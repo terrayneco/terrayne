@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Terrayne — Property Intelligence</title>
+<style>
+:root{color-scheme:dark;--bg:#060d1a;--panel:#0d1830;--panel2:#111f3d;--line:#1c2b4d;--text:#fff;--mute:#8c9ab3;--accent:#9fd0ff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-behavior:smooth;scroll-padding-top:80px;background:var(--bg)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Helvetica Neue",Inter,Arial,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+nav{position:sticky;top:0;z-index:10;background:rgba(6,13,26,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{height:52px;mix-blend-mode:screen;display:block}@media(max-width:600px){.logo{height:42px}}
+nav ul{display:flex;gap:28px;list-style:none;margin:0;padding:0;font-size:14px;color:var(--mute)}
+nav ul a:hover{color:#fff}
+.btn{display:inline-block;background:#fff;color:#060d1a;font-weight:600;font-size:15px;padding:14px 26px;border-radius:999px;transition:.2s}
+.btn:hover{background:var(--accent)}
+.btn.ghost{background:transparent;color:#fff;border:1px solid var(--line)}
+.btn.ghost:hover{border-color:#fff;background:transparent}
+.hero{position:relative;overflow:hidden;padding:110px 0 0}
+.eyebrow{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:22px}
+h1{font-size:clamp(42px,8vw,92px);line-height:1.02;letter-spacing:-.03em;margin:0 0 26px;font-weight:700;max-width:900px}
+h1 span{color:var(--mute)}
+.lead{font-size:clamp(17px,2.2vw,21px);color:var(--mute);max-width:620px;margin:0 0 36px}
+.cta{display:flex;gap:14px;flex-wrap:wrap;position:relative;z-index:2}
+.sky{display:block;width:100%;height:auto;margin-top:-40px;position:relative}
+section{padding:110px 0}
+h2{font-size:clamp(32px,5vw,56px);line-height:1.08;letter-spacing:-.025em;margin:0 0 18px;font-weight:700}
+.sub{color:var(--mute);font-size:18px;max-width:640px;margin:0 0 56px}
+.grid{display:grid;gap:18px}
+.g3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:32px}
+.card h3{margin:0 0 10px;font-size:22px;letter-spacing:-.01em}
+.card p{margin:0;color:var(--mute);font-size:16px}
+.num{font-size:13px;color:var(--accent);letter-spacing:.18em;margin-bottom:46px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+@media(max-width:820px){.split{grid-template-columns:1fr;gap:36px}nav ul{display:none}section{padding:80px 0}}
+.index{background:linear-gradient(160deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:28px;padding:34px}
+.score{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+.score b{font-size:84px;letter-spacing:-.04em;line-height:1}
+.score i{font-style:normal;color:var(--mute)}
+.tag{font-size:12px;color:var(--mute);letter-spacing:.14em;text-transform:uppercase}
+.bar{margin-top:20px}
+.bar div.l{display:flex;justify-content:space-between;font-size:14px;color:var(--mute);margin-bottom:7px}
+.bar div.t{height:8px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar div.t i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#4f86c6,var(--accent))}
+.note{font-size:12px;color:var(--mute);margin-top:22px}
+.memo{background:#fff;color:#0a1223;border-radius:22px;padding:30px;font-size:15px;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.memo small{color:#5b6882;letter-spacing:.14em;text-transform:uppercase;font-size:11px}
+.memo h4{margin:8px 0 14px;font-size:20px}
+.memo p{margin:0 0 12px;color:#26324d}
+.memo hr{border:0;border-top:1px solid #dde3ef;margin:16px 0}
+.price{font-size:46px;font-weight:700;letter-spacing:-.03em;margin:14px 0 4px}
+.price small{font-size:16px;color:var(--mute);font-weight:400}
+.card ul{list-style:none;padding:0;margin:22px 0 0;color:var(--mute);font-size:15px}
+.card li{padding:9px 0;border-top:1px solid var(--line)}
+.card.feat{background:var(--panel2);border-color:#35508a}
+.badge{display:inline-block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;border:1px solid #35508a;color:var(--accent);padding:5px 12px;border-radius:99px;margin-bottom:16px}
+.final{background:var(--panel);border:1px solid var(--line);border-radius:32px;padding:clamp(36px,7vw,84px);text-align:center}
+.final p{color:var(--mute);max-width:520px;margin:0 auto 30px;font-size:18px}
+footer{border-top:1px solid var(--line);padding:36px 0;color:var(--mute);font-size:14px}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+
+.mono{font-family:ui-monospace,"SF Mono",Menlo,monospace;letter-spacing:.14em;text-transform:uppercase}
+.pill{font-size:11px;border:1px solid var(--line);color:var(--mute);padding:5px 12px;border-radius:99px;margin-left:12px}
+nav .wrap>a:first-child{display:flex;align-items:center}
+.dash-h{margin-bottom:34px}
+.tabs{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:22px}
+.tab{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:18px 20px;text-align:left;color:#fff;font:inherit;cursor:pointer;transition:.2s}
+.tab:hover{border-color:#35508a}
+.tab.on{border-color:#4f9be8;background:var(--panel2)}
+.tab .r{display:flex;justify-content:space-between;align-items:center;font-size:15px;gap:8px}
+.chg{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#5fd6b8;background:rgba(95,214,184,.12);padding:3px 8px;border-radius:7px;white-space:nowrap}
+.tab .s{display:flex;justify-content:space-between;align-items:baseline;margin:12px 0 10px}
+.tab .s b{font-size:30px;font-weight:600;letter-spacing:-.02em}.tab .s b em{font-style:normal;font-size:13px;color:var(--mute);font-weight:400;font-family:ui-monospace,Menlo,monospace}
+.tab .s span{font-size:10px;color:var(--mute)}
+.tab .m{height:5px;border-radius:9px;background:var(--line);overflow:hidden}.tab .m i{display:block;height:100%;background:#5b6478;border-radius:9px}
+.tab.on .m i{background:#4f9be8}
+.dash{display:grid;grid-template-columns:1.45fr 1fr;gap:18px}
+@media(max-width:900px){.dash{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:28px;padding:28px}
+.ph{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.ph small{font-size:11px;color:var(--mute)}
+.ph h3{margin:6px 0 0;font-size:20px;font-weight:500}
+.leg{font-size:12px;color:var(--mute);display:flex;gap:16px;font-family:ui-monospace,Menlo,monospace}
+.leg i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}
+#map{width:100%;height:auto;display:block}
+#map g.mk{cursor:pointer}
+.dh{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;padding-bottom:22px;border-bottom:1px solid var(--line);margin-bottom:22px}
+.dh h3{margin:6px 0 12px;font-size:26px;font-weight:500;letter-spacing:-.01em}
+.big{background:var(--panel2);border:1px solid var(--line);border-radius:18px;padding:14px 18px;text-align:center}
+.big b{font-size:44px;font-weight:600;line-height:1}.big em{font-style:normal;color:var(--mute);font-family:ui-monospace,Menlo,monospace;font-size:13px}
+.big div{font-size:10px;color:var(--accent);background:rgba(79,155,232,.15);border-radius:8px;padding:4px 8px;margin-top:8px}
+.units{font-size:11px;color:var(--mute);margin-left:8px}
+.sig{margin-bottom:18px}.sig .l{display:flex;justify-content:space-between;font-size:15px;margin-bottom:8px}.sig .l span:last-child{font-family:ui-monospace,Menlo,monospace}
+.sig .t{height:7px;border-radius:9px;background:var(--line);overflow:hidden}.sig .t i{display:block;height:100%;border-radius:9px;transition:width .5s}
+.take{border:1px solid var(--line);border-radius:18px;padding:20px;margin-top:6px}
+.take .top{display:flex;justify-content:space-between;font-size:10px;color:var(--mute);margin-bottom:12px}.take .top span:first-child{color:#4f9be8}
+.take p{margin:0;color:#c3cde0;font-size:15.5px}
+.feedhead{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:end;margin-bottom:40px}
+@media(max-width:900px){.feedhead{grid-template-columns:1fr;gap:24px}}
+.feedhead .sub{margin:0}
+.pills{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end}
+@media(max-width:900px){.pills{justify-content:flex-start}}
+.fp{background:var(--panel);border:1px solid var(--line);color:#c3cde0;font:inherit;font-size:14px;padding:12px 20px;border-radius:99px;cursor:pointer;transition:.2s}
+.fp:hover{border-color:#35508a}
+.fp.on{background:#fff;color:#0a1223;border-color:#fff}
+.tw{background:var(--panel);border:1px solid var(--line);border-radius:28px;overflow-x:auto}
+.tw table{width:100%;min-width:900px;border-collapse:collapse}
+.tw th{text-align:left;font-size:11px;color:var(--mute);padding:22px 20px;background:var(--panel2);font-weight:700}
+.tw td{padding:24px 20px;border-top:1px solid var(--line);vertical-align:middle;font-size:15px}
+.tw td:first-child{color:#fff;font-size:16px}
+.tw td.sc{color:#a9b6cf}
+.tg{display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:12px;padding:6px 12px;border-radius:9px;border:1px solid;white-space:nowrap}
+.tg.ma{color:#5fd6b8;background:rgba(95,214,184,.1);border-color:rgba(95,214,184,.4)}
+.tg.mr{color:#6db6f5;background:rgba(79,155,232,.1);border-color:rgba(79,155,232,.4)}
+.tg.tr{color:#b79cff;background:rgba(183,156,255,.1);border-color:rgba(183,156,255,.4)}
+.tg.rg{color:#f0b86e;background:rgba(240,184,110,.1);border-color:rgba(240,184,110,.4)}
+.mn{font-family:ui-monospace,Menlo,monospace}
+.ai{color:#6db6f5;font-weight:700}
+.tk{color:#c3cde0;font-size:15px;line-height:1.55;min-width:260px}
+
+.bgrid{display:grid;grid-template-columns:1fr 1.25fr;gap:56px;align-items:start}
+@media(max-width:900px){.bgrid{grid-template-columns:1fr;gap:36px}.nr{display:none}}
+.nr{display:flex;align-items:center;gap:22px}.nr span{font-size:11px;color:var(--mute)}
+.teal{color:#5fd6b8}
+.wl{font-size:12px;color:var(--mute);margin:34px 0 14px}
+.chips{display:flex;flex-wrap:wrap;gap:12px}
+.chip{font-family:ui-monospace,Menlo,monospace;font-size:14px;color:var(--mute);background:var(--panel);border:1px solid var(--line);padding:12px 20px;border-radius:99px;cursor:pointer;transition:.2s}
+.chip:hover{border-color:#35508a}
+.chip.on{color:#6db6f5;background:rgba(79,155,232,.12);border-color:#3a77b8}
+.bl{list-style:none;padding:28px 0 0;margin:34px 0 0;border-top:1px solid var(--line);color:#b4bfd3}
+.bl li{padding:8px 0 8px 26px;position:relative}.bl li::before{content:"";position:absolute;left:0;top:18px;width:8px;height:8px;border-radius:50%;background:#4f9be8}
+.mail{background:var(--panel);border:1px solid var(--line);border-radius:28px;overflow:hidden}
+.mb{display:flex;align-items:center;gap:8px;padding:16px 22px;background:var(--panel2);border-bottom:1px solid var(--line);font-family:ui-monospace,Menlo,monospace;font-size:13px;color:var(--mute)}
+.mb i{width:11px;height:11px;border-radius:50%;background:#2a3a5e}.mb span{margin-left:10px}.mb em{margin-left:auto;font-style:normal;color:#6db6f5;font-size:12px}
+.mh{padding:30px 30px 26px;border-bottom:1px solid var(--line)}
+.mh .t{display:flex;justify-content:space-between;gap:10px;font-size:12px;color:var(--mute);margin-bottom:22px}.mh .t b{color:#fff;letter-spacing:.2em}
+.mh h3{margin:0 0 10px;font-size:clamp(22px,3vw,30px);font-weight:500;line-height:1.2}.mh h3 span{color:#6db6f5}
+.mh p{margin:0;color:var(--mute);font-size:14px}
+.mbody{padding:26px 30px 30px;display:grid;gap:16px;background:#0a1426}
+.bc{border:1px solid var(--line);background:var(--panel);border-radius:20px;padding:22px 24px;animation:fi .3s}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+.bc .r{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.bc .r b{font-size:13px;letter-spacing:.16em;text-transform:uppercase}
+.bc .ix{font-family:ui-monospace,Menlo,monospace;font-size:12px;border:1px solid var(--line);border-radius:8px;padding:5px 10px;margin-left:10px;background:#0a1426}
+.bc h4{margin:0 0 8px;font-size:18px;font-weight:500;color:#6db6f5}
+.bc p{margin:0;color:var(--mute);font-size:14.5px}
+nav ul{gap:22px}nav ul a{padding:6px 0;border-bottom:1px solid transparent;transition:.2s}nav ul a.act{color:#fff;border-bottom-color:var(--accent)}
+.burger{display:none;background:none;border:1px solid var(--line);border-radius:12px;width:44px;height:44px;cursor:pointer;flex-direction:column;justify-content:center;align-items:center;gap:5px;padding:0}
+.burger i{display:block;width:18px;height:2px;background:#fff;border-radius:2px;transition:.25s}
+nav.open .burger i:nth-child(1){transform:translateY(7px) rotate(45deg)}nav.open .burger i:nth-child(2){opacity:0}nav.open .burger i:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mcta{display:none}
+@media(max-width:1180px){.nr span{display:none}}
+@media(max-width:1000px){nav ul{display:none}.burger{display:flex}nav.open ul{display:flex;flex-direction:column;gap:0;position:absolute;top:100%;left:0;right:0;background:rgba(6,13,26,.97);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:8px 24px 20px;font-size:17px}nav.open ul li{border-top:1px solid var(--line)}nav.open ul a{display:block;padding:16px 0;border-bottom:0}.mcta{display:block}.mcta a{color:var(--accent)}}
+
+nav .wrap{display:grid;grid-template-columns:1fr auto 1fr;height:72px}
+nav .wrap .brand{justify-self:start}
+nav ul{gap:4px;font-size:14.5px}
+nav ul a{padding:9px 16px;border:0;border-radius:99px;color:var(--mute)}
+nav ul a:hover{color:#fff;background:rgba(255,255,255,.05)}
+nav ul a.act{color:#fff;background:var(--panel2)}
+.nr{justify-self:end;gap:10px}
+.ncta{padding:11px 22px;font-size:14px}
+@media(max-width:1000px){nav .wrap{display:flex;justify-content:space-between}.ncta{display:none}nav.open ul a{padding:16px 0;border-radius:0;background:none}}
+@media(max-width:900px){.nr{display:flex}}
+.cust .card h3{font-size:20px}
+.road .tg2{display:inline-block;font-size:11px;color:var(--accent);border:1px solid #35508a;padding:4px 11px;border-radius:99px;margin-top:18px;letter-spacing:.1em;text-transform:uppercase}
+.road .card.now{background:var(--panel2);border-color:#35508a}
+.plan .btn{margin-top:26px;text-align:center;width:100%}
+.plan .price{font-size:38px}
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+<a href="#top" class="brand"><img class="logo" alt="Terrayne" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAD5ArwDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD4yooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACilxRQAlFLSGgAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiilAJ7GgBKKdsb0pdje1ADKKf5fvS7B6miwrkdFS7V9KMD0FOwXIqXFSEUmKLBcZg0Yp1FFguNxRiloxQAlFKaKQCUUtFAxKWkpaBBSGlpKACkoooGFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRTljdvuox+gqQWtwf+WRH14osK5DRVlbKY9dq/U08WJ/ikH4CnZhzIp0VfFlGOrMaUW0S/wZ+pp8rFzIz6UAnoM1oiNB0RR+FLj8KLBzGeI3P8JpRC57AfjV0imkUWDmKwgbuwFL5A7sanxSUWC5F5S+hNARR2FSGkxQK4zGOwop2KTFACGjiig0AJRRRQMSg0tJQAhopaQ0AFJS0UAIaQ0tFAxKSlopCEoooNAxKM0GkpDFopKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAoqWO2uJP9XBK/0UmrMekag5/49mX/AHiBTsxNpFGitZNBuz994k/Emp00Ff8AlpcE/wC6tPkZPPEwqK6RNFs1HzeY/wBWx/KpF0+zTpbofrzT5GL2iOXqRIJn+7E5+imupWKNPuxov0GKGFPkF7Q5xLC7b/lkR9SBUqaXOfvOi/jmtsimkUciFzsy10oD70xP0WpF023HXe31NX6QinyoOZlUWdsvSIH680ojRfuoo+gqc00inYVyOkp5BpppANNITSnpTDQMQ0w0400mkMTNJmg000gFNN4oJptAxTSUUhNAwpDQaQ0ABpppaTNIApKKKAEooooA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7u0K3dr5rRhjkqDkfLkk49zRcLHlmsafeaVqt1pmoQPb3lpM8M8TjBR1JDKfoQaqV0XxE8X6p468W3nifWYbKLULzaZ/skPlI7BQu7bk8kAZPeudpDCiiigArS8Lf8jLpn/X5D/6GKzansbmSzvIbuHHmQyLImRkZU5H8qAP1H/aX5+AXjjH/QIm/lX5ZN9417b4y/ag+KHivwtqXhvVn0X7DqNu1vceVZbX2N1wd3BrxInJoEhKKKKBhRRRQADrX6L/ALBpH/DPNnk/8xK7/wDQxX50V638L/2hfiF8OfCkfhnw42kiwjmeZRcWfmPuc5PORQhMyf2mP+S/eN/+wxP/ADrQ/Zv+MOqfCfxgLnMt1oF6ypqdkD99e0iZ4Ei549RkHrxwPjLxDqHizxTqXiTVjEb/AFG4a4n8pNqb264HYVkUDP1qW18JfEHR/D/iKBotTtYLiLVNLu4zzG69CD1HdWU+4PIry/8AbuH/ABjzqHB/4/7Tv/00r41+Evx3+IXwy0a40bw3fWr6fNL5wgvIPNWJz1KcjbnjI6cZq58Tv2hviH8RPCkvhnxE+kmwlljlYW9n5b7kOV5ye9O5NjyOiiikUFFFFAGv4KGfGOif9hC3/wDRi1+p3xh8K3Xjj4aa/wCE7K7gtJ9TtzCk0qkqh3A5OOe1flFpt3LYahbX1vt862lWaPcMjcpBGR9RXvv/AA2D8YP7/h//AMF//wBlTQmdS37Evi4nP/Ca6F/34l/wpP8AhiTxf/0Oug/9+Jv8K5f/AIbB+MH9/wAP/wDgv/8AsqP+GwfjB/f8P/8Agv8A/sqNA1MD49fs/a38I/D9hrGqeINO1KO9ujbJHbRupUhC2TuHTivGa9O+Lvxy8c/FHR7PSvFDaaba0uPtEX2W18s79pXk5ORgmvMaQwooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAP//Z"></a>
+<ul id="menu"><li><a href="#index">Momentum Index</a></li><li><a href="#feed">Signal Feed</a></li><li><a href="#brief">Monday Brief</a></li><li><a href="#pricing">Pricing</a></li><li class="mcta"><a href="#access">Request Founding Access</a></li></ul>
+<div class="nr"><a class="btn ncta" href="#access">Request Founding Access</a><button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><i></i><i></i><i></i></button></div>
+</div></nav>
+
+<header class="hero" id="top"><div class="wrap">
+<div class="eyebrow">Property intelligence</div>
+<h1>See where London is heading. <span>Before the market does.</span></h1>
+<p class="lead">Terrayne turns scattered council planning data into a single Development Momentum Index and weekly briefings, so you can spot emerging neighbourhoods 6 to 12 months before land and lease prices move.</p>
+<div class="cta"><a class="btn" href="#access">Join the founding pilot</a><a class="btn ghost" href="#how">How it works</a></div>
+</div>
+<svg class="sky" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a2d52"/><stop offset="1" stop-color="#060d1a"/></linearGradient>
+<linearGradient id="g2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0f1c38"/><stop offset="1" stop-color="#060d1a"/></linearGradient></defs>
+<g fill="url(#g2)"><rect x="0" y="190" width="70" height="110"/><rect x="60" y="160" width="50" height="140"/><rect x="120" y="205" width="90" height="95"/><rect x="230" y="175" width="60" height="125"/><rect x="760" y="185" width="80" height="115"/><rect x="900" y="170" width="55" height="130"/><rect x="1000" y="195" width="100" height="105"/><rect x="1110" y="165" width="90" height="135"/></g>
+<g fill="url(#g)">
+<polygon points="330,300 330,150 372,40 414,150 414,300"/>
+<path d="M470 300V150C470 90 500 60 520 60S570 90 570 150V300Z"/>
+<rect x="590" y="110" width="70" height="190"/><path d="M590 110h70l-8-14h-54z"/>
+<path d="M690 300V130l60-22v192z"/>
+<rect x="850" y="120" width="34" height="180"/><polygon points="850,120 867,92 884,120"/>
+<rect x="960" y="140" width="46" height="160"/>
+<rect x="150" y="130" width="60" height="170"/><rect x="250" y="140" width="55" height="160"/>
+</g>
+<rect y="296" width="1200" height="4" fill="#060d1a"/>
+</svg>
+</header>
+
+<section id="problem"><div class="wrap">
+<div class="eyebrow">The problem</div>
+<h2>33 boroughs. 33 portals. Hours of reading.</h2>
+<p class="sub">London planning data is scattered across borough portals and buried in bureaucratic language like Class MA prior approvals and Section 106 agreements. Manual analysis is slow, and by the time it’s done the opportunity has moved.</p>
+<div class="grid g3">
+<div class="card"><h3>Fragmented</h3><p>Every authority publishes differently. No single, consistent view of a city that’s changing everywhere at once.</p></div>
+<div class="card"><h3>Opaque</h3><p>Dense jargon hides what a filing actually means for a high street, a rent roll or a development appraisal.</p></div>
+<div class="card"><h3>Too slow</h3><p>Analysts spend hours on triage instead of decisions, and the signal arrives after prices have already adjusted.</p></div>
+</div></div></section>
+
+<section id="how" style="padding-top:0"><div class="wrap">
+<div class="eyebrow">How it works</div>
+<h2>From filings to a decision.</h2>
+<p class="sub">The product isn’t the data, it’s the interpretation of the data. Terrayne connects planning, pipeline and footfall signals to explain where places are heading, built on public Greater London Authority and UK Government planning data.</p>
+<div class="grid g3">
+<div class="card"><div class="num">01</div><h3>Ingest</h3><p>Planning applications from across London are pulled in automatically, filtered for major developments (10+ units) and Class MA conversions.</p></div>
+<div class="card"><div class="num">02</div><h3>Translate</h3><p>AI turns raw filings into plain-English commercial takeaways and scores every submarket on momentum.</p></div>
+<div class="card"><div class="num">03</div><h3>Decide</h3><p>Get Monday morning briefings, watchlists and one-click Investment Committee memos ready to share.</p></div>
+</div></div></section>
+
+<section id="index" style="padding-top:0"><div class="wrap">
+<div class="eyebrow">The Development Momentum Index</div>
+<h2 class="dash-h">One score for how fast a neighbourhood is changing.</h2>
+<div class="tabs" id="tabs"></div>
+<div class="dash" id="signals">
+<div class="panel"><div class="ph"><div><small class="mono">Spatial intelligence layer</small><h3>Greater London opportunity &amp; rail corridors</h3></div><div class="leg"><span><i style="background:#4f9be8"></i>80+ High</span><span><i style="background:#5fd6b8"></i>70–79 Active</span></div></div>
+<svg id="map" viewBox="0 0 640 440"></svg></div>
+<div class="panel" id="detail"></div>
+</div>
+<p class="note" style="margin-top:18px">Illustrative data. Scores out of 100; change shown over the last 30 days.</p>
+</div></section>
+
+<section id="feed" style="padding-top:0"><div class="wrap">
+<div class="feedhead"><div><div class="eyebrow mono">Automated Datahub translation</div><h2>Live London planning &amp; AI signal feed</h2><p class="sub">Every night, Terrayne ingests raw Greater London planning filings, filters out minor domestic extensions, and translates commercial schemes into plain-English acquisition takeaways.</p></div><div class="pills" id="pills"></div></div>
+<div class="tw"><table><thead><tr class="mono"><th>Borough</th><th>Site / corridor</th><th>Signal type</th><th>Net units / scale</th><th>AI impact</th><th>Plain-English commercial takeaway</th></tr></thead><tbody id="rows"></tbody></table></div>
+<p class="note" style="margin-top:18px">Illustrative examples of the feed format.</p>
+</div></section>
+
+<section id="brief" style="padding-top:0"><div class="wrap bgrid">
+<div>
+<div class="eyebrow mono teal">Push intelligence • No login fatigue</div>
+<h2>The Monday 7:00 AM Submarket Brief.</h2>
+<p class="sub" style="margin-bottom:0">Busy expansion directors and acquisition teams don’t want another dashboard to remember to check. Every Monday at 07:00 GMT, Terrayne delivers a concise executive briefing filtered strictly to your target London boroughs.</p>
+<div class="wl mono">Toggle watchlist boroughs to preview your brief:</div>
+<div class="chips" id="chips"></div>
+<ul class="bl"><li>Highlights weekly momentum deltas (+pts) before comps adjust</li><li>Flags Class MA prior approvals in high-street catchments</li><li>Delivered via email &amp; Slack with 1-click IC PDF attachments</li></ul>
+</div>
+<div class="mail"><div class="mb"><i></i><i></i><i></i><span>briefings@terrayne.co.uk</span><em>MON 07:00 GMT</em></div>
+<div class="mh"><div class="t mono"><b>Terrayne</b><span>Issue #46 • London edition</span></div><h3 id="mt"></h3><p>Prepared for Acquisition &amp; Retail Expansion Team • 7-day planning &amp; footfall delta summary</p></div>
+<div class="mbody" id="mbody"></div></div>
+</div></section>
+
+<section id="customers" class="cust" style="padding-top:0"><div class="wrap">
+<div class="eyebrow">Who it’s for</div>
+<h2>Built for people who make expensive location decisions.</h2>
+<p class="sub">If Terrayne helps you make one better decision, the subscription pays for itself.</p>
+<div class="grid g3" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+<div class="card"><h3>Property developers</h3><p>See where opportunities are emerging, which areas are changing and where infrastructure is improving.</p></div>
+<div class="card"><h3>Investors &amp; consultants</h3><p>Identify emerging markets, understand neighbourhood trajectories and compare locations side by side.</p></div>
+<div class="card"><h3>Retail &amp; hospitality</h3><p>Find where population growth, footfall and commercial activity point to your next location.</p></div>
+<div class="card"><h3>Architects &amp; urban consultancies</h3><p>Understand the wider context of a neighbourhood and how a development fits a changing city.</p></div>
+</div></div></section>
+
+<section id="pricing" class="plan" style="padding-top:0"><div class="wrap">
+<div class="eyebrow">Pricing</div>
+<h2>Free to explore. Paid for the intelligence.</h2>
+<p class="sub">Start with the basics for free. Subscribe when you need the deeper interpretation behind the scores.</p>
+<div class="grid g3">
+<div class="card"><div class="tag">01 · Discover</div><div class="price">Free</div><p>For everyone.</p><ul><li>Explore London’s neighbourhoods</li><li>Basic Momentum Scores</li><li>Selected intelligence reports</li><li>London development map</li></ul><a class="btn ghost" href="#access">Start exploring</a></div>
+<div class="card feat"><span class="badge">Main product</span><div class="tag">02 · Professional</div><div class="price">£49–£79<small> / month</small></div><p>For individual professionals.</p><ul><li>Full neighbourhood intelligence</li><li>All Momentum metrics</li><li>Historical trends</li><li>Development &amp; regeneration tracking</li><li>Saved locations &amp; alerts</li><li>AI-generated area reports</li></ul><a class="btn" href="#access">Request Founding Access</a></div>
+<div class="card"><div class="tag">03 · Enterprise</div><div class="price">£249–£499<small> / month</small></div><p>For businesses and teams.</p><ul><li>Everything in Professional</li><li>Multiple user accounts</li><li>Custom geographic analysis</li><li>Comparative neighbourhood reports</li><li>Exportable research</li><li>Bespoke alerts &amp; reporting</li></ul><a class="btn ghost" href="#access">Talk to us</a></div>
+</div>
+<p class="note" style="margin-top:18px">Proposed pricing. Founding members lock in their rate for 12 months.</p>
+</div></section>
+
+<section id="roadmap" class="road" style="padding-top:0"><div class="wrap">
+<div class="eyebrow">Roadmap</div>
+<h2>London first. Then the world’s great cities.</h2>
+<p class="sub">Terrayne is being built to become a platform for understanding urban change across major cities.</p>
+<div class="grid g3" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+<div class="card now"><div class="num">01</div><h3>London</h3><p>Where we start, with the full borough-level picture.</p><span class="tg2">Launch market</span></div>
+<div class="card"><div class="num">02</div><h3>Manchester</h3><p>The next market once London has repeat customers.</p><span class="tg2">Second market</span></div>
+<div class="card"><div class="num">03</div><h3>Birmingham</h3><p>Regeneration and infrastructure-led growth.</p><span class="tg2">Third market</span></div>
+<div class="card"><div class="num">04</div><h3>Paris</h3><p>The first step into international cities.</p><span class="tg2">International</span></div>
+</div></div></section>
+
+<section id="access" style="padding-top:0"><div class="wrap"><div class="final">
+<div class="eyebrow">Early access</div>
+<h2>Be first to see what’s next.</h2>
+<p>We’re onboarding a small group of London teams. Tell us where you invest or expand and we’ll be in touch.</p>
+<a class="btn" href="mailto:hello@terrayne.co.uk?subject=Terrayne%20early%20access">Request access</a>
+</div></div></section>
+
+<footer><div class="wrap"><span>© 2026 Terrayne. Property intelligence.</span><span>terrayne.co.uk</span></div></footer>
+<script>
+var D=[
+{n:"Nine Elms",f:"Nine Elms & Vauxhall",b:"LB Wandsworth / Lambeth",s:88,c:4,u:"1,420",x:[92,87,81,85],p:[250,300],t:"High-density residential completions and Northern Line Extension footfall (+24% YoY) are creating an immediate morning commuter catchment, a prime window for QSR, coffee and convenience retail expansion before high-street rents re-rate."},
+{n:"Stratford",f:"Stratford & Olympic Park",b:"LB Newham",s:85,c:3,u:"1,180",x:[86,84,72,88],p:[470,150],t:"Sustained residential delivery around the Elizabeth line is deepening the evening leisure and convenience catchment, supporting hospitality and grocery expansion."},
+{n:"Canada Water",f:"Canada Water",b:"LB Southwark",s:84,c:6,u:"960",x:[83,85,78,88],p:[440,265],t:"Town-centre regeneration and new workspace are broadening daytime demand, opening room for flexible retail and food-led formats ahead of rent resets."},
+{n:"Whitechapel",f:"Whitechapel",b:"LB Tower Hamlets",s:81,c:5,u:"870",x:[80,79,86,81],p:[390,200],t:"A cluster of office-to-residential conversions near the high street points to rising density and stronger residential demand before rents adjust."},
+{n:"King’s Cross",f:"King’s Cross",b:"LB Camden / Islington",s:79,c:2,u:"540",x:[74,70,82,78],p:[300,175],t:"A mature market with steady conversion activity. Momentum is incremental, favouring selective occupier moves over broad expansion."},
+{n:"Croydon",f:"Croydon",b:"LB Croydon",s:74,c:4,u:"1,050",x:[76,78,70,72],p:[290,400],t:"Pipeline volume is building steadily on the back of town-centre redevelopment, an early-stage opportunity for patient acquirers."}
+];
+var L=["Planning Activity","Development Pipeline","Commercial-to-Resi (Class MA)","Transport & Regeneration"],C=["#fff","#4f9be8","#5fd6b8","#9aa3b5"],cur=0;
+function col(s){return s>=80?"#4f9be8":"#5fd6b8"}
+function render(){
+ document.getElementById("tabs").innerHTML=D.map(function(d,i){return '<button class="tab'+(i==cur?' on':'')+'" onclick="pick('+i+')"><div class="r"><span>'+d.n+'</span><span class="chg">+'+d.c+' pts</span></div><div class="s"><b>'+d.s+'<em>/100</em></b><span class="mono">Index</span></div><div class="m"><i style="width:'+d.s+'%"></i></div></button>'}).join("");
+ var m='<defs><pattern id="gr" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="#16233f" stroke-width="1"/></pattern></defs><rect width="640" height="440" fill="url(#gr)" opacity=".7"/>'+
+ '<ellipse cx="320" cy="260" rx="300" ry="175" fill="none" stroke="#1c2b4d" stroke-dasharray="4 6"/><ellipse cx="350" cy="235" rx="170" ry="90" fill="#0f1c38" stroke="#1c2b4d" opacity=".8"/>'+
+ '<path d="M20 335C110 335 160 295 205 305S245 335 275 305C305 255 355 225 395 255S455 235 505 235 600 240 628 222" fill="none" stroke="#1d3358" stroke-width="16" stroke-linecap="round"/>'+
+ '<g fill="#52617f" font-size="9" letter-spacing="2.5" font-family="ui-monospace,Menlo,monospace"><text x="320" y="118">NORTH LONDON</text><text x="470" y="108">EAST / LEA VALLEY</text><text x="60" y="210">WEST</text><text x="85" y="345">RIVER THAMES</text><text x="340" y="350">SOUTH EAST</text></g>';
+ D.forEach(function(d,i){var x=d.p[0],y=d.p[1],on=i==cur,w=d.n.length*6.6+44;
+  m+='<g class="mk" onclick="pick('+i+')">'+(on?'<circle cx="'+x+'" cy="'+y+'" r="20" fill="#4f9be8" opacity=".18"/>':'')+'<circle cx="'+x+'" cy="'+y+'" r="8" fill="#0a1426" stroke="'+col(d.s)+'" stroke-width="2"/><circle cx="'+x+'" cy="'+y+'" r="3" fill="'+col(d.s)+'"/><rect x="'+(x+14)+'" y="'+(y-12)+'" width="'+w+'" height="24" rx="8" fill="'+(on?'#fff':'#0d1830')+'" stroke="#1c2b4d"/><text x="'+(x+24)+'" y="'+(y+4)+'" font-size="11" fill="'+(on?'#0a1223':'#fff')+'">'+d.n+'</text><text x="'+(x+14+w-14)+'" y="'+(y+4)+'" font-size="11" font-weight="700" text-anchor="end" fill="'+(on?'#0a1223':col(d.s))+'">'+d.s+'</text></g>'});
+ document.getElementById("map").innerHTML=m;
+ var d=D[cur];
+ document.getElementById("detail").innerHTML='<div class="dh"><div><small class="mono" style="font-size:11px;color:var(--mute)">'+d.b+'</small><h3>'+d.f+'</h3><span class="chg">+'+d.c+' pts (30d)</span><span class="units mono">'+d.u+' net units pipeline</span></div><div class="big"><b>'+d.s+'</b><em>/100</em><div class="mono">'+(d.s>=80?"High activity":"Active")+'</div></div></div>'+
+ d.x.map(function(v,i){return '<div class="sig"><div class="l"><span>'+L[i]+'</span><span>'+v+'/100</span></div><div class="t"><i style="width:'+v+'%;background:'+C[i]+'"></i></div></div>'}).join("")+
+ '<div class="take"><div class="top mono"><span>● Plain-English commercial takeaway</span><span>AI synthesis</span></div><p>'+d.t+'</p></div>';
+}
+function pick(i){cur=i;render()}
+render();
+</script>
+<script>
+var F=[
+{b:"Tower Hamlets",s:"Commercial Road, E1",t:"ma",k:"Class MA (Office-to-Resi)",u:"68 Resi Units",a:91,x:"4-storey 1990s office block approved for residential conversion—adds ~120 daily residents 150m from Whitechapel high street."},
+{b:"Southwark",s:"Surrey Quays / Rotherhithe, SE16",t:"mr",k:"Major Residential",u:"310 BTR Units",a:89,x:"Build-to-rent riverfront scheme validated; strong forward signal for convenience retail and gym operators targeting SE16."},
+{b:"Wandsworth",s:"Battersea Park Road, SW11",t:"mr",k:"Major Residential",u:"440 Units + Labs",a:94,x:"38-storey mixed-use podium submitted; anchors VNEB eastern corridor footfall through 2028."},
+{b:"Lambeth",s:"Vauxhall Cross, SE11",t:"tr",k:"Transport & Infra",u:"Interchange upgrade",a:86,x:"Station-area upgrade strengthens commuter flows, supporting grab-and-go food and services ahead of lease renewals."},
+{b:"Newham",s:"Stratford Waterfront, E20",t:"rg",k:"Regeneration",u:"Mixed-use masterplan",a:88,x:"Phased waterfront masterplan adds workspace and homes together, a long-run catchment for evening leisure and hospitality."}
+];
+var P=[["all","All Signals"],["ma","Class MA (Office-to-Resi)"],["mr","Major Residential"],["tr","Transport & Infra"],["rg","Regeneration"]],fc="all";
+function feed(){
+document.getElementById("pills").innerHTML=P.map(function(p){return '<button class="fp'+(p[0]==fc?' on':'')+'" onclick="fsel(\''+p[0]+'\')">'+p[1]+'</button>'}).join("");
+document.getElementById("rows").innerHTML=F.filter(function(r){return fc=="all"||r.t==fc}).map(function(r){return '<tr><td>'+r.b+'</td><td class="sc">'+r.s+'</td><td><span class="tg '+r.t+'">'+r.k+'</span></td><td class="mn">'+r.u+'</td><td class="ai mn">'+r.a+'/100</td><td class="tk">'+r.x+'</td></tr>'}).join("");}
+function fsel(c){fc=c;feed()}
+feed();
+</script>
+<script>
+var B=[
+{n:"Tower Hamlets",c:5,i:81,h:"Class MA spike on Commercial Road + Barts Life Sciences Plot B validation",t:"3 new office-to-residential prior approvals within 400m of Whitechapel station (114 net new dwellings). Retail lease competition expected to tighten in Q1 2027."},
+{n:"Southwark",c:6,i:84,h:"Canada Water topping-out milestone & 310-unit Rotherhithe BTR filing",t:"Highest weekly momentum gain in Inner London. Surrey Quays Overground entrance works are shifting pedestrian flows toward Lower Road retail units."},
+{n:"Wandsworth",c:4,i:88,h:"440-unit VNEB podium submission & +24% Nine Elms station throughput",t:"Morning commuter entries at Nine Elms hit a new post-opening high. Prime window for specialty coffee and grab-and-go food operators."},
+{n:"Newham",c:3,i:85,h:"Stratford Waterfront phase approved & Elizabeth line evening footfall",t:"Residential completions near Stratford continue to deepen the evening catchment, an opening for convenience and leisure operators."},
+{n:"Camden",c:2,i:79,h:"King’s Cross conversion activity holds steady",t:"Class MA approvals remain steady in the high-street catchment. Momentum is incremental, favouring selective occupier moves."}
+],S=[1,1,1,0,0];
+function brief(){
+ document.getElementById("chips").innerHTML=B.map(function(d,k){return '<button class="chip'+(S[k]?' on':'')+'" onclick="tg('+k+')">'+(S[k]?'✓ ':'+ ')+d.n+'</button>'}).join("");
+ var on=B.filter(function(d,k){return S[k]});
+ document.getElementById("mt").innerHTML='Weekly Momentum Digest: <span>'+(on.length?on.map(function(d){return d.n}).join(", "):"select a borough")+'</span>';
+ document.getElementById("mbody").innerHTML=on.length?on.map(function(d){return '<div class="bc"><div class="r"><b>'+d.n+'</b><span><span class="chg">+'+d.c+' pts</span><span class="ix">INDEX '+d.i+'/100</span></span></div><h4>'+d.h+'</h4><p>'+d.t+'</p></div>'}).join(""):'<div class="bc"><p>Toggle a borough to add it to your brief.</p></div>';
+}
+function tg(k){S[k]=S[k]?0:1;brief()}
+brief();
+</script>
+<script>
+(function(){var n=document.querySelector("nav"),b=document.getElementById("burger"),L=document.querySelectorAll("#menu a");
+b.onclick=function(){var o=n.classList.toggle("open");b.setAttribute("aria-expanded",o)};
+L.forEach(function(a){a.addEventListener("click",function(){n.classList.remove("open");b.setAttribute("aria-expanded",false)})});
+if(!("IntersectionObserver" in window))return;
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){L.forEach(function(a){a.classList.toggle("act",a.getAttribute("href")=="#"+e.target.id)})}})},{rootMargin:"-40% 0px -55% 0px"});
+["how","index","feed","brief","pricing"].forEach(function(id){var s=document.getElementById(id);if(s)io.observe(s)});
+})();
+</script>
+</body>
+</html>
