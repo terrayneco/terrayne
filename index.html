@@ -172,6 +172,62 @@ nav ul a.act{color:#fff;background:var(--panel2)}
 .road .card.now{background:var(--panel2);border-color:#35508a}
 .plan .btn{margin-top:26px;text-align:center;width:100%}
 .plan .price{font-size:38px}
+
+/* ---- Responsive fit: every screen size ---- */
+html,body{overflow-x:hidden}
+img,svg{max-width:100%}
+/* Hero fills exactly one screen and scales with both width AND height */
+.hero{min-height:calc(100vh - 72px);min-height:calc(100svh - 72px);display:flex;flex-direction:column;padding:clamp(36px,9vh,110px) 0 0}
+.hero>.wrap{width:100%;flex:1 0 auto;display:flex;flex-direction:column;justify-content:center}
+.eyebrow{margin-bottom:clamp(14px,2.4vh,22px)}
+.hero h1{font-size:clamp(36px,min(7.6vw,10vh),104px);max-width:min(1000px,100%);margin-bottom:clamp(16px,3vh,26px)}
+.hero .lead{font-size:clamp(16px,min(2vw,2.6vh),21px);margin-bottom:clamp(22px,4vh,36px)}
+.sky{flex:0 0 auto;overflow:visible;height:clamp(110px,24vh,300px);width:100%;margin-top:clamp(-40px,-3vh,-16px)}
+/* Grids never force sideways scrolling */
+.dash>*,.split>*,.bgrid>*,.feedhead>*,.grid>*{min-width:0}
+.tabs{grid-template-columns:repeat(auto-fit,minmax(min(150px,100%),1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr))}
+.grid.g3[style]{grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr))!important}
+.mb{flex-wrap:wrap}
+.dh{flex-wrap:wrap}
+/* Big screens: use a little more width */
+@media(min-width:1600px){.wrap{max-width:1240px}}
+/* Tablets and phones */
+@media(max-width:700px){
+ section{padding:64px 0}
+ .wrap{padding:0 20px}
+ .card,.panel{padding:24px;border-radius:20px}
+ .index,.final{border-radius:22px}
+ .sub{font-size:16.5px;margin-bottom:36px}
+ .score b{font-size:64px}
+ .mh{padding:24px 20px 20px}.mbody{padding:18px 16px 20px}.bc{padding:18px}
+ .cta .btn{flex:1 1 auto;text-align:center;padding:13px 20px;font-size:14.5px}
+ /* Signal feed table becomes stacked cards */
+ .tw{background:none;border:0;border-radius:0;overflow:visible}
+ .tw table,.tw tbody,.tw tr,.tw td{display:block;width:100%;min-width:0}
+ .tw thead{display:none}
+ .tw tr{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:18px 20px;margin-bottom:12px}
+ .tw td{border:0;padding:6px 0;font-size:14.5px}
+ .tw td[data-l]::before{content:attr(data-l);display:block;font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin-bottom:3px}
+ .tw td:first-child{font-size:18px;font-weight:600;padding-top:0}
+ .tw td.tk{min-width:0;border-top:1px solid var(--line);margin-top:8px;padding-top:12px}
+ .fp{padding:10px 16px;font-size:13px}
+ .tabs{grid-template-columns:1fr 1fr;gap:10px}.tab{padding:14px;border-radius:16px}.tab .r{font-size:13.5px;flex-wrap:wrap}.tab .s b{font-size:24px}.tab .s span{display:none}
+ .bc .r{flex-wrap:wrap}.bc .ix{white-space:nowrap}.bc .r>span{display:flex;flex-wrap:wrap;gap:6px}.bc .ix{margin-left:0}
+ .chip{padding:10px 16px;font-size:13px}
+}
+@media(max-width:380px){
+ .wrap{padding:0 16px}
+ .card,.panel{padding:20px}
+ .big b{font-size:36px}
+ .dh h3{font-size:22px}
+ .leg{flex-wrap:wrap;gap:8px}
+ .price{font-size:38px}
+}
+/* Upright tablets: no forced full-height hero */
+@media(min-width:701px) and (orientation:portrait){.hero{min-height:auto;padding-top:96px}.hero>.wrap{flex:0 0 auto}.sky{margin-top:24px}}
+/* Short landscape screens (phones turned sideways) */
+@media(max-height:500px) and (orientation:landscape){.hero{min-height:auto}.sky{height:90px}}
 </style>
 </head>
 <body>
@@ -190,7 +246,9 @@ nav ul a.act{color:#fff;background:var(--panel2)}
 <svg class="sky" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
 <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a2d52"/><stop offset="1" stop-color="#060d1a"/></linearGradient>
 <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0f1c38"/><stop offset="1" stop-color="#060d1a"/></linearGradient></defs>
-<g fill="url(#g2)"><rect x="0" y="190" width="70" height="110"/><rect x="60" y="160" width="50" height="140"/><rect x="120" y="205" width="90" height="95"/><rect x="230" y="175" width="60" height="125"/><rect x="760" y="185" width="80" height="115"/><rect x="900" y="170" width="55" height="130"/><rect x="1000" y="195" width="100" height="105"/><rect x="1110" y="165" width="90" height="135"/></g>
+<g fill="url(#g2)" id="bgb"><rect x="0" y="190" width="70" height="110"/><rect x="60" y="160" width="50" height="140"/><rect x="120" y="205" width="90" height="95"/><rect x="230" y="175" width="60" height="125"/><rect x="760" y="185" width="80" height="115"/><rect x="900" y="170" width="55" height="130"/><rect x="1000" y="195" width="100" height="105"/><rect x="1110" y="165" width="90" height="135"/></g>
+<use href="#bgb" x="-1200"/><use href="#bgb" x="1200"/>
+<g fill="url(#g)"><rect x="-260" y="150" width="60" height="150"/><rect x="-140" y="120" width="40" height="180"/><rect x="1240" y="135" width="55" height="165"/><rect x="1360" y="155" width="70" height="145"/></g>
 <g fill="url(#g)">
 <polygon points="330,300 330,150 372,40 414,150 414,300"/>
 <path d="M470 300V150C470 90 500 60 520 60S570 90 570 150V300Z"/>
@@ -200,7 +258,7 @@ nav ul a.act{color:#fff;background:var(--panel2)}
 <rect x="960" y="140" width="46" height="160"/>
 <rect x="150" y="130" width="60" height="170"/><rect x="250" y="140" width="55" height="160"/>
 </g>
-<rect y="296" width="1200" height="4" fill="#060d1a"/>
+<rect x="-2400" y="296" width="6000" height="4" fill="#060d1a"/>
 </svg>
 </header>
 
@@ -337,7 +395,7 @@ var F=[
 var P=[["all","All Signals"],["ma","Class MA (Office-to-Resi)"],["mr","Major Residential"],["tr","Transport & Infra"],["rg","Regeneration"]],fc="all";
 function feed(){
 document.getElementById("pills").innerHTML=P.map(function(p){return '<button class="fp'+(p[0]==fc?' on':'')+'" onclick="fsel(\''+p[0]+'\')">'+p[1]+'</button>'}).join("");
-document.getElementById("rows").innerHTML=F.filter(function(r){return fc=="all"||r.t==fc}).map(function(r){return '<tr><td>'+r.b+'</td><td class="sc">'+r.s+'</td><td><span class="tg '+r.t+'">'+r.k+'</span></td><td class="mn">'+r.u+'</td><td class="ai mn">'+r.a+'/100</td><td class="tk">'+r.x+'</td></tr>'}).join("");}
+document.getElementById("rows").innerHTML=F.filter(function(r){return fc=="all"||r.t==fc}).map(function(r){return '<tr><td>'+r.b+'</td><td class="sc" data-l="Site / corridor">'+r.s+'</td><td data-l="Signal type"><span class="tg '+r.t+'">'+r.k+'</span></td><td class="mn" data-l="Net units / scale">'+r.u+'</td><td class="ai mn" data-l="AI impact">'+r.a+'/100</td><td class="tk" data-l="Commercial takeaway">'+r.x+'</td></tr>'}).join("");}
 function fsel(c){fc=c;feed()}
 feed();
 </script>
@@ -366,6 +424,9 @@ if(!("IntersectionObserver" in window))return;
 var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){L.forEach(function(a){a.classList.toggle("act",a.getAttribute("href")=="#"+e.target.id)})}})},{rootMargin:"-40% 0px -55% 0px"});
 ["how","index","feed","brief","pricing"].forEach(function(id){var s=document.getElementById(id);if(s)io.observe(s)});
 })();
+</script>
+<script>
+(function(){var s=document.querySelector(".sky");if(!s)return;function f(){var r=s.getBoundingClientRect();s.setAttribute("preserveAspectRatio",r.width/r.height>4?"xMidYMax meet":"xMidYMax slice")}f();addEventListener("resize",f)})();
 </script>
 </body>
 </html>
