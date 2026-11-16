@@ -219,6 +219,10 @@ def build(today=None):
 def main():
     root = pathlib.Path(__file__).resolve().parent.parent
     data = build()
+    # Refuse to publish if the Datahub returned obviously partial data (keeps last good file instead).
+    live = sum(1 for a in data["areas"] if a["raw"]["act"] > 0)
+    if data["tiles"] < 120 or live < len(AREAS) - 3:
+        sys.exit(f"Datahub looks incomplete ({data['tiles']} tiles, {live}/{len(AREAS)} areas with filings); not writing.")
     (root / "data").mkdir(exist_ok=True)
     (root / "data" / "momentum.json").write_text(json.dumps(data, ensure_ascii=False, indent=1))
     print(f"{data['generated']}: {len(data['areas'])} areas vs {data['tiles']} London tiles")

@@ -759,6 +759,14 @@
      "valid": "21/07/2026"
     },
     {
+     "ref": "HGY/2025/3167",
+     "lpa": "Haringey",
+     "site": "512 High Road, Tottenham",
+     "units": 2,
+     "status": "Application Under Consideration",
+     "valid": "19/12/2025"
+    },
+    {
      "ref": "HGY/2026/0078",
      "lpa": "Haringey",
      "site": "512 High Road, Tottenham",
@@ -767,12 +775,12 @@
      "valid": "06/02/2026"
     },
     {
-     "ref": "HGY/2025/3167",
+     "ref": "HGY/2025/3181",
      "lpa": "Haringey",
      "site": "512 High Road, Tottenham",
-     "units": 2,
+     "units": 1,
      "status": "Application Under Consideration",
-     "valid": "19/12/2025"
+     "valid": "08/01/2026"
     },
     {
      "ref": "HGY/2026/1111",
@@ -797,14 +805,6 @@
      "units": 2,
      "status": "Application Under Consideration",
      "valid": "29/12/2025"
-    },
-    {
-     "ref": "HGY/2025/3181",
-     "lpa": "Haringey",
-     "site": "512 High Road, Tottenham",
-     "units": 1,
-     "status": "Application Under Consideration",
-     "valid": "08/01/2026"
     },
     {
      "ref": "252597",
@@ -1263,14 +1263,6 @@
      "valid": "13/07/2026"
     },
     {
-     "ref": "26/0397",
-     "lpa": "Brent",
-     "site": "7 Chalfont Avenue, Wembley",
-     "units": 1,
-     "status": "Dismissed",
-     "valid": "26/02/2026"
-    },
-    {
      "ref": "26/2506",
      "lpa": "Brent",
      "site": "First Floor Flat, 517A High Road, Wembley",
@@ -1279,12 +1271,12 @@
      "valid": "12/10/2026"
     },
     {
-     "ref": "26/1723",
+     "ref": "26/0397",
      "lpa": "Brent",
-     "site": "128 Church Lane",
+     "site": "7 Chalfont Avenue, Wembley",
      "units": 1,
-     "status": "Approved",
-     "valid": "15/07/2026"
+     "status": "Dismissed",
+     "valid": "26/02/2026"
     },
     {
      "ref": "26/2408",
@@ -1295,12 +1287,20 @@
      "valid": "22/09/2026"
     },
     {
-     "ref": "26/0407",
+     "ref": "26/1723",
      "lpa": "Brent",
-     "site": "146 Wembley Hill Road, Wembley",
+     "site": "128 Church Lane",
+     "units": 1,
+     "status": "Approved",
+     "valid": "15/07/2026"
+    },
+    {
+     "ref": "26/1906",
+     "lpa": "Brent",
+     "site": "55 Chalkhill Road, Wembley",
      "units": 0,
-     "status": "Appeal Received",
-     "valid": "16/03/2026"
+     "status": "Approved",
+     "valid": "31/07/2026"
     }
    ],
    "t": "Wembley Park scores highest on its housing pipeline (top 4% of London). In the last 12 months: 148 significant applications, 817 net new homes proposed and 39,715 m² of net commercial floorspace. Largest live schemes: Glynns Skip Hire, Fifth Way, Wembley (425 homes, application received, ref 26/0831); Land adjacent to Holiday Inn, Empire Way, Wembley (334 homes, application received, ref 26/0967)."
@@ -1703,22 +1703,6 @@
      "valid": "01/05/2026"
     },
     {
-     "ref": "26/2814/PN2",
-     "lpa": "Greenwich",
-     "site": "25 Powis Street",
-     "units": 2,
-     "status": "Application Under Consideration",
-     "valid": "28/09/2026"
-    },
-    {
-     "ref": "26/3082/PN2",
-     "lpa": "Greenwich",
-     "site": "27 Powis Street",
-     "units": 2,
-     "status": "Application Under Consideration",
-     "valid": "26/10/2026"
-    },
-    {
      "ref": "26/1493/CE",
      "lpa": "Greenwich",
      "site": "57 Waverley Road",
@@ -1733,6 +1717,22 @@
      "units": 1,
      "status": "Approved",
      "valid": "13/03/2026"
+    },
+    {
+     "ref": "26/1997/PN2",
+     "lpa": "Greenwich",
+     "site": "Allied Remedial Treatments Ltd, 4 Conduit Mews",
+     "units": 2,
+     "status": "Approved",
+     "valid": "03/07/2026"
+    },
+    {
+     "ref": "26/2302/CE",
+     "lpa": "Greenwich",
+     "site": "GROUND FLOOR and FIRST FLOOR, 4 GOSSAGE ROAD",
+     "units": 1,
+     "status": "Completed",
+     "valid": "30/07/2026"
     }
    ],
    "t": "Woolwich scores highest on office-to-residential (Class MA) conversions (top 9% of London). In the last 12 months: 116 significant applications, 59 net new homes proposed, 23 homes via Class MA and 3,085 m² of net commercial floorspace. Largest live schemes: Thames House, 7-9 Wellingtom Street, Woolwich (11 homes, application under consideration, ref 26/3024/PN2)."
@@ -1825,14 +1825,6 @@
      "valid": "28/11/2025"
     },
     {
-     "ref": "DC/26/145752",
-     "lpa": "Lewisham",
-     "site": "Land To The Rear Of 344-348 Lee High Road",
-     "units": 2,
-     "status": "Application Under Consideration",
-     "valid": "12/10/2026"
-    },
-    {
      "ref": "DC/26/143682",
      "lpa": "Lewisham",
      "site": "130 Tanners Hill",
@@ -1847,6 +1839,14 @@
      "units": 2,
      "status": "Completed",
      "valid": "13/05/2026"
+    },
+    {
+     "ref": "DC/26/145752",
+     "lpa": "Lewisham",
+     "site": "Land To The Rear Of 344-348 Lee High Road",
+     "units": 2,
+     "status": "Application Under Consideration",
+     "valid": "12/10/2026"
     },
     {
      "ref": "DC/25/142394",
