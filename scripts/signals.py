@@ -19,7 +19,25 @@ import xml.etree.ElementTree as ET
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 CACHE = ROOT / ".cache"
 UA = {"User-Agent": "terrayne-momentum-index/1.0"}
-LONDON = (51.28, 51.70, -0.52, 0.34)  # lat min/max, lon min/max
+# City settings. configure("manchester") switches every loader below to that city.
+CITIES = {
+    "london": {"box": (51.28, 51.70, -0.52, 0.34), "county": {"GREATER LONDON"}, "nomis": "2013265927TYPE151",
+               "orr_region": "London", "tfl": True,
+               "pc_areas": ["e", "ec", "n", "nw", "se", "sw", "w", "wc", "br", "cr", "da", "en", "ha", "ig", "kt", "rm", "sm", "tw", "ub", "wd"]},
+    "manchester": {"box": (53.33, 53.70, -2.75, -1.90), "county": {"GREATER MANCHESTER"}, "nomis": "2013265922TYPE151",
+                   "orr_region": "North West", "tfl": False, "pc_areas": ["m", "ol", "bl", "wn", "sk", "wa"]},
+}
+CITY = "london"
+LONDON = CITIES["london"]["box"]  # lat min/max, lon min/max of the current city (name kept for compatibility)
+
+
+def configure(city):
+    global CITY, LONDON
+    CITY, LONDON = city, CITIES[city]["box"]
+
+
+def cfg(k):
+    return CITIES[CITY][k]
 
 
 def fetch(url, name, max_age_days=7, timeout=300):
@@ -198,7 +216,7 @@ def orr_counts():
     latest, earlier = cols[-1], cols[-3]  # two years apart
     out = {}
     for r in rows[hi + 1:]:
-        if len(r) <= latest or (region is not None and "London" not in str(r[region])):
+        if len(r) <= latest or (region is not None and cfg("orr_region") not in str(r[region])):
             continue
         a, b = num(r[latest]), num(r[earlier])
         if a and b:
@@ -210,7 +228,9 @@ def orr_counts():
 def transport_points():
     pts = station_points()
     yrs = []
-    for y in range(dt.date.today().year, dt.date.today().year - 4, -1):
+    if not cfg("tfl"):
+        yrs = None
+    for y in (range(dt.date.today().year, dt.date.today().year - 4, -1) if yrs is not None else []):
         try:
             c = tfl_counts(y)
             if c:
@@ -221,6 +241,7 @@ def transport_points():
             break
     out, seen, unmatched = [], set(), 0
     label = None
+    yrs = yrs or []
     if len(yrs) >= 2:
         (y1, now), (y0, prev) = yrs[0], yrs[-1]  # compare across two years where available
         label = f"TfL {y0}→{y1}"
@@ -255,7 +276,7 @@ def transport_points():
 # ---------- population ----------
 def lsoa_points():
     """{LSOA21CD: (lat, lon)} for LSOAs in the London box, from ONS Open Geography."""
-    p = CACHE / "lsoa_centroids.json"
+    p = CACHE / f"lsoa_centroids_{CITY}.json"
     if p.exists() and time.time() - p.stat().st_mtime < 180 * 86400:
         return json.loads(p.read_text())
     base = "https://services1.arcgis.com/ESMARspQHYMw9BZ9/arcgis/rest/services/LSOA_2021_EW_BSC_V4_RUC/FeatureServer/0/query"
@@ -279,16 +300,17 @@ def lsoa_points():
 
 def population_points():
     cents = lsoa_points()
-    url = ("https://www.nomisweb.co.uk/api/v01/dataset/NM_2014_1.data.csv?geography=2013265927TYPE151"
+    url = (f"https://www.nomisweb.co.uk/api/v01/dataset/NM_2014_1.data.csv?geography={cfg('nomis')}"
            "&date=latestMINUS3,latest&gender=0&c_age=200&measures=20100&select=date_name,geography_code,obs_value")
-    f = fetch(url, "nomis_lsoa_pop.csv", 30)
+    f = fetch(url, f"nomis_lsoa_pop_{CITY}.csv", 30)
     pop = {}
     years = set()
     for r in csv.DictReader(open(f, encoding="utf-8-sig")):
         pop.setdefault(r["GEOGRAPHY_CODE"], {})[r["DATE_NAME"]] = num(r["OBS_VALUE"])
         years.add(r["DATE_NAME"])
     y0, y1 = min(years), max(years)
-    out = [(cents[c][0], cents[c][1], v[y1], v[y0]) for c, v in pop.items() if c in cents and v.get(y0) and v.get(y1)]
+    out = [(cents[c][0], cents[c][1], v[y1], v[y0]) for c, v in pop.items()
+           if c in cents and v.get(y0) and v.get(y1) and in_london(*cents[c])]
     return out, {"years": f"{y0}→{y1}", "lsoas": len(out)}
 
 
@@ -297,14 +319,14 @@ LONDON_POSTCODE_AREAS = ["e", "ec", "n", "nw", "se", "sw", "w", "wc", "br", "cr"
 
 
 def postcode_points():
-    p = CACHE / "postcodes_london.json"
+    p = CACHE / f"postcodes_{CITY}.json"
     if p.exists() and time.time() - p.stat().st_mtime < 90 * 86400:
         return json.loads(p.read_text())
     z = zipfile.ZipFile(fetch("https://api.os.uk/downloads/v1/products/CodePointOpen/downloads?area=GB&format=CSV&redirect", "codepo_gb.zip", 90))
     out = {}
     for n in z.namelist():
         m = re.search(r"/([a-z]+)\.csv$", n)
-        if not m or m.group(1) not in LONDON_POSTCODE_AREAS:
+        if not m or m.group(1) not in cfg("pc_areas"):
             continue
         for r in csv.reader(io.TextIOWrapper(z.open(n), encoding="utf-8")):
             E, N = num(r[2]), num(r[3])
@@ -331,7 +353,7 @@ def price_points(today=None):
             continue
         for r in csv.reader(open(f, encoding="latin-1")):
             # columns: id, price, date, postcode, type, new, tenure, paon, saon, street, locality, town, district, county, ppd_cat, status
-            if len(r) < 15 or r[13] != "GREATER LONDON" or r[14] != "A" or r[4] == "O":
+            if len(r) < 15 or r[13] not in cfg("county") or r[14] != "A" or r[4] == "O":
                 continue
             d = dt.date.fromisoformat(r[2][:10])
             if d < early:

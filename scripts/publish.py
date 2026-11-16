@@ -93,6 +93,16 @@ def main():
     print(f"public index written: {len(pub['areas'])} of {pub['tracked']} areas")
     import explore
     print("postcode check + Class MA tracker:", explore.write_all(full, week))
+    # Other cities (no Supabase/briefs yet). A failure here never blocks London.
+    import city, signals
+    for c in city.CITY_AREAS:
+        try:
+            _, info = city.write(c, week)
+            print(f"{c}:", info)
+        except Exception as e:  # noqa: BLE001
+            print(f"{c} skipped: {type(e).__name__}: {e}")
+        finally:
+            signals.configure("london")
 
     if "--html" in sys.argv:
         f = pathlib.Path(sys.argv[sys.argv.index("--html") + 1])

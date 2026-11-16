@@ -22,6 +22,11 @@ sync will overwrite your change. If you do edit here, copy `index.html` back to 
 - The GitHub Action `.github/workflows/momentum.yml` runs publish.py every Monday 05:15 UTC and emails briefs.
 - Refresh by hand: `python3 scripts/publish.py --html "$HOME/Library/Mobile Documents/com~apple~CloudDocs/TYE/website/terrayne.html"`, then sync/push.
 
+## Cities
+- London: full index (planning + official stats). Manchester (beta): `scripts/city.py` builds data/manchester/ from brownfield registers (scored on hectares), Land Registry new-build sales, ORR rail, ONS population, LR resale prices. Greater Manchester has no open planning-applications feed.
+- `scripts/signals.py` has a CITIES config; `signals.configure(city)` switches every loader. Add a city there + in `CITY_AREAS` (city.py) + `CITYCFG`/`CK_CITIES` in the page JS.
+- Birmingham and Paris are shown as "coming soon".
+
 ## Accounts (Supabase + Stripe)
 - `account.html`, `admin.html`, `terms.html`, `privacy.html`, `assets/config.js`, `supabase/` live in THIS repo only (not in the iCloud folder); edit them here.
 - Setup steps are in `SETUP.md`. `assets/config.js` holds only the public Supabase URL + anon key; never put secret keys in the repo.

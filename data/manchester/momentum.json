@@ -1,0 +1,796 @@
+{
+ "city": "manchester",
+ "generated": "2026-11-16",
+ "window_days": 365,
+ "radius_km": 1.72,
+ "tiles": 184,
+ "weights": {
+  "brownfield": 0.25,
+  "newbuild": 0.2,
+  "transport": 0.15,
+  "population": 0.2,
+  "prices": 0.2
+ },
+ "labels": [
+  "Brownfield Pipeline",
+  "New-build Delivery",
+  "Transport Demand",
+  "Population Growth",
+  "Price Momentum"
+ ],
+ "keys": [
+  "brownfield",
+  "newbuild",
+  "transport",
+  "population",
+  "prices"
+ ],
+ "groups": [
+  [
+   0,
+   "DEVELOPMENT PIPELINE"
+  ],
+  [
+   2,
+   "DEMAND & PRICES"
+  ]
+ ],
+ "unit_label": "of brownfield land for housing",
+ "sources": {
+  "brownfield": "MHCLG brownfield land registers (planning.data.gov.uk)",
+  "newbuild": "HM Land Registry Price Paid Data (new-build sales); OS Code-Point Open",
+  "transport": "ORR Estimates of Station Usage; DfT NaPTAN",
+  "population": "ONS small-area population estimates (Nomis); ONS Open Geography",
+  "prices": "HM Land Registry Price Paid Data; OS Code-Point Open"
+ },
+ "official": {
+  "transport": {
+   "tfl": null,
+   "orr": "ORR Apr 2022 to Mar 2023 → Apr 2024 to Mar 2025",
+   "stations": 115,
+   "tfl_unmatched": 0
+  },
+  "population": {
+   "years": "2021→2024",
+   "lsoas": 2104
+  },
+  "prices": {
+   "sales": 62725,
+   "latest_sale": "2026-09-30",
+   "window": "2024-09-30→2026-09-30"
+  },
+  "brownfield": {
+   "sites": 2504,
+   "homes": 136482
+  }
+ },
+ "errors": {},
+ "bench": {
+  "brownfield": 5.2,
+  "newbuild": 0.0,
+  "transport": 0.266947998910972,
+  "population": 0.026649307471434125,
+  "prices": 0.03643112622065148,
+  "price_level": 231000.0
+ },
+ "source": "MHCLG brownfield registers, HM Land Registry, ORR, ONS",
+ "areas": [
+  {
+   "n": "Salford Quays",
+   "f": "Salford Quays & MediaCity",
+   "b": "Salford",
+   "lat": 53.472,
+   "lon": -2.295,
+   "s": 82,
+   "c": null,
+   "u": "204.7 ha",
+   "x": [
+    99,
+    99,
+    null,
+    99,
+    26
+   ],
+   "hd": 67,
+   "off": {
+    "brownfield_homes": 20666,
+    "brownfield_permissioned": 12070,
+    "brownfield_sites": 80,
+    "brownfield_ha": 204.7,
+    "newbuild_sales": 47,
+    "transport": null,
+    "stations": 0,
+    "population": 0.221,
+    "prices": 0.0215,
+    "median_price": 208701.5,
+    "transport_span": "ORR Apr 2022 to Mar 2023 → Apr 2024 to Mar 2025",
+    "population_span": "2021→2024"
+   },
+   "det": {
+    "brownfield": [
+     [
+      "MediaCity / Quayside regeneration framework area",
+      3200,
+      "permissioned",
+      "Salford City Council",
+      22.16
+     ],
+     [
+      "Land between Broadway and The Quays",
+      2000,
+      "not permissioned",
+      "Salford City Council",
+      8.27
+     ],
+     [
+      "Waterfront Quay, Salford Quays, Salford M50 3XW",
+      1600,
+      "permissioned",
+      "Salford City Council",
+      2.91
+     ],
+     [
+      "Land to the west of Michigan Avenue, Salford, M50 2GY",
+      1500,
+      "not permissioned",
+      "Salford City Council",
+      1.82
+     ],
+     [
+      "Waterfront Quay, Salford Quays, Salford M50 3XW",
+      1493,
+      "permissioned",
+      "Salford City Council",
+      2.91
+     ]
+    ],
+    "transport": {
+     "now": 0,
+     "before": 0,
+     "top": []
+    },
+    "population": {
+     "now": 39322,
+     "before": 32206,
+     "lsoas": 18
+    },
+    "prices": {
+     "types": [
+      [
+       "Flats",
+       164,
+       165000,
+       163000
+      ],
+      [
+       "Terraced",
+       80,
+       228250,
+       222000
+      ],
+      [
+       "Semi-detached",
+       17,
+       270000,
+       250000
+      ]
+     ],
+     "new_build": 47,
+     "sales": 308
+    }
+   },
+   "raw": {},
+   "schemes": [],
+   "t": "Salford Quays & MediaCity scores highest on brownfield land identified for housing (top 1% of Greater Manchester). 80 brownfield register sites nearby (204.7 ha) could take about 20,666 homes, 12,070 of them with planning permission. 47 new-build homes sold in the last 12 months. Official statistics: population +22.1% (2021→2024); resale prices +2.1% on a year earlier, median £208,702."
+  },
+  {
+   "n": "Bolton",
+   "f": "Bolton town centre",
+   "b": "Bolton",
+   "lat": 53.578,
+   "lon": -2.429,
+   "s": 81,
+   "c": null,
+   "u": "46.0 ha",
+   "x": [
+    93,
+    90,
+    29,
+    93,
+    85
+   ],
+   "hd": 100,
+   "off": {
+    "brownfield_homes": 0,
+    "brownfield_permissioned": 0,
+    "brownfield_sites": 79,
+    "brownfield_ha": 46.0,
+    "newbuild_sales": 3,
+    "transport": 0.2051,
+    "stations": 1,
+    "population": 0.0841,
+    "prices": 0.0764,
+    "median_price": 147000.0,
+    "transport_span": "ORR Apr 2022 to Mar 2023 → Apr 2024 to Mar 2025",
+    "population_span": "2021→2024"
+   },
+   "det": {
+    "brownfield": [
+     [
+      "Derby Street/Rothwell Mill",
+      0,
+      "not permissioned",
+      "Bolton Metropolitan Borough Council",
+      3.95
+     ],
+     [
+      "CHURCH WHARF",
+      0,
+      "permissioned",
+      "Bolton Metropolitan Borough Council",
+      3.01
+     ],
+     [
+      "TRINITY QUARTER CORE SHIFFNALL STREET/CARLTON ST/SALOP ST",
+      0,
+      "not permissioned",
+      "Bolton Metropolitan Borough Council",
+      2.72
+     ],
+     [
+      "BREIGHTMET ST, BOLTON, BL1 1ET",
+      0,
+      "not permissioned",
+      "Bolton Metropolitan Borough Council",
+      2.1
+     ],
+     [
+      "Chadwick Street Campus, Chadwick Street, Bolton",
+      0,
+      "not permissioned",
+      "Bolton Metropolitan Borough Council",
+      1.8
+     ]
+    ],
+    "transport": {
+     "now": 3011850,
+     "before": 2499322,
+     "top": [
+      [
+       "Bolton",
+       3011850,
+       2499322
+      ]
+     ]
+    },
+    "population": {
+     "now": 45609,
+     "before": 42069,
+     "lsoas": 23
+    },
+    "prices": {
+     "types": [
+      [
+       "Flats",
+       30,
+       90300,
+       84550
+      ],
+      [
+       "Terraced",
+       114,
+       143000,
+       134000
+      ],
+      [
+       "Semi-detached",
+       32,
+       210000,
+       188000
+      ],
+      [
+       "Detached",
+       7,
+       245000,
+       null
+      ]
+     ],
+     "new_build": 3,
+     "sales": 186
+    }
+   },
+   "raw": {},
+   "schemes": [],
+   "t": "Bolton town centre scores highest on brownfield land identified for housing (top 7% of Greater Manchester). 79 brownfield register sites nearby (46.0 ha). 3 new-build homes sold in the last 12 months. Official statistics: population +8.4% (2021→2024); rail use +20.5%; resale prices +7.6% on a year earlier, median £147,000."
+  },
+  {
+   "n": "Cheetham Hill",
+   "f": "Cheetham Hill & Strangeways",
+   "b": "Manchester",
+   "lat": 53.503,
+   "lon": -2.238,
+   "s": 77,
+   "c": null,
+   "u": "69.4 ha",
+   "x": [
+    97,
+    99,
+    null,
+    89,
+    20
+   ],
+   "hd": 52,
+   "off": {
+    "brownfield_homes": 15450,
+    "brownfield_permissioned": 14020,
+    "brownfield_sites": 59,
+    "brownfield_ha": 69.4,
+    "newbuild_sales": 62,
+    "transport": null,
+    "stations": 0,
+    "population": 0.074,
+    "prices": 0.0075,
+    "median_price": 230000.0,
+    "transport_span": "ORR Apr 2022 to Mar 2023 → Apr 2024 to Mar 2025",
+    "population_span": "2021→2024"
+   },
+   "det": {
+    "brownfield": [
+     [
+      "Red Bank (Victoria North)",
+      3250,
+      "non permissioned",
+      "Manchester City Council",
+      5.950587
+     ],
+     [
+      "Great Ducie Street Masterplan Area",
+      2000,
+      "non permissioned",
+      "Manchester City Council",
+      6.525389
+     ],
+     [
+      "New Town (Victoria North)",
+      1800,
+      "non permissioned",
+      "Manchester City Council",
+      3.671046
+     ],
+     [
+      "Vauxhall Gardens/Sandhills (Victoria North)",
+      1250,
+      "non permissioned",
+      "Manchester City Council",
+      6.99219
+     ],
+     [
+      "Former Gas Works, Gould Street - New Town (Victoria North)",
+      1202,
+      "Planning Permission",
+      "Manchester City Council",
+      3.083265
+     ]
+    ],
+    "transport": {
+     "now": 0,
+     "before": 0,
+     "top": []
+    },
+    "population": {
+     "now": 62244,
+     "before": 57954,
+     "lsoas": 28
+    },
+    "prices": {
+     "types": [
+      [
+       "Flats",
+       96,
+       158250,
+       162500
+      ],
+      [
+       "Terraced",
+       49,
+       204000,
+       200000
+      ],
+      [
+       "Semi-detached",
+       37,
+       275000,
+       255000
+      ],
+      [
+       "Detached",
+       6,
+       228500,
+       null
+      ]
+     ],
+     "new_build": 62,
+     "sales": 250
+    }
+   },
+   "raw": {},
+   "schemes": [],
+   "t": "Cheetham Hill & Strangeways scores highest on new-build homes being sold (top 1% of Greater Manchester). 59 brownfield register sites nearby (69.4 ha) could take about 15,450 homes, 14,020 of them with planning permission. 62 new-build homes sold in the last 12 months. Official statistics: population +7.4% (2021→2024); resale prices +0.8% on a year earlier, median £230,000."
+  },
+  {
+   "n": "Oldham",
+   "f": "Oldham town centre",
+   "b": "Oldham",
+   "lat": 53.5409,
+   "lon": -2.1114,
+   "s": 77,
+   "c": null,
+   "u": "27.3 ha",
+   "x": [
+    88,
+    79,
+    null,
+    81,
+    57
+   ],
+   "hd": 98,
+   "off": {
+    "brownfield_homes": 2365,
+    "brownfield_permissioned": 986,
+    "brownfield_sites": 48,
+    "brownfield_ha": 27.3,
+    "newbuild_sales": 1,
+    "transport": null,
+    "stations": 0,
+    "population": 0.0573,
+    "prices": 0.0439,
+    "median_price": 156000.0,
+    "transport_span": "ORR Apr 2022 to Mar 2023 → Apr 2024 to Mar 2025",
+    "population_span": "2021→2024"
+   },
+   "det": {
+    "brownfield": [
+     [
+      "Land between Prince Street, Oldham Way and Mumps metrolink stop (forme",
+      331,
+      "permissioned",
+      "Oldham Metropolitan Borough Council",
+      0.98
+     ],
+     [
+      "Land at North Werneth Zone 6 (Hartford Mill, Edward St)",
+      285,
+      "permissioned",
+      "Oldham Metropolitan Borough Council",
+      2.7
+     ],
+     [
+      "Land at Southgate Street and Waterloo Street, Oldham",
+      250,
+      "not permissioned",
+      "Oldham Metropolitan Borough Council",
+      0.82
+     ],
+     [
+      "Tommyfield Market, Albion Street, Oldham, OL1 3BG",
+      244,
+      "not permissioned",
+      "Oldham Metropolitan Borough Council",
+      1.12
+     ],
+     [
+      "Former Leisure Centre site, Lord Street, Oldham",
+      231,
+      "permissioned",
+      "Oldham Metropolitan Borough Council",
+      1.5
+     ]
+    ],
+    "transport": {
+     "now": 0,
+     "before": 0,
+     "top": []
+    },
+    "population": {
+     "now": 62993,
+     "before": 59577,
+     "lsoas": 28
+    },
+    "prices": {
+     "types": [
+      [
+       "Flats",
+       4,
+       90100,
+       102475
+      ],
+      [
+       "Terraced",
+       120,
+       135000,
+       135000
+      ],
+      [
+       "Semi-detached",
+       45,
+       200000,
+       172250
+      ],
+      [
+       "Detached",
+       11,
+       288000,
+       null
+      ]
+     ],
+     "new_build": 1,
+     "sales": 181
+    }
+   },
+   "raw": {},
+   "schemes": [],
+   "t": "Oldham town centre scores highest on brownfield land identified for housing (top 12% of Greater Manchester). 48 brownfield register sites nearby (27.3 ha) could take about 2,365 homes, 986 of them with planning permission. 1 new-build homes sold in the last 12 months. Official statistics: population +5.7% (2021→2024); resale prices +4.4% on a year earlier, median £156,000."
+  },
+  {
+   "n": "Stockport",
+   "f": "Stockport town centre",
+   "b": "Stockport",
+   "lat": 53.4083,
+   "lon": -2.1494,
+   "s": 75,
+   "c": null,
+   "u": "18.4 ha",
+   "x": [
+    80,
+    86,
+    76,
+    85,
+    45
+   ],
+   "hd": 52,
+   "off": {
+    "brownfield_homes": 1377,
+    "brownfield_permissioned": 1088,
+    "brownfield_sites": 34,
+    "brownfield_ha": 18.4,
+    "newbuild_sales": 2,
+    "transport": 0.367,
+    "stations": 1,
+    "population": 0.0624,
+    "prices": 0.0328,
+    "median_price": 230000.0,
+    "transport_span": "ORR Apr 2022 to Mar 2023 → Apr 2024 to Mar 2025",
+    "population_span": "2021→2024"
+   },
+   "det": {
+    "brownfield": [
+     [
+      "Meadow Mill Water Street Portwood SK1 2BX",
+      217,
+      "permissioned",
+      "Stockport Metropolitan Borough Council",
+      1.12
+     ],
+     [
+      "Stockport Interchange, Chestergate, Stockport, SK1 1NP",
+      196,
+      "permissioned",
+      "Stockport Metropolitan Borough Council",
+      3.56
+     ],
+     [
+      "Offerton Industrial Estate, Hempshaw Lane, Offerton, Stockport, SK2 5T",
+      144,
+      "permissioned",
+      "Stockport Metropolitan Borough Council",
+      3.15
+     ],
+     [
+      "Edward Street, Stockport, SK1 3DQ",
+      135,
+      "permissioned",
+      "Stockport Metropolitan Borough Council",
+      0.28
+     ],
+     [
+      "Former Sorting Office, Exchange Street, Stockport",
+      90,
+      "not permissioned",
+      "Stockport Metropolitan Borough Council",
+      0.59
+     ]
+    ],
+    "transport": {
+     "now": 4295970,
+     "before": 3142678,
+     "top": [
+      [
+       "Stockport",
+       4295970,
+       3142678
+      ]
+     ]
+    },
+    "population": {
+     "now": 43515,
+     "before": 40960,
+     "lsoas": 26
+    },
+    "prices": {
+     "types": [
+      [
+       "Flats",
+       40,
+       158500,
+       152000
+      ],
+      [
+       "Terraced",
+       233,
+       220000,
+       212500
+      ],
+      [
+       "Semi-detached",
+       155,
+       277500,
+       270000
+      ],
+      [
+       "Detached",
+       11,
+       330000,
+       325000
+      ]
+     ],
+     "new_build": 2,
+     "sales": 441
+    }
+   },
+   "raw": {},
+   "schemes": [],
+   "t": "Stockport town centre scores highest on new-build homes being sold (top 14% of Greater Manchester). 34 brownfield register sites nearby (18.4 ha) could take about 1,377 homes, 1,088 of them with planning permission. 2 new-build homes sold in the last 12 months. Official statistics: population +6.2% (2021→2024); rail use +36.7%; resale prices +3.3% on a year earlier, median £230,000."
+  },
+  {
+   "n": "City Centre",
+   "f": "Manchester city centre",
+   "b": "Manchester",
+   "lat": 53.4794,
+   "lon": -2.244,
+   "s": 71,
+   "c": null,
+   "u": "192.4 ha",
+   "x": [
+    99,
+    100,
+    34,
+    100,
+    5
+   ],
+   "hd": 47,
+   "off": {
+    "brownfield_homes": 52887,
+    "brownfield_permissioned": 39481,
+    "brownfield_sites": 343,
+    "brownfield_ha": 192.4,
+    "newbuild_sales": 157,
+    "transport": 0.2177,
+    "stations": 5,
+    "population": 0.3524,
+    "prices": -0.0436,
+    "median_price": 235000.0,
+    "transport_span": "ORR Apr 2022 to Mar 2023 → Apr 2024 to Mar 2025",
+    "population_span": "2021→2024"
+   },
+   "det": {
+    "brownfield": [
+     [
+      "Red Bank (Victoria North)",
+      3250,
+      "non permissioned",
+      "Manchester City Council",
+      5.950587
+     ],
+     [
+      "New Cross Zones B & C (Victoria North)",
+      3000,
+      "non permissioned",
+      "Manchester City Council",
+      11.141161
+     ],
+     [
+      "Ardwick Green NDF sites",
+      2484,
+      "non permissioned",
+      "Manchester City Council",
+      14.303563
+     ],
+     [
+      "Great Ducie Street Masterplan Area",
+      2000,
+      "non permissioned",
+      "Manchester City Council",
+      6.525389
+     ],
+     [
+      "Piccadilly Trading Estate",
+      1960,
+      "non permissioned",
+      "Manchester City Council",
+      2.974643
+     ]
+    ],
+    "transport": {
+     "now": 44706850,
+     "before": 36714352,
+     "top": [
+      [
+       "Manchester Piccadilly",
+       27401610,
+       23558364
+      ],
+      [
+       "Manchester Victoria",
+       8378502,
+       7002544
+      ],
+      [
+       "Manchester Oxford Road",
+       6392614,
+       4657936
+      ],
+      [
+       "Deansgate",
+       1719378,
+       968090
+      ],
+      [
+       "Salford Central",
+       814746,
+       527418
+      ]
+     ]
+    },
+    "population": {
+     "now": 94392,
+     "before": 69795,
+     "lsoas": 43
+    },
+    "prices": {
+     "types": [
+      [
+       "Flats",
+       823,
+       213000,
+       221750
+      ],
+      [
+       "Terraced",
+       27,
+       315000,
+       380000
+      ],
+      [
+       "Semi-detached",
+       10,
+       264500,
+       null
+      ],
+      [
+       "Detached",
+       2,
+       311500,
+       null
+      ]
+     ],
+     "new_build": 157,
+     "sales": 1019
+    }
+   },
+   "raw": {},
+   "schemes": [],
+   "t": "Manchester city centre scores highest on new-build homes being sold (top 1% of Greater Manchester). 343 brownfield register sites nearby (192.4 ha) could take about 52,887 homes, 39,481 of them with planning permission. 157 new-build homes sold in the last 12 months. Official statistics: population +35.2% (2021→2024); rail use +21.8%; resale prices −4.4% on a year earlier, median £235,000."
+  }
+ ],
+ "tracked": 19
+}
