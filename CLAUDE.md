@@ -16,7 +16,7 @@ sync will overwrite your change. If you do edit here, copy `index.html` back to 
 5. Tell Charlie it's pushed and will be live on terrayne.co in about a minute (hard refresh: Cmd+Shift+R).
 
 ## Momentum Index (real data)
-- Scores come from `scripts/momentum.py` (method in its docstring), queried from the GLA Planning London Datahub public guest API.
+- Scores come from `scripts/momentum.py` (method + weights in its docstring): 4 planning signals from the GLA Planning London Datahub, plus 3 official-statistics signals from `scripts/signals.py` (TfL/ORR station usage, ONS LSOA population, HM Land Registry resale prices; locations from NaPTAN, ONS Open Geography, OS Code-Point Open). Downloads cache in `.cache/` (git-ignored). If a source fails, it is skipped and listed under `errors` in the output.
 - `scripts/publish.py` is the entry point: writes `data/momentum.json` with the free TOP 6 only, and (with Supabase env vars) stores the full snapshot + weekly briefs in Supabase for paying users. Never commit the full all-areas data publicly.
 - The home page loads `data/momentum.json` live and also embeds a snapshot between `/*MI*/` markers.
 - The GitHub Action `.github/workflows/momentum.yml` runs publish.py every Monday 05:15 UTC and emails briefs.

@@ -6,15 +6,21 @@ Run:  python3 scripts/momentum.py            -> writes data/momentum.json
 
 Method (shown on the site as well):
   Each tracked neighbourhood is a circle of radius 1.72 km (9.3 km2) around a fixed point.
-  Over the last 12 months of validated applications we measure four signals:
-    1. Planning Activity     number of non-householder, non-minor applications
-    2. Development Pipeline  net new homes proposed (live or approved schemes)
-    3. Class MA conversions  homes proposed via office/commercial-to-residential prior approvals
-    4. Commercial Floorspace net non-residential floorspace (m2) proposed
+  Seven signals, four from planning applications (GLA Planning London Datahub, last 12 months)
+  and three from other official statistics (see scripts/signals.py):
+    1. Planning Activity     number of non-householder, non-minor applications            15%
+    2. Development Pipeline  net new homes proposed (live or approved schemes)            20%
+    3. Class MA conversions  homes proposed via office-to-residential prior approvals     10%
+    4. Commercial Floorspace net non-residential floorspace (m2) proposed                 10%
+    5. Transport demand      growth in station entries+exits (TfL counts, ORR usage)      15%
+    6. Population growth     ONS small-area mid-year estimates                            15%
+    7. Price momentum        median sale price vs a year earlier (HM Land Registry)       15%
   Each signal becomes a percentile (0-100) against every 9.3 km2 map tile in Greater London
-  (zoom-13 web-map tiles, the same area as the circles). The Index is the weighted average:
-  activity 25%, pipeline 35%, Class MA 20%, commercial 20%.
-  The 30-day change is today's Index minus the Index computed for the 12 months ending 30 days ago.
+  (zoom-13 web-map tiles, the same area as the circles). The Index is the weighted average of
+  the signals available for that neighbourhood (weights re-scaled if one is missing).
+  Price headroom (shown alongside, not in the score) = how cheap the median sale is vs London.
+  The 30-day change is today's Index minus the Index with planning data for the 12 months
+  ending 30 days ago (the official statistics update monthly to yearly).
 No API key needed: uses the Datahub's public guest endpoint. Standard library only.
 """
 import json, sys, datetime as dt, urllib.request, pathlib, re, math
@@ -24,7 +30,14 @@ HEAD = {"Content-Type": "application/json", "X-API-AllowRequest": "be2rmRnt&"}
 RADIUS_KM = 1.72
 TILE_ZOOM = 13
 BBOX = {"top_left": {"lat": 51.70, "lon": -0.52}, "bottom_right": {"lat": 51.28, "lon": 0.34}}
-WEIGHTS = {"act": 0.25, "pipe": 0.35, "ma": 0.20, "com": 0.20}
+PLAN_W = {"act": 0.15, "pipe": 0.20, "ma": 0.10, "com": 0.10}
+OFFICIAL_W = {"transport": 0.15, "population": 0.15, "prices": 0.15}
+WEIGHTS = {**PLAN_W, **OFFICIAL_W}
+LABELS = {"act": "Planning Activity", "pipe": "Development Pipeline", "ma": "Class MA (Office-to-Resi)", "com": "Commercial Floorspace",
+          "transport": "Transport Demand", "population": "Population Growth", "prices": "Price Momentum"}
+SOURCES = {"act": "GLA Planning London Datahub", "pipe": "GLA Planning London Datahub", "ma": "GLA Planning London Datahub",
+           "com": "GLA Planning London Datahub", "transport": "TfL Annual Station Counts; ORR Estimates of Station Usage; DfT NaPTAN",
+           "population": "ONS small-area population estimates (Nomis); ONS Open Geography", "prices": "HM Land Registry Price Paid Data; OS Code-Point Open"}
 
 # Tracked submarkets: name, full name, boroughs, centre lat, lon
 AREAS = [
@@ -133,9 +146,11 @@ def pct(v, dist):
     return round(100 * (below + 0.5 * same) / len(dist)) if dist else 0
 
 
-def score(sig, dist):
-    parts = {k: pct(sig[k], [d[k] for d in dist]) for k in WEIGHTS}
-    return round(sum(parts[k] * w for k, w in WEIGHTS.items())), parts
+def score(sig, dist, extra=None):
+    parts = {k: pct(sig[k], [d[k] for d in dist]) for k in PLAN_W}
+    parts.update(extra or {})
+    have = {k: w for k, w in WEIGHTS.items() if parts.get(k) is not None}
+    return round(sum(parts[k] * w for k, w in have.items()) / sum(have.values())), parts
 
 
 def km(a, b, c, d):
@@ -170,15 +185,31 @@ def label(site, street):
     return site or street
 
 
-def takeaway(full, sig, parts, schemes):
+def pc(v):
+    return f"{'+' if v >= 0 else '−'}{abs(v) * 100:.1f}%"
+
+
+def takeaway(full, sig, parts, schemes, off=None):
     bits = []
-    lead = max(parts, key=parts.get)
+    have = {k: v for k, v in parts.items() if v is not None}
+    lead = max(have, key=have.get)
     names = {"act": "planning activity", "pipe": "its housing pipeline", "ma": "office-to-residential (Class MA) conversions",
-             "com": "new commercial floorspace"}
+             "com": "new commercial floorspace", "transport": "growth in station use", "population": "population growth",
+             "prices": "house-price momentum"}
     bits.append(f"{full} scores highest on {names[lead]} (top {max(1, 100 - parts[lead])}% of London).")
     bits.append(f"In the last 12 months: {fnum(sig['act'])} significant applications, {fnum(sig['pipe'])} net new home{'' if sig['pipe']==1 else 's'} proposed"
                 + (f", {homes(sig['ma'] - 0.5 * sig['ma_n'])} via Class MA" if sig['ma_n'] else "")
                 + (f" and {fnum(sig['com'])} m² of net commercial floorspace." if sig['com'] >= 500 else "."))
+    o = off or {}
+    facts = []
+    if o.get("transport") is not None:
+        facts.append(f"station use {pc(o['transport'])} ({o['transport_span']})")
+    if o.get("population") is not None:
+        facts.append(f"population {pc(o['population'])} ({o['population_span']})")
+    if o.get("prices") is not None:
+        facts.append(f"median sale price {pc(o['prices'])} on a year earlier, at £{o['median_price']:,.0f}")
+    if facts:
+        bits.append("Official statistics: " + "; ".join(facts) + ".")
     big = [s for s in schemes if (s.get("units") or 0) >= 10][:2]
     if big:
         bits.append("Largest live schemes: " + "; ".join(f"{s['site']} ({homes(s['units'])}, {s['status'].lower()}, ref {s['ref']})" for s in big) + ".")
@@ -189,12 +220,38 @@ def build(today=None):
     today = today or dt.date.today()
     prior = today - dt.timedelta(days=30)
     dist_now, dist_prev = tiles(today), tiles(prior)
+    import signals as official
+    loaded, errors = official.load_all(today)
+    odist, meta = {}, {}
+    for name, (pts, m, kind) in loaded.items():
+        agg = official.aggregate(pts, kind)
+        minimum = {"transport": 1, "population": 3, "prices": 1}[kind]
+        odist[name] = [a["growth"] for a in agg.values() if a["growth"] is not None and a["n"] >= minimum]
+        if kind == "prices":
+            odist["price_level"] = [a["median"] for a in agg.values() if a["median"] is not None]
+        meta[name] = {**m, "tiles": len(odist[name])}
+    span = {"transport": (meta.get("transport") or {}).get("tfl") or (meta.get("transport") or {}).get("orr") or "",
+            "population": (meta.get("population") or {}).get("years", "")}
     out = []
     for n, full, boro, lat, lon in AREAS:
         r = area_query(lat, lon, today, top=12)
         sig = signals(r["aggregations"]); sig["ma_n"] = r["aggregations"]["ma"]["doc_count"]
-        s, parts = score(sig, dist_now)
-        s_prev, _ = score(signals(area_query(lat, lon, prior)["aggregations"]), dist_prev)
+        extra, offv, headroom = {}, {}, None
+        for name, (pts, m, kind) in loaded.items():
+            a = official.summarise(official.within(pts, lat, lon, RADIUS_KM), kind)
+            g = a["growth"]
+            extra[name] = pct(g, odist[name]) if g is not None and odist[name] else None
+            offv[name] = g
+            if kind == "prices" and a["median"] is not None:
+                offv["median_price"] = a["median"]; offv["sales"] = a["sales"]
+                headroom = 100 - pct(a["median"], odist["price_level"])
+            if kind == "transport":
+                offv["stations"] = a["n"]
+        for k in OFFICIAL_W:
+            extra.setdefault(k, None)
+        offv["transport_span"], offv["population_span"] = span["transport"], span["population"]
+        s, parts = score(sig, dist_now, extra)
+        s_prev, _ = score(signals(area_query(lat, lon, prior)["aggregations"]), dist_prev, extra)
         schemes = []
         for h in r["hits"]["hits"]:
             src = h["_source"]; c = src.get("centroid") or {}
@@ -208,12 +265,15 @@ def build(today=None):
             schemes.append({"ref": src.get("lpa_app_no"), "lpa": src.get("lpa_name"), "site": site, "units": u,
                             "status": src.get("status") or "", "valid": src.get("valid_date")})
         out.append({"n": n, "f": full, "b": boro, "lat": lat, "lon": lon, "s": s, "c": s - s_prev,
-                    "u": fnum(sig["pipe"]), "x": [parts["act"], parts["pipe"], parts["ma"], parts["com"]],
-                    "raw": {k: round(v) for k, v in sig.items()}, "schemes": schemes,
-                    "t": takeaway(full, sig, parts, schemes)})
+                    "u": fnum(sig["pipe"]), "x": [parts[k] for k in WEIGHTS], "hd": headroom,
+                    "raw": {k: round(v) for k, v in sig.items()},
+                    "off": {k: (round(v, 4) if isinstance(v, float) else v) for k, v in offv.items()},
+                    "schemes": schemes, "t": takeaway(full, sig, parts, schemes, offv)})
     out.sort(key=lambda d: -d["s"])
     return {"generated": today.isoformat(), "window_days": 365, "radius_km": RADIUS_KM, "tiles": len(dist_now),
-            "weights": WEIGHTS, "source": "GLA Planning London Datahub", "areas": out}
+            "weights": WEIGHTS, "labels": [LABELS[k] for k in WEIGHTS], "keys": list(WEIGHTS),
+            "sources": SOURCES, "official": meta, "errors": errors,
+            "source": "GLA Planning London Datahub, TfL, ORR, ONS, HM Land Registry", "areas": out}
 
 
 def main():
