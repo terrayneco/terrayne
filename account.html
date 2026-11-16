@@ -294,9 +294,9 @@ billing:function(){
  var line=team?"Your Enterprise access is provided by your team owner.":!live?"You’re on the free plan.":p.cancel_at_period_end?"Cancels on "+fmtDate(p.current_period_end)+". You keep access until then.":"Renews on "+fmtDate(p.current_period_end)+" ("+(p.billing_interval==="year"?"yearly":"monthly")+").";
  $("bl-sub").textContent="";
  $("bl-cur").innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap"><div><div class="note">Current plan</div><div class="score">'+cur+' '+(st==="past_due"?'<span class="pill warn">Payment due</span>':p.cancel_at_period_end?'<span class="pill warn">Cancelling</span>':'')+'</div><div class="note">'+esc(line)+'</div></div>'+(live&&!team?'<button class="btn ghost" id="portal">Manage subscription</button>':'')+'</div>';
- var I=S.interval,plans=[["free","Discover","Free",["Top 6 Momentum scores","London development map","Planning signal feed","Sample Monday brief"]],
-  ["pro","Professional","£"+pr.pro[I].toLocaleString()+"<small> / "+I+"</small>",["Every neighbourhood, full breakdown","Watchlist of up to 10","Monday 07:00 email brief","Full brief archive","Weekly score history","CSV export"]],
-  ["enterprise","Enterprise","£"+pr.enterprise[I].toLocaleString()+"<small> / "+I+"</small>",["Everything in Professional","Up to 5 users","Unlimited watchlist","Custom neighbourhoods","Onboarding & priority support"]]];
+ var I=S.interval,plans=[["free","Discover","Free",["Postcode check: score and top 5 schemes","Top 6 Momentum Index","Class MA tracker","Sample Monday brief"]],
+  ["pro","Professional","£"+pr.pro[I].toLocaleString()+"<small> / "+I+"</small>",["Full postcode reports and CSV export","Every neighbourhood and its history","Watchlist of 10 with a Monday email brief","Class MA leads in your boroughs","Archive of every past brief"]],
+  ["enterprise","Enterprise","£"+pr.enterprise[I].toLocaleString()+"<small> / "+I+"</small>",["Everything in Professional","Custom catchments round your sites","Up to 5 users, unlimited watchlist","Onboarding and priority support"]]];
  $("bl-plans").innerHTML=plans.map(function(x){var isCur=x[0]===S.plan,btn="";
   if(team)btn="";else if(isCur)btn='<button class="btn ghost" disabled>Current plan</button>';
   else if(x[0]==="free")btn=live?'<button class="btn ghost" data-portal="1">Cancel subscription</button>':"";

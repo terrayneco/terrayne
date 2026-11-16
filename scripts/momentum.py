@@ -124,10 +124,19 @@ def signals(b):
             "com": max(0, b["com"]["g"]["value"] - b["com"]["l"]["value"])}
 
 
-def tiles(end):
+def tiles(end, keyed=False):
     body = {"size": 0, "query": {"bool": {"filter": [window(end), {"geo_bounding_box": {"centroid": BBOX}}]}},
             "aggs": {"t": {"geotile_grid": {"field": "centroid", "precision": TILE_ZOOM, "size": 2000}, "aggs": SIGNAL_AGGS}}}
-    return [signals(b) for b in q(body)["aggregations"]["t"]["buckets"] if b["doc_count"] >= 5]
+    b = [x for x in q(body)["aggregations"]["t"]["buckets"] if x["doc_count"] >= 5]
+    return {x["key"]: signals(x) for x in b} if keyed else [signals(x) for x in b]
+
+
+def tile_centre(key):
+    z, x, y = (int(v) for v in key.split("/"))
+    n = 2 ** z
+    lon = (x + 0.5) / n * 360 - 180
+    lat = math.degrees(math.atan(math.sinh(math.pi * (1 - 2 * (y + 0.5) / n))))
+    return round(lat, 5), round(lon, 5)
 
 
 def area_query(lat, lon, end, top=0):
@@ -219,12 +228,13 @@ def takeaway(full, sig, parts, schemes, off=None):
 def build(today=None):
     today = today or dt.date.today()
     prior = today - dt.timedelta(days=30)
-    dist_now, dist_prev = tiles(today), tiles(prior)
+    tk_now = tiles(today, keyed=True)
+    dist_now, dist_prev = list(tk_now.values()), tiles(prior)
     import signals as official
     loaded, errors = official.load_all(today)
-    odist, meta = {}, {}
+    odist, meta, aggs = {}, {}, {}
     for name, (pts, m, kind) in loaded.items():
-        agg = official.aggregate(pts, kind)
+        agg = aggs[name] = official.aggregate(pts, kind)
         minimum = {"transport": 1, "population": 3, "prices": 1}[kind]
         odist[name] = [a["growth"] for a in agg.values() if a["growth"] is not None and a["n"] >= minimum]
         if kind == "prices":
@@ -275,12 +285,28 @@ def build(today=None):
                     "off": {k: (round(v, 4) if isinstance(v, float) else v) for k, v in offv.items()},
                     "schemes": schemes, "det": det, "t": takeaway(full, sig, parts, schemes, offv)})
     out.sort(key=lambda d: -d["s"])
+    # A score for every map tile in London (powers the postcode check).
+    tile_scores = {}
+    for key, sig in tk_now.items():
+        extra, off, hd = {}, {}, None
+        for name in OFFICIAL_W:
+            a = (aggs.get(name) or {}).get(key)
+            g = a["growth"] if a else None
+            extra[name] = pct(g, odist[name]) if g is not None and odist.get(name) else None
+            off[name] = round(g, 4) if g is not None else None
+            if name == "prices" and a and a["median"] is not None:
+                off["median_price"] = a["median"]; hd = 100 - pct(a["median"], odist["price_level"])
+        s, parts = score(sig, dist_now, extra)
+        lat, lon = tile_centre(key)
+        tile_scores[key] = {"s": s, "x": [parts[k] for k in WEIGHTS], "hd": hd, "lat": lat, "lon": lon,
+                            "raw": {k: round(sig[k]) for k in PLAN_W}, "off": off}
     return {"generated": today.isoformat(), "window_days": 365, "radius_km": RADIUS_KM, "tiles": len(dist_now),
             "weights": WEIGHTS, "labels": [LABELS[k] for k in WEIGHTS], "keys": list(WEIGHTS),
             "sources": SOURCES, "official": meta, "errors": errors,
             "bench": {**{k: statistics.median([d[k] for d in dist_now]) for k in PLAN_W},
                       **{k: statistics.median(v) for k, v in odist.items() if v}},
-            "source": "GLA Planning London Datahub, TfL, ORR, ONS, HM Land Registry", "areas": out}
+            "source": "GLA Planning London Datahub, TfL, ORR, ONS, HM Land Registry", "areas": out,
+            "tile_scores": tile_scores}
 
 
 def main():

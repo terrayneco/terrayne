@@ -31,7 +31,7 @@ def sb(method, path, body=None, headers=None):
 
 
 def public(data):
-    d = dict(data)
+    d = {k: v for k, v in data.items() if k != "tile_scores"}
     d["areas"] = data["areas"][:FREE_TOP]
     d["tracked"] = len(data["areas"])
     return d
@@ -91,6 +91,8 @@ def main():
     (ROOT / "data").mkdir(exist_ok=True)
     (ROOT / "data" / "momentum.json").write_text(json.dumps(pub, ensure_ascii=False, indent=1))
     print(f"public index written: {len(pub['areas'])} of {pub['tracked']} areas")
+    import explore
+    print("postcode check + Class MA tracker:", explore.write_all(full, week))
 
     if "--html" in sys.argv:
         f = pathlib.Path(sys.argv[sys.argv.index("--html") + 1])

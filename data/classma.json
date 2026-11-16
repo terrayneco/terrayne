@@ -1,0 +1,379 @@
+{
+ "generated": "2026-11-16",
+ "boroughs": [
+  {
+   "borough": "Croydon",
+   "filed_12m": 29,
+   "homes_12m": 808,
+   "decided_24m": 76,
+   "approval_rate": 0.724,
+   "median_days": 88,
+   "pending": 6
+  },
+  {
+   "borough": "Barnet",
+   "filed_12m": 29,
+   "homes_12m": 279,
+   "decided_24m": 47,
+   "approval_rate": 0.745,
+   "median_days": 56,
+   "pending": 13
+  },
+  {
+   "borough": "Islington",
+   "filed_12m": 25,
+   "homes_12m": 169,
+   "decided_24m": 69,
+   "approval_rate": 0.638,
+   "median_days": 55,
+   "pending": 11
+  },
+  {
+   "borough": "Hammersmith & Fulham",
+   "filed_12m": 23,
+   "homes_12m": 616,
+   "decided_24m": 64,
+   "approval_rate": 0.516,
+   "median_days": 71,
+   "pending": 26
+  },
+  {
+   "borough": "Wandsworth",
+   "filed_12m": 22,
+   "homes_12m": 115,
+   "decided_24m": 46,
+   "approval_rate": 0.804,
+   "median_days": 51,
+   "pending": 6
+  },
+  {
+   "borough": "Richmond",
+   "filed_12m": 21,
+   "homes_12m": 41,
+   "decided_24m": 39,
+   "approval_rate": 0.795,
+   "median_days": 50,
+   "pending": 6
+  },
+  {
+   "borough": "Lambeth",
+   "filed_12m": 17,
+   "homes_12m": 56,
+   "decided_24m": 19,
+   "approval_rate": 0.737,
+   "median_days": 179,
+   "pending": 10
+  },
+  {
+   "borough": "Ealing",
+   "filed_12m": 16,
+   "homes_12m": 441,
+   "decided_24m": 40,
+   "approval_rate": 0.825,
+   "median_days": 56,
+   "pending": 10
+  },
+  {
+   "borough": "Westminster",
+   "filed_12m": 16,
+   "homes_12m": 149,
+   "decided_24m": 51,
+   "approval_rate": 0.784,
+   "median_days": 53,
+   "pending": 5
+  },
+  {
+   "borough": "Haringey",
+   "filed_12m": 16,
+   "homes_12m": 36,
+   "decided_24m": 30,
+   "approval_rate": 0.833,
+   "median_days": 56,
+   "pending": 3
+  },
+  {
+   "borough": "Greenwich",
+   "filed_12m": 13,
+   "homes_12m": 50,
+   "decided_24m": 20,
+   "approval_rate": 0.65,
+   "median_days": 55,
+   "pending": 5
+  },
+  {
+   "borough": "Kingston",
+   "filed_12m": 12,
+   "homes_12m": 62,
+   "decided_24m": 23,
+   "approval_rate": 0.652,
+   "median_days": 56,
+   "pending": 0
+  },
+  {
+   "borough": "Newham",
+   "filed_12m": 10,
+   "homes_12m": 233,
+   "decided_24m": 22,
+   "approval_rate": 0.409,
+   "median_days": 55,
+   "pending": 1
+  },
+  {
+   "borough": "Hackney",
+   "filed_12m": 10,
+   "homes_12m": 10,
+   "decided_24m": 12,
+   "approval_rate": 0.417,
+   "median_days": 56,
+   "pending": 4
+  },
+  {
+   "borough": "Sutton",
+   "filed_12m": 9,
+   "homes_12m": 34,
+   "decided_24m": 15,
+   "approval_rate": 0.8,
+   "median_days": 56,
+   "pending": 3
+  },
+  {
+   "borough": "Enfield",
+   "filed_12m": 9,
+   "homes_12m": 21,
+   "decided_24m": 26,
+   "approval_rate": 0.692,
+   "median_days": 54,
+   "pending": 4
+  },
+  {
+   "borough": "Hounslow",
+   "filed_12m": 7,
+   "homes_12m": 93,
+   "decided_24m": 34,
+   "approval_rate": 0.529,
+   "median_days": 56,
+   "pending": 5
+  },
+  {
+   "borough": "Redbridge",
+   "filed_12m": 7,
+   "homes_12m": 70,
+   "decided_24m": 12,
+   "approval_rate": 0.667,
+   "median_days": 49,
+   "pending": 1
+  },
+  {
+   "borough": "Southwark",
+   "filed_12m": 7,
+   "homes_12m": 12,
+   "decided_24m": 10,
+   "approval_rate": 0.9,
+   "median_days": 36,
+   "pending": 1
+  },
+  {
+   "borough": "Hillingdon",
+   "filed_12m": 7,
+   "homes_12m": 0,
+   "decided_24m": 16,
+   "approval_rate": 0.938,
+   "median_days": 58,
+   "pending": 1
+  },
+  {
+   "borough": "Bexley",
+   "filed_12m": 6,
+   "homes_12m": 37,
+   "decided_24m": 21,
+   "approval_rate": 0.667,
+   "median_days": 55,
+   "pending": 1
+  },
+  {
+   "borough": "Merton",
+   "filed_12m": 3,
+   "homes_12m": 3,
+   "decided_24m": 24,
+   "approval_rate": 0.792,
+   "median_days": 55,
+   "pending": 3
+  },
+  {
+   "borough": "Brent",
+   "filed_12m": 3,
+   "homes_12m": 3,
+   "decided_24m": 4,
+   "approval_rate": null,
+   "median_days": null,
+   "pending": 2
+  },
+  {
+   "borough": "Kensington & Chelsea",
+   "filed_12m": 2,
+   "homes_12m": 0,
+   "decided_24m": 5,
+   "approval_rate": 0.8,
+   "median_days": 98,
+   "pending": 1
+  },
+  {
+   "borough": "Camden",
+   "filed_12m": 1,
+   "homes_12m": 7,
+   "decided_24m": 1,
+   "approval_rate": null,
+   "median_days": null,
+   "pending": 4
+  },
+  {
+   "borough": "Bromley",
+   "filed_12m": 0,
+   "homes_12m": 0,
+   "decided_24m": 11,
+   "approval_rate": 0.364,
+   "median_days": 53,
+   "pending": 4
+  },
+  {
+   "borough": "OPDC",
+   "filed_12m": 0,
+   "homes_12m": 0,
+   "decided_24m": 2,
+   "approval_rate": null,
+   "median_days": null,
+   "pending": 0
+  },
+  {
+   "borough": "Tower Hamlets",
+   "filed_12m": 0,
+   "homes_12m": 0,
+   "decided_24m": 2,
+   "approval_rate": null,
+   "median_days": null,
+   "pending": 0
+  },
+  {
+   "borough": "Lewisham",
+   "filed_12m": 0,
+   "homes_12m": 0,
+   "decided_24m": 0,
+   "approval_rate": null,
+   "median_days": null,
+   "pending": 1
+  },
+  {
+   "borough": "Barking & Dagenham",
+   "filed_12m": 0,
+   "homes_12m": 0,
+   "decided_24m": 1,
+   "approval_rate": null,
+   "median_days": null,
+   "pending": 0
+  }
+ ],
+ "london": {
+  "filed_12m": 320,
+  "homes_12m": 3345,
+  "approval_rate": 0.693,
+  "median_days": 56
+ },
+ "latest": [
+  {
+   "borough": "Islington",
+   "site": "25-27 Horsell Road & 11 Ronalds Road",
+   "homes": 19,
+   "status": "Pending",
+   "valid": "2026-10-30",
+   "ref": "P2026/2859/PRA"
+  },
+  {
+   "borough": "Croydon",
+   "site": "Church Road",
+   "homes": 2,
+   "status": "Pending",
+   "valid": "2026-10-21",
+   "ref": "26/02737/GPDO"
+  },
+  {
+   "borough": "Greenwich",
+   "site": "Thames House, 7-9 Wellingtom Street, Woolwich",
+   "homes": 11,
+   "status": "Pending",
+   "valid": "2026-10-21",
+   "ref": "26/3024/PN2"
+  },
+  {
+   "borough": "Croydon",
+   "site": "Melrose House Dingwall Road",
+   "homes": 6,
+   "status": "Pending",
+   "valid": "2026-10-20",
+   "ref": "26/02971/GPDO"
+  },
+  {
+   "borough": "Lambeth",
+   "site": "Singer Mews Development Control Pseudo Street",
+   "homes": 6,
+   "status": "Pending",
+   "valid": "2026-10-16",
+   "ref": "26/03042/P3MA"
+  },
+  {
+   "borough": "Westminster",
+   "site": "Porchester Road",
+   "homes": 32,
+   "status": "Pending",
+   "valid": "2026-10-16",
+   "ref": "26/07020/P3JPA"
+  },
+  {
+   "borough": "Haringey",
+   "site": "Shop 519 Seven Sisters Road, Tottenham",
+   "homes": 2,
+   "status": "Pending",
+   "valid": "2026-10-07",
+   "ref": "HGY/2026/2615"
+  },
+  {
+   "borough": "Hammersmith & Fulham",
+   "site": "LANE HOUSE Parsons Green Lane",
+   "homes": 3,
+   "status": "Pending",
+   "valid": "2026-10-07",
+   "ref": "P/2026/02574/PACU1"
+  },
+  {
+   "borough": "Haringey",
+   "site": "307 West Green Road, Tottenham",
+   "homes": 2,
+   "status": "Pending",
+   "valid": "2026-10-01",
+   "ref": "HGY/2026/2729"
+  },
+  {
+   "borough": "Lambeth",
+   "site": "Streatham High Road",
+   "homes": 2,
+   "status": "Pending",
+   "valid": "2026-09-25",
+   "ref": "26/02793/P3MA"
+  },
+  {
+   "borough": "Hammersmith & Fulham",
+   "site": "Unit 1 Askew Road",
+   "homes": 18,
+   "status": "Pending",
+   "valid": "2026-09-25",
+   "ref": "P/2026/02481/PACU1"
+  },
+  {
+   "borough": "Westminster",
+   "site": "The Arcade Grove End Gardens",
+   "homes": 7,
+   "status": "Pending",
+   "valid": "2026-09-24",
+   "ref": "26/06557/P3JPA"
+  }
+ ]
+}
