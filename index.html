@@ -300,6 +300,17 @@ nav ul a{padding:7px 14px}
 .mat{width:100%;border-collapse:collapse;font-size:14px;min-width:620px}.mat th{text-align:left;font-weight:500;color:var(--mute);font-size:12px;padding:14px 16px;border-bottom:1px solid var(--line);cursor:pointer;white-space:nowrap}.mat th.n,.mat td.n{text-align:right;font-variant-numeric:tabular-nums}
 .mat td{padding:11px 16px;border-bottom:1px solid var(--line)}.mat tr:last-child td{border-bottom:0}.mat th[aria-sort]:after{content:" ↓";color:#9fd0ff}
 .rate{display:inline-block;width:64px;height:6px;border-radius:4px;background:var(--line);vertical-align:middle;margin-left:8px;overflow:hidden}.rate i{display:block;height:100%;background:#5fd6b8;border-radius:4px}
+/* compact nav for laptop widths */
+.ncta,.nsign,nav ul a,.dd>button{white-space:nowrap}
+@media(min-width:1001px) and (max-width:1320px){
+ nav .wrap{padding:0 20px;gap:12px}
+ nav .logo{height:40px}
+ nav ul{padding:4px}
+ nav ul a,.dd>button{padding:8px 12px!important;font-size:10.5px!important;letter-spacing:.12em!important}
+ .nsign{font-size:10.5px;letter-spacing:.12em}
+ .ncta{padding:9px 14px!important;font-size:10.5px!important;letter-spacing:.12em!important}
+ .nr{gap:12px!important}
+}
 /* premium nav */
 .nsign{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,212,232,.72);white-space:nowrap}.nsign:hover{color:#fff}@media(max-width:1000px){.nsign{display:none}}
 nav{background:linear-gradient(180deg,rgba(8,16,32,.82),rgba(6,13,26,.66));border-bottom:0}
@@ -318,8 +329,8 @@ nav ul a.act{color:#fff;background:linear-gradient(180deg,rgba(159,208,255,.14),
 <body>
 <nav><div class="wrap">
 <a href="#top" class="brand"><img class="logo" alt="Terrayne" src="assets/logo-white.svg"></a>
-<ul id="menu"><li class="dd" id="dd"><button type="button" aria-expanded="false" aria-controls="ddm">Solutions</button><ul class="ddm" id="ddm"><li><a href="#for-retail">Retail &amp; hospitality<small>Where to open next, from new residents arriving</small></a></li><li><a href="#for-investors">Property investors<small>Is this street about to change?</small></a></li><li><a href="#for-developers">Developers &amp; Class MA<small>Where conversions get approved, and live leads</small></a></li><li><a href="#for-communities">Residents, councillors &amp; press<small>What’s being built around you</small></a></li></ul></li><li><a href="#check">Postcode check</a></li><li><a href="#index">Momentum Index</a></li><li><a href="#classma">Class MA</a></li><li><a href="#pricing">Pricing</a></li><li class="mcta"><a href="account.html">Sign in</a></li><li class="mcta"><a href="#access">Request Founding Access</a></li></ul>
-<div class="nr"><a class="nsign" href="account.html">Sign in</a><a class="btn ncta" href="#access">Request Founding Access</a><button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><i></i><i></i><i></i></button></div>
+<ul id="menu"><li class="dd" id="dd"><button type="button" aria-expanded="false" aria-controls="ddm">Solutions</button><ul class="ddm" id="ddm"><li><a href="#for-retail">Retail &amp; hospitality<small>Where to open next, from new residents arriving</small></a></li><li><a href="#for-investors">Property investors<small>Is this street about to change?</small></a></li><li><a href="#for-developers">Developers &amp; Class MA<small>Where conversions get approved, and live leads</small></a></li><li><a href="#for-communities">Residents, councillors &amp; press<small>What’s being built around you</small></a></li></ul></li><li><a href="#check">Postcode check</a></li><li><a href="#index">Index</a></li><li><a href="#classma">Class MA</a></li><li><a href="#pricing">Pricing</a></li><li class="mcta"><a href="account.html">Sign in</a></li><li class="mcta"><a href="#access">Request Founding Access</a></li></ul>
+<div class="nr"><a class="nsign" href="account.html">Sign in</a><a class="btn ncta" href="#access">Get early access</a><button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><i></i><i></i><i></i></button></div>
 </div></nav>
 
 <header class="hero" id="top"><div class="wrap">
