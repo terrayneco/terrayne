@@ -16,10 +16,15 @@ sync will overwrite your change. If you do edit here, copy `index.html` back to 
 5. Tell Charlie it's pushed and will be live on terrayne.co in about a minute (hard refresh: Cmd+Shift+R).
 
 ## Momentum Index (real data)
-- Scores come from `scripts/momentum.py`, which queries the GLA Planning London Datahub (public guest API) and writes `data/momentum.json`. The method is in the script's docstring.
-- The page loads `data/momentum.json` live and also has a snapshot embedded between `/*MI*/` markers (used when opened as a local file).
-- A GitHub Action (`.github/workflows/momentum.yml`) refreshes the JSON every Monday 05:30 UTC.
-- To refresh by hand: `python3 scripts/momentum.py --html "$HOME/Library/Mobile Documents/com~apple~CloudDocs/TYE/website/terrayne.html"`, then sync/push.
+- Scores come from `scripts/momentum.py` (method in its docstring), queried from the GLA Planning London Datahub public guest API.
+- `scripts/publish.py` is the entry point: writes `data/momentum.json` with the free TOP 6 only, and (with Supabase env vars) stores the full snapshot + weekly briefs in Supabase for paying users. Never commit the full all-areas data publicly.
+- The home page loads `data/momentum.json` live and also embeds a snapshot between `/*MI*/` markers.
+- The GitHub Action `.github/workflows/momentum.yml` runs publish.py every Monday 05:15 UTC and emails briefs.
+- Refresh by hand: `python3 scripts/publish.py --html "$HOME/Library/Mobile Documents/com~apple~CloudDocs/TYE/website/terrayne.html"`, then sync/push.
+
+## Accounts (Supabase + Stripe)
+- `account.html`, `terms.html`, `privacy.html`, `assets/config.js`, `supabase/` live in THIS repo only (not in the iCloud folder); edit them here.
+- Setup steps are in `SETUP.md`. `assets/config.js` holds only the public Supabase URL + anon key; never put secret keys in the repo.
 - Neighbourhoods are listed in `AREAS` in the script; add or move one there.
 
 ## Don't

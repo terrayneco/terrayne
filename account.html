@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Your account · Terrayne</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/favicon-48.png" sizes="48x48" type="image/png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta name="robots" content="noindex">
+<style>
+:root{color-scheme:dark;--bg:#060d1a;--panel:#0d1830;--panel2:#111f3d;--line:#1c2b4d;--text:#fff;--mute:#8c9ab3;--accent:#9fd0ff;--blue:#4f9be8;--green:#5fd6b8;--warn:#f2a65a;--bad:#ef6f6f}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 -apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.mono{font-family:ui-monospace,Menlo,monospace}
+.top{position:sticky;top:0;z-index:5;background:rgba(6,13,26,.85);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.06)}
+.top .in{max-width:1180px;margin:0 auto;padding:0 24px;height:68px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.top img{height:40px;display:block}
+.who{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--mute)}
+.wrap{max-width:1180px;margin:0 auto;padding:40px 24px 80px}
+h1{font-size:clamp(28px,4vw,40px);letter-spacing:-.02em;margin:0 0 8px;line-height:1.1}
+h2{font-size:22px;margin:0 0 6px;letter-spacing:-.01em}
+h3{font-size:16px;margin:0 0 6px}
+.sub{color:var(--mute);margin:0 0 28px;max-width:640px}
+.eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:22px}
+.grid{display:grid;gap:16px}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:99px;padding:11px 20px;font:inherit;font-weight:600;font-size:14px;background:#fff;color:#0a1223;cursor:pointer;text-decoration:none}
+.btn:hover{text-decoration:none;filter:brightness(.94)}
+.btn.ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.2)}
+.btn.danger{background:transparent;color:var(--bad);border:1px solid rgba(239,111,111,.4)}
+.btn.sm{padding:7px 14px;font-size:13px}
+.btn[disabled]{opacity:.5;cursor:default}
+input,select{width:100%;background:#0a1426;border:1px solid var(--line);border-radius:12px;padding:12px 14px;color:#fff;font:inherit;outline:none}
+input:focus{border-color:var(--blue)}
+label{display:block;font-size:13px;color:var(--mute);margin:0 0 6px}
+.field{margin-bottom:14px}
+.msg{font-size:14px;border-radius:12px;padding:10px 14px;margin:0 0 14px;display:none}
+.msg.on{display:block}.msg.ok{background:rgba(95,214,184,.1);color:var(--green)}.msg.err{background:rgba(239,111,111,.1);color:var(--bad)}
+.auth{max-width:440px;margin:40px auto}
+.seg{display:flex;gap:4px;padding:4px;border:1px solid var(--line);border-radius:99px;margin-bottom:22px}
+.seg button{flex:1;background:none;border:0;color:var(--mute);font:inherit;font-size:14px;padding:9px;border-radius:99px;cursor:pointer}
+.seg button.on{background:var(--panel2);color:#fff}
+.layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:28px}
+.side{position:sticky;top:92px;align-self:start;display:flex;flex-direction:column;gap:2px}
+.side a{display:block;padding:10px 14px;border-radius:12px;color:var(--mute);font-size:14px}
+.side a:hover{background:rgba(255,255,255,.04);color:#fff;text-decoration:none}
+.side a.on{background:var(--panel2);color:#fff}
+.pill{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;border-radius:99px;background:rgba(159,208,255,.12);color:var(--accent)}
+.pill.free{background:rgba(140,154,179,.14);color:var(--mute)}.pill.warn{background:rgba(242,166,90,.12);color:var(--warn)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.score{font-size:24px;font-weight:600}.score em{font-style:normal;font-size:12px;color:var(--mute)}
+.chg{white-space:nowrap;font-family:ui-monospace,Menlo,monospace;font-size:11px;padding:3px 8px;border-radius:7px;background:rgba(95,214,184,.12);color:var(--green)}
+.chg.dn{background:rgba(242,166,90,.12);color:var(--warn)}.chg.eq{background:rgba(140,154,179,.12);color:var(--mute)}
+.lock{text-align:center;padding:36px 22px}
+.lock p{color:var(--mute);max-width:460px;margin:8px auto 18px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-weight:500;color:var(--mute);font-size:12px;padding:10px 8px;border-bottom:1px solid var(--line)}
+td{padding:12px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tw{overflow-x:auto}
+.brief{border:1px solid var(--line);border-radius:16px;margin-bottom:10px;overflow:hidden}
+.brief summary{cursor:pointer;list-style:none;padding:16px 18px;display:flex;justify-content:space-between;gap:12px}
+.brief summary::-webkit-details-marker{display:none}
+.brief .bd{padding:0 18px 16px;color:#c8d4e8;font-size:14px}
+.brief .bd ul{padding-left:18px}.brief .bd li{margin-bottom:8px}
+.plan{border:1px solid var(--line);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:10px}
+.plan.cur{border-color:var(--blue);box-shadow:0 0 0 1px var(--blue) inset}
+.plan .p{font-size:28px;font-weight:600}.plan .p small{font-size:13px;color:var(--mute);font-weight:400}
+.plan ul{margin:0;padding-left:18px;color:var(--mute);font-size:14px}
+.toggle{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:14px}
+.toggle input{width:auto}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:99px;padding:7px 12px;font-size:13px;background:none;color:#fff;cursor:pointer;font:inherit}
+.chip.on{background:rgba(79,155,232,.16);border-color:rgba(79,155,232,.5)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+svg.spark{display:block}
+.hide{display:none!important}
+.note{font-size:12px;color:var(--mute)}
+@media(max-width:860px){.layout{grid-template-columns:1fr}.side{position:static;flex-direction:row;overflow-x:auto;gap:4px}.side a{white-space:nowrap}.g2,.g3{grid-template-columns:1fr}.wrap{padding:28px 16px 64px}.top .in{padding:0 16px}}
+</style>
+</head>
+<body>
+<div class="top"><div class="in"><a href="./"><img src="assets/logo-white.svg" alt="Terrayne"></a><div class="who" id="who"></div></div></div>
+<main class="wrap">
+
+<section id="v-off" class="auth hide">
+<div class="card"><div class="eyebrow">Accounts</div><h2>Accounts are launching soon.</h2><p class="sub" style="margin-bottom:18px">We’re onboarding founding members first. Request access and we’ll set up your account.</p><a class="btn" href="./#access">Request founding access</a></div>
+</section>
+
+<section id="v-auth" class="auth hide">
+<div class="eyebrow">Terrayne account</div>
+<h1 id="a-title">Sign in</h1>
+<p class="sub" id="a-sub">Your watchlist, Monday briefs and subscription in one place.</p>
+<div class="card">
+<div class="seg" id="a-seg"><button data-m="in" class="on">Sign in</button><button data-m="up">Create account</button></div>
+<div class="msg" id="a-msg"></div>
+<form id="a-form">
+<div class="field hide" id="f-name"><label for="a-name">Full name</label><input id="a-name" autocomplete="name"></div>
+<div class="field" id="f-email"><label for="a-email">Work email</label><input id="a-email" type="email" autocomplete="email" required></div>
+<div class="field" id="f-pass"><label for="a-pass">Password</label><input id="a-pass" type="password" autocomplete="current-password" minlength="8"></div>
+<button class="btn" style="width:100%" id="a-go" type="submit">Sign in</button>
+</form>
+<p class="note" style="margin:14px 0 0;text-align:center"><a href="#" id="a-magic">Email me a sign-in link</a> · <a href="#" id="a-forgot">Forgot password?</a></p>
+</div>
+<p class="note" style="text-align:center;margin-top:16px">By creating an account you agree to our <a href="terms.html">terms</a> and <a href="privacy.html">privacy policy</a>.</p>
+</section>
+
+<section id="v-reset" class="auth hide">
+<div class="eyebrow">Reset password</div><h1>Choose a new password</h1>
+<div class="card"><div class="msg" id="r-msg"></div>
+<form id="r-form"><div class="field"><label for="r-pass">New password</label><input id="r-pass" type="password" minlength="8" autocomplete="new-password" required></div><button class="btn" style="width:100%">Save password</button></form></div>
+</section>
+
+<section id="v-app" class="hide">
+<div class="layout">
+<nav class="side" id="side">
+<a href="#overview">Overview</a><a href="#watchlist">Watchlist</a><a href="#briefs">Monday briefs</a><a href="#index">Index &amp; history</a><a href="#profile">Profile</a><a href="#billing">Subscription</a><a href="#team" id="nav-team" class="hide">Team</a>
+</nav>
+<div>
+<div class="msg" id="g-msg"></div>
+
+<div id="p-overview" class="pane">
+<div class="eyebrow">Overview</div><h1 id="hello">Welcome</h1><p class="sub" id="o-sub"></p>
+<div class="grid g3" id="o-stats"></div>
+<div class="grid g2" style="margin-top:16px"><div class="card"><h3>Your watchlist</h3><div id="o-watch"></div></div><div class="card"><h3>Latest brief</h3><div id="o-brief"></div></div></div>
+</div>
+
+<div id="p-watchlist" class="pane hide">
+<div class="eyebrow">Watchlist</div><h1>Neighbourhoods you follow</h1><p class="sub">Your Monday 07:00 brief covers these neighbourhoods. <span id="w-limit"></span></p>
+<div id="w-body"></div>
+</div>
+
+<div id="p-briefs" class="pane hide">
+<div class="eyebrow">Monday briefs</div><h1>Every brief so far</h1><p class="sub">Each Monday’s brief, built from new planning filings and the latest Momentum Index.</p>
+<div id="b-body"></div>
+</div>
+
+<div id="p-index" class="pane hide">
+<div class="eyebrow">Momentum Index</div><h1>All neighbourhoods &amp; history</h1><p class="sub" id="i-sub"></p>
+<div id="i-body"></div>
+</div>
+
+<div id="p-profile" class="pane hide">
+<div class="eyebrow">Profile</div><h1>Your details</h1><p class="sub">Used on your briefs and invoices.</p>
+<div class="grid g2">
+<form class="card" id="pf-form"><h3>Details</h3><div class="msg" id="pf-msg"></div>
+<div class="field"><label for="pf-name">Full name</label><input id="pf-name" autocomplete="name"></div>
+<div class="field"><label for="pf-company">Company</label><input id="pf-company" autocomplete="organization"></div>
+<div class="field"><label for="pf-title">Job title</label><input id="pf-title" autocomplete="organization-title"></div>
+<label class="toggle" style="margin:6px 0 16px"><input type="checkbox" id="pf-brief"> Email me the Monday brief</label>
+<button class="btn">Save</button></form>
+<div class="grid" style="align-content:start">
+<form class="card" id="em-form"><h3>Email address</h3><div class="msg" id="em-msg"></div><div class="field"><label for="em-email">Email</label><input id="em-email" type="email" required></div><button class="btn ghost">Change email</button><p class="note" style="margin:10px 0 0">We’ll send a confirmation link to the new address.</p></form>
+<form class="card" id="pw-form"><h3>Password</h3><div class="msg" id="pw-msg"></div><div class="field"><label for="pw-pass">New password</label><input id="pw-pass" type="password" minlength="8" autocomplete="new-password" required></div><button class="btn ghost">Change password</button></form>
+<div class="card"><h3>Account</h3><p class="note" style="margin:0 0 14px">Deleting your account cancels any subscription immediately and removes your watchlist and profile. This can’t be undone.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn ghost" id="signout2">Sign out</button><button class="btn danger" id="del">Delete account</button></div></div>
+</div></div>
+</div>
+
+<div id="p-billing" class="pane hide">
+<div class="eyebrow">Subscription</div><h1>Your plan</h1><p class="sub" id="bl-sub"></p>
+<div class="card" style="margin-bottom:16px" id="bl-cur"></div>
+<div class="seg" id="bl-int" style="max-width:400px"><button data-i="month" class="on">Monthly</button><button data-i="year">Yearly · 2 months free</button></div>
+<div class="grid g3" id="bl-plans"></div>
+<p class="note" style="margin-top:16px">Payments are handled securely by Stripe. Upgrade, downgrade, cancel, update your card and download invoices from “Manage subscription”. Cancelling keeps access until the end of the period you’ve paid for.</p>
+</div>
+
+<div id="p-team" class="pane hide">
+<div class="eyebrow">Team</div><h1>Your Enterprise team</h1><p class="sub">Enterprise includes up to 5 users. Invited colleagues get full access when they create an account with the invited email.</p>
+<div class="grid g2"><form class="card" id="tm-form"><h3>Invite a colleague</h3><div class="msg" id="tm-msg"></div><div class="field"><label for="tm-email">Work email</label><input id="tm-email" type="email" required></div><button class="btn">Send invite</button></form><div class="card"><h3>Members</h3><div id="tm-list"></div></div></div>
+</div>
+
+</div></div>
+</section>
+</main>
+
+<script src="assets/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+(function(){
+var C=window.TERRAYNE||{},$=function(id){return document.getElementById(id)};
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function show(id){["v-off","v-auth","v-reset","v-app"].forEach(function(v){$(v).classList.toggle("hide",v!==id)})}
+function msg(id,text,ok){var m=$(id);m.textContent=text||"";m.className="msg"+(text?" on "+(ok?"ok":"err"):"")}
+function fmtDate(d){return new Date(d).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"})}
+function sg(c){return (c>0?"+":c<0?"−":"")+Math.abs(c)}
+function chg(c){return '<span class="chg'+(c<0?" dn":c==0?" eq":"")+'">'+sg(c)+' pts</span>'}
+if(!C.supabaseUrl||!C.supabaseAnonKey||!window.supabase){show("v-off");return}
+var sb=window.supabase.createClient(C.supabaseUrl,C.supabaseAnonKey);
+var S={user:null,profile:null,plan:"free",watch:[],snaps:null,pub:null,briefs:null,interval:"month"};
+
+/* ---------- auth ---------- */
+var mode="in";
+function setMode(m){mode=m;[].forEach.call($("a-seg").children,function(b){b.classList.toggle("on",b.dataset.m===m)});
+ $("f-name").classList.toggle("hide",m!=="up");$("a-go").textContent=m==="up"?"Create account":"Sign in";
+ $("a-title").textContent=m==="up"?"Create your account":"Sign in";$("a-pass").autocomplete=m==="up"?"new-password":"current-password";msg("a-msg")}
+$("a-seg").onclick=function(e){if(e.target.dataset.m)setMode(e.target.dataset.m)};
+if(/[?&]signup/.test(location.search))setMode("up");
+$("a-form").onsubmit=async function(e){e.preventDefault();var em=$("a-email").value.trim(),pw=$("a-pass").value,r;
+ if(pw.length<8){msg("a-msg","Use a password of at least 8 characters.");return}
+ $("a-go").disabled=true;
+ if(mode==="up"){r=await sb.auth.signUp({email:em,password:pw,options:{data:{full_name:$("a-name").value.trim()},emailRedirectTo:location.origin+location.pathname}});
+  if(!r.error&&!r.data.session)msg("a-msg","Check your inbox to confirm your email, then sign in.",true)}
+ else r=await sb.auth.signInWithPassword({email:em,password:pw});
+ $("a-go").disabled=false;if(r.error)msg("a-msg",r.error.message)};
+$("a-magic").onclick=async function(e){e.preventDefault();var em=$("a-email").value.trim();if(!em){msg("a-msg","Enter your email first.");return}
+ var r=await sb.auth.signInWithOtp({email:em,options:{emailRedirectTo:location.origin+location.pathname}});msg("a-msg",r.error?r.error.message:"Sign-in link sent. Check your inbox.",!r.error)};
+$("a-forgot").onclick=async function(e){e.preventDefault();var em=$("a-email").value.trim();if(!em){msg("a-msg","Enter your email first.");return}
+ var r=await sb.auth.resetPasswordForEmail(em,{redirectTo:location.origin+location.pathname});msg("a-msg",r.error?r.error.message:"Password reset link sent.",!r.error)};
+$("r-form").onsubmit=async function(e){e.preventDefault();var r=await sb.auth.updateUser({password:$("r-pass").value});
+ if(r.error)msg("r-msg",r.error.message);else{msg("r-msg","Password saved.",true);setTimeout(function(){boot()},800)}};
+async function signOut(){await sb.auth.signOut();location.hash="";show("v-auth")}
+$("signout2").onclick=signOut;
+
+sb.auth.onAuthStateChange(function(ev,session){
+ if(ev==="PASSWORD_RECOVERY"){show("v-reset");return}
+ if(ev==="SIGNED_IN"&&!S.user)boot();
+ if(ev==="SIGNED_OUT"){S.user=null;show("v-auth");$("who").innerHTML=""}
+});
+
+/* ---------- data ---------- */
+async function loadProfile(){
+ var r=await sb.from("profiles").select("*").eq("id",S.user.id).single();S.profile=r.data||{};
+ var p=await sb.rpc("effective_plan",{uid:S.user.id});S.plan=p.data||"free";
+ var w=await sb.from("watchlist").select("area").eq("user_id",S.user.id);S.watch=(w.data||[]).map(function(x){return x.area});
+}
+async function loadIndex(){
+ if(S.plan!=="free"&&!S.snaps){var r=await sb.from("snapshots").select("generated,data").order("generated",{ascending:false}).limit(60);S.snaps=r.data||[]}
+ if(!S.pub){try{S.pub=await (await fetch("data/momentum.json",{cache:"no-cache"})).json()}catch(e){S.pub={areas:[]}}}
+}
+function latest(){return S.snaps&&S.snaps.length?S.snaps[0].data:S.pub}
+async function loadBriefs(){if(S.plan==="free"||S.briefs)return;var r=await sb.from("briefs").select("week,area,title,body").order("week",{ascending:false}).limit(1000);S.briefs=r.data||[]}
+function paid(){return S.plan!=="free"}
+function lock(what){return '<div class="card lock"><span class="pill">Professional</span><h2 style="margin-top:12px">'+what+'</h2><p>Upgrade to Professional to follow up to 10 neighbourhoods, get the Monday brief by email, see every past brief and the full Index history.</p><a class="btn" href="#billing">See plans</a></div>'}
+
+/* ---------- panes ---------- */
+var P={
+overview:function(){
+ var d=latest(),pr=S.profile,first=(pr.full_name||"").split(" ")[0];
+ $("hello").textContent=first?"Welcome back, "+first:"Welcome back";
+ $("o-sub").textContent=d&&d.generated?"Momentum Index updated "+fmtDate(d.generated)+".":"";
+ var pl={free:"Discover (free)",pro:"Professional",enterprise:"Enterprise"}[S.plan];
+ $("o-stats").innerHTML='<div class="card"><div class="note">Plan</div><div class="score">'+pl+'</div></div><div class="card"><div class="note">Watchlist</div><div class="score">'+S.watch.length+'<em> neighbourhoods</em></div></div><div class="card"><div class="note">Briefs</div><div class="score">'+(paid()?(S.briefs?uniqWeeks().length:"—"):"Sample")+'<em> '+(paid()?"weeks":"")+'</em></div></div>';
+ var A=(d&&d.areas)||[];
+ $("o-watch").innerHTML=!paid()?'<p class="note">The watchlist is part of Professional. <a href="#billing">Upgrade</a></p>':S.watch.length?S.watch.map(function(n){var a=A.find(function(x){return x.n===n});return '<div class="row"><span>'+esc(a?a.f:n)+'</span><span>'+(a?'<b>'+a.s+'</b>/100 '+chg(a.c):'')+'</span></div>'}).join(""):'<p class="note">You’re not following any neighbourhoods yet. <a href="#watchlist">Add some</a>.</p>';
+ if(!paid()){$("o-brief").innerHTML='<p class="note">See a sample on the <a href="./#brief">home page</a>, or <a href="#billing">upgrade</a> to receive yours every Monday.</p>';return}
+ var b=S.briefs&&S.briefs.find(function(x){return S.watch.indexOf(x.area)>=0})||(S.briefs&&S.briefs[0]);
+ $("o-brief").innerHTML=b?'<p class="note">'+fmtDate(b.week)+'</p><p><b>'+esc(b.title)+'</b></p><a href="#briefs">Read all briefs</a>':'<p class="note">Your first brief arrives on Monday at 07:00.</p>';
+},
+watchlist:function(){
+ if(!paid()){$("w-body").innerHTML=lock("Build your watchlist");$("w-limit").textContent="";return}
+ var lim=S.plan==="pro"?10:0,A=(latest()&&latest().areas)||[];
+ $("w-limit").textContent=lim?"Professional: up to "+lim+" ("+S.watch.length+" used).":"Enterprise: unlimited.";
+ $("w-body").innerHTML='<div class="card"><div class="tw"><table><thead><tr><th>Neighbourhood</th><th>Borough</th><th>Index</th><th>30d</th><th></th></tr></thead><tbody>'+
+  A.slice().sort(function(a,b){return a.f.localeCompare(b.f)}).map(function(a){var on=S.watch.indexOf(a.n)>=0;
+   return '<tr><td>'+esc(a.f)+'</td><td class="note">'+esc(a.b)+'</td><td><b>'+a.s+'</b></td><td>'+chg(a.c)+'</td><td style="text-align:right"><button class="chip'+(on?" on":"")+'" data-a="'+esc(a.n)+'">'+(on?"✓ Following":"+ Follow")+'</button></td></tr>'}).join("")+'</tbody></table></div></div>';
+ $("w-body").querySelectorAll("button[data-a]").forEach(function(b){b.onclick=async function(){var n=b.dataset.a,on=S.watch.indexOf(n)>=0,r;b.disabled=true;
+  r=on?await sb.from("watchlist").delete().eq("user_id",S.user.id).eq("area",n):await sb.from("watchlist").insert({user_id:S.user.id,area:n});
+  if(r.error)msg("g-msg",r.error.message);else{msg("g-msg");S.watch=on?S.watch.filter(function(x){return x!==n}):S.watch.concat(n)}P.watchlist()}});
+},
+briefs:function(){
+ if(!paid()){$("b-body").innerHTML=lock("Every Monday brief, archived");return}
+ if(!S.briefs.length){$("b-body").innerHTML='<div class="card"><p class="note" style="margin:0">Your first brief arrives on Monday at 07:00. Past briefs will appear here.</p></div>';return}
+ var only=S.briefsMine!==false&&S.watch.length>0;
+ var list=S.briefs.filter(function(b){return !only||S.watch.indexOf(b.area)>=0});
+ var html='<div class="chips" style="margin-bottom:16px"><button class="chip'+(only?" on":"")+'" id="bm">My watchlist</button><button class="chip'+(!only?" on":"")+'" id="ba">All neighbourhoods</button></div>',wk="";
+ list.forEach(function(b){if(b.week!==wk){wk=b.week;html+='<h3 style="margin:22px 0 10px">'+fmtDate(b.week)+'</h3>'}
+  html+='<details class="brief"><summary><span><span class="note">'+esc(b.area)+'</span><br><b>'+esc(b.title)+'</b></span><span class="note">▾</span></summary><div class="bd">'+b.body+'</div></details>'});
+ $("b-body").innerHTML=html||'<p class="note">No briefs for your watchlist yet.</p>';
+ $("bm").onclick=function(){S.briefsMine=true;P.briefs()};$("ba").onclick=function(){S.briefsMine=false;P.briefs()};
+},
+index:function(){
+ var d=latest();if(!d){$("i-body").innerHTML="";return}
+ $("i-sub").textContent=(paid()?"All "+d.areas.length+" tracked neighbourhoods":"The top "+d.areas.length+" neighbourhoods (free plan)")+". Updated "+fmtDate(d.generated)+".";
+ var hist={};(S.snaps||[]).slice().reverse().forEach(function(s){s.data.areas.forEach(function(a){(hist[a.n]=hist[a.n]||[]).push(a.s)})});
+ function spark(v){if(!v||v.length<2)return '<span class="note">—</span>';var w=90,h=24,mn=Math.min.apply(0,v),mx=Math.max.apply(0,v),r=mx-mn||1;
+  return '<svg class="spark" width="'+w+'" height="'+h+'"><polyline fill="none" stroke="#4f9be8" stroke-width="1.6" points="'+v.map(function(x,i){return (i*(w-4)/(v.length-1)+2).toFixed(1)+","+(h-3-(x-mn)/r*(h-6)).toFixed(1)}).join(" ")+'"/></svg>'}
+ var L=["Activity","Pipeline","Class MA","Commercial"];
+ $("i-body").innerHTML='<div class="card"><div class="tw"><table><thead><tr><th>#</th><th>Neighbourhood</th><th>Index</th><th>30d</th>'+L.map(function(l){return "<th>"+l+"</th>"}).join("")+'<th>Net homes (12m)</th>'+(paid()?'<th>History</th>':'')+'</tr></thead><tbody>'+
+  d.areas.map(function(a,i){return '<tr><td class="note">'+(i+1)+'</td><td>'+esc(a.f)+'<div class="note">'+esc(a.b)+'</div></td><td><b>'+a.s+'</b></td><td>'+chg(a.c)+'</td>'+a.x.map(function(v){return "<td>"+v+"</td>"}).join("")+'<td>'+esc(a.u)+'</td>'+(paid()?'<td>'+spark(hist[a.n])+'</td>':'')+'</tr>'}).join("")+'</tbody></table></div>'+
+  (paid()?'<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px"><button class="btn ghost sm" id="csv1">Download scores (CSV)</button><button class="btn ghost sm" id="csv2">Download schemes (CSV)</button></div>':'')+'</div>'+
+  (paid()?'':lock("Every neighbourhood, history and CSV export"));
+ if(!paid())return;
+ function dl(name,rows){var t=rows.map(function(r){return r.map(function(c){c=String(c==null?"":c);return /[",\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c}).join(",")}).join("\n");
+  var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:"text/csv"}));a.download=name;a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},1000)}
+ $("csv1").onclick=function(){dl("terrayne-momentum-"+d.generated+".csv",[["neighbourhood","borough","index","change_30d","planning_activity","pipeline","class_ma","commercial","net_homes_12m","applications_12m","class_ma_homes","commercial_m2"]].concat(d.areas.map(function(a){return [a.f,a.b,a.s,a.c].concat(a.x,[a.raw.pipe,a.raw.act,Math.round(a.raw.ma-.5*(a.raw.ma_n||0)),a.raw.com])})))};
+ $("csv2").onclick=function(){var rows=[["neighbourhood","reference","council","site","net_homes","status","validated"]];d.areas.forEach(function(a){(a.schemes||[]).forEach(function(s){rows.push([a.f,s.ref,s.lpa,s.site,s.units,s.status,s.valid])})});dl("terrayne-schemes-"+d.generated+".csv",rows)};
+},
+profile:function(){var p=S.profile;$("pf-name").value=p.full_name||"";$("pf-company").value=p.company||"";$("pf-title").value=p.job_title||"";$("pf-brief").checked=p.brief_email!==false;$("em-email").value=S.user.email||""},
+billing:function(){
+ var p=S.profile,pr=C.prices||{pro:{month:79,year:790},enterprise:{month:399,year:3990}},team=!!p.team_owner;
+ var st=p.status,live=["active","trialing","past_due"].indexOf(st)>=0;
+ var cur={free:"Discover (free)",pro:"Professional",enterprise:"Enterprise"}[S.plan];
+ var line=team?"Your Enterprise access is provided by your team owner.":!live?"You’re on the free plan.":p.cancel_at_period_end?"Cancels on "+fmtDate(p.current_period_end)+". You keep access until then.":"Renews on "+fmtDate(p.current_period_end)+" ("+(p.billing_interval==="year"?"yearly":"monthly")+").";
+ $("bl-sub").textContent="";
+ $("bl-cur").innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap"><div><div class="note">Current plan</div><div class="score">'+cur+' '+(st==="past_due"?'<span class="pill warn">Payment due</span>':p.cancel_at_period_end?'<span class="pill warn">Cancelling</span>':'')+'</div><div class="note">'+esc(line)+'</div></div>'+(live&&!team?'<button class="btn ghost" id="portal">Manage subscription</button>':'')+'</div>';
+ var I=S.interval,plans=[["free","Discover","Free",["Top 6 Momentum scores","London development map","Planning signal feed","Sample Monday brief"]],
+  ["pro","Professional","£"+pr.pro[I].toLocaleString()+"<small> / "+I+"</small>",["Every neighbourhood, full breakdown","Watchlist of up to 10","Monday 07:00 email brief","Full brief archive","Weekly score history","CSV export"]],
+  ["enterprise","Enterprise","£"+pr.enterprise[I].toLocaleString()+"<small> / "+I+"</small>",["Everything in Professional","Up to 5 users","Unlimited watchlist","Custom neighbourhoods","Onboarding & priority support"]]];
+ $("bl-plans").innerHTML=plans.map(function(x){var isCur=x[0]===S.plan,btn="";
+  if(team)btn="";else if(isCur)btn='<button class="btn ghost" disabled>Current plan</button>';
+  else if(x[0]==="free")btn=live?'<button class="btn ghost" data-portal="1">Cancel subscription</button>':"";
+  else btn='<button class="btn" data-plan="'+x[0]+'">'+(live?"Switch to ":"Upgrade to ")+x[1]+'</button>';
+  return '<div class="plan'+(isCur?" cur":"")+'"><div class="note">'+x[1]+'</div><div class="p">'+x[2]+'</div><ul>'+x[3].map(function(f){return "<li>"+f+"</li>"}).join("")+'</ul><div style="margin-top:auto">'+btn+'</div></div>'}).join("");
+ [].forEach.call($("bl-int").children,function(b){b.classList.toggle("on",b.dataset.i===I);b.onclick=function(){S.interval=b.dataset.i;P.billing()}});
+ $("bl-plans").querySelectorAll("[data-plan]").forEach(function(b){b.onclick=function(){go("create-checkout",{plan:b.dataset.plan,interval:S.interval},b)}});
+ $("bl-plans").querySelectorAll("[data-portal]").forEach(function(b){b.onclick=function(){go("customer-portal",{},b)}});
+ if($("portal"))$("portal").onclick=function(){go("customer-portal",{},this)};
+ if(/checkout=success/.test(location.search))msg("g-msg","Thanks, your subscription is active. It can take a few seconds to show here.",true);
+},
+team:async function(){
+ var r=await sb.from("profiles").select("id,email,full_name").eq("team_owner",S.user.id),i=await sb.from("team_invites").select("email");
+ var m=r.data||[],inv=i.data||[];
+ $("tm-list").innerHTML='<div class="row"><span>'+esc(S.profile.full_name||S.user.email)+' <span class="note">(you, owner)</span></span></div>'+
+  m.map(function(u){return '<div class="row"><span>'+esc(u.full_name||u.email)+'<div class="note">'+esc(u.email)+'</div></span><button class="btn danger sm" data-rm="'+u.id+'">Remove</button></div>'}).join("")+
+  inv.map(function(u){return '<div class="row"><span>'+esc(u.email)+' <span class="pill free">Invited</span></span><button class="btn ghost sm" data-ci="'+esc(u.email)+'">Cancel</button></div>'}).join("")+
+  '<p class="note" style="margin:12px 0 0">'+(1+m.length+inv.length)+' of 5 seats used.</p>';
+ $("tm-list").querySelectorAll("[data-rm]").forEach(function(b){b.onclick=async function(){var x=await sb.rpc("remove_member",{member:b.dataset.rm});if(x.error)msg("tm-msg",x.error.message);P.team()}});
+ $("tm-list").querySelectorAll("[data-ci]").forEach(function(b){b.onclick=async function(){await sb.from("team_invites").delete().eq("owner",S.user.id).eq("email",b.dataset.ci);P.team()}});
+}};
+function uniqWeeks(){var s={};(S.briefs||[]).forEach(function(b){s[b.week]=1});return Object.keys(s)}
+
+async function go(fn,body,btn){if(btn)btn.disabled=true;msg("g-msg");
+ var r=await sb.functions.invoke(fn,{body:body});if(btn)btn.disabled=false;
+ if(r.error||!r.data||!r.data.url){var t=r.error&&r.error.context&&r.error.context.json?await r.error.context.json().catch(function(){return{}}):{};msg("g-msg",(r.data&&r.data.error)||t.error||"Something went wrong. Please try again.");scrollTo(0,0);return}
+ location.href=r.data.url}
+
+/* ---------- forms ---------- */
+$("pf-form").onsubmit=async function(e){e.preventDefault();var u={full_name:$("pf-name").value.trim(),company:$("pf-company").value.trim(),job_title:$("pf-title").value.trim(),brief_email:$("pf-brief").checked};
+ var r=await sb.from("profiles").update(u).eq("id",S.user.id);if(r.error)msg("pf-msg",r.error.message);else{Object.assign(S.profile,u);msg("pf-msg","Saved.",true)}};
+$("em-form").onsubmit=async function(e){e.preventDefault();var r=await sb.auth.updateUser({email:$("em-email").value.trim()},{emailRedirectTo:location.origin+location.pathname});msg("em-msg",r.error?r.error.message:"Check both inboxes to confirm the change.",!r.error)};
+$("pw-form").onsubmit=async function(e){e.preventDefault();var r=await sb.auth.updateUser({password:$("pw-pass").value});msg("pw-msg",r.error?r.error.message:"Password changed.",!r.error);if(!r.error)$("pw-pass").value=""};
+$("tm-form").onsubmit=async function(e){e.preventDefault();var r=await sb.from("team_invites").insert({owner:S.user.id,email:$("tm-email").value.trim().toLowerCase()});
+ if(r.error)msg("tm-msg",r.error.message);else{msg("tm-msg","Invite saved. Ask them to create an account at terrayne.co/account.html with that email.",true);$("tm-email").value="";P.team()}};
+$("del").onclick=async function(){if(!confirm("Delete your Terrayne account? Any subscription is cancelled immediately and your data is removed."))return;
+ if(prompt('Type DELETE to confirm')!=="DELETE")return;var r=await sb.functions.invoke("delete-account",{body:{}});
+ if(r.error){msg("g-msg","Couldn’t delete the account. Please contact us.");return}await sb.auth.signOut();location.href="./"};
+
+/* ---------- routing ---------- */
+var panes=["overview","watchlist","briefs","index","profile","billing","team"];
+async function route(){var h=(location.hash||"#overview").slice(1);if(panes.indexOf(h)<0)h="overview";
+ if(h==="team"&&!(S.plan==="enterprise"&&!S.profile.team_owner))h="overview";
+ panes.forEach(function(p){$("p-"+p).classList.toggle("hide",p!==h)});
+ document.querySelectorAll("#side a").forEach(function(a){a.classList.toggle("on",a.getAttribute("href")==="#"+h)});
+ if(h==="briefs"||h==="overview")await loadBriefs();
+ await P[h]();}
+addEventListener("hashchange",route);
+
+async function boot(){var s=await sb.auth.getSession();if(!s.data.session){show("v-auth");return}
+ S.user=s.data.session.user;await loadProfile();await loadIndex();show("v-app");
+ $("who").innerHTML='<span>'+esc(S.user.email)+'</span><button class="btn ghost sm" id="so">Sign out</button>';$("so").onclick=signOut;
+ $("nav-team").classList.toggle("hide",!(S.plan==="enterprise"&&!S.profile.team_owner));
+ var want=new URLSearchParams(location.search).get("plan");
+ if(want&&!paid()&&(want==="pro"||want==="enterprise")){history.replaceState(null,"",location.pathname+"#billing");S.interval=new URLSearchParams(location.search).get("interval")==="year"?"year":"month";}
+ route()}
+boot();
+})();
+</script>
+</body>
+</html>

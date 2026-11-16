@@ -240,4 +240,6 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # Public output must hold only the free top 6; publish.py handles that (and Supabase).
+    import publish
+    publish.main()
