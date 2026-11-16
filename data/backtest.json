@@ -1,0 +1,155 @@
+{
+ "generated": "2026-11-16",
+ "method": "Back-test: did areas with high planning momentum go on to outperform on house prices?\n\nFor each start date T0 we rebuild the planning half of the Momentum Index exactly as the live index does\n(4 planning signals, 12 months of GLA Planning London Datahub filings to T0, percentiles across London's\nzoom-13 map tiles, live weights re-scaled to the planning signals). We then measure each tile's resale\nprice change from the 12 months to T0 to the latest 12 months (HM Land Registry, resales only, like-for-like\nby property type) and compare score bands. Only the planning signals can be rebuilt historically.\n\n  python3 scripts/backtest.py      -> data/backtest.json",
+ "price_tests": [
+  {
+   "start": "2021-09-30",
+   "end": "2026-09-30",
+   "areas": 165,
+   "london_growth": 0.0295,
+   "spearman": -0.544,
+   "bands": [
+    {
+     "band": "80–100",
+     "areas": 20,
+     "median_growth": -0.0005,
+     "vs_london_pts": -3.0,
+     "beat_london": 0.4
+    },
+    {
+     "band": "60–79",
+     "areas": 55,
+     "median_growth": 0.0453,
+     "vs_london_pts": 1.6,
+     "beat_london": 0.636
+    },
+    {
+     "band": "40–59",
+     "areas": 56,
+     "median_growth": 0.074,
+     "vs_london_pts": 4.4,
+     "beat_london": 0.875
+    },
+    {
+     "band": "0–39",
+     "areas": 34,
+     "median_growth": 0.0999,
+     "vs_london_pts": 7.0,
+     "beat_london": 0.882
+    }
+   ]
+  },
+  {
+   "start": "2022-09-30",
+   "end": "2026-09-30",
+   "areas": 165,
+   "london_growth": -0.0069,
+   "spearman": -0.161,
+   "bands": [
+    {
+     "band": "80–100",
+     "areas": 23,
+     "median_growth": -0.0094,
+     "vs_london_pts": -0.3,
+     "beat_london": 0.478
+    },
+    {
+     "band": "60–79",
+     "areas": 52,
+     "median_growth": -0.001,
+     "vs_london_pts": 0.6,
+     "beat_london": 0.558
+    },
+    {
+     "band": "40–59",
+     "areas": 54,
+     "median_growth": 0.011,
+     "vs_london_pts": 1.8,
+     "beat_london": 0.741
+    },
+    {
+     "band": "0–39",
+     "areas": 36,
+     "median_growth": 0.0113,
+     "vs_london_pts": 1.8,
+     "beat_london": 0.583
+    }
+   ]
+  }
+ ],
+ "population_test": {
+  "start": "2021-06-30",
+  "years": "2021→2024",
+  "areas": 171,
+  "london_growth": 0.0324,
+  "spearman": 0.174,
+  "bands": [
+   {
+    "band": "80–100",
+    "areas": 15,
+    "median_growth": 0.0532,
+    "beat_london": 0.6
+   },
+   {
+    "band": "60–79",
+    "areas": 58,
+    "median_growth": 0.0246,
+    "beat_london": 0.448
+   },
+   {
+    "band": "40–59",
+    "areas": 54,
+    "median_growth": 0.0244,
+    "beat_london": 0.407
+   },
+   {
+    "band": "0–39",
+    "areas": 44,
+    "median_growth": 0.0161,
+    "beat_london": 0.295
+   }
+  ]
+ },
+ "headroom_tests": [
+  {
+   "start": "2021-09-30",
+   "end": "2026-09-30",
+   "areas": 165,
+   "spearman_price_level": -0.404,
+   "thirds": [
+    {
+     "group": "cheapest",
+     "median_growth": 0.0882
+    },
+    {
+     "group": "middle",
+     "median_growth": 0.054
+    },
+    {
+     "group": "priciest",
+     "median_growth": 0.0426
+    }
+   ]
+  },
+  {
+   "start": "2022-09-30",
+   "end": "2026-09-30",
+   "areas": 165,
+   "spearman_price_level": -0.476,
+   "thirds": [
+    {
+     "group": "cheapest",
+     "median_growth": 0.0254
+    },
+    {
+     "group": "middle",
+     "median_growth": 0.0004
+    },
+    {
+     "group": "priciest",
+     "median_growth": -0.0212
+    }
+   ]
+  }
+ ]
+}
