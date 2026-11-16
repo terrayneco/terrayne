@@ -131,7 +131,7 @@ async function run(){var pc=TerrayneReport.normPC(Q.get("pc")),r=parseInt(Q.get(
  $("pc").value=pc;$("r").value=String(r);$("msg").textContent="Building report…";
  var d=await TerrayneReport.build(pc,r/1000);if(d.error){$("msg").textContent=d.error;return}
  var acc=await access(pc);$("msg").textContent="";
- if(type==="memo"&&plan!=="enterprise"){$("out").innerHTML='<div class="page"><h1>IC memos are part of Enterprise</h1><p class="sub">Enterprise teams get one-click Investment Committee memos with their own branding. <a href="mailto:hello@terrayne.co.uk?subject=Terrayne%20Enterprise">Talk to us</a>.</p></div>';return}
+ if(type==="memo"&&plan!=="enterprise"){$("out").innerHTML='<div class="page"><h1>IC memos are part of Enterprise</h1><p class="sub">Enterprise teams get one-click Investment Committee memos with their own branding. <a href="mailto:hello@terrayne.co?subject=Terrayne%20Enterprise">Talk to us</a>.</p></div>';return}
  $("out").innerHTML=type==="memo"?memo(d):report(d,acc.full);
  document.title=(type==="memo"?"IC memo ":"Postcode Report ")+d.pc+" · Terrayne";
  var act='';if(acc.full||type==="memo")act+='<button class="btn" id="pdf">Download PDF</button>';

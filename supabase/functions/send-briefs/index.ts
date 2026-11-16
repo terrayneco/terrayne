@@ -3,7 +3,7 @@
 // Deploy with --no-verify-jwt (protected by CRON_SECRET instead).
 import { admin, SITE } from "../_shared/common.ts";
 
-const FROM = Deno.env.get("BRIEF_FROM") ?? "Terrayne <briefings@terrayne.co.uk>";
+const FROM = Deno.env.get("BRIEF_FROM") ?? "Terrayne <briefings@terrayne.co>";
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]!));
 
 function html(name: string, week: string, items: { area: string; title: string; body: string }[], alerts: Alert[] = []) {

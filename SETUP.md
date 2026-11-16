@@ -25,7 +25,7 @@ Do them in order. Stripe **test mode** is fine to start; switch to live keys whe
    Events: `checkout.session.completed`, `customer.subscription.created`, `customer.subscription.updated`, `customer.subscription.deleted`. Copy the signing secret (`whsec_...`).
 
 ## 3. Resend (Monday emails)
-1. resend.com → Domains → add `terrayne.co.uk` (the domain your emails use) and add the DNS records it shows at your domain registrar.
+1. resend.com → Domains → add `terrayne.co` and add the DNS records it shows at your domain registrar.
 2. API Keys → create one.
 
 ## 4. Deploy the server functions
@@ -36,7 +36,7 @@ supabase link --project-ref <project-ref>
 supabase secrets set STRIPE_SECRET_KEY=sk_... STRIPE_WEBHOOK_SECRET=whsec_... \
   PRICE_REPORT=price_... PRICE_INV_MONTH=price_... PRICE_INV_YEAR=price_... PRICE_PRO_MONTH=price_... PRICE_PRO_YEAR=price_... PRICE_ENT_MONTH=price_... PRICE_ENT_YEAR=price_... \
   RESEND_API_KEY=re_... CRON_SECRET=<any long random string> SITE_URL=https://terrayne.co \
-  BRIEF_FROM="Terrayne <briefings@terrayne.co.uk>"
+  BRIEF_FROM="Terrayne <briefings@terrayne.co>"
 supabase functions deploy create-checkout
 supabase functions deploy customer-portal
 supabase functions deploy delete-account

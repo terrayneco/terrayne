@@ -28,7 +28,7 @@ sync will overwrite your change. If you do edit here, copy `index.html` back to 
 - Birmingham and Paris are shown as "coming soon".
 
 ## Accounts (Supabase + Stripe)
-- `account.html`, `admin.html`, `terms.html`, `privacy.html`, `assets/config.js`, `supabase/` live in THIS repo only (not in the iCloud folder); edit them here.
+- `account.html`, `admin.html`, `report.html`, `methodology.html`, `terms.html`, `privacy.html`, `assets/config.js`, `assets/report-core.js`, `supabase/` live in THIS repo only (methodology.html copies the homepage's styles and nav; regenerate it if those change) (not in the iCloud folder); edit them here.
 - Setup steps are in `SETUP.md`. `assets/config.js` holds only the public Supabase URL + anon key; never put secret keys in the repo.
 - Neighbourhoods are listed in `AREAS` in the script; add or move one there.
 
