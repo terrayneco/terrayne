@@ -15,6 +15,13 @@ sync will overwrite your change. If you do edit here, copy `index.html` back to 
 4. Commit with a short plain-English message and `git push` to `main` straight away. Changes are not live until they are pushed.
 5. Tell Charlie it's pushed and will be live on terrayne.co in about a minute (hard refresh: Cmd+Shift+R).
 
+## Momentum Index (real data)
+- Scores come from `scripts/momentum.py`, which queries the GLA Planning London Datahub (public guest API) and writes `data/momentum.json`. The method is in the script's docstring.
+- The page loads `data/momentum.json` live and also has a snapshot embedded between `/*MI*/` markers (used when opened as a local file).
+- A GitHub Action (`.github/workflows/momentum.yml`) refreshes the JSON every Monday 05:30 UTC.
+- To refresh by hand: `python3 scripts/momentum.py --html "$HOME/Library/Mobile Documents/com~apple~CloudDocs/TYE/website/terrayne.html"`, then sync/push.
+- Neighbourhoods are listed in `AREAS` in the script; add or move one there.
+
 ## Don't
 - Don't delete or rename `CNAME` — it connects the site to terrayne.co.
 - Don't create other branches; push to `main`.
