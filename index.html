@@ -317,6 +317,12 @@ nav ul a{padding:7px 14px}
 .cities button small{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);margin-left:4px}
 .cities button[aria-selected="true"]{background:#fff;color:#0a1223}.cities button[aria-selected="true"] small{color:#4a5670}
 .cities button:disabled{cursor:default;opacity:.55}
+/* class MA show-all */
+.mamore{text-align:center;margin-top:14px}
+.mamore button{background:none;border:1px solid var(--line);color:#c8d4e8;border-radius:99px;padding:10px 20px;font:inherit;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;gap:10px}
+.mamore button:hover{border-color:#4f9be8;color:#fff}
+.chev{display:inline-block;width:7px;height:7px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg);margin-top:-4px}.chev.up{transform:rotate(-135deg);margin-top:3px}
+#mat{scroll-margin-top:100px}
 /* premium nav */
 .nsign{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,212,232,.72);white-space:nowrap}.nsign:hover{color:#fff}@media(max-width:1000px){.nsign{display:none}}
 nav{background:linear-gradient(180deg,rgba(8,16,32,.82),rgba(6,13,26,.66));border-bottom:0}
@@ -414,6 +420,7 @@ nav ul a.act{color:#fff;background:linear-gradient(180deg,rgba(159,208,255,.14),
 <p class="sub">Class MA prior approvals let offices and shops become homes without full planning permission. Here is how each borough handles them, from GLA Planning London Datahub filings.</p>
 <div class="makpi" id="makpi"></div>
 <div class="matw"><table class="mat" id="mat"><thead><tr><th data-k="borough">Borough</th><th class="n" data-k="filed_12m" aria-sort="descending">Filed (12m)</th><th class="n" data-k="homes_12m">Homes proposed (12m)</th><th class="n" data-k="approval_rate">Approval rate (24m)</th><th class="n" data-k="median_days">Median decision</th><th class="n" data-k="pending">Pending</th></tr></thead><tbody></tbody></table></div>
+<div class="mamore"><button type="button" id="mamore" aria-expanded="false" aria-controls="mat"></button></div>
 <h3 style="margin:28px 0 10px;font-size:18px">Latest filings</h3>
 <div class="matw"><table class="mat" id="malatest"><thead><tr><th>Filed</th><th>Borough</th><th>Site</th><th class="n">Homes</th><th>Status</th><th>Reference</th></tr></thead><tbody></tbody></table></div>
 <p class="note" id="manote" style="margin-top:14px"></p>
@@ -719,10 +726,12 @@ var q=new URLSearchParams(location.search).get("pc");if(q){$("ckpc").value=q;run
 
 /* ---------- Class MA tracker ---------- */
 (function(){var tb=document.querySelector("#mat tbody");if(!tb||location.protocol.indexOf("http")!==0)return;
-var D=null,key="filed_12m";function nf(v){return v==null?"—":Math.round(v).toLocaleString("en-GB")}
+var D=null,key="filed_12m",ALLB=false;function nf(v){return v==null?"—":Math.round(v).toLocaleString("en-GB")}
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 function draw(){var B=D.boroughs.slice().sort(function(a,b){if(key==="borough")return a.borough.localeCompare(b.borough);var x=a[key],y=b[key];if(x==null)return 1;if(y==null)return -1;return key==="median_days"?x-y:y-x});
- tb.innerHTML=B.map(function(r){return '<tr><td>'+esc(r.borough)+'</td><td class="n">'+nf(r.filed_12m)+'</td><td class="n">'+nf(r.homes_12m)+'</td><td class="n">'+(r.approval_rate==null?'<span style="color:var(--mute)">too few</span>':Math.round(r.approval_rate*100)+'%<span class="rate"><i style="width:'+r.approval_rate*100+'%"></i></span>')+'</td><td class="n">'+(r.median_days==null?'—':r.median_days+' days')+'</td><td class="n">'+nf(r.pending)+'</td></tr>'}).join("");
+ var shown=ALLB?B:B.slice(0,Math.ceil(B.length/2)),mb=document.getElementById("mamore");
+ if(mb){mb.innerHTML=ALLB?'Show fewer <span class="chev up"></span>':'Show all '+B.length+' boroughs <span class="chev"></span>';mb.setAttribute("aria-expanded",ALLB);mb.onclick=function(){ALLB=!ALLB;draw();if(!ALLB)document.getElementById("mat").scrollIntoView({behavior:"smooth",block:"start"})}}
+ tb.innerHTML=shown.map(function(r){return '<tr><td>'+esc(r.borough)+'</td><td class="n">'+nf(r.filed_12m)+'</td><td class="n">'+nf(r.homes_12m)+'</td><td class="n">'+(r.approval_rate==null?'<span style="color:var(--mute)">too few</span>':Math.round(r.approval_rate*100)+'%<span class="rate"><i style="width:'+r.approval_rate*100+'%"></i></span>')+'</td><td class="n">'+(r.median_days==null?'—':r.median_days+' days')+'</td><td class="n">'+nf(r.pending)+'</td></tr>'}).join("");
  document.querySelectorAll("#mat th").forEach(function(th){if(th.dataset.k===key)th.setAttribute("aria-sort","descending");else th.removeAttribute("aria-sort")})}
 document.querySelectorAll("#mat th").forEach(function(th){th.onclick=function(){key=th.dataset.k;draw()}});
 fetch("data/classma.json",{cache:"no-cache"}).then(function(r){return r.json()}).then(function(d){D=d;var L=d.london;
