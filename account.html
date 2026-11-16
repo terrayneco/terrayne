@@ -25,7 +25,7 @@ h3{font-size:16px;margin:0 0 6px}
 .sub{color:var(--mute);margin:0 0 28px;max-width:640px}
 .eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:22px}
-.grid{display:grid;gap:16px}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid{display:grid;gap:16px}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}#bl-plans{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:99px;padding:11px 20px;font:inherit;font-weight:600;font-size:14px;background:#fff;color:#0a1223;cursor:pointer;text-decoration:none}
 .btn:hover{text-decoration:none;filter:brightness(.94)}
 .btn.ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.2)}
@@ -229,9 +229,10 @@ async function loadIndex(){
  if(!S.pub){try{S.pub=await (await fetch("data/momentum.json",{cache:"no-cache"})).json()}catch(e){S.pub={areas:[]}}}
 }
 function latest(){return S.snaps&&S.snaps.length?S.snaps[0].data:S.pub}
-async function loadBriefs(){if(S.plan==="free"||S.briefs)return;var r=await sb.from("briefs").select("week,area,title,body").order("week",{ascending:false}).limit(1000);S.briefs=r.data||[]}
+async function loadBriefs(){if(!briefsOK()||S.briefs)return;var r=await sb.from("briefs").select("week,area,title,body").order("week",{ascending:false}).limit(1000);S.briefs=r.data||[]}
 function paid(){return S.plan!=="free"}
-function lock(what){return '<div class="card lock"><span class="pill">Professional</span><h2 style="margin-top:12px">'+what+'</h2><p>Upgrade to Professional to follow up to 10 neighbourhoods, get the Monday brief by email, see every past brief and the full Index history.</p><a class="btn" href="#billing">See plans</a></div>'}
+function briefsOK(){return S.plan==="pro"||S.plan==="enterprise"}
+function lock(what){return '<div class="card lock"><span class="pill">Professional</span><h2 style="margin-top:12px">'+what+'</h2><p>Investor (£19 a month) unlocks every neighbourhood, unlimited postcode checks and 3 saved places. Professional adds the Monday brief, every past brief, 10 watchlist places and the full Index history.</p><a class="btn" href="#billing">See plans</a></div>'}
 
 /* ---------- panes ---------- */
 var P={
@@ -239,7 +240,7 @@ overview:function(){
  var d=latest(),pr=S.profile,first=(pr.full_name||"").split(" ")[0];
  $("hello").textContent=first?"Welcome back, "+first:"Welcome back";
  $("o-sub").textContent=d&&d.generated?"Momentum Index updated "+fmtDate(d.generated)+".":"";
- var pl={free:"Discover (free)",pro:"Professional",enterprise:"Enterprise"}[S.plan];
+ var pl={free:"Discover (free)",investor:"Investor",pro:"Professional",enterprise:"Enterprise"}[S.plan];
  $("o-stats").innerHTML='<div class="card"><div class="note">Plan</div><div class="score">'+pl+'</div></div><div class="card"><div class="note">Watchlist</div><div class="score">'+S.watch.length+'<em> neighbourhoods</em></div></div><div class="card"><div class="note">Briefs</div><div class="score">'+(paid()?(S.briefs?uniqWeeks().length:"—"):"Sample")+'<em> '+(paid()?"weeks":"")+'</em></div></div>';
  var A=(d&&d.areas)||[];
  $("o-watch").innerHTML=!paid()?'<p class="note">The watchlist is part of Professional. <a href="#billing">Upgrade</a></p>':S.watch.length?S.watch.map(function(n){var a=A.find(function(x){return x.n===n});return '<div class="row"><span>'+esc(a?a.f:n)+'</span><span>'+(a?'<b>'+a.s+'</b>/100 '+chg(a.c):'')+'</span></div>'}).join(""):'<p class="note">You’re not following any neighbourhoods yet. <a href="#watchlist">Add some</a>.</p>';
@@ -249,8 +250,8 @@ overview:function(){
 },
 watchlist:function(){
  if(!paid()){$("w-body").innerHTML=lock("Build your watchlist");$("w-limit").textContent="";return}
- var lim=S.plan==="pro"?10:0,A=(latest()&&latest().areas)||[];
- $("w-limit").textContent=lim?"Professional: up to "+lim+" ("+S.watch.length+" used).":"Enterprise: unlimited.";
+ var lim=S.plan==="pro"?10:S.plan==="investor"?3:0,A=(latest()&&latest().areas)||[];
+ $("w-limit").textContent=lim?(S.plan==="investor"?"Investor":"Professional")+": up to "+lim+" ("+S.watch.length+" used).":"Enterprise: unlimited.";
  $("w-body").innerHTML='<div class="card"><div class="tw"><table><thead><tr><th>Neighbourhood</th><th>Borough</th><th>Index</th><th>30d</th><th></th></tr></thead><tbody>'+
   A.slice().sort(function(a,b){return a.f.localeCompare(b.f)}).map(function(a){var on=S.watch.indexOf(a.n)>=0;
    return '<tr><td>'+esc(a.f)+'</td><td class="note">'+esc(a.b)+'</td><td><b>'+a.s+'</b></td><td>'+chg(a.c)+'</td><td style="text-align:right"><button class="chip'+(on?" on":"")+'" data-a="'+esc(a.n)+'">'+(on?"✓ Following":"+ Follow")+'</button></td></tr>'}).join("")+'</tbody></table></div></div>';
@@ -259,7 +260,7 @@ watchlist:function(){
   if(r.error)msg("g-msg",r.error.message);else{msg("g-msg");S.watch=on?S.watch.filter(function(x){return x!==n}):S.watch.concat(n)}P.watchlist()}});
 },
 briefs:function(){
- if(!paid()){$("b-body").innerHTML=lock("Every Monday brief, archived");return}
+ if(!briefsOK()){$("b-body").innerHTML=lock("The Monday brief is part of Professional");return}
  if(!S.briefs.length){$("b-body").innerHTML='<div class="card"><p class="note" style="margin:0">Your first brief arrives on Monday at 7am. Past briefs will appear here.</p></div>';return}
  var only=S.briefsMine!==false&&S.watch.length>0;
  var list=S.briefs.filter(function(b){return !only||S.watch.indexOf(b.area)>=0});
@@ -288,15 +289,16 @@ index:function(){
 },
 profile:function(){var p=S.profile;$("pf-name").value=p.full_name||"";$("pf-company").value=p.company||"";$("pf-title").value=p.job_title||"";$("pf-brief").checked=p.brief_email!==false;$("em-email").value=S.user.email||""},
 billing:function(){
- var p=S.profile,pr=C.prices||{pro:{month:79,year:790},enterprise:{month:399,year:3990}},team=!!p.team_owner;
+ var p=S.profile,pr=C.prices||{investor:{month:19,year:190},pro:{month:79,year:790},enterprise:{month:399,year:3990}},team=!!p.team_owner;
  var st=p.status,live=["active","trialing","past_due"].indexOf(st)>=0;
- var cur={free:"Discover (free)",pro:"Professional",enterprise:"Enterprise"}[S.plan];
+ var cur={free:"Discover (free)",investor:"Investor",pro:"Professional",enterprise:"Enterprise"}[S.plan];
  var line=team?"Your Enterprise access is provided by your team owner.":!live?"You’re on the free plan.":p.cancel_at_period_end?"Cancels on "+fmtDate(p.current_period_end)+". You keep access until then.":"Renews on "+fmtDate(p.current_period_end)+" ("+(p.billing_interval==="year"?"yearly":"monthly")+").";
  $("bl-sub").textContent="";
  $("bl-cur").innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap"><div><div class="note">Current plan</div><div class="score">'+cur+' '+(st==="past_due"?'<span class="pill warn">Payment due</span>':p.cancel_at_period_end?'<span class="pill warn">Cancelling</span>':'')+'</div><div class="note">'+esc(line)+'</div></div>'+(live&&!team?'<button class="btn ghost" id="portal">Manage subscription</button>':'')+'</div>';
- var I=S.interval,plans=[["free","Discover","Free",["Postcode check: score and top 5 schemes","Top 6 Momentum Index","Class MA tracker","Sample Monday brief"]],
-  ["pro","Professional","£"+pr.pro[I].toLocaleString()+"<small> / "+I+"</small>",["Full postcode reports and CSV export","Every neighbourhood and its history","Watchlist of 10 with a Monday email brief","Class MA leads in your boroughs","Archive of every past brief"]],
-  ["enterprise","Enterprise","£"+pr.enterprise[I].toLocaleString()+"<small> / "+I+"</small>",["Everything in Professional","Custom catchments round your sites","Up to 5 users, unlimited watchlist","Onboarding and priority support"]]];
+ var I=S.interval,plans=[["free","Discover","Free",["3 postcode checks a month","Top 10 Momentum Index","Class MA approval rates","Sample Monday brief"]],
+  ["investor","Investor","£"+pr.investor[I].toLocaleString()+"<small> / "+I+"</small>",["Unlimited postcode checks, every scheme","Score and price headroom everywhere","Alerts near 3 saved properties","PDF postcode reports"]],
+  ["pro","Professional","£"+pr.pro[I].toLocaleString()+"<small> / "+I+"</small>",["Everything in Investor","Monday 7am brief for your boroughs","Live Class MA leads","Score history, watchlist of 10","CSV export and brief archive"]],
+  ["enterprise","Enterprise","£"+pr.enterprise[I].toLocaleString()+"<small> / "+I+"</small>",["Everything in Professional, 5 users","Custom catchments and team watchlist","Branded PDFs, IC memos, Slack brief","Onboarding and priority support"]]];
  $("bl-plans").innerHTML=plans.map(function(x){var isCur=x[0]===S.plan,btn="";
   if(team)btn="";else if(isCur)btn='<button class="btn ghost" disabled>Current plan</button>';
   else if(x[0]==="free")btn=live?'<button class="btn ghost" data-portal="1">Cancel subscription</button>':"";
@@ -351,7 +353,7 @@ async function boot(){var s=await sb.auth.getSession();if(!s.data.session){show(
  $("who").innerHTML='<span>'+esc(S.user.email)+'</span><button class="btn ghost sm" id="so">Sign out</button>';$("so").onclick=signOut;
  $("nav-team").classList.toggle("hide",!(S.plan==="enterprise"&&!S.profile.team_owner));
  var want=new URLSearchParams(location.search).get("plan");
- if(want&&!paid()&&(want==="pro"||want==="enterprise")){history.replaceState(null,"",location.pathname+"#billing");S.interval=new URLSearchParams(location.search).get("interval")==="year"?"year":"month";}
+ if(want&&!paid()&&(want==="investor"||want==="pro"||want==="enterprise")){history.replaceState(null,"",location.pathname+"#billing");S.interval=new URLSearchParams(location.search).get("interval")==="year"?"year":"month";}
  route()}
 boot();
 })();

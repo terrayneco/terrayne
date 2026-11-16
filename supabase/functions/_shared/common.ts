@@ -12,6 +12,8 @@ export const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("S
 
 // Stripe price IDs, set as function secrets.
 export const PRICES: Record<string, string | undefined> = {
+  "investor:month": Deno.env.get("PRICE_INV_MONTH"),
+  "investor:year": Deno.env.get("PRICE_INV_YEAR"),
   "pro:month": Deno.env.get("PRICE_PRO_MONTH"),
   "pro:year": Deno.env.get("PRICE_PRO_YEAR"),
   "enterprise:month": Deno.env.get("PRICE_ENT_MONTH"),

@@ -790,6 +790,506 @@
    "raw": {},
    "schemes": [],
    "t": "Manchester city centre scores highest on new-build homes being sold (top 1% of Greater Manchester). 343 brownfield register sites nearby (192.4 ha) could take about 52,887 homes, 39,481 of them with planning permission. 157 new-build homes sold in the last 12 months. Official statistics: population +35.2% (2021→2024); rail use +21.8%; resale prices −4.4% on a year earlier, median £235,000."
+  },
+  {
+   "n": "Eastlands",
+   "f": "Eastlands & Openshaw",
+   "b": "Manchester",
+   "lat": 53.482,
+   "lon": -2.18,
+   "s": 71,
+   "c": null,
+   "u": "45.4 ha",
+   "x": [
+    93,
+    37,
+    82,
+    72,
+    68
+   ],
+   "hd": 63,
+   "off": {
+    "brownfield_homes": 2279,
+    "brownfield_permissioned": 2025,
+    "brownfield_sites": 30,
+    "brownfield_ha": 45.4,
+    "newbuild_sales": 0,
+    "transport": 0.3857,
+    "stations": 2,
+    "population": 0.046,
+    "prices": 0.0529,
+    "median_price": 212000.0,
+    "transport_span": "ORR Apr 2022 to Mar 2023 → Apr 2024 to Mar 2025",
+    "population_span": "2021→2024"
+   },
+   "det": {
+    "brownfield": [
+     [
+      "Clayton Canalside (Eccleshall Street & Croft Street Triangle)",
+      880,
+      "non permissioned",
+      "Manchester City Council",
+      18.448666
+     ],
+     [
+      "Crabtree Lane",
+      300,
+      "non permissioned",
+      "Manchester City Council",
+      1.975521
+     ],
+     [
+      "GML Masterplan: Former Police Station site",
+      150,
+      "non permissioned",
+      "Manchester City Council",
+      0.877997
+     ],
+     [
+      "GML Masterplan: Grey Mare Lane / Raglan Close / Sledmore Close (plots ",
+      150,
+      "non permissioned",
+      "Manchester City Council",
+      0.572191
+     ],
+     [
+      "Seamark, Seamark, Edge Lane, Droylsden, M43 6SJ",
+      143,
+      "not permissioned",
+      "Tameside Metropolitan Borough Council",
+      2.24
+     ]
+    ],
+    "transport": {
+     "now": 163414,
+     "before": 117930,
+     "top": [
+      [
+       "Ashburys",
+       105284,
+       65988
+      ],
+      [
+       "Gorton",
+       58130,
+       51942
+      ]
+     ]
+    },
+    "population": {
+     "now": 41225,
+     "before": 39413,
+     "lsoas": 22
+    },
+    "prices": {
+     "types": [
+      [
+       "Flats",
+       29,
+       127500,
+       145000
+      ],
+      [
+       "Terraced",
+       66,
+       202500,
+       183000
+      ],
+      [
+       "Semi-detached",
+       81,
+       225000,
+       210000
+      ],
+      [
+       "Detached",
+       14,
+       331500,
+       null
+      ]
+     ],
+     "new_build": 0,
+     "sales": 190
+    }
+   },
+   "raw": {},
+   "schemes": [],
+   "t": "Eastlands & Openshaw scores highest on brownfield land identified for housing (top 7% of Greater Manchester). 30 brownfield register sites nearby (45.4 ha) could take about 2,279 homes, 2,025 of them with planning permission. 0 new-build homes sold in the last 12 months. Official statistics: population +4.6% (2021→2024); rail use +38.6%; resale prices +5.3% on a year earlier, median £212,000."
+  },
+  {
+   "n": "Ancoats",
+   "f": "Ancoats & New Islington",
+   "b": "Manchester",
+   "lat": 53.485,
+   "lon": -2.218,
+   "s": 68,
+   "c": null,
+   "u": "162.4 ha",
+   "x": [
+    99,
+    98,
+    19,
+    98,
+    5
+   ],
+   "hd": 56,
+   "off": {
+    "brownfield_homes": 30557,
+    "brownfield_permissioned": 28147,
+    "brownfield_sites": 183,
+    "brownfield_ha": 162.4,
+    "newbuild_sales": 11,
+    "transport": 0.1708,
+    "stations": 3,
+    "population": 0.1745,
+    "prices": -0.0519,
+    "median_price": 225000.0,
+    "transport_span": "ORR Apr 2022 to Mar 2023 → Apr 2024 to Mar 2025",
+    "population_span": "2021→2024"
+   },
+   "det": {
+    "brownfield": [
+     [
+      "Holt Town",
+      4030,
+      "non permissioned",
+      "Manchester City Council",
+      25.564358
+     ],
+     [
+      "Red Bank (Victoria North)",
+      3250,
+      "non permissioned",
+      "Manchester City Council",
+      5.950587
+     ],
+     [
+      "New Cross Zones B & C (Victoria North)",
+      3000,
+      "non permissioned",
+      "Manchester City Council",
+      11.141161
+     ],
+     [
+      "Ardwick Green NDF sites",
+      2484,
+      "non permissioned",
+      "Manchester City Council",
+      14.303563
+     ],
+     [
+      "Piccadilly Trading Estate",
+      1960,
+      "non permissioned",
+      "Manchester City Council",
+      2.974643
+     ]
+    ],
+    "transport": {
+     "now": 35780374,
+     "before": 30561232,
+     "top": [
+      [
+       "Manchester Piccadilly",
+       27401610,
+       23558364
+      ],
+      [
+       "Manchester Victoria",
+       8378502,
+       7002544
+      ],
+      [
+       "Ardwick",
+       262,
+       324
+      ]
+     ]
+    },
+    "population": {
+     "now": 48256,
+     "before": 41088,
+     "lsoas": 25
+    },
+    "prices": {
+     "types": [
+      [
+       "Flats",
+       409,
+       210000,
+       225000
+      ],
+      [
+       "Terraced",
+       42,
+       270000,
+       270000
+      ],
+      [
+       "Semi-detached",
+       23,
+       360000,
+       322500
+      ],
+      [
+       "Detached",
+       1,
+       338000,
+       null
+      ]
+     ],
+     "new_build": 11,
+     "sales": 486
+    }
+   },
+   "raw": {},
+   "schemes": [],
+   "t": "Ancoats & New Islington scores highest on brownfield land identified for housing (top 1% of Greater Manchester). 183 brownfield register sites nearby (162.4 ha) could take about 30,557 homes, 28,147 of them with planning permission. 11 new-build homes sold in the last 12 months. Official statistics: population +17.4% (2021→2024); rail use +17.1%; resale prices −5.2% on a year earlier, median £225,000."
+  },
+  {
+   "n": "Hulme",
+   "f": "Hulme & Moss Side",
+   "b": "Manchester",
+   "lat": 53.462,
+   "lon": -2.248,
+   "s": 67,
+   "c": null,
+   "u": "56.6 ha",
+   "x": [
+    96,
+    37,
+    90,
+    99,
+    12
+   ],
+   "hd": 56,
+   "off": {
+    "brownfield_homes": 14108,
+    "brownfield_permissioned": 10740,
+    "brownfield_sites": 131,
+    "brownfield_ha": 56.6,
+    "newbuild_sales": 0,
+    "transport": 0.4419,
+    "stations": 2,
+    "population": 0.1974,
+    "prices": -0.003,
+    "median_price": 225000.0,
+    "transport_span": "ORR Apr 2022 to Mar 2023 → Apr 2024 to Mar 2025",
+    "population_span": "2021→2024"
+   },
+   "det": {
+    "brownfield": [
+     [
+      "Crown Street Phase 3, Great Jackson Street Masterplan",
+      1746,
+      "non permissioned",
+      "Manchester City Council",
+      1.12529
+     ],
+     [
+      "Park Place (Plot G - Great Jackson Street Masterplan)",
+      1037,
+      "non permissioned",
+      "Manchester City Council",
+      0.709418
+     ],
+     [
+      "Water Street sites (Big Yellow)",
+      800,
+      "non permissioned",
+      "Manchester City Council",
+      0.607285
+     ],
+     [
+      "Viadux Phase 2b",
+      780,
+      "non permissioned",
+      "Manchester City Council",
+      0.125127
+     ],
+     [
+      "Great Northern Complex",
+      746,
+      "non permissioned",
+      "Manchester City Council",
+      0.827666
+     ]
+    ],
+    "transport": {
+     "now": 8111992,
+     "before": 5626026,
+     "top": [
+      [
+       "Manchester Oxford Road",
+       6392614,
+       4657936
+      ],
+      [
+       "Deansgate",
+       1719378,
+       968090
+      ]
+     ]
+    },
+    "population": {
+     "now": 92066,
+     "before": 76888,
+     "lsoas": 42
+    },
+    "prices": {
+     "types": [
+      [
+       "Flats",
+       353,
+       205000,
+       215000
+      ],
+      [
+       "Terraced",
+       130,
+       259000,
+       235500
+      ],
+      [
+       "Semi-detached",
+       39,
+       383000,
+       365500
+      ],
+      [
+       "Detached",
+       4,
+       326000,
+       null
+      ]
+     ],
+     "new_build": 0,
+     "sales": 526
+    }
+   },
+   "raw": {},
+   "schemes": [],
+   "t": "Hulme & Moss Side scores highest on population growth (top 1% of Greater Manchester). 131 brownfield register sites nearby (56.6 ha) could take about 14,108 homes, 10,740 of them with planning permission. 0 new-build homes sold in the last 12 months. Official statistics: population +19.7% (2021→2024); rail use +44.2%; resale prices −0.3% on a year earlier, median £225,000."
+  },
+  {
+   "n": "Ashton",
+   "f": "Ashton-under-Lyne",
+   "b": "Tameside",
+   "lat": 53.488,
+   "lon": -2.095,
+   "s": 67,
+   "c": null,
+   "u": "7.6 ha",
+   "x": [
+    62,
+    79,
+    51,
+    73,
+    67
+   ],
+   "hd": 89,
+   "off": {
+    "brownfield_homes": 1464,
+    "brownfield_permissioned": 227,
+    "brownfield_sites": 36,
+    "brownfield_ha": 7.6,
+    "newbuild_sales": 1,
+    "transport": 0.2677,
+    "stations": 1,
+    "population": 0.0478,
+    "prices": 0.0513,
+    "median_price": 186000.0,
+    "transport_span": "ORR Apr 2022 to Mar 2023 → Apr 2024 to Mar 2025",
+    "population_span": "2021→2024"
+   },
+   "det": {
+    "brownfield": [
+     [
+      "Ashton Town Centre, Ashton-under-Lyne",
+      600,
+      "not permissioned",
+      "Tameside Metropolitan Borough Council",
+      1.08
+     ],
+     [
+      "Old Cross Street Car Parks, Old Cross Street, Ashton-under-Lyne",
+      81,
+      "not permissioned",
+      "Tameside Metropolitan Borough Council",
+      0.67
+     ],
+     [
+      "Union Street Car Park, Union Street, Ashton-under-Lyne",
+      76,
+      "not permissioned",
+      "Tameside Metropolitan Borough Council",
+      0.63
+     ],
+     [
+      "Henrietta Street and Wimpole Street Car Parks, Wimpole Street, Ashton-",
+      68,
+      "not permissioned",
+      "Tameside Metropolitan Borough Council",
+      0.56
+     ],
+     [
+      "Former Active Tameside Ashton Swimming Pool, Water Street, Ashton-unde",
+      65,
+      "not permissioned",
+      "Tameside Metropolitan Borough Council",
+      0.54
+     ]
+    ],
+    "transport": {
+     "now": 180238,
+     "before": 142178,
+     "top": [
+      [
+       "Ashton-Under-Lyne",
+       180238,
+       142178
+      ]
+     ]
+    },
+    "population": {
+     "now": 41464,
+     "before": 39574,
+     "lsoas": 23
+    },
+    "prices": {
+     "types": [
+      [
+       "Flats",
+       16,
+       120000,
+       85000
+      ],
+      [
+       "Terraced",
+       172,
+       170000,
+       161000
+      ],
+      [
+       "Semi-detached",
+       93,
+       219000,
+       220000
+      ],
+      [
+       "Detached",
+       13,
+       315000,
+       332500
+      ]
+     ],
+     "new_build": 1,
+     "sales": 295
+    }
+   },
+   "raw": {},
+   "schemes": [],
+   "t": "Ashton-under-Lyne scores highest on new-build homes being sold (top 21% of Greater Manchester). 36 brownfield register sites nearby (7.6 ha) could take about 1,464 homes, 227 of them with planning permission. 1 new-build homes sold in the last 12 months. Official statistics: population +4.8% (2021→2024); rail use +26.8%; resale prices +5.1% on a year earlier, median £186,000."
   }
  ],
  "tracked": 19

@@ -13,10 +13,12 @@ Do them in order. Stripe **test mode** is fine to start; switch to live keys whe
 5. Keep the **service_role** key secret (never put it in the website).
 
 ## 2. Stripe (payments)
-1. Products → add **Terrayne Professional** with two prices: £79/month and £790/year.
+1. Products → add **Terrayne Investor** with two prices: £19/month and £190/year.
+1. Add **Terrayne Professional** with two prices: £79/month and £790/year.
 2. Add **Terrayne Enterprise** with two prices: £399/month and £3,990/year.
-3. Copy the four price IDs (`price_...`).
-4. Settings → Billing → Customer portal: enable "Customers can switch plans" (add both products and all four prices), "Cancel subscriptions" (at end of billing period), "Update payment methods" and "Invoice history". Save.
+3. Copy the six price IDs (`price_...`).
+   Founding offer: Products → Coupons → £30 off, duration **forever**, limited to **50 redemptions**, applies to Professional monthly only; add a promotion code (e.g. `FOUNDING`). Checkout already accepts promotion codes, so founding members pay £49/month for as long as they stay subscribed.
+4. Settings → Billing → Customer portal: enable "Customers can switch plans" (add all three products and all six prices), "Cancel subscriptions" (at end of billing period), "Update payment methods" and "Invoice history". Save.
 5. Developers → Webhooks → Add endpoint:
    `https://<project-ref>.supabase.co/functions/v1/stripe-webhook`
    Events: `checkout.session.completed`, `customer.subscription.created`, `customer.subscription.updated`, `customer.subscription.deleted`. Copy the signing secret (`whsec_...`).
@@ -31,7 +33,7 @@ Install the Supabase CLI (`brew install supabase/tap/supabase`), then from this 
 supabase login
 supabase link --project-ref <project-ref>
 supabase secrets set STRIPE_SECRET_KEY=sk_... STRIPE_WEBHOOK_SECRET=whsec_... \
-  PRICE_PRO_MONTH=price_... PRICE_PRO_YEAR=price_... PRICE_ENT_MONTH=price_... PRICE_ENT_YEAR=price_... \
+  PRICE_INV_MONTH=price_... PRICE_INV_YEAR=price_... PRICE_PRO_MONTH=price_... PRICE_PRO_YEAR=price_... PRICE_ENT_MONTH=price_... PRICE_ENT_YEAR=price_... \
   RESEND_API_KEY=re_... CRON_SECRET=<any long random string> SITE_URL=https://terrayne.co \
   BRIEF_FROM="Terrayne <briefings@terrayne.co.uk>"
 supabase functions deploy create-checkout

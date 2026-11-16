@@ -3,5 +3,5 @@
 window.TERRAYNE = {
   supabaseUrl: "",      // e.g. "https://abcdefghijkl.supabase.co"
   supabaseAnonKey: "",  // the "anon public" key
-  prices: { pro: { month: 79, year: 790 }, enterprise: { month: 399, year: 3990 } }
+  prices: { investor: { month: 19, year: 190 }, pro: { month: 79, year: 790 }, enterprise: { month: 399, year: 3990 } }
 };

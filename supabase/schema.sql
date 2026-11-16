@@ -7,7 +7,7 @@ create table if not exists public.profiles (
   full_name text default '',
   company text default '',
   job_title text default '',
-  plan text not null default 'free' check (plan in ('free','pro','enterprise')),
+  plan text not null default 'free' check (plan in ('free','investor','pro','enterprise')),
   status text not null default 'none',          -- Stripe subscription status: active, trialing, past_due, canceled, none
   billing_interval text,                        -- month | year
   current_period_end timestamptz,
@@ -22,6 +22,8 @@ create table if not exists public.profiles (
 
 -- Neighbourhoods a user follows (names match data "n" field, e.g. 'Nine Elms').
 alter table public.profiles add column if not exists is_admin boolean not null default false;
+alter table public.profiles drop constraint if exists profiles_plan_check;
+alter table public.profiles add constraint profiles_plan_check check (plan in ('free','investor','pro','enterprise'));
 
 create table if not exists public.watchlist (
   user_id uuid not null references public.profiles(id) on delete cascade,
@@ -70,6 +72,12 @@ language sql stable security definer set search_path = public as $$
   select coalesce(public.effective_plan(uid) <> 'free', false)
 $$;
 
+-- Monday briefs are Professional and Enterprise only.
+create or replace function public.has_briefs(uid uuid) returns boolean
+language sql stable security definer set search_path = public as $$
+  select coalesce(public.effective_plan(uid) in ('pro','enterprise'), false)
+$$;
+
 -- New user -> profile; join a team if they were invited.
 create or replace function public.handle_new_user() returns trigger
 language plpgsql security definer set search_path = public as $$
@@ -114,13 +122,14 @@ end $$;
 drop trigger if exists guard_profile on public.profiles;
 create trigger guard_profile before update on public.profiles for each row execute function public.guard_profile();
 
--- Watchlist limits: free 0, pro 10, enterprise unlimited.
+-- Watchlist limits: free 0, investor 3 saved places, pro 10, enterprise unlimited.
 create or replace function public.watchlist_limit() returns trigger
 language plpgsql security definer set search_path = public as $$
 declare pl text := public.effective_plan(new.user_id); n int;
 begin
   select count(*) into n from public.watchlist where user_id = new.user_id;
-  if pl = 'free' then raise exception 'Upgrade to Professional to use the watchlist'; end if;
+  if pl = 'free' then raise exception 'Upgrade to Investor or Professional to save places'; end if;
+  if pl = 'investor' and n >= 3 then raise exception 'Investor includes up to 3 saved places'; end if;
   if pl = 'pro' and n >= 10 then raise exception 'Professional watchlists hold up to 10 neighbourhoods'; end if;
   return new;
 end $$;
@@ -164,7 +173,7 @@ drop policy if exists "paid snapshots" on public.snapshots;
 create policy "paid snapshots" on public.snapshots for select using (public.is_paid(auth.uid()));
 
 drop policy if exists "paid briefs" on public.briefs;
-create policy "paid briefs" on public.briefs for select using (public.is_paid(auth.uid()));
+create policy "paid briefs" on public.briefs for select using (public.has_briefs(auth.uid()));
 
 -- Owners can remove members from their team.
 create or replace function public.remove_member(member uuid) returns void
@@ -173,6 +182,7 @@ language sql security definer set search_path = public as $$
 $$;
 grant execute on function public.remove_member(uuid) to authenticated;
 grant execute on function public.effective_plan(uuid) to authenticated;
+grant execute on function public.has_briefs(uuid) to authenticated;
 
 -- Founding-access requests from the home page form (anyone can submit; only admins read, via the admin function).
 create table if not exists public.access_requests (

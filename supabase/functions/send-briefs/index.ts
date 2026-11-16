@@ -38,8 +38,8 @@ Deno.serve(async (req) => {
   let sent = 0;
   const failed: string[] = [];
   for (const u of users ?? []) {
-    const { data: paid } = await admin.rpc("is_paid", { uid: u.id });
-    if (!paid) continue;
+    const { data: plan } = await admin.rpc("effective_plan", { uid: u.id });
+    if (plan !== "pro" && plan !== "enterprise") continue; // Monday brief is Professional and up
     const { data: wl } = await admin.from("watchlist").select("area").eq("user_id", u.id);
     const items = (wl ?? []).map((w) => byArea.get(w.area)).filter(Boolean) as { area: string; title: string; body: string }[];
     if (!items.length) continue;

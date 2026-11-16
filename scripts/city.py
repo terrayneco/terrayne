@@ -227,7 +227,7 @@ def write(city, today=None):
     data, tile_scores, bf = build(city, today)
     d = ROOT / "data" / city
     d.mkdir(parents=True, exist_ok=True)
-    pub = dict(data); pub["tracked"] = len(data["areas"]); pub["areas"] = data["areas"][:6]
+    pub = dict(data); pub["tracked"] = len(data["areas"]); pub["areas"] = data["areas"][:10]
     (d / "momentum.json").write_text(json.dumps(pub, ensure_ascii=False, indent=1))
     ts = {"city": city, "generated": data["generated"], "radius_km": RADIUS_KM, "labels": data["labels"], "keys": data["keys"],
           "weights": data["weights"], "bench": data["bench"], "groups": data["groups"], "tiles": tile_scores,

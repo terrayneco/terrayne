@@ -906,14 +906,6 @@
      "valid": "13/07/2026"
     },
     {
-     "ref": "26/2506",
-     "lpa": "Brent",
-     "site": "First Floor Flat, 517A High Road, Wembley",
-     "units": 2,
-     "status": "Application Received",
-     "valid": "12/10/2026"
-    },
-    {
      "ref": "26/0397",
      "lpa": "Brent",
      "site": "7 Chalfont Avenue, Wembley",
@@ -922,12 +914,12 @@
      "valid": "26/02/2026"
     },
     {
-     "ref": "26/2408",
+     "ref": "26/2506",
      "lpa": "Brent",
-     "site": "9-11 Bridge Road, Wembley",
+     "site": "First Floor Flat, 517A High Road, Wembley",
      "units": 2,
      "status": "Application Received",
-     "valid": "22/09/2026"
+     "valid": "12/10/2026"
     },
     {
      "ref": "26/1723",
@@ -938,12 +930,20 @@
      "valid": "15/07/2026"
     },
     {
-     "ref": "26/1906",
+     "ref": "26/2408",
      "lpa": "Brent",
-     "site": "55 Chalkhill Road, Wembley",
+     "site": "9-11 Bridge Road, Wembley",
+     "units": 2,
+     "status": "Application Received",
+     "valid": "22/09/2026"
+    },
+    {
+     "ref": "26/0407",
+     "lpa": "Brent",
+     "site": "146 Wembley Hill Road, Wembley",
      "units": 0,
-     "status": "Approved",
-     "valid": "31/07/2026"
+     "status": "Appeal Received",
+     "valid": "16/03/2026"
     }
    ],
    "det": {
@@ -1224,6 +1224,832 @@
     }
    },
    "t": "Hammersmith & White City scores highest on office-to-residential (Class MA) conversions (top 1% of London). In the last 12 months: 591 significant applications, 985 net new homes proposed, 555 homes via Class MA and 44,169 m² of net commercial floorspace. Official statistics: station use +5.4% (TfL 2023→2025); population +2.2% (2021→2024); median sale price −5.7% on a year earlier, at £654,375. Largest live schemes: Sussex Place (292 homes, application received, ref P/2026/00633/FUL); Griffin House Hammersmith Road (140 homes, approved, ref P/2026/01329/PACU1)."
+  },
+  {
+   "n": "Croydon",
+   "f": "Croydon town centre",
+   "b": "LB Croydon",
+   "lat": 51.3762,
+   "lon": -0.0982,
+   "s": 68,
+   "c": -1,
+   "u": "1,149",
+   "x": [
+    75,
+    99,
+    100,
+    7,
+    62,
+    95,
+    19
+   ],
+   "hd": 100,
+   "raw": {
+    "act": 162,
+    "pipe": 1149,
+    "ma": 678,
+    "com": 0,
+    "ma_n": 10
+   },
+   "off": {
+    "transport": 0.1329,
+    "stations": 4,
+    "population": 0.0945,
+    "prices": -0.041,
+    "median_price": 322000.0,
+    "sales": 556,
+    "transport_span": "TfL 2023→2025",
+    "population_span": "2021→2024"
+   },
+   "schemes": [
+    {
+     "ref": "26/02309/GPDO",
+     "lpa": "Croydon",
+     "site": "Southern House",
+     "units": 281,
+     "status": "Application Under Consideration",
+     "valid": "13/08/2026"
+    },
+    {
+     "ref": "26/01474/GPDO",
+     "lpa": "Croydon",
+     "site": "Addiscombe Road",
+     "units": 250,
+     "status": "Application Under Consideration",
+     "valid": "19/05/2026"
+    },
+    {
+     "ref": "26/01158/FUL",
+     "lpa": "Croydon",
+     "site": "Development Site Former Site Of",
+     "units": 179,
+     "status": "Application Under Consideration",
+     "valid": "06/05/2026"
+    },
+    {
+     "ref": "26/01598/GPDO",
+     "lpa": "Croydon",
+     "site": "Altyre Road",
+     "units": 112,
+     "status": "Approved",
+     "valid": "03/06/2026"
+    },
+    {
+     "ref": "26/01720/FUL",
+     "lpa": "Croydon",
+     "site": "Car Park Adjoining 93 Bensham Lane",
+     "units": 102,
+     "status": "Application Under Consideration",
+     "valid": "12/06/2026"
+    },
+    {
+     "ref": "26/00074/OUT",
+     "lpa": "Croydon",
+     "site": "Brighton Road",
+     "units": 31,
+     "status": "Application Under Consideration",
+     "valid": "23/02/2026"
+    },
+    {
+     "ref": "26/00076/OUT",
+     "lpa": "Croydon",
+     "site": "Brighton Road",
+     "units": 31,
+     "status": "Appeal in Progress",
+     "valid": "09/03/2026"
+    },
+    {
+     "ref": "26/00077/OUT",
+     "lpa": "Croydon",
+     "site": "Brighton Road",
+     "units": 31,
+     "status": "Appeal in Progress",
+     "valid": "24/02/2026"
+    },
+    {
+     "ref": "26/00075/OUT",
+     "lpa": "Croydon",
+     "site": "Brighton Road",
+     "units": 25,
+     "status": "Application Under Consideration",
+     "valid": "23/02/2026"
+    },
+    {
+     "ref": "26/01707/GPDO",
+     "lpa": "Croydon",
+     "site": "Altyre Road",
+     "units": 10,
+     "status": "Approved",
+     "valid": "11/06/2026"
+    },
+    {
+     "ref": "26/01328/OUT",
+     "lpa": "Croydon",
+     "site": "Works Rear Of 209 - 225 Davidson Road",
+     "units": 10,
+     "status": "Application Under Consideration",
+     "valid": "05/05/2026"
+    },
+    {
+     "ref": "26/00822/GPDO",
+     "lpa": "Croydon",
+     "site": "Park Lane",
+     "units": 8,
+     "status": "Approved",
+     "valid": "18/03/2026"
+    }
+   ],
+   "det": {
+    "transport": {
+     "now": 26104786,
+     "before": 23042065,
+     "top": [
+      [
+       "East Croydon",
+       20592106,
+       18514458
+      ],
+      [
+       "West Croydon",
+       3819480,
+       3310109
+      ],
+      [
+       "South Croydon",
+       1088648,
+       733102
+      ],
+      [
+       "Waddon",
+       604552,
+       484396
+      ]
+     ]
+    },
+    "population": {
+     "now": 94023,
+     "before": 85905,
+     "lsoas": 48
+    },
+    "prices": {
+     "types": [
+      [
+       "Flats",
+       312,
+       254500,
+       275000
+      ],
+      [
+       "Terraced",
+       174,
+       415900,
+       410000
+      ],
+      [
+       "Semi-detached",
+       56,
+       459500,
+       470000
+      ],
+      [
+       "Detached",
+       14,
+       645000,
+       682500
+      ]
+     ],
+     "new_build": 0,
+     "sales": 556
+    }
+   },
+   "t": "Croydon town centre scores highest on office-to-residential (Class MA) conversions (top 1% of London). In the last 12 months: 162 significant applications, 1,149 net new homes proposed, 673 homes via Class MA. Official statistics: station use +13.3% (TfL 2023→2025); population +9.4% (2021→2024); median sale price −4.1% on a year earlier, at £322,000. Largest live schemes: Southern House (281 homes, application under consideration, ref 26/02309/GPDO); Addiscombe Road (250 homes, application under consideration, ref 26/01474/GPDO)."
+  },
+  {
+   "n": "Whitechapel",
+   "f": "Whitechapel & Aldgate",
+   "b": "LB Tower Hamlets",
+   "lat": 51.5195,
+   "lon": -0.0597,
+   "s": 67,
+   "c": 0,
+   "u": "1,277",
+   "x": [
+    92,
+    99,
+    29,
+    98,
+    36,
+    85,
+    14
+   ],
+   "hd": 61,
+   "raw": {
+    "act": 397,
+    "pipe": 1277,
+    "ma": 0,
+    "com": 74238,
+    "ma_n": 0
+   },
+   "off": {
+    "transport": 0.0229,
+    "stations": 14,
+    "population": 0.0635,
+    "prices": -0.0486,
+    "median_price": 480000.0,
+    "sales": 755,
+    "transport_span": "TfL 2023→2025",
+    "population_span": "2021→2024"
+   },
+   "schemes": [
+    {
+     "ref": "PA/26/00391/A1",
+     "lpa": "Tower Hamlets",
+     "site": "Calcutta House",
+     "units": 794,
+     "status": "Application Under Consideration",
+     "valid": "19/03/2026"
+    },
+    {
+     "ref": "PA/26/00122/S",
+     "lpa": "Tower Hamlets",
+     "site": "13-15 Blount Street",
+     "units": 106,
+     "status": "Approved",
+     "valid": "21/01/2026"
+    },
+    {
+     "ref": "PA/26/01071/A1",
+     "lpa": "Tower Hamlets",
+     "site": "120-132 Pennington Street",
+     "units": 71,
+     "status": "Application Under Consideration",
+     "valid": "28/07/2026"
+    },
+    {
+     "ref": "PA/26/01533/A1",
+     "lpa": "Tower Hamlets",
+     "site": "Land at Tent Street",
+     "units": 60,
+     "status": "Application Under Consideration",
+     "valid": "24/09/2026"
+    },
+    {
+     "ref": "PA/26/00559/A1",
+     "lpa": "Tower Hamlets",
+     "site": "2-20 Tomlinson Close & Land to the East of 33-63 Tomlinson Close",
+     "units": 43,
+     "status": "Application Under Consideration",
+     "valid": "08/04/2026"
+    },
+    {
+     "ref": "PA/26/00589/A1",
+     "lpa": "Tower Hamlets",
+     "site": "Professional Development Centre, 229 Bethnal Green Road, E2 6AB And 10 Turin Street",
+     "units": 44,
+     "status": "Application Under Consideration",
+     "valid": "21/04/2026"
+    },
+    {
+     "ref": "PA/26/01280/S",
+     "lpa": "Tower Hamlets",
+     "site": "St Georges Leisure Centre, 221 The Highway",
+     "units": 29,
+     "status": "Approved",
+     "valid": "24/07/2026"
+    },
+    {
+     "ref": "PA/26/01447/A1",
+     "lpa": "Tower Hamlets",
+     "site": "33-37 The Oval",
+     "units": 23,
+     "status": "Application Under Consideration",
+     "valid": "17/08/2026"
+    },
+    {
+     "ref": "PA/26/01444/A1",
+     "lpa": "Tower Hamlets",
+     "site": "Site adjacent to 122-126 Back Church Lane",
+     "units": 19,
+     "status": "Application Under Consideration",
+     "valid": "14/08/2026"
+    },
+    {
+     "ref": "PA/26/01465/A1",
+     "lpa": "Tower Hamlets",
+     "site": "Land to the rear of 331-377 (odd) Jamaica Street and North of Smithy Street, E1",
+     "units": 19,
+     "status": "Application Under Consideration",
+     "valid": "14/09/2026"
+    },
+    {
+     "ref": "PA/26/00875/A1",
+     "lpa": "Tower Hamlets",
+     "site": "4-8 Vyner Street",
+     "units": 9,
+     "status": "Application Under Consideration",
+     "valid": "18/05/2026"
+    },
+    {
+     "ref": "PA/26/00906/A1",
+     "lpa": "Tower Hamlets",
+     "site": "1 Rushmead",
+     "units": 9,
+     "status": "Approved",
+     "valid": "26/05/2026"
+    }
+   ],
+   "det": {
+    "transport": {
+     "now": 184083818,
+     "before": 179957634,
+     "top": [
+      [
+       "Liverpool Street",
+       75661873,
+       70079971
+      ],
+      [
+       "Whitechapel",
+       17889894,
+       17452196
+      ],
+      [
+       "Tower Hill",
+       16098135,
+       14965619
+      ],
+      [
+       "Aldgate East",
+       11605126,
+       10947896
+      ],
+      [
+       "Bethnal Green",
+       11027276,
+       11886545
+      ],
+      [
+       "London Fenchurch Street",
+       10862630,
+       10207634
+      ]
+     ]
+    },
+    "population": {
+     "now": 160708,
+     "before": 151111,
+     "lsoas": 81
+    },
+    "prices": {
+     "types": [
+      [
+       "Flats",
+       669,
+       460000,
+       485000
+      ],
+      [
+       "Terraced",
+       62,
+       855500,
+       870000
+      ],
+      [
+       "Semi-detached",
+       3,
+       645000,
+       null
+      ],
+      [
+       "Detached",
+       1,
+       930000,
+       null
+      ]
+     ],
+     "new_build": 20,
+     "sales": 755
+    }
+   },
+   "t": "Whitechapel & Aldgate scores highest on its housing pipeline (top 1% of London). In the last 12 months: 397 significant applications, 1,277 net new homes proposed and 74,238 m² of net commercial floorspace. Official statistics: station use +2.3% (TfL 2023→2025); population +6.4% (2021→2024); median sale price −4.9% on a year earlier, at £480,000. Largest live schemes: Calcutta House (794 homes, application under consideration, ref PA/26/00391/A1); 13-15 Blount Street (106 homes, approved, ref PA/26/00122/S)."
+  },
+  {
+   "n": "Stratford",
+   "f": "Stratford & Olympic Park",
+   "b": "LB Newham",
+   "lat": 51.5416,
+   "lon": -0.0034,
+   "s": 65,
+   "c": -1,
+   "u": "549",
+   "x": [
+    82,
+    94,
+    29,
+    99,
+    15,
+    95,
+    30
+   ],
+   "hd": 71,
+   "raw": {
+    "act": 213,
+    "pipe": 549,
+    "ma": 0,
+    "com": 188986,
+    "ma_n": 0
+   },
+   "off": {
+    "transport": -0.0145,
+    "stations": 9,
+    "population": 0.0929,
+    "prices": -0.0277,
+    "median_price": 459000.0,
+    "sales": 520,
+    "transport_span": "TfL 2023→2025",
+    "population_span": "2021→2024"
+   },
+   "schemes": [
+    {
+     "ref": "PA/26/00765/A1",
+     "lpa": "Tower Hamlets",
+     "site": "Land at Wansbeck Road, Fish Island",
+     "units": 324,
+     "status": "Application Under Consideration",
+     "valid": "13/05/2026"
+    },
+    {
+     "ref": "26/02121/FUL",
+     "lpa": "Newham",
+     "site": "Land At 2 Bridge Terrace",
+     "units": 179,
+     "status": "Application Under Consideration",
+     "valid": "05/10/2026"
+    },
+    {
+     "ref": "PA/26/00141/NC",
+     "lpa": "Tower Hamlets",
+     "site": "50 Monier Road",
+     "units": 9,
+     "status": "Approved",
+     "valid": "26/01/2026"
+    },
+    {
+     "ref": "26/02043/FUL",
+     "lpa": "Newham",
+     "site": "Chobham Road",
+     "units": 5,
+     "status": "Application Under Consideration",
+     "valid": "09/10/2026"
+    },
+    {
+     "ref": "PA/26/00911",
+     "lpa": "Tower Hamlets",
+     "site": "25 Trego Road",
+     "units": 3,
+     "status": "Application Under Consideration",
+     "valid": "26/05/2026"
+    },
+    {
+     "ref": "PA/26/00911/A1",
+     "lpa": "Tower Hamlets",
+     "site": "25 Trego Road",
+     "units": 3,
+     "status": "Application Under Consideration",
+     "valid": "26/05/2026"
+    },
+    {
+     "ref": "26/01432/FUL",
+     "lpa": "Newham",
+     "site": "Suite 1 Warton Road",
+     "units": 3,
+     "status": "Approved",
+     "valid": "02/07/2026"
+    },
+    {
+     "ref": "26/01394/FUL",
+     "lpa": "Newham",
+     "site": "Manbey Grove",
+     "units": 2,
+     "status": "Appeal in Progress",
+     "valid": "29/06/2026"
+    },
+    {
+     "ref": "25/02738/CLE",
+     "lpa": "Newham",
+     "site": "Harcourt Road",
+     "units": 2,
+     "status": "Completed",
+     "valid": "01/12/2025"
+    },
+    {
+     "ref": "25/02383/FUL",
+     "lpa": "Newham",
+     "site": "Manbey Park Road",
+     "units": 1,
+     "status": "Dismissed",
+     "valid": "04/12/2025"
+    },
+    {
+     "ref": "26/01025/FUL",
+     "lpa": "Newham",
+     "site": "Earlham Grove",
+     "units": 2,
+     "status": "Application Under Consideration",
+     "valid": "11/06/2026"
+    },
+    {
+     "ref": "262241",
+     "lpa": "Waltham Forest",
+     "site": "Cann Hall Road",
+     "units": 1,
+     "status": "Application Under Consideration",
+     "valid": "28/09/2026"
+    }
+   ],
+   "det": {
+    "transport": {
+     "now": 83786145,
+     "before": 85022537,
+     "top": [
+      [
+       "Stratford",
+       53193118,
+       54376225
+      ],
+      [
+       "Leyton",
+       8403580,
+       8592536
+      ],
+      [
+       "West Ham",
+       5215465,
+       5338957
+      ],
+      [
+       "Hackney Wick",
+       4206184,
+       3797970
+      ],
+      [
+       "Maryland",
+       4157832,
+       3531277
+      ],
+      [
+       "Stratford International",
+       3739316,
+       4442673
+      ]
+     ]
+    },
+    "population": {
+     "now": 100663,
+     "before": 92107,
+     "lsoas": 51
+    },
+    "prices": {
+     "types": [
+      [
+       "Flats",
+       340,
+       403500,
+       420000
+      ],
+      [
+       "Terraced",
+       154,
+       563750,
+       565000
+      ],
+      [
+       "Semi-detached",
+       8,
+       545250,
+       null
+      ],
+      [
+       "Detached",
+       1,
+       825000,
+       null
+      ]
+     ],
+     "new_build": 17,
+     "sales": 520
+    }
+   },
+   "t": "Stratford & Olympic Park scores highest on new commercial floorspace (top 1% of London). In the last 12 months: 213 significant applications, 549 net new homes proposed and 188,986 m² of net commercial floorspace. Official statistics: station use −1.5% (TfL 2023→2025); population +9.3% (2021→2024); median sale price −2.8% on a year earlier, at £459,000. Largest live schemes: Land at Wansbeck Road, Fish Island (324 homes, application under consideration, ref PA/26/00765/A1); Land At 2 Bridge Terrace (179 homes, application under consideration, ref 26/02121/FUL)."
+  },
+  {
+   "n": "King’s Cross",
+   "f": "King’s Cross & St Pancras",
+   "b": "LB Camden / Islington",
+   "lat": 51.5347,
+   "lon": -0.1246,
+   "s": 65,
+   "c": 0,
+   "u": "563",
+   "x": [
+    97,
+    94,
+    97,
+    7,
+    49,
+    82,
+    9
+   ],
+   "hd": 13,
+   "raw": {
+    "act": 673,
+    "pipe": 563,
+    "ma": 102,
+    "com": 0,
+    "ma_n": 11
+   },
+   "off": {
+    "transport": 0.0587,
+    "stations": 14,
+    "population": 0.0569,
+    "prices": -0.059,
+    "median_price": 674250.0,
+    "sales": 616,
+    "transport_span": "TfL 2023→2025",
+    "population_span": "2021→2024"
+   },
+   "schemes": [
+    {
+     "ref": "2025/5802/P",
+     "lpa": "Camden",
+     "site": "Bonham Carter House",
+     "units": 128,
+     "status": "Application Received",
+     "valid": "22/12/2025"
+    },
+    {
+     "ref": "2026/2226/P",
+     "lpa": "Camden",
+     "site": "Bangor Wharf Georgiana Street",
+     "units": 153,
+     "status": "Application Received",
+     "valid": "01/06/2026"
+    },
+    {
+     "ref": "2026/1229/P",
+     "lpa": "Camden",
+     "site": "Car Parking Site At 13 Britannia Street",
+     "units": 124,
+     "status": "Application Received",
+     "valid": "27/03/2026"
+    },
+    {
+     "ref": "P2025/3531/PRA",
+     "lpa": "Islington",
+     "site": "City Road",
+     "units": 35,
+     "status": "Approved",
+     "valid": "12/12/2025"
+    },
+    {
+     "ref": "P2026/0278/PRA",
+     "lpa": "Islington",
+     "site": "City Road",
+     "units": 20,
+     "status": "Approved",
+     "valid": "03/02/2026"
+    },
+    {
+     "ref": "P2026/1470/PRA",
+     "lpa": "Islington",
+     "site": "391-395 City Road",
+     "units": 20,
+     "status": "Approved",
+     "valid": "08/06/2026"
+    },
+    {
+     "ref": "P2025/3241/PRA",
+     "lpa": "Islington",
+     "site": "Clarissa Baldwin House",
+     "units": 15,
+     "status": "Approved",
+     "valid": "17/11/2025"
+    },
+    {
+     "ref": "P2026/2346/PRA",
+     "lpa": "Islington",
+     "site": "Northampton Square",
+     "units": 10,
+     "status": "Approved",
+     "valid": "07/09/2026"
+    },
+    {
+     "ref": "2026/3433/P",
+     "lpa": "Camden",
+     "site": "Fitzroy Street",
+     "units": 8,
+     "status": "Application Received",
+     "valid": "11/08/2026"
+    },
+    {
+     "ref": "2026/4736/P",
+     "lpa": "Camden",
+     "site": "5-6 Underhill Street",
+     "units": 6,
+     "status": "Application Received",
+     "valid": "26/10/2026"
+    },
+    {
+     "ref": "P2026/0584/PRA",
+     "lpa": "Islington",
+     "site": "Green Man Tower",
+     "units": 5,
+     "status": "Approved",
+     "valid": "03/03/2026"
+    },
+    {
+     "ref": "2026/1904/P",
+     "lpa": "Camden",
+     "site": "Woburn Square",
+     "units": 4,
+     "status": "Application Received",
+     "valid": "13/05/2026"
+    }
+   ],
+   "det": {
+    "transport": {
+     "now": 258903123,
+     "before": 244542796,
+     "top": [
+      [
+       "King's Cross St. Pancras",
+       73571468,
+       72124262
+      ],
+      [
+       "London St Pancras International",
+       38842772,
+       33296120
+      ],
+      [
+       "Euston",
+       37686944,
+       32861441
+      ],
+      [
+       "London Kings Cross",
+       27727108,
+       23287414
+      ],
+      [
+       "Camden Town",
+       17155755,
+       18805872
+      ],
+      [
+       "Warren Street",
+       13853666,
+       14076462
+      ]
+     ]
+    },
+    "population": {
+     "now": 121175,
+     "before": 114656,
+     "lsoas": 67
+    },
+    "prices": {
+     "types": [
+      [
+       "Flats",
+       484,
+       580000,
+       613000
+      ],
+      [
+       "Terraced",
+       76,
+       1555000,
+       1712500
+      ],
+      [
+       "Semi-detached",
+       9,
+       2225000,
+       2250000
+      ],
+      [
+       "Detached",
+       1,
+       1625000,
+       null
+      ]
+     ],
+     "new_build": 46,
+     "sales": 616
+    }
+   },
+   "t": "King’s Cross & St Pancras scores highest on planning activity (top 3% of London). In the last 12 months: 673 significant applications, 563 net new homes proposed, 96 homes via Class MA. Official statistics: station use +5.9% (TfL 2023→2025); population +5.7% (2021→2024); median sale price −5.9% on a year earlier, at £674,250. Largest live schemes: Bonham Carter House (128 homes, application received, ref 2025/5802/P); Bangor Wharf Georgiana Street (153 homes, application received, ref 2026/2226/P)."
   }
  ],
  "tracked": 18

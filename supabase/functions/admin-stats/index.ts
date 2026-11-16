@@ -73,7 +73,7 @@ Deno.serve(async (req) => {
   const body = await req.json().catch(() => ({}));
 
   if (body.action === "comp") {
-    if (!["free", "pro", "enterprise"].includes(body.plan)) return json({ error: "Bad plan" }, 400);
+    if (!["free", "investor", "pro", "enterprise"].includes(body.plan)) return json({ error: "Bad plan" }, 400);
     const { data: t } = await admin.from("profiles").select("status").eq("id", body.user_id).single();
     if (t && ["active", "trialing", "past_due"].includes(t.status)) return json({ error: "This user pays through Stripe; change their plan there." }, 400);
     const upd = body.plan === "free" ? { plan: "free", status: "none" } : { plan: body.plan, status: "comp" };

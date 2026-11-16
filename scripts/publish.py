@@ -18,7 +18,7 @@ import momentum as M  # noqa: E402
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SB, KEY = os.environ.get("SUPABASE_URL", "").rstrip("/"), os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
-FREE_TOP = 6
+FREE_TOP = 10
 
 
 def sb(method, path, body=None, headers=None):
