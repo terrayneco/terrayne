@@ -241,6 +241,18 @@ nav ul a{padding:7px 14px}
 .ncta{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.18);padding:8px 16px;font-size:13px;font-weight:500;letter-spacing:.01em}
 .ncta:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.35);color:#fff}
 @media(max-width:1000px){nav .wrap{padding:0 20px}}
+/* premium nav */
+nav{background:linear-gradient(180deg,rgba(8,16,32,.82),rgba(6,13,26,.66));border-bottom:0}
+nav:after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(159,208,255,.22) 30%,rgba(255,255,255,.12) 50%,rgba(159,208,255,.22) 70%,transparent)}
+@media(min-width:1001px){
+nav .wrap{height:76px}
+nav ul{gap:0;padding:5px;border-radius:99px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 10px 30px -12px rgba(0,0,0,.6)}
+nav ul a{display:block;padding:9px 18px;font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,212,232,.62);border-radius:99px;transition:color .25s,background .25s,box-shadow .25s}
+nav ul a:hover{color:#fff;background:rgba(255,255,255,.04)}
+nav ul a.act{color:#fff;background:linear-gradient(180deg,rgba(159,208,255,.14),rgba(159,208,255,.05));box-shadow:inset 0 0 0 1px rgba(159,208,255,.22),0 0 18px -4px rgba(159,208,255,.35)}
+.ncta{padding:10px 20px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;border-color:rgba(255,255,255,.22);border-radius:99px}
+.ncta:hover{border-color:rgba(159,208,255,.5);box-shadow:0 0 20px -6px rgba(159,208,255,.5)}
+}
 </style>
 </head>
 <body>
