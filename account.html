@@ -127,7 +127,7 @@ svg.spark{display:block}
 </div>
 
 <div id="p-watchlist" class="pane hide">
-<div class="eyebrow">Watchlist</div><h1>Neighbourhoods you follow</h1><p class="sub">Your Monday 07:00 brief covers these neighbourhoods. <span id="w-limit"></span></p>
+<div class="eyebrow">Watchlist</div><h1>Neighbourhoods you follow</h1><p class="sub">Your 7am Monday brief covers these neighbourhoods. <span id="w-limit"></span></p>
 <div id="w-body"></div>
 </div>
 
@@ -245,7 +245,7 @@ overview:function(){
  $("o-watch").innerHTML=!paid()?'<p class="note">The watchlist is part of Professional. <a href="#billing">Upgrade</a></p>':S.watch.length?S.watch.map(function(n){var a=A.find(function(x){return x.n===n});return '<div class="row"><span>'+esc(a?a.f:n)+'</span><span>'+(a?'<b>'+a.s+'</b>/100 '+chg(a.c):'')+'</span></div>'}).join(""):'<p class="note">You’re not following any neighbourhoods yet. <a href="#watchlist">Add some</a>.</p>';
  if(!paid()){$("o-brief").innerHTML='<p class="note">See a sample on the <a href="./#brief">home page</a>, or <a href="#billing">upgrade</a> to receive yours every Monday.</p>';return}
  var b=S.briefs&&S.briefs.find(function(x){return S.watch.indexOf(x.area)>=0})||(S.briefs&&S.briefs[0]);
- $("o-brief").innerHTML=b?'<p class="note">'+fmtDate(b.week)+'</p><p><b>'+esc(b.title)+'</b></p><a href="#briefs">Read all briefs</a>':'<p class="note">Your first brief arrives on Monday at 07:00.</p>';
+ $("o-brief").innerHTML=b?'<p class="note">'+fmtDate(b.week)+'</p><p><b>'+esc(b.title)+'</b></p><a href="#briefs">Read all briefs</a>':'<p class="note">Your first brief arrives on Monday at 7am.</p>';
 },
 watchlist:function(){
  if(!paid()){$("w-body").innerHTML=lock("Build your watchlist");$("w-limit").textContent="";return}
@@ -260,7 +260,7 @@ watchlist:function(){
 },
 briefs:function(){
  if(!paid()){$("b-body").innerHTML=lock("Every Monday brief, archived");return}
- if(!S.briefs.length){$("b-body").innerHTML='<div class="card"><p class="note" style="margin:0">Your first brief arrives on Monday at 07:00. Past briefs will appear here.</p></div>';return}
+ if(!S.briefs.length){$("b-body").innerHTML='<div class="card"><p class="note" style="margin:0">Your first brief arrives on Monday at 7am. Past briefs will appear here.</p></div>';return}
  var only=S.briefsMine!==false&&S.watch.length>0;
  var list=S.briefs.filter(function(b){return !only||S.watch.indexOf(b.area)>=0});
  var html='<div class="chips" style="margin-bottom:16px"><button class="chip'+(only?" on":"")+'" id="bm">My watchlist</button><button class="chip'+(!only?" on":"")+'" id="ba">All neighbourhoods</button></div>',wk="";

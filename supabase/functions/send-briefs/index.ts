@@ -20,6 +20,14 @@ ${items.map((b) => `<div style="background:#0d1830;border:1px solid #1c2b4d;bord
 </div></div>`;
 }
 
+// 7am London time on the brief's Monday, whether the UK is on GMT or BST.
+function sevenAmLondon(week: string) {
+  const noon = new Date(week + "T12:00:00Z");
+  const zone = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/London", timeZoneName: "short" })
+    .formatToParts(noon).find((p) => p.type === "timeZoneName")?.value ?? "GMT";
+  return `${week}T07:00:00${zone === "BST" ? "+01:00" : "Z"}`;
+}
+
 Deno.serve(async (req) => {
   if (req.headers.get("x-cron-secret") !== Deno.env.get("CRON_SECRET")) return new Response("forbidden", { status: 403 });
   const { week } = await req.json();
@@ -38,7 +46,7 @@ Deno.serve(async (req) => {
     const r = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { Authorization: `Bearer ${Deno.env.get("RESEND_API_KEY")}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ from: FROM, to: u.email, subject: `Your Monday Brief: ${items.map((i) => i.area).join(", ")}`, html: html(u.full_name, week, items) }),
+      body: JSON.stringify({ from: FROM, to: u.email, ...(Date.now() < Date.parse(sevenAmLondon(week)) ? { scheduled_at: sevenAmLondon(week) } : {}), subject: `Your Monday Brief: ${items.map((i) => i.area).join(", ")}`, html: html(u.full_name, week, items) }),
     });
     r.ok ? sent++ : failed.push(u.id);
   }
