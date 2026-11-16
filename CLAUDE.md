@@ -23,7 +23,7 @@ sync will overwrite your change. If you do edit here, copy `index.html` back to 
 - Refresh by hand: `python3 scripts/publish.py --html "$HOME/Library/Mobile Documents/com~apple~CloudDocs/TYE/website/terrayne.html"`, then sync/push.
 
 ## Accounts (Supabase + Stripe)
-- `account.html`, `terms.html`, `privacy.html`, `assets/config.js`, `supabase/` live in THIS repo only (not in the iCloud folder); edit them here.
+- `account.html`, `admin.html`, `terms.html`, `privacy.html`, `assets/config.js`, `supabase/` live in THIS repo only (not in the iCloud folder); edit them here.
 - Setup steps are in `SETUP.md`. `assets/config.js` holds only the public Supabase URL + anon key; never put secret keys in the repo.
 - Neighbourhoods are listed in `AREAS` in the script; add or move one there.
 
