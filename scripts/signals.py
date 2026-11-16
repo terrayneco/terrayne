@@ -224,17 +224,18 @@ def transport_points():
     if len(yrs) >= 2:
         (y1, now), (y0, prev) = yrs[0], yrs[-1]  # compare across two years where available
         label = f"TfL {y0}→{y1}"
-        bykey = {}
+        bykey, disp = {}, {}
         for (mode, name), v in now.items():
             k = norm_station(name)
             p0 = prev.get((mode, name))
             if not p0:
                 continue
             a = bykey.setdefault(k, [0, 0]); a[0] += v; a[1] += p0
+            disp.setdefault(k, re.sub(r"\s+(NR|LU|DLR|EL)$", "", name.strip()))
         for k, (v, p0) in bykey.items():
             loc = pts.get(k)
             if loc:
-                out.append((loc[0], loc[1], v, p0)); seen.add(k)
+                out.append((loc[0], loc[1], v, p0, disp[k])); seen.add(k)
             else:
                 unmatched += 1
     try:
@@ -247,7 +248,7 @@ def transport_points():
             continue
         loc = pts.get(k)
         if loc:
-            out.append((loc[0], loc[1], v, p0)); seen.add(k)
+            out.append((loc[0], loc[1], v, p0, name)); seen.add(k)
     return out, {"tfl": label, "orr": span, "stations": len(out), "tfl_unmatched": unmatched}
 
 
@@ -361,7 +362,10 @@ def within(points, lat, lon, r_km):
 def summarise(pts, kind):
     if kind in ("transport", "population"):
         now, before = sum(p[2] for p in pts), sum(p[3] for p in pts)
-        return {"growth": (now / before - 1) if before else None, "now": now, "before": before, "n": len(pts)}
+        out = {"growth": (now / before - 1) if before else None, "now": now, "before": before, "n": len(pts)}
+        if kind == "transport":
+            out["top"] = [[p[4], round(p[2]), round(p[3])] for p in sorted(pts, key=lambda p: -p[2])[:6]]
+        return out
     if kind == "prices":
         # Mix-adjusted: median change within each property type (flat, terraced, semi, detached),
         # weighted by this year's sales of that type, so a shift in what sold doesn't look like a price move.
@@ -374,8 +378,13 @@ def summarise(pts, kind):
                 num_ += len(now) * (statistics.median(now) / statistics.median(was) - 1); den += len(now)
         resales = sum(1 for p in pts if p[3] == 1 and not p[5])
         ok = den >= 25 and den >= 0.6 * resales
+        types = []
+        for t, nm in (("F", "Flats"), ("T", "Terraced"), ("S", "Semi-detached"), ("D", "Detached")):
+            now = [p[2] for p in pts if p[3] == 1 and p[4] == t and not p[5]]; was = [p[2] for p in pts if p[3] == 0 and p[4] == t and not p[5]]
+            if now:
+                types.append([nm, len(now), round(statistics.median(now)), round(statistics.median(was)) if len(was) >= 10 else None])
         return {"growth": num_ / den if ok else None, "median": statistics.median(a) if len(a) >= 25 else None,
-                "sales": len(a), "n": len(pts)}
+                "sales": len(a), "n": len(pts), "new_build": sum(1 for p in pts if p[3] == 1 and p[5]), "types": types}
     raise ValueError(kind)
 
 

@@ -23,7 +23,7 @@ Method (shown on the site as well):
   ending 30 days ago (the official statistics update monthly to yearly).
 No API key needed: uses the Datahub's public guest endpoint. Standard library only.
 """
-import json, sys, datetime as dt, urllib.request, pathlib, re, math
+import json, sys, datetime as dt, urllib.request, pathlib, re, math, statistics
 
 API = "https://planningdata.london.gov.uk/api-guest/applications/_search"
 HEAD = {"Content-Type": "application/json", "X-API-AllowRequest": "be2rmRnt&"}
@@ -236,7 +236,7 @@ def build(today=None):
     for n, full, boro, lat, lon in AREAS:
         r = area_query(lat, lon, today, top=12)
         sig = signals(r["aggregations"]); sig["ma_n"] = r["aggregations"]["ma"]["doc_count"]
-        extra, offv, headroom = {}, {}, None
+        extra, offv, headroom, det = {}, {}, None, {}
         for name, (pts, m, kind) in loaded.items():
             a = official.summarise(official.within(pts, lat, lon, RADIUS_KM), kind)
             g = a["growth"]
@@ -247,6 +247,11 @@ def build(today=None):
                 headroom = 100 - pct(a["median"], odist["price_level"])
             if kind == "transport":
                 offv["stations"] = a["n"]
+                det["transport"] = {"now": round(a["now"]), "before": round(a["before"]), "top": a["top"]}
+            elif kind == "population":
+                det["population"] = {"now": round(a["now"]), "before": round(a["before"]), "lsoas": a["n"]}
+            else:
+                det["prices"] = {"types": a["types"], "new_build": a["new_build"], "sales": a["sales"]}
         for k in OFFICIAL_W:
             extra.setdefault(k, None)
         offv["transport_span"], offv["population_span"] = span["transport"], span["population"]
@@ -268,11 +273,13 @@ def build(today=None):
                     "u": fnum(sig["pipe"]), "x": [parts[k] for k in WEIGHTS], "hd": headroom,
                     "raw": {k: round(v) for k, v in sig.items()},
                     "off": {k: (round(v, 4) if isinstance(v, float) else v) for k, v in offv.items()},
-                    "schemes": schemes, "t": takeaway(full, sig, parts, schemes, offv)})
+                    "schemes": schemes, "det": det, "t": takeaway(full, sig, parts, schemes, offv)})
     out.sort(key=lambda d: -d["s"])
     return {"generated": today.isoformat(), "window_days": 365, "radius_km": RADIUS_KM, "tiles": len(dist_now),
             "weights": WEIGHTS, "labels": [LABELS[k] for k in WEIGHTS], "keys": list(WEIGHTS),
             "sources": SOURCES, "official": meta, "errors": errors,
+            "bench": {**{k: statistics.median([d[k] for d in dist_now]) for k in PLAN_W},
+                      **{k: statistics.median(v) for k, v in odist.items() if v}},
             "source": "GLA Planning London Datahub, TfL, ORR, ONS, HM Land Registry", "areas": out}
 
 

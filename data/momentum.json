@@ -60,6 +60,16 @@
   }
  },
  "errors": {},
+ "bench": {
+  "act": 82,
+  "pipe": 36.0,
+  "ma": 0.0,
+  "com": 2111.299994468689,
+  "transport": 0.06355242799236316,
+  "population": 0.02217997465145749,
+  "prices": -0.010184316126214354,
+  "price_level": 515000.0
+ },
  "source": "GLA Planning London Datahub, TfL, ORR, ONS, HM Land Registry",
  "areas": [
   {
@@ -196,6 +206,54 @@
      "valid": "03/03/2026"
     }
    ],
+   "det": {
+    "transport": {
+     "now": 11646888,
+     "before": 9156227,
+     "top": [
+      [
+       "Ilford",
+       11646888,
+       9156227
+      ]
+     ]
+    },
+    "population": {
+     "now": 99778,
+     "before": 93489,
+     "lsoas": 49
+    },
+    "prices": {
+     "types": [
+      [
+       "Flats",
+       66,
+       248500,
+       255000
+      ],
+      [
+       "Terraced",
+       146,
+       476000,
+       475000
+      ],
+      [
+       "Semi-detached",
+       12,
+       643500,
+       687500
+      ],
+      [
+       "Detached",
+       2,
+       722500,
+       null
+      ]
+     ],
+     "new_build": 0,
+     "sales": 226
+    }
+   },
    "t": "Ilford town centre scores highest on office-to-residential (Class MA) conversions (top 5% of London). In the last 12 months: 177 significant applications, 154 net new homes proposed, 55 homes via Class MA and 7,365 m² of net commercial floorspace. Official statistics: station use +27.2% (TfL 2023→2025); population +6.7% (2021→2024); median sale price −1.0% on a year earlier, at £432,500. Largest live schemes: Development At Rigby Mews And 99 To 127 Cranbrook Road (45 homes, approved, ref 1801/26); Development At 10 The Drive (12 homes, commenced, ref 2668/25)."
   },
   {
@@ -324,6 +382,79 @@
      "valid": "14/07/2026"
     }
    ],
+   "det": {
+    "transport": {
+     "now": 175068393,
+     "before": 170275960,
+     "top": [
+      [
+       "Waterloo",
+       74483879,
+       70329553
+      ],
+      [
+       "London Bridge",
+       56194070,
+       54765991
+      ],
+      [
+       "Elephant & Castle",
+       12991846,
+       14236050
+      ],
+      [
+       "Southwark",
+       8581018,
+       8508705
+      ],
+      [
+       "London Waterloo East",
+       6841002,
+       5429884
+      ],
+      [
+       "Oval",
+       4988300,
+       5615724
+      ]
+     ]
+    },
+    "population": {
+     "now": 125520,
+     "before": 118980,
+     "lsoas": 70
+    },
+    "prices": {
+     "types": [
+      [
+       "Flats",
+       625,
+       480000,
+       485000
+      ],
+      [
+       "Terraced",
+       70,
+       917500,
+       965000
+      ],
+      [
+       "Semi-detached",
+       5,
+       1250000,
+       null
+      ],
+      [
+       "Detached",
+       1,
+       755000,
+       null
+      ]
+     ],
+     "new_build": 5,
+     "sales": 706
+    }
+   },
    "t": "Elephant & Castle scores highest on its housing pipeline (top 7% of London). In the last 12 months: 294 significant applications, 522 net new homes proposed, 1 home via Class MA and 31,487 m² of net commercial floorspace. Official statistics: station use +2.8% (TfL 2023→2025); population +5.5% (2021→2024); median sale price −1.4% on a year earlier, at £512,500."
   },
   {
@@ -460,6 +591,79 @@
      "valid": "03/03/2026"
     }
    ],
+   "det": {
+    "transport": {
+     "now": 58288309,
+     "before": 56337437,
+     "top": [
+      [
+       "Vauxhall",
+       21954288,
+       20770515
+      ],
+      [
+       "Battersea Power Station",
+       8616922,
+       8399835
+      ],
+      [
+       "Pimlico",
+       7641420,
+       7087668
+      ],
+      [
+       "Stockwell",
+       7288321,
+       7381051
+      ],
+      [
+       "Oval",
+       4988300,
+       5615724
+      ],
+      [
+       "Nine Elms",
+       3988977,
+       4108613
+      ]
+     ]
+    },
+    "population": {
+     "now": 125620,
+     "before": 120786,
+     "lsoas": 72
+    },
+    "prices": {
+     "types": [
+      [
+       "Flats",
+       871,
+       545000,
+       570000
+      ],
+      [
+       "Terraced",
+       87,
+       1200000,
+       1155000
+      ],
+      [
+       "Semi-detached",
+       9,
+       1750000,
+       null
+      ],
+      [
+       "Detached",
+       3,
+       1800000,
+       null
+      ]
+     ],
+     "new_build": 33,
+     "sales": 1003
+    }
+   },
    "t": "Nine Elms & Vauxhall scores highest on its housing pipeline (top 4% of London). In the last 12 months: 421 significant applications, 626 net new homes proposed, 57 homes via Class MA and 38,894 m² of net commercial floorspace. Official statistics: station use +3.5% (TfL 2023→2025); population +4.0% (2021→2024); median sale price −3.6% on a year earlier, at £585,000. Largest live schemes: Units 1-6 Citadel Place (522 homes, application under consideration, ref 26/00601/FUL); Vincent Square (26 homes, approved, ref 26/00795/P3JPA)."
   },
   {
@@ -548,6 +752,64 @@
      "valid": "13/03/2026"
     }
    ],
+   "det": {
+    "transport": {
+     "now": 14661395,
+     "before": 10905953,
+     "top": [
+      [
+       "Bermondsey",
+       7038981,
+       6802053
+      ],
+      [
+       "Peckham Rye",
+       6989720,
+       3608792
+      ],
+      [
+       "South Bermondsey",
+       632694,
+       495108
+      ]
+     ]
+    },
+    "population": {
+     "now": 145401,
+     "before": 141054,
+     "lsoas": 77
+    },
+    "prices": {
+     "types": [
+      [
+       "Flats",
+       573,
+       410000,
+       415000
+      ],
+      [
+       "Terraced",
+       113,
+       800000,
+       792500
+      ],
+      [
+       "Semi-detached",
+       11,
+       925000,
+       715000
+      ],
+      [
+       "Detached",
+       3,
+       870000,
+       null
+      ]
+     ],
+     "new_build": 12,
+     "sales": 712
+    }
+   },
    "t": "Old Kent Road scores highest on growth in station use (top 5% of London). In the last 12 months: 166 significant applications, 182 net new homes proposed, 1 home via Class MA and 4,330 m² of net commercial floorspace. Official statistics: station use +34.4% (TfL 2023→2025); population +3.1% (2021→2024); median sale price −0.4% on a year earlier, at £450,000. Largest live schemes: Abbey Street (152 homes, application under consideration, ref 26/AP/0096)."
   },
   {
@@ -644,14 +906,6 @@
      "valid": "13/07/2026"
     },
     {
-     "ref": "26/2506",
-     "lpa": "Brent",
-     "site": "First Floor Flat, 517A High Road, Wembley",
-     "units": 2,
-     "status": "Application Received",
-     "valid": "12/10/2026"
-    },
-    {
      "ref": "26/0397",
      "lpa": "Brent",
      "site": "7 Chalfont Avenue, Wembley",
@@ -660,12 +914,12 @@
      "valid": "26/02/2026"
     },
     {
-     "ref": "26/2408",
+     "ref": "26/2506",
      "lpa": "Brent",
-     "site": "9-11 Bridge Road, Wembley",
+     "site": "First Floor Flat, 517A High Road, Wembley",
      "units": 2,
      "status": "Application Received",
-     "valid": "22/09/2026"
+     "valid": "12/10/2026"
     },
     {
      "ref": "26/1723",
@@ -676,14 +930,90 @@
      "valid": "15/07/2026"
     },
     {
-     "ref": "26/1906",
+     "ref": "26/2408",
      "lpa": "Brent",
-     "site": "55 Chalkhill Road, Wembley",
+     "site": "9-11 Bridge Road, Wembley",
+     "units": 2,
+     "status": "Application Received",
+     "valid": "22/09/2026"
+    },
+    {
+     "ref": "26/0407",
+     "lpa": "Brent",
+     "site": "146 Wembley Hill Road, Wembley",
      "units": 0,
-     "status": "Approved",
-     "valid": "31/07/2026"
+     "status": "Appeal Received",
+     "valid": "16/03/2026"
     }
    ],
+   "det": {
+    "transport": {
+     "now": 24965266,
+     "before": 24486857,
+     "top": [
+      [
+       "Wembley Park",
+       15548493,
+       15510977
+      ],
+      [
+       "Wembley Central",
+       4837967,
+       4598994
+      ],
+      [
+       "Preston Road",
+       2309779,
+       2423452
+      ],
+      [
+       "North Wembley",
+       1384166,
+       1296040
+      ],
+      [
+       "Wembley Stadium",
+       884860,
+       657394
+      ]
+     ]
+    },
+    "population": {
+     "now": 84007,
+     "before": 74965,
+     "lsoas": 39
+    },
+    "prices": {
+     "types": [
+      [
+       "Flats",
+       87,
+       335000,
+       340000
+      ],
+      [
+       "Terraced",
+       37,
+       530000,
+       550000
+      ],
+      [
+       "Semi-detached",
+       56,
+       625000,
+       625000
+      ],
+      [
+       "Detached",
+       10,
+       1000000,
+       810000
+      ]
+     ],
+     "new_build": 54,
+     "sales": 244
+    }
+   },
    "t": "Wembley Park scores highest on its housing pipeline (top 4% of London). In the last 12 months: 148 significant applications, 817 net new homes proposed and 39,715 m² of net commercial floorspace. Official statistics: station use +2.0% (TfL 2023→2025); population +12.1% (2021→2024); median sale price −0.1% on a year earlier, at £466,725. Largest live schemes: Glynns Skip Hire, Fifth Way, Wembley (425 homes, application received, ref 26/0831); Land adjacent to Holiday Inn, Empire Way, Wembley (334 homes, application received, ref 26/0967)."
   },
   {
@@ -820,6 +1150,79 @@
      "valid": "24/06/2026"
     }
    ],
+   "det": {
+    "transport": {
+     "now": 90700196,
+     "before": 86042287,
+     "top": [
+      [
+       "Hammersmith (DIS)",
+       30678391,
+       28998458
+      ],
+      [
+       "Shepherd's Bush",
+       20152966,
+       18487084
+      ],
+      [
+       "White City",
+       7945761,
+       7890670
+      ],
+      [
+       "Barons Court",
+       5429364,
+       5240900
+      ],
+      [
+       "Wood Lane",
+       5245357,
+       4909025
+      ],
+      [
+       "West Kensington",
+       3708455,
+       3763523
+      ]
+     ]
+    },
+    "population": {
+     "now": 117334,
+     "before": 114814,
+     "lsoas": 73
+    },
+    "prices": {
+     "types": [
+      [
+       "Flats",
+       592,
+       540000,
+       574000
+      ],
+      [
+       "Terraced",
+       164,
+       1300000,
+       1400000
+      ],
+      [
+       "Semi-detached",
+       23,
+       2285000,
+       2061000
+      ],
+      [
+       "Detached",
+       5,
+       2340000,
+       2850000
+      ]
+     ],
+     "new_build": 12,
+     "sales": 796
+    }
+   },
    "t": "Hammersmith & White City scores highest on office-to-residential (Class MA) conversions (top 1% of London). In the last 12 months: 591 significant applications, 985 net new homes proposed, 555 homes via Class MA and 44,169 m² of net commercial floorspace. Official statistics: station use +5.4% (TfL 2023→2025); population +2.2% (2021→2024); median sale price −5.7% on a year earlier, at £654,375. Largest live schemes: Sussex Place (292 homes, application received, ref P/2026/00633/FUL); Griffin House Hammersmith Road (140 homes, approved, ref P/2026/01329/PACU1)."
   }
  ],
