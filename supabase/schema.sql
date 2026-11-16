@@ -205,3 +205,68 @@ alter table public.brief_sends enable row level security;
 
 -- Make yourself an admin (run once, with your own email):
 --   update public.profiles set is_admin = true where email = 'you@example.com';
+
+-- ============ Saved places, alerts, catchments, branding, Slack ============
+alter table public.profiles add column if not exists slack_webhook text;
+alter table public.profiles add column if not exists brand_name text;
+alter table public.profiles add column if not exists brand_logo text;
+
+-- A saved place: a postcode + radius. Investor 3, Professional 10, Enterprise unlimited (shared with the team).
+create table if not exists public.saved_places (
+  id bigint generated always as identity primary key,
+  owner uuid not null references public.profiles(id) on delete cascade,
+  label text not null default '',
+  postcode text not null,
+  lat double precision not null,
+  lon double precision not null,
+  radius_m int not null default 800 check (radius_m in (400, 800, 1600)),
+  created_at timestamptz not null default now()
+);
+create index if not exists saved_places_owner on public.saved_places(owner);
+
+-- Who can see a place: its owner, and everyone on the owner's Enterprise team.
+create or replace function public.can_see_owner(o uuid) returns boolean
+language sql stable security definer set search_path = public as $$
+  select o = auth.uid()
+      or o = (select team_owner from public.profiles where id = auth.uid())
+      or auth.uid() in (select id from public.profiles where team_owner = o)
+$$;
+
+alter table public.saved_places enable row level security;
+drop policy if exists "see places" on public.saved_places;
+create policy "see places" on public.saved_places for select using (public.can_see_owner(owner));
+drop policy if exists "add places" on public.saved_places;
+create policy "add places" on public.saved_places for insert with check (owner = auth.uid());
+drop policy if exists "change places" on public.saved_places;
+create policy "change places" on public.saved_places for update using (public.can_see_owner(owner)) with check (public.can_see_owner(owner));
+drop policy if exists "remove places" on public.saved_places;
+create policy "remove places" on public.saved_places for delete using (public.can_see_owner(owner));
+
+create or replace function public.places_limit() returns trigger
+language plpgsql security definer set search_path = public as $$
+declare pl text := public.effective_plan(new.owner); n int;
+begin
+  select count(*) into n from public.saved_places where owner = new.owner;
+  if pl = 'free' then raise exception 'Upgrade to Investor to save places and get alerts'; end if;
+  if pl = 'investor' and n >= 3 then raise exception 'Investor includes up to 3 saved places'; end if;
+  if pl = 'pro' and n >= 10 then raise exception 'Professional includes up to 10 saved places'; end if;
+  if pl <> 'enterprise' then new.radius_m := 800; end if;  -- custom catchment sizes are Enterprise
+  return new;
+end $$;
+drop trigger if exists places_limit on public.saved_places;
+create trigger places_limit before insert on public.saved_places for each row execute function public.places_limit();
+
+-- Weekly alerts: new filings near a saved place (written by the weekly job).
+create table if not exists public.alerts (
+  id bigint generated always as identity primary key,
+  place_id bigint not null references public.saved_places(id) on delete cascade,
+  week date not null,
+  items jsonb not null default '[]'::jsonb,
+  created_at timestamptz not null default now(),
+  unique (place_id, week)
+);
+alter table public.alerts enable row level security;
+drop policy if exists "see alerts" on public.alerts;
+create policy "see alerts" on public.alerts for select using (
+  exists (select 1 from public.saved_places p where p.id = place_id and public.can_see_owner(p.owner)));
+grant execute on function public.can_see_owner(uuid) to authenticated;

@@ -60,6 +60,31 @@ def new_filings(area, since, seen):
     return out[:6]
 
 
+def near_filings(lat, lon, radius_m, since, seen):
+    geo = {"geo_distance": {"distance": f"{radius_m}m", "centroid": {"lat": lat, "lon": lon}}}
+    rng = {"range": {"valid_date": {"gte": since.strftime("%d/%m/%Y"), "format": "dd/MM/yyyy"}}}
+    body = {"size": 30, "query": {"bool": {"filter": [rng, geo, M.QUALIFYING], "must_not": [M.terms("status", M.DEAD)]}},
+            "sort": [{M.PROP: {"order": "desc", "missing": "_last"}}],
+            "_source": ["lpa_app_no", "lpa_name", "site_name", "street_name", "status", "application_type_full", "description", "centroid", M.PROP, M.EXIST]}
+    out = []
+    import math
+    for h in M.q(body)["hits"]["hits"]:
+        s = h["_source"]
+        if s.get("lpa_app_no") in seen:
+            continue
+        rd = (s.get("application_details") or {}).get("residential_details") or {}
+        u = (rd.get("total_no_proposed_residential_units") or 0) - (rd.get("total_no_existing_residential_units") or 0)
+        c = s.get("centroid") or {}
+        try:
+            d = int(math.hypot((float(c["lon"]) - lon) * 69.4, (float(c["lat"]) - lat) * 111.2) * 1000)
+        except (KeyError, TypeError, ValueError):
+            d = 0
+        kind = "Class MA conversion" if "Use Class E) to Dwellinghouses" in (s.get("application_type_full") or "") else (s.get("application_type_full") or "Application")
+        out.append({"ref": s.get("lpa_app_no"), "lpa": s.get("lpa_name"), "site": M.label(s.get("site_name"), s.get("street_name")),
+                    "units": int(u), "kind": kind, "status": s.get("status") or "", "dist": d})
+    return out[:8]
+
+
 def brief_for(a, prev, items):
     d = (a["s"] - prev["s"]) if prev else a["c"]
     when = "since last week" if prev else "over 30 days"
@@ -131,6 +156,22 @@ def main():
                      "data": {"score": a["s"], "refs": [i["ref"] for i in items], "items": items}})
     sb("POST", "/rest/v1/briefs?on_conflict=week,area", rows, up)
     print(f"stored snapshot and {len(rows)} briefs for {week}")
+
+    # Alerts: new significant filings near each saved place (London places; Manchester has no open feed).
+    places = sb("GET", "/rest/v1/saved_places?select=id,lat,lon,radius_m,postcode") or []
+    prev = sb("GET", f"/rest/v1/alerts?select=place_id,items&week=lt.{week.isoformat()}&week=gte.{(week - dt.timedelta(days=120)).isoformat()}") or []
+    seen_by = {}
+    for r in prev:
+        seen_by.setdefault(r["place_id"], set()).update(i.get("ref") for i in (r["items"] or []))
+    out = []
+    for pl in places:
+        if not (51.28 < pl["lat"] < 51.70 and -0.52 < pl["lon"] < 0.34):
+            continue
+        items = near_filings(pl["lat"], pl["lon"], pl["radius_m"], week - dt.timedelta(days=14), seen_by.get(pl["id"], set()))
+        out.append({"place_id": pl["id"], "week": week.isoformat(), "items": items})
+    if out:
+        sb("POST", "/rest/v1/alerts?on_conflict=place_id,week", out, up)
+    print(f"alerts: {sum(1 for o in out if o['items'])} of {len(out)} saved places have new filings")
 
     if "--send" in sys.argv:
         req = urllib.request.Request(f"{SB}/functions/v1/send-briefs", json.dumps({"week": week.isoformat()}).encode(),

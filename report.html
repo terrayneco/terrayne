@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Postcode Report · Terrayne</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<style>
+:root{--ink:#0b1f3a;--ink2:#3a4a66;--mute:#6b7890;--line:#dde3ee;--soft:#f4f6fa;--blue:#2f6fb5;--green:#1f9e7a;--warn:#c8662f;--bg:#e9edf3}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--blue)}
+.bar{position:sticky;top:0;z-index:5;background:#060d1a;color:#fff;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.bar img{height:30px;display:block}.bar .r{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:99px;padding:9px 16px;font:inherit;font-weight:600;font-size:13.5px;background:#fff;color:#0a1223;cursor:pointer;text-decoration:none}
+.btn.ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.3)}.btn.dark{background:var(--ink);color:#fff}
+.btn[disabled]{opacity:.5;cursor:default}
+select,input{font:inherit;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;color:var(--ink)}
+.page{max-width:820px;margin:28px auto;background:#fff;box-shadow:0 10px 40px -20px rgba(11,31,58,.35);border-radius:6px;padding:48px 56px}
+.hd{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;border-bottom:2px solid var(--ink);padding-bottom:18px;margin-bottom:22px}
+.brand{display:flex;align-items:center;gap:12px}.brand img{max-height:38px;max-width:180px}.brand b{font-size:18px;letter-spacing:.02em}
+.meta{text-align:right;font-size:12px;color:var(--mute)}
+h1{font-size:28px;letter-spacing:-.02em;margin:0 0 4px;line-height:1.15}
+h2{font-size:15px;text-transform:uppercase;letter-spacing:.12em;color:var(--ink2);margin:26px 0 10px}
+.sub{color:var(--ink2);margin:0 0 18px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.kpi{background:var(--soft);border-radius:10px;padding:12px 14px}.kpi b{display:block;font-size:24px;letter-spacing:-.01em}.kpi span{font-size:11.5px;color:var(--mute)}
+.score{display:flex;gap:18px;align-items:center;background:var(--ink);color:#fff;border-radius:12px;padding:16px 20px;margin:0 0 14px}
+.score .n{font-size:46px;font-weight:700;letter-spacing:-.03em;line-height:1}.score .n small{font-size:14px;color:#9fb2d4;font-weight:400}
+.score p{margin:0;color:#c8d4e8;font-size:13.5px}.score .v{display:inline-block;background:rgba(255,255,255,.12);border-radius:99px;padding:2px 10px;font-size:12px;margin-bottom:6px}
+.sig{display:grid;grid-template-columns:200px 1fr 40px;gap:10px;align-items:center;font-size:13px;margin:5px 0}
+.sig i{display:block;height:7px;border-radius:4px;background:var(--line);overflow:hidden}.sig i em{display:block;height:100%;background:var(--blue);border-radius:4px}
+.sig b{text-align:right;font-variant-numeric:tabular-nums}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{text-align:left;color:var(--mute);font-weight:500;border-bottom:1px solid var(--line);padding:6px 6px 6px 0}
+td{border-bottom:1px solid var(--line);padding:7px 6px 7px 0;vertical-align:top}td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+td small{color:var(--mute)}
+.note{font-size:11.5px;color:var(--mute)}
+.lock{border:1px dashed var(--line);border-radius:12px;padding:22px;text-align:center;margin-top:16px;background:var(--soft)}
+.lock h3{margin:0 0 6px}.lock p{color:var(--ink2);margin:0 0 14px}
+.memo-line{border-bottom:1px solid var(--line);height:26px}
+.ft{margin-top:28px;padding-top:14px;border-top:1px solid var(--line);font-size:11px;color:var(--mute)}
+.form{max-width:820px;margin:28px auto;background:#fff;border-radius:6px;padding:28px 32px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.form input{flex:1 1 200px;text-transform:uppercase}
+.msg{max-width:820px;margin:10px auto;color:var(--warn);text-align:center}
+.hide{display:none!important}
+@media(max-width:700px){.page{padding:28px 20px;margin:12px}.kpis{grid-template-columns:repeat(2,1fr)}.sig{grid-template-columns:130px 1fr 34px}.hd{flex-direction:column}.meta{text-align:left}}
+@media print{body{background:#fff}.bar,.form,.msg,.noprint{display:none!important}.page{box-shadow:none;margin:0;max-width:none;padding:0}@page{size:A4;margin:16mm}h2{break-after:avoid}tr,.kpi,.score{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="bar"><a href="./"><img src="assets/logo-white.svg" alt="Terrayne"></a><div class="r" id="actions"></div></div>
+<form class="form" id="f"><input id="pc" placeholder="London postcode, e.g. SE1 7PB" aria-label="Postcode" maxlength="9"><select id="r" aria-label="Radius"><option value="400">400 m</option><option value="800" selected>800 m</option><option value="1600">1.6 km</option></select><button class="btn dark" type="submit">Build report</button></form>
+<p class="msg" id="msg" role="status"></p>
+<div id="out"></div>
+
+<script src="assets/config.js"></script>
+<script src="assets/report-core.js"></script>
+<script>
+(function(){
+var C=window.TERRAYNE||{},Q=new URLSearchParams(location.search),$=function(i){return document.getElementById(i)};
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function nf(v){return Math.round(v||0).toLocaleString("en-GB")}
+function pcs(v){return v==null?"n/a":(v>=0?"+":"−")+Math.abs(v*100).toFixed(1)+"%"}
+var sb=null,plan="free",profile=null;
+function lib(){return new Promise(function(ok,no){if(window.supabase)return ok();var s=document.createElement("script");s.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js";s.onload=ok;s.onerror=no;document.head.appendChild(s)})}
+async function access(pc){
+ if(!C.supabaseUrl||!C.supabaseAnonKey)return {full:false,why:"offline"};
+ try{await lib();sb=window.supabase.createClient(C.supabaseUrl,C.supabaseAnonKey);
+  var s=await sb.auth.getSession();
+  if(s.data.session){var r=await sb.rpc("effective_plan",{uid:s.data.session.user.id});plan=r.data||"free";
+   var p=await sb.from("profiles").select("full_name,company,brand_name,brand_logo").eq("id",s.data.session.user.id).single();profile=p.data||null;
+   if(plan!=="free")return {full:true,why:"plan"}}
+  var sess=Q.get("session");
+  if(sess){var v=await sb.functions.invoke("verify-report",{body:{session:sess,postcode:pc}});if(v.data&&v.data.ok)return {full:true,why:"bought"}}
+ }catch(e){}
+ return {full:false,why:"none"}}
+
+async function buy(pc,r){var b=$("buy");if(b)b.disabled=true;
+ try{await lib();sb=sb||window.supabase.createClient(C.supabaseUrl,C.supabaseAnonKey);
+  var x=await sb.functions.invoke("create-report-checkout",{body:{postcode:pc,radius:r}});
+  if(x.data&&x.data.url){location.href=x.data.url;return}
+  $("msg").textContent=(x.data&&x.data.error)||"Reports aren’t on sale yet. Please try again soon."}catch(e){$("msg").textContent="Reports aren’t on sale yet. Please try again soon."}
+ if(b)b.disabled=false}
+
+function signals(d){var L=d.T.labels||[];if(!d.ts)return '<p class="note">Not enough activity to score this area.</p>';
+ return L.map(function(l,i){var v=d.ts.x[i];return '<div class="sig"><span>'+esc(l)+'</span><i><em style="width:'+(v||0)+'%"></em></i><b>'+(v==null?"n/a":v)+'</b></div>'}).join("")}
+
+function schemes(d,limit){var rows=d.near.slice(0,limit||d.near.length),K=d.KIND,bf=d.city!=="london";
+ if(!rows.length)return '<p class="note">No significant schemes within '+(d.R*1000)+' m in the last 24 months.</p>';
+ return '<table><thead><tr><th>Site</th><th class="n">Homes</th><th class="n">'+(bf?"Hectares":"Commercial m²")+'</th><th>Type</th><th>Status</th><th class="n">Distance</th></tr></thead><tbody>'+
+ rows.map(function(o){var r=o.r;return '<tr><td><b>'+esc(r[9]||"Site")+'</b><br><small>'+esc(r[8])+(r[7]?' · ref '+esc(r[7]):'')+(r[6]?' · '+esc(r[6]):'')+'</small><br><small>'+esc(r[10])+'</small></td><td class="n">'+(r[2]>0?nf(r[2]):"—")+'</td><td class="n">'+(r[3]?(bf?r[3]:nf(r[3])):"—")+'</td><td>'+esc(K[r[4]])+'</td><td>'+esc(r[5])+'</td><td class="n">'+Math.round(o.d*1000)+' m</td></tr>'}).join("")+'</tbody></table>'}
+
+function header(d,title,brandOn){var brand=brandOn&&profile&&(profile.brand_name||profile.company);
+ var logo=brandOn&&profile&&/^https:\/\//.test(profile.brand_logo||"")?'<img src="'+esc(profile.brand_logo)+'" alt="">':'';
+ return '<div class="hd"><div class="brand">'+(logo||'')+'<b>'+esc(brand||"TERRAYNE")+'</b></div><div class="meta">'+esc(title)+'<br>Prepared '+new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"})+'<br>Data updated '+esc(d.generated)+'</div></div>'}
+
+function summary(d){var s=d.stats,ts=d.ts;
+ return (ts?'<div class="score"><div class="n">'+ts.s+'<small>/100</small></div><div><span class="v">'+TerrayneReport.verdict(ts.s)+'</span><p>Momentum Index for the surrounding ~3 km area'+(ts.hd!=null?'. Price headroom '+ts.hd+'/100: cheaper than '+ts.hd+'% of '+esc(d.cityInfo.name)+'.':'.')+(d.city!=="london"?' Manchester is an experimental beta with its own method.':'')+'</p></div></div>':'')+
+ '<div class="kpis"><div class="kpi"><b>'+nf(s.homes)+'</b><span>net new homes '+(d.city!=="london"?"(where published)":"proposed")+'</span></div><div class="kpi"><b>≈ '+nf(s.residents)+'</b><span>new residents if built</span></div><div class="kpi"><b>'+nf(s.approved)+'</b><span>homes approved or started</span></div><div class="kpi"><b>'+(d.city!=="london"?(Math.round(s.com*10)/10)+' ha':nf(s.com)+' m²')+'</b><span>'+(d.city!=="london"?"brownfield land":"new commercial space")+'</span></div></div>'}
+
+function sources(d){return '<div class="ft">Sources: '+(d.city==="london"?'GLA Planning London Datahub (applications validated in the last 24 months, live or approved)':'MHCLG brownfield land registers')+'; Terrayne Momentum Index (TfL, ORR, ONS, HM Land Registry); postcode location via postcodes.io. New residents use '+esc(d.cityInfo.hhLabel)+' (ONS Census 2021). Planning statuses change: check the council’s register by reference before relying on them. This report is information, not investment, legal or planning advice. Contains public sector information licensed under the Open Government Licence v3.0. © Terrayne '+new Date().getFullYear()+'.</div>'}
+
+function report(d,full){var rm=d.R*1000+" m";
+ var h='<div class="page">'+header(d,"Postcode Report",plan==="enterprise")+'<h1>'+esc(d.pc)+'</h1><p class="sub">'+esc([d.g.ward,d.g.district].filter(Boolean).join(", "))+' · catchment of '+rm+' (about a '+(d.R<=0.4?"5":d.R<=0.8?"10":"20")+'-minute walk)</p>'+
+  summary(d)+'<h2>What’s planned within '+rm+'</h2>'+schemes(d,full?0:3);
+ if(!full){h+='<div class="lock noprint"><h3>'+(d.near.length>3?(d.near.length-3)+' more schemes, the full signal breakdown and a PDF':'Full signal breakdown and a PDF')+'</h3><p>Unlock this report for £12, no subscription. Or get unlimited reports with Investor at £19 a month.</p><button class="btn dark" id="buy">Unlock this report · £12</button> <a class="btn" style="border:1px solid var(--line)" href="./#pricing">See Investor</a></div>'}
+ else h+='<h2>Momentum signals</h2>'+signals(d)+(d.nearest&&d.nearest.d<3?'<p class="note" style="margin-top:10px">Nearest tracked neighbourhood: '+esc(d.nearest.a.f)+' ('+d.nearest.d.toFixed(1)+' km).</p>':'');
+ return h+sources(d)+'</div>'}
+
+function memo(d){var s=d.stats,ts=d.ts,rm=d.R*1000+" m",risks=[];
+ if(s.homes>500)risks.push("A large pipeline nearby ("+nf(s.homes)+" homes) brings new customers but also construction disruption and possible new competing retail.");
+ if(s.pending>s.approved)risks.push("Most nearby homes ("+nf(s.pending)+") are not yet approved; timing and delivery are uncertain.");
+ if(ts&&ts.hd!=null&&ts.hd<30)risks.push("Low price headroom ("+ts.hd+"/100): the area is already expensive relative to "+d.cityInfo.name+".");
+ if(ts&&ts.x&&ts.x[6]!=null&&ts.x[6]<30)risks.push("Weak resale price momentum locally.");
+ risks.push("Planning data reflects applications, not completions; statuses can change.");
+ return '<div class="page">'+header(d,"Investment Committee memo",true)+'<h1>'+esc(d.pc)+': site catchment memo</h1><p class="sub">'+esc([d.g.ward,d.g.district].filter(Boolean).join(", "))+' · catchment '+rm+'</p>'+
+ '<h2>1. Summary</h2>'+summary(d)+
+ '<h2>2. Demand outlook</h2><p>'+nf(s.homes)+' net new homes are proposed within '+rm+', '+nf(s.approved)+' of them approved or under way. If built, that is roughly '+nf(s.residents)+' new residents within walking distance.'+(ts&&ts.x&&ts.x[5]!=null?' Local population growth scores '+ts.x[5]+'/100 against '+esc(d.cityInfo.name)+'.':'')+'</p>'+
+ '<h2>3. Development pipeline</h2>'+schemes(d,10)+
+ '<h2>4. Market</h2>'+signals(d)+
+ '<h2>5. Risks and considerations</h2><ul>'+risks.map(function(r){return '<li>'+esc(r)+'</li>'}).join("")+'</ul>'+
+ '<h2>6. Recommendation</h2><div class="memo-line"></div><div class="memo-line"></div><div class="memo-line"></div><p class="note">Prepared for internal discussion.</p>'+sources(d)+'</div>'}
+
+async function run(){var pc=TerrayneReport.normPC(Q.get("pc")),r=parseInt(Q.get("r")||"800",10);if([400,800,1600].indexOf(r)<0)r=800;var type=Q.get("type");
+ if(!pc){$("pc").focus();return}
+ $("pc").value=pc;$("r").value=String(r);$("msg").textContent="Building report…";
+ var d=await TerrayneReport.build(pc,r/1000);if(d.error){$("msg").textContent=d.error;return}
+ var acc=await access(pc);$("msg").textContent="";
+ if(type==="memo"&&plan!=="enterprise"){$("out").innerHTML='<div class="page"><h1>IC memos are part of Enterprise</h1><p class="sub">Enterprise teams get one-click Investment Committee memos with their own branding. <a href="mailto:hello@terrayne.co.uk?subject=Terrayne%20Enterprise">Talk to us</a>.</p></div>';return}
+ $("out").innerHTML=type==="memo"?memo(d):report(d,acc.full);
+ document.title=(type==="memo"?"IC memo ":"Postcode Report ")+d.pc+" · Terrayne";
+ var act='';if(acc.full||type==="memo")act+='<button class="btn" id="pdf">Download PDF</button>';
+ if(plan==="enterprise"&&type!=="memo")act+='<a class="btn ghost" href="?pc='+encodeURIComponent(d.pc)+'&r='+r+'&type=memo">IC memo</a>';
+ if(type==="memo")act+='<a class="btn ghost" href="?pc='+encodeURIComponent(d.pc)+'&r='+r+'">Report</a>';
+ act+='<a class="btn ghost" href="account.html">Account</a>';$("actions").innerHTML=act;
+ if($("pdf"))$("pdf").onclick=function(){window.print()};
+ if($("buy"))$("buy").onclick=function(){buy(d.pc,r)};
+}
+$("f").onsubmit=function(e){e.preventDefault();var pc=TerrayneReport.normPC($("pc").value);if(!pc)return;history.replaceState(null,"","?pc="+encodeURIComponent(pc)+"&r="+$("r").value+(Q.get("type")?"&type="+Q.get("type"):""));Q=new URLSearchParams(location.search);run()};
+run();
+})();
+</script>
+</body>
+</html>

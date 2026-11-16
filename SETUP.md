@@ -16,7 +16,8 @@ Do them in order. Stripe **test mode** is fine to start; switch to live keys whe
 1. Products → add **Terrayne Investor** with two prices: £19/month and £190/year.
 1. Add **Terrayne Professional** with two prices: £79/month and £790/year.
 2. Add **Terrayne Enterprise** with two prices: £399/month and £3,990/year.
-3. Copy the six price IDs (`price_...`).
+3. Add **Postcode Report** as a one-off price of £12 (not recurring).
+4. Copy the seven price IDs (`price_...`).
    Founding offer: Products → Coupons → £30 off, duration **forever**, limited to **50 redemptions**, applies to Professional monthly only; add a promotion code (e.g. `FOUNDING`). Checkout already accepts promotion codes, so founding members pay £49/month for as long as they stay subscribed.
 4. Settings → Billing → Customer portal: enable "Customers can switch plans" (add all three products and all six prices), "Cancel subscriptions" (at end of billing period), "Update payment methods" and "Invoice history". Save.
 5. Developers → Webhooks → Add endpoint:
@@ -33,13 +34,16 @@ Install the Supabase CLI (`brew install supabase/tap/supabase`), then from this 
 supabase login
 supabase link --project-ref <project-ref>
 supabase secrets set STRIPE_SECRET_KEY=sk_... STRIPE_WEBHOOK_SECRET=whsec_... \
-  PRICE_INV_MONTH=price_... PRICE_INV_YEAR=price_... PRICE_PRO_MONTH=price_... PRICE_PRO_YEAR=price_... PRICE_ENT_MONTH=price_... PRICE_ENT_YEAR=price_... \
+  PRICE_REPORT=price_... PRICE_INV_MONTH=price_... PRICE_INV_YEAR=price_... PRICE_PRO_MONTH=price_... PRICE_PRO_YEAR=price_... PRICE_ENT_MONTH=price_... PRICE_ENT_YEAR=price_... \
   RESEND_API_KEY=re_... CRON_SECRET=<any long random string> SITE_URL=https://terrayne.co \
   BRIEF_FROM="Terrayne <briefings@terrayne.co.uk>"
 supabase functions deploy create-checkout
 supabase functions deploy customer-portal
 supabase functions deploy delete-account
 supabase functions deploy admin-stats
+supabase functions deploy slack-test
+supabase functions deploy create-report-checkout --no-verify-jwt
+supabase functions deploy verify-report --no-verify-jwt
 supabase functions deploy stripe-webhook --no-verify-jwt
 supabase functions deploy send-briefs --no-verify-jwt
 ```

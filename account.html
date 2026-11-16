@@ -125,7 +125,7 @@ svg.spark{display:block}
 <section id="v-app" class="hide">
 <div class="layout">
 <nav class="side" id="side">
-<a href="#overview">Overview</a><a href="#watchlist">Watchlist</a><a href="#briefs">Monday briefs</a><a href="#index">Index &amp; history</a><a href="#profile">Profile</a><a href="#billing">Subscription</a><a href="#team" id="nav-team" class="hide">Team</a>
+<a href="#overview">Overview</a><a href="#watchlist">Watchlist</a><a href="#places">Saved places</a><a href="#briefs">Monday briefs</a><a href="#index">Index &amp; history</a><a href="#profile">Profile</a><a href="#billing">Subscription</a><a href="#team" id="nav-team" class="hide">Team</a>
 </nav>
 <div>
 <div class="msg" id="g-msg"></div>
@@ -139,6 +139,11 @@ svg.spark{display:block}
 <div id="p-watchlist" class="pane hide">
 <div class="eyebrow">Watchlist</div><h1>Neighbourhoods you follow</h1><p class="sub">Your 7am Monday brief covers these neighbourhoods. <span id="w-limit"></span></p>
 <div id="w-body"></div>
+</div>
+
+<div id="p-places" class="pane hide">
+<div class="eyebrow">Saved places</div><h1>Your sites and catchments</h1><p class="sub">Save a property or site. Every Monday we email you any significant new planning filing nearby, and you can open a full report for it any time. <span id="pl-limit"></span></p>
+<div id="pl-body"></div>
 </div>
 
 <div id="p-briefs" class="pane hide">
@@ -163,6 +168,12 @@ svg.spark{display:block}
 <div class="grid" style="align-content:start">
 <form class="card" id="em-form"><h3>Email address</h3><div class="msg" id="em-msg"></div><div class="field"><label for="em-email">Email</label><input id="em-email" type="email" required></div><button class="btn ghost">Change email</button><p class="note" style="margin:10px 0 0">We’ll send a confirmation link to the new address.</p></form>
 <form class="card" id="pw-form"><h3>Password</h3><div class="msg" id="pw-msg"></div><div class="field"><label for="pw-pass">New password</label><input id="pw-pass" type="password" minlength="8" autocomplete="new-password" required></div><button class="btn ghost">Change password</button></form>
+<form class="card hide" id="ent-form"><h3>Enterprise: branding and Slack</h3><div class="msg" id="ent-msg"></div>
+<div class="field"><label for="ent-brand">Brand name on reports and memos</label><input id="ent-brand" maxlength="80"></div>
+<div class="field"><label for="ent-logo">Logo URL (https, PNG or SVG)</label><input id="ent-logo" type="url" maxlength="300" placeholder="https://…"></div>
+<div class="field"><label for="ent-slack">Slack incoming-webhook URL</label><input id="ent-slack" type="url" maxlength="300" placeholder="https://hooks.slack.com/services/…"></div>
+<div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn">Save</button><button class="btn ghost" type="button" id="ent-test">Send Slack test</button></div>
+<p class="note" style="margin:10px 0 0">In Slack: Apps → Incoming Webhooks → Add to a channel, then paste the URL here. The Monday brief and alerts are posted there at 7am.</p></form>
 <div class="card"><h3>Account</h3><p class="note" style="margin:0 0 14px">Deleting your account cancels any subscription immediately and removes your watchlist and profile. This can’t be undone.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn ghost" id="signout2">Sign out</button><button class="btn danger" id="del">Delete account</button></div></div>
 </div></div>
 </div>
@@ -245,6 +256,7 @@ function briefsOK(){return S.plan==="pro"||S.plan==="enterprise"}
 function lock(what){return '<div class="card lock"><span class="pill">Professional</span><h2 style="margin-top:12px">'+what+'</h2><p>Investor (£19 a month) unlocks every neighbourhood, unlimited postcode checks and 3 saved places. Professional adds the Monday brief, every past brief, 10 watchlist places and the full Index history.</p><a class="btn" href="#billing">See plans</a></div>'}
 
 /* ---------- panes ---------- */
+function P_places(){P.places()}
 var P={
 overview:function(){
  var d=latest(),pr=S.profile,first=(pr.full_name||"").split(" ")[0];
@@ -314,7 +326,30 @@ index:function(){
  $("csv1").onclick=function(){dl("terrayne-momentum-"+d.generated+".csv",[["neighbourhood","borough","index","change_30d","planning_activity","pipeline","class_ma","commercial","transport","population","prices","price_headroom","net_homes_12m","applications_12m","class_ma_homes","commercial_m2","station_use_change","population_change","resale_price_change","median_price"]].concat(d.areas.map(function(a){var o=a.off||{},x=a.x.concat([null,null,null]).slice(0,7);return [a.f,a.b,a.s,a.c].concat(x,[a.hd,a.raw.pipe,a.raw.act,Math.round(a.raw.ma-.5*(a.raw.ma_n||0)),a.raw.com,o.transport,o.population,o.prices,o.median_price])})))};
  $("csv2").onclick=function(){var rows=[["neighbourhood","reference","council","site","net_homes","status","validated"]];d.areas.forEach(function(a){(a.schemes||[]).forEach(function(s){rows.push([a.f,s.ref,s.lpa,s.site,s.units,s.status,s.valid])})});dl("terrayne-schemes-"+d.generated+".csv",rows)};
 },
-profile:function(){var p=S.profile;$("pf-name").value=p.full_name||"";$("pf-company").value=p.company||"";$("pf-title").value=p.job_title||"";$("pf-brief").checked=p.brief_email!==false;$("em-email").value=S.user.email||""},
+places:async function(){
+ if(!paid()){$("pl-body").innerHTML=lock("Save places and get alerts");$("pl-limit").textContent="";return}
+ var ent=S.plan==="enterprise",lim=S.plan==="investor"?3:S.plan==="pro"?10:0;
+ var r=await sb.from("saved_places").select("id,label,postcode,radius_m,created_at,owner").order("created_at",{ascending:true});var P=r.data||[];
+ var ids=P.map(function(x){return x.id}),A=ids.length?((await sb.from("alerts").select("place_id,week,items").in("place_id",ids).order("week",{ascending:false}).limit(200)).data||[]):[];
+ $("pl-limit").textContent=lim?(S.plan==="investor"?"Investor":"Professional")+": up to "+lim+" ("+P.length+" used).":"Enterprise: unlimited, shared with your team.";
+ var latest={};A.forEach(function(a){if(!latest[a.place_id])latest[a.place_id]=a});
+ $("pl-body").innerHTML='<form class="card" id="pl-form" style="margin-bottom:16px"><h3>Add a place</h3><div class="msg" id="pl-msg"></div><div style="display:grid;grid-template-columns:1fr 1.4fr '+(ent?'160px ':'')+'auto;gap:10px;align-items:end">'+
+  '<div><label for="pl-pc">Postcode</label><input id="pl-pc" required maxlength="9" style="text-transform:uppercase"></div><div><label for="pl-lab">Label (optional)</label><input id="pl-lab" maxlength="60" placeholder="e.g. 14 High St, Unit 3"></div>'+
+  (ent?'<div><label for="pl-r">Catchment</label><select id="pl-r"><option value="400">400 m</option><option value="800" selected>800 m</option><option value="1600">1.6 km</option></select></div>':'')+
+  '<button class="btn">Save place</button></div>'+(ent?'':'<p class="note" style="margin:10px 0 0">Alerts cover 800 m. Custom catchments of 400 m or 1.6 km are part of Enterprise.</p>')+'</form>'+
+  (P.length?'<div class="card"><div class="tw"><table><thead><tr><th>Place</th><th>Catchment</th><th>Latest alert</th><th></th></tr></thead><tbody>'+P.map(function(x){var a=latest[x.id],n=a?(a.items||[]).length:0,q="pc="+encodeURIComponent(x.postcode)+"&r="+x.radius_m;
+   return '<tr><td><b>'+esc(x.label||x.postcode)+'</b><div class="note">'+esc(x.postcode)+(x.owner!==S.user.id?' · shared by your team':'')+'</div></td><td>'+(x.radius_m>=1000?(x.radius_m/1000)+' km':x.radius_m+' m')+'</td><td>'+(a?(n?'<b>'+n+' new filing'+(n>1?'s':'')+'</b><div class="note">'+esc(a.week)+'</div>':'<span class="note">Nothing new ('+esc(a.week)+')</span>'):'<span class="note">First check on Monday</span>')+'</td>'+
+   '<td style="text-align:right;white-space:nowrap"><a class="btn ghost sm" href="report.html?'+q+'" target="_blank" rel="noopener">Report</a> '+(ent?'<a class="btn ghost sm" href="report.html?'+q+'&type=memo" target="_blank" rel="noopener">IC memo</a> ':'')+'<button class="btn danger sm" data-del="'+x.id+'">Remove</button></td></tr>'+
+   (n?'<tr><td colspan="4" style="padding-top:0"><ul style="margin:0;padding-left:18px;font-size:13px;color:#c8d4e8">'+a.items.map(function(i){return '<li>'+esc(i.site)+(i.units>0?' · '+i.units+' homes':'')+' · '+esc(i.status)+' <span class="note">('+esc(i.lpa)+' ref '+esc(i.ref)+', '+i.dist+' m)</span></li>'}).join("")+'</ul></td></tr>':'')}).join("")+'</tbody></table></div></div>'
+  :'<p class="note">No saved places yet.</p>');
+ $("pl-form").onsubmit=async function(e){e.preventDefault();var pc=$("pl-pc").value.trim().toUpperCase().replace(/\s+/g," ");
+  var g=await fetch("https://api.postcodes.io/postcodes/"+encodeURIComponent(pc)).then(function(r){return r.ok?r.json():null}).catch(function(){return null});
+  if(!g||!g.result){msg("pl-msg","We couldn’t find that postcode.");return}
+  var row={owner:S.user.id,label:$("pl-lab").value.trim().slice(0,60),postcode:g.result.postcode,lat:g.result.latitude,lon:g.result.longitude,radius_m:ent?parseInt($("pl-r").value,10):800};
+  var x=await sb.from("saved_places").insert(row);if(x.error){msg("pl-msg",x.error.message);return}P_places()};
+ $("pl-body").querySelectorAll("[data-del]").forEach(function(b){b.onclick=async function(){if(!confirm("Remove this place and its alerts?"))return;await sb.from("saved_places").delete().eq("id",b.dataset.del);P_places()}});
+},
+profile:function(){var p=S.profile;$("ent-form").classList.toggle("hide",!(S.plan==="enterprise"&&!p.team_owner));$("ent-brand").value=p.brand_name||"";$("ent-logo").value=p.brand_logo||"";$("ent-slack").value=p.slack_webhook||"";$("pf-name").value=p.full_name||"";$("pf-company").value=p.company||"";$("pf-title").value=p.job_title||"";$("pf-brief").checked=p.brief_email!==false;$("em-email").value=S.user.email||""},
 billing:function(){
  var p=S.profile,pr=C.prices||{investor:{month:19,year:190},pro:{month:79,year:790},enterprise:{month:399,year:3990}},team=!!p.team_owner;
  var st=p.status,live=["active","trialing","past_due"].indexOf(st)>=0;
@@ -358,6 +393,12 @@ async function go(fn,body,btn){if(btn)btn.disabled=true;msg("g-msg");
 $("pf-form").onsubmit=async function(e){e.preventDefault();var u={full_name:$("pf-name").value.trim(),company:$("pf-company").value.trim(),job_title:$("pf-title").value.trim(),brief_email:$("pf-brief").checked};
  var r=await sb.from("profiles").update(u).eq("id",S.user.id);if(r.error)msg("pf-msg",r.error.message);else{Object.assign(S.profile,u);msg("pf-msg","Saved.",true)}};
 $("em-form").onsubmit=async function(e){e.preventDefault();var r=await sb.auth.updateUser({email:$("em-email").value.trim()},{emailRedirectTo:location.origin+location.pathname});msg("em-msg",r.error?r.error.message:"Check both inboxes to confirm the change.",!r.error)};
+$("ent-form").onsubmit=async function(e){e.preventDefault();var logo=$("ent-logo").value.trim(),hook=$("ent-slack").value.trim();
+ if(logo&&!/^https:\/\//.test(logo)){msg("ent-msg","The logo URL must start with https://");return}
+ if(hook&&!/^https:\/\/hooks\.slack\.com\/services\//.test(hook)){msg("ent-msg","That doesn’t look like a Slack incoming-webhook URL.");return}
+ var u={brand_name:$("ent-brand").value.trim().slice(0,80),brand_logo:logo||null,slack_webhook:hook||null};
+ var r=await sb.from("profiles").update(u).eq("id",S.user.id);if(r.error)msg("ent-msg",r.error.message);else{Object.assign(S.profile,u);msg("ent-msg","Saved.",true)}};
+$("ent-test").onclick=async function(){var r=await sb.functions.invoke("slack-test",{body:{}});msg("ent-msg",r.data&&r.data.ok?"Test message sent to Slack.":((r.data&&r.data.error)||"Couldn’t reach Slack."),!!(r.data&&r.data.ok))};
 $("pw-form").onsubmit=async function(e){e.preventDefault();var r=await sb.auth.updateUser({password:$("pw-pass").value});msg("pw-msg",r.error?r.error.message:"Password changed.",!r.error);if(!r.error)$("pw-pass").value=""};
 $("tm-form").onsubmit=async function(e){e.preventDefault();var r=await sb.from("team_invites").insert({owner:S.user.id,email:$("tm-email").value.trim().toLowerCase()});
  if(r.error)msg("tm-msg",r.error.message);else{msg("tm-msg","Invite saved. Ask them to create an account at terrayne.co/account.html with that email.",true);$("tm-email").value="";P.team()}};
@@ -366,7 +407,7 @@ $("del").onclick=async function(){if(!confirm("Delete your Terrayne account? Any
  if(r.error){msg("g-msg","Couldn’t delete the account. Please contact us.");return}await sb.auth.signOut();location.href="./"};
 
 /* ---------- routing ---------- */
-var panes=["overview","watchlist","briefs","index","profile","billing","team"];
+var panes=["overview","watchlist","places","briefs","index","profile","billing","team"];
 async function route(){var h=(location.hash||"#overview").slice(1);if(panes.indexOf(h)<0)h="overview";
  if(h==="team"&&!(S.plan==="enterprise"&&!S.profile.team_owner))h="overview";
  panes.forEach(function(p){$("p-"+p).classList.toggle("hide",p!==h)});
