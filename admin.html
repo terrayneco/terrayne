@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Admin · Terrayne</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<style>
+:root{color-scheme:dark;--bg:#060d1a;--panel:#0d1830;--panel2:#111f3d;--line:#1c2b4d;--grid:#16233f;--text:#fff;--text2:#c8d4e8;--mute:#8c9ab3;--accent:#9fd0ff;--series:#4f9be8;--good:#5fd6b8;--warn:#f2a65a;--bad:#ef6f6f}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.top{position:sticky;top:0;z-index:5;background:rgba(6,13,26,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.06)}
+.top .in{max-width:1320px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.top img{height:36px;display:block}
+.top .r{display:flex;gap:12px;align-items:center;color:var(--mute);font-size:13px}
+.wrap{max-width:1320px;margin:0 auto;padding:28px 24px 80px}
+h1{font-size:30px;letter-spacing:-.02em;margin:0 0 4px}
+h2{font-size:15px;margin:0 0 14px;font-weight:600}
+.sub{color:var(--mute);margin:0 0 24px}
+.eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px 20px;min-width:0}
+.grid{display:grid;gap:14px}
+.k6{grid-template-columns:repeat(6,minmax(0,1fr))}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.kpi .l{font-size:12px;color:var(--mute)}.kpi .v{font-size:26px;font-weight:600;letter-spacing:-.01em;margin-top:2px;font-variant-numeric:tabular-nums}.kpi .s{font-size:12px;color:var(--mute)}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(255,255,255,.2);border-radius:99px;padding:7px 14px;font:inherit;font-size:13px;font-weight:500;background:transparent;color:#fff;cursor:pointer}
+.btn:hover{background:rgba(255,255,255,.06)}
+.btn.pri{background:#fff;color:#0a1223;border-color:#fff}
+input,select{background:#0a1426;border:1px solid var(--line);border-radius:10px;padding:8px 12px;color:#fff;font:inherit}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-weight:500;color:var(--mute);font-size:12px;padding:8px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--text2)}
+td b{color:#fff;font-weight:500}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.tw{overflow-x:auto}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:2px 9px;border-radius:99px;background:rgba(140,154,179,.14);color:var(--mute);white-space:nowrap}
+.pill.pro,.pill.enterprise{background:rgba(159,208,255,.12);color:var(--accent)}
+.pill.good{background:rgba(95,214,184,.12);color:var(--good)}.pill.warn{background:rgba(242,166,90,.12);color:var(--warn)}.pill.bad{background:rgba(239,111,111,.12);color:var(--bad)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)}.row:last-child{border-bottom:0}
+.row .n{color:var(--text2)}.row .v{font-variant-numeric:tabular-nums;color:#fff}
+.bar{height:6px;border-radius:4px;background:var(--line);overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;background:var(--series);border-radius:4px}
+.chart{position:relative}.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.tip{position:absolute;pointer-events:none;background:#0a1426;border:1px solid var(--line);border-radius:10px;padding:6px 10px;font-size:12px;white-space:nowrap;transform:translate(-50%,-110%);opacity:0;transition:opacity .12s}
+.tip b{display:block;font-size:14px;color:#fff}
+.msg{border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:14px}
+.msg.err{background:rgba(239,111,111,.1);color:var(--bad)}.msg.info{background:rgba(159,208,255,.08);color:var(--accent)}
+.hide{display:none!important}
+.tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.note{font-size:12px;color:var(--mute)}
+.sec{margin-top:14px}
+@media(max-width:1100px){.k6{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:760px){.k6,.g2,.g3{grid-template-columns:repeat(2,minmax(0,1fr))}.g2>.card,.g3>.card{grid-column:1/-1}.wrap{padding:20px 16px 64px}.top .in{padding:0 16px}}
+</style>
+</head>
+<body>
+<div class="top"><div class="in"><a href="./"><img src="assets/logo-white.svg" alt="Terrayne"></a><div class="r"><span id="who"></span><button class="btn" id="refresh">Refresh</button><a class="btn" href="account.html">My account</a></div></div></div>
+<main class="wrap">
+<div class="eyebrow">Admin</div><h1>Terrayne at a glance</h1><p class="sub" id="asof">Loading…</p>
+<div id="msg"></div>
+<div id="app" class="hide">
+
+<div class="grid k6" id="kpis"></div>
+
+<div class="grid g2 sec">
+<div class="card"><h2>Revenue by month (paid invoices)</h2><div class="chart" id="c-rev"></div></div>
+<div class="card"><h2>New accounts per week</h2><div class="chart" id="c-sign"></div></div>
+</div>
+
+<div class="grid g3 sec">
+<div class="card"><h2>Users by plan</h2><div id="plans"></div></div>
+<div class="card"><h2>Subscription health</h2><div id="health"></div></div>
+<div class="card"><h2>Data &amp; briefs</h2><div id="datah"></div></div>
+</div>
+
+<div class="grid g2 sec">
+<div class="card"><h2>Most-watched neighbourhoods</h2><div id="areas"></div></div>
+<div class="card"><h2>Recent payments</h2><div class="tw" id="pays"></div></div>
+</div>
+
+<div class="card sec"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><h2 style="margin:0">Founding-access requests <span class="note" id="reqn"></span></h2><button class="btn" id="req-csv">Export CSV</button></div><div class="tw" id="reqs" style="margin-top:12px"></div></div>
+
+<div class="card sec"><h2>Users</h2>
+<div class="tools"><input id="q" placeholder="Search name, email, company" style="flex:1;min-width:200px"><select id="pf"><option value="">All plans</option><option value="free">Free</option><option value="pro">Professional</option><option value="enterprise">Enterprise</option></select><button class="btn" id="u-csv">Export CSV</button></div>
+<div class="tw" id="users"></div>
+<p class="note" style="margin:10px 0 0">“Comp” gives a free plan (for pilots, partners, press). Paying users’ plans are changed in Stripe.</p>
+</div>
+
+</div>
+</main>
+<script src="assets/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+(function(){
+var C=window.TERRAYNE||{},$=function(i){return document.getElementById(i)},D=null;
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function say(t,k){$("msg").innerHTML=t?'<div class="msg '+(k||"err")+'">'+t+'</div>':""}
+function money(v,dp){var c=(D&&D.billing&&D.billing.currency)||"GBP";return new Intl.NumberFormat("en-GB",{style:"currency",currency:c,maximumFractionDigits:dp==null?0:dp,minimumFractionDigits:dp==null?0:dp}).format(v||0)}
+function n(v){return (v||0).toLocaleString("en-GB")}
+function pct(v){return ((v||0)*100).toFixed(1)+"%"}
+function day(d){return d?new Date(d).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}):"—"}
+function ago(d){if(!d)return"never";var s=(Date.now()-new Date(d))/1000;return s<3600?Math.max(1,Math.round(s/60))+"m ago":s<86400?Math.round(s/3600)+"h ago":Math.round(s/86400)+"d ago"}
+if(!C.supabaseUrl||!C.supabaseAnonKey||!window.supabase){$("asof").textContent="";say("Accounts aren’t connected yet. Fill in assets/config.js (see SETUP.md), then sign in with an admin account.","info");return}
+var sb=window.supabase.createClient(C.supabaseUrl,C.supabaseAnonKey);
+
+/* single-series bar chart: thin rounded bars, recessive grid, hover tooltip */
+function bars(el,pts,fmt){
+ var W=560,H=200,L=44,B=24,T=8,max=Math.max.apply(0,pts.map(function(p){return p.v}).concat([1]));
+ var step=Math.pow(10,Math.floor(Math.log10(max))),nice=Math.ceil(max/step)*step;if(nice/step<=2)step/=2;var ticks=[];for(var t=0;t<=nice+1e-9;t+=step)ticks.push(t);
+ var bw=(W-L)/pts.length,w=Math.max(4,Math.min(28,bw*.56)),s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+esc(el.dataset.label||"chart")+'">';
+ ticks.forEach(function(t){var y=T+(H-B-T)*(1-t/nice);s+='<line x1="'+L+'" x2="'+W+'" y1="'+y+'" y2="'+y+'" stroke="var(--grid)"/><text x="'+(L-8)+'" y="'+(y+4)+'" text-anchor="end" font-size="10" fill="var(--mute)">'+esc(fmt(t,true))+'</text>'});
+ pts.forEach(function(p,i){var h=(H-B-T)*(p.v/nice),x=L+bw*i+(bw-w)/2,y=H-B-h,r=Math.min(4,w/2,h);
+  s+='<g class="hb" data-i="'+i+'"><rect x="'+(L+bw*i)+'" y="'+T+'" width="'+bw+'" height="'+(H-B-T)+'" fill="transparent"/>'+(h>0?'<path d="M'+x+' '+(H-B)+'V'+(y+r)+'Q'+x+' '+y+' '+(x+r)+' '+y+'H'+(x+w-r)+'Q'+(x+w)+' '+y+' '+(x+w)+' '+(y+r)+'V'+(H-B)+'Z" fill="var(--series)"/>':'')+'</g>';
+  if(pts.length<=12||i%2==0)s+='<text x="'+(L+bw*i+bw/2)+'" y="'+(H-6)+'" text-anchor="middle" font-size="10" fill="var(--mute)">'+esc(p.k)+'</text>'});
+ s+='<line x1="'+L+'" x2="'+W+'" y1="'+(H-B)+'" y2="'+(H-B)+'" stroke="var(--line)"/></svg><div class="tip"></div>';
+ el.innerHTML=s;var tip=el.querySelector(".tip");
+ el.querySelectorAll(".hb").forEach(function(g){g.addEventListener("mousemove",function(e){var p=pts[+g.dataset.i],r=el.getBoundingClientRect();tip.innerHTML='<span class="note">'+esc(p.label||p.k)+'</span><b>'+esc(fmt(p.v))+'</b>';tip.style.left=(e.clientX-r.left)+"px";tip.style.top=(e.clientY-r.top)+"px";tip.style.opacity=1});g.addEventListener("mouseleave",function(){tip.style.opacity=0})});
+}
+function months(map){var out=[],d=new Date();d.setUTCDate(1);for(var i=11;i>=0;i--){var x=new Date(Date.UTC(d.getUTCFullYear(),d.getUTCMonth()-i,1)),k=x.toISOString().slice(0,7);out.push({k:x.toLocaleDateString("en-GB",{month:"short"}),label:x.toLocaleDateString("en-GB",{month:"long",year:"numeric"}),v:(map||{})[k]||0})}return out}
+function weeks(map){var out=[],d=new Date();d.setUTCHours(0,0,0,0);d.setUTCDate(d.getUTCDate()-((d.getUTCDay()+6)%7));for(var i=11;i>=0;i--){var x=new Date(d-i*7*864e5),k=x.toISOString().slice(0,10);out.push({k:x.toLocaleDateString("en-GB",{day:"numeric",month:"short"}),label:"Week of "+x.toLocaleDateString("en-GB",{day:"numeric",month:"long"}),v:(map||{})[k]||0})}return out}
+function dl(name,rows){var t=rows.map(function(r){return r.map(function(c){c=String(c==null?"":c);return /[",\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c}).join(",")}).join("\n");var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:"text/csv"}));a.download=name;a.click()}
+function kv(rows){return rows.map(function(r){return '<div class="row"><span class="n">'+r[0]+'</span><span class="v">'+r[1]+'</span></div>'}).join("")}
+
+function render(){
+ var u=D.users,b=D.billing&&!D.billing.error?D.billing:null,e=D.engagement,dt=D.data;
+ $("asof").textContent="Live data · updated "+new Date(D.generated_at).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"});
+ if(D.billing&&D.billing.error)say("Stripe: "+esc(D.billing.error));
+ var paying=b?b.active:((u.by_plan.pro||0)+(u.by_plan.enterprise||0)-u.comp);
+ var K=[["MRR",b?money(b.mrr):"—",b?"ARR "+money(b.arr):"Stripe not connected"],["Paying customers",n(paying),b?"ARPU "+money(b.arpu)+"/mo":""],["Revenue, 30 days",b?money(b.revenue_30d):"—",b?money(b.revenue_12m)+" in 12 months":""],
+  ["Total accounts",n(u.total),n(u.confirmed)+" confirmed email"],["New accounts, 30 days",n(u.new_30d),n(u.new_7d)+" in the last 7 days"],["Churn, 30 days",b?pct(b.churn_rate_30d):"—",b?n(b.churned_30d)+" cancelled":""]];
+ $("kpis").innerHTML=K.map(function(k){return '<div class="card kpi"><div class="l">'+k[0]+'</div><div class="v">'+k[1]+'</div><div class="s">'+k[2]+'</div></div>'}).join("");
+ $("c-rev").dataset.label="Revenue by month";bars($("c-rev"),months(b&&b.by_month),function(v,ax){return ax&&v>=1000?money(v/1000)+"k":money(v)});
+ $("c-sign").dataset.label="New accounts per week";bars($("c-sign"),weeks(u.signups_by_week),function(v){return n(Math.round(v))});
+ var tot=u.total||1,P=[["Discover (free)",u.by_plan.free||0],["Professional",u.by_plan.pro||0],["Enterprise",u.by_plan.enterprise||0]];
+ $("plans").innerHTML=P.map(function(p){return '<div style="margin-bottom:12px"><div class="row" style="border:0;padding:0"><span class="n">'+p[0]+'</span><span class="v">'+n(p[1])+' <span class="note">'+Math.round(p[1]/tot*100)+'%</span></span></div><div class="bar"><i style="width:'+(p[1]/tot*100)+'%"></i></div></div>'}).join("")+'<p class="note" style="margin:4px 0 0">'+n(u.comp)+' complimentary · '+n(u.team_members)+' Enterprise team members</p>';
+ $("health").innerHTML=b?kv([["Active subscriptions",n(b.active)],["New in 30 days",n(b.new_30d)],["Trialing",n(b.trialing)],["Cancelling at period end",b.cancelling?'<span class="pill warn">⚠ '+n(b.cancelling)+'</span>':"0"],["Payment overdue",b.past_due?'<span class="pill bad">● '+n(b.past_due)+'</span>':"0"]])+
+  (b.by_price.length?'<p class="note" style="margin:10px 0 4px">By price</p>'+kv(b.by_price.map(function(p){return [money(p.amount)+" / "+esc(p.interval)+(p.nickname?" · "+esc(p.nickname):""),n(p.count)+" · "+money(p.mrr)+" MRR"]})):""):'<p class="note">Connect Stripe to see subscriptions.</p>';
+ var last=dt.sends[0];
+ var stale=dt.latest_snapshot&&(Date.now()-new Date(dt.latest_snapshot))>9*864e5;
+ $("datah").innerHTML=kv([["Latest Momentum Index",dt.latest_snapshot?day(dt.latest_snapshot)+(stale?' <span class="pill warn">⚠ over a week old</span>':' <span class="pill good">✓</span>'):'<span class="pill warn">⚠ none yet</span>'],["Weeks of briefs",n(dt.brief_weeks)],["Last email run",last?day(last.created_at)+" · "+n(last.sent)+" sent"+(last.failed?' <span class="pill bad">'+n(last.failed)+' failed</span>':""):"none yet"],["Brief emails on",n(u.brief_opt_in)+" users"],["Active users, 7 / 30 days",n(u.active_7d)+" / "+n(u.active_30d)],["Avg. watchlist",e.avg_watchlist.toFixed(1)+" neighbourhoods"]]);
+ var mx=e.top_areas.length?e.top_areas[0][1]:1;
+ $("areas").innerHTML=e.top_areas.length?e.top_areas.map(function(a){return '<div style="margin-bottom:10px"><div class="row" style="border:0;padding:0"><span class="n">'+esc(a[0])+'</span><span class="v">'+n(a[1])+'</span></div><div class="bar"><i style="width:'+(a[1]/mx*100)+'%"></i></div></div>'}).join(""):'<p class="note">No watchlists yet.</p>';
+ $("pays").innerHTML=b&&b.recent.length?'<table><thead><tr><th>Date</th><th>Customer</th><th class="num">Amount</th><th></th></tr></thead><tbody>'+b.recent.map(function(p){return '<tr><td>'+day(p.date)+'</td><td>'+esc(p.email||"")+'</td><td class="num"><b>'+money(p.amount,2)+'</b></td><td>'+(p.url?'<a href="'+esc(p.url)+'" target="_blank" rel="noopener">Invoice</a>':"")+'</td></tr>'}).join("")+'</tbody></table>':'<p class="note">No payments yet.</p>';
+ $("reqn").textContent="("+n(D.requests.length)+")";
+ $("reqs").innerHTML=D.requests.length?'<table><thead><tr><th>Received</th><th>Name</th><th>Email</th><th>Company</th><th>Interested in</th></tr></thead><tbody>'+D.requests.map(function(r){return '<tr><td>'+day(r.created_at)+'</td><td><b>'+esc(r.name)+'</b></td><td><a href="mailto:'+esc(r.email)+'">'+esc(r.email)+'</a></td><td>'+esc(r.company)+'</td><td>'+esc(r.interest)+'</td></tr>'}).join("")+'</tbody></table>':'<p class="note">No requests yet.</p>';
+ users();
+}
+function users(){
+ var q=$("q").value.trim().toLowerCase(),pf=$("pf").value;
+ var L=D.people.filter(function(p){return (!pf||p.effective_plan===pf)&&(!q||[p.email,p.full_name,p.company].join(" ").toLowerCase().indexOf(q)>=0)});
+ var lab={free:"Free",pro:"Professional",enterprise:"Enterprise"};
+ $("users").innerHTML='<table><thead><tr><th>User</th><th>Company</th><th>Plan</th><th>Status</th><th>Renews / ends</th><th class="num">Watchlist</th><th>Joined</th><th>Last seen</th><th>Comp</th></tr></thead><tbody>'+
+  L.slice(0,500).map(function(p){var st=p.status==="comp"?'<span class="pill good">Comp</span>':p.status==="past_due"?'<span class="pill bad">Overdue</span>':p.cancel_at_period_end?'<span class="pill warn">Cancelling</span>':p.status==="active"?'<span class="pill good">Active</span>':p.team_owner?'<span class="pill">Team member</span>':'<span class="pill">'+esc(p.status)+'</span>';
+   var stripePaid=["active","trialing","past_due"].indexOf(p.status)>=0;
+   return '<tr><td><b>'+esc(p.full_name||"—")+'</b>'+(p.is_admin?' <span class="pill">admin</span>':'')+'<div class="note">'+esc(p.email)+(p.confirmed?'':' · unconfirmed')+'</div></td><td>'+esc(p.company)+'<div class="note">'+esc(p.job_title)+'</div></td><td><span class="pill '+p.effective_plan+'">'+lab[p.effective_plan]+'</span>'+(p.billing_interval&&stripePaid?'<div class="note">'+esc(p.billing_interval)+'ly</div>':'')+'</td><td>'+st+'</td><td>'+(stripePaid?day(p.current_period_end):"—")+'</td><td class="num">'+n(p.watchlist)+'</td><td>'+day(p.created_at)+'</td><td>'+ago(p.last_sign_in_at)+'</td><td>'+(stripePaid||p.team_owner?'<span class="note">—</span>':'<select data-u="'+esc(p.id)+'"><option value="">Change…</option><option value="free">Free</option><option value="pro">Comp Professional</option><option value="enterprise">Comp Enterprise</option></select>')+'</td></tr>'}).join("")+'</tbody></table>'+(L.length>500?'<p class="note">Showing 500 of '+n(L.length)+'. Use search or export.</p>':'');
+ $("users").querySelectorAll("select[data-u]").forEach(function(s){s.onchange=async function(){if(!s.value)return;if(!confirm("Set this user to "+s.options[s.selectedIndex].text+"?")){s.value="";return}
+  var r=await sb.functions.invoke("admin-stats",{body:{action:"comp",user_id:s.dataset.u,plan:s.value}});if(r.error||(r.data&&r.data.error)){say((r.data&&r.data.error)||"Couldn’t change plan.");s.value="";return}load()}});
+}
+$("q").oninput=users;$("pf").onchange=users;
+$("u-csv").onclick=function(){dl("terrayne-users.csv",[["email","name","company","job_title","plan","status","interval","renews_or_ends","cancelling","watchlist","joined","last_sign_in","brief_email"]].concat(D.people.map(function(p){return [p.email,p.full_name,p.company,p.job_title,p.effective_plan,p.status,p.billing_interval,p.current_period_end,p.cancel_at_period_end,p.watchlist,p.created_at,p.last_sign_in_at,p.brief_email]})))};
+$("req-csv").onclick=function(){dl("terrayne-access-requests.csv",[["received","name","email","company","interest"]].concat(D.requests.map(function(r){return [r.created_at,r.name,r.email,r.company,r.interest]})))};
+$("refresh").onclick=load;
+
+async function load(){
+ var s=await sb.auth.getSession();if(!s.data.session){$("asof").textContent="";say('Please <a href="account.html">sign in</a> with an admin account.',"info");return}
+ $("who").textContent=s.data.session.user.email;
+ var r=await sb.functions.invoke("admin-stats",{body:{}});
+ if(r.error||!r.data||r.data.error){$("asof").textContent="";$("app").classList.add("hide");say(r.data&&r.data.error?esc(r.data.error):"This page is for Terrayne admins. If that’s you, mark your profile as admin (see SETUP.md).");return}
+ D=r.data;say();$("app").classList.remove("hide");render();
+}
+load();
+})();
+</script>
+</body>
+</html>

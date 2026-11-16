@@ -22,7 +22,7 @@ Do them in order. Stripe **test mode** is fine to start; switch to live keys whe
    Events: `checkout.session.completed`, `customer.subscription.created`, `customer.subscription.updated`, `customer.subscription.deleted`. Copy the signing secret (`whsec_...`).
 
 ## 3. Resend (Monday emails)
-1. resend.com → Domains → add `terrayne.co` and add the DNS records it shows at your domain registrar.
+1. resend.com → Domains → add `terrayne.co.uk` (the domain your emails use) and add the DNS records it shows at your domain registrar.
 2. API Keys → create one.
 
 ## 4. Deploy the server functions
@@ -33,10 +33,11 @@ supabase link --project-ref <project-ref>
 supabase secrets set STRIPE_SECRET_KEY=sk_... STRIPE_WEBHOOK_SECRET=whsec_... \
   PRICE_PRO_MONTH=price_... PRICE_PRO_YEAR=price_... PRICE_ENT_MONTH=price_... PRICE_ENT_YEAR=price_... \
   RESEND_API_KEY=re_... CRON_SECRET=<any long random string> SITE_URL=https://terrayne.co \
-  BRIEF_FROM="Terrayne <briefings@terrayne.co>"
+  BRIEF_FROM="Terrayne <briefings@terrayne.co.uk>"
 supabase functions deploy create-checkout
 supabase functions deploy customer-portal
 supabase functions deploy delete-account
+supabase functions deploy admin-stats
 supabase functions deploy stripe-webhook --no-verify-jwt
 supabase functions deploy send-briefs --no-verify-jwt
 ```
@@ -46,7 +47,12 @@ Repo → Settings → Secrets and variables → Actions → add:
 `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `CRON_SECRET` (same value as above).
 Then Actions → "Weekly Momentum Index and Monday brief" → Run workflow (leave "send" off) to fill the first week of briefs and history.
 
-## 6. Test
+## 6. Make yourself an admin
+1. Create your own account at terrayne.co/account.html.
+2. Supabase → SQL Editor → run: `update public.profiles set is_admin = true where email = 'YOUR EMAIL';`
+3. Open terrayne.co/admin.html for users, revenue (MRR, ARR, churn), signups, plan mix, payments, access requests, and to give pilots free (“comp”) plans.
+
+## 7. Test
 1. terrayne.co/account.html → create an account → confirm the email.
 2. Subscription → Upgrade to Professional → pay with test card `4242 4242 4242 4242`, any future date, any CVC.
 3. Check: plan shows Professional, watchlist works, briefs and history appear, "Manage subscription" opens Stripe, cancelling shows "Cancels on …".

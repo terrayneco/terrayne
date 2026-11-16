@@ -243,6 +243,8 @@ nav ul a{padding:7px 14px}
 .ncta{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.18);padding:8px 16px;font-size:13px;font-weight:500;letter-spacing:.01em}
 .ncta:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.35);color:#fff}
 @media(max-width:1000px){nav .wrap{padding:0 20px}}
+/* access form */
+.accf{margin:22px auto 0;max-width:760px}.accg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}.accg input{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:13px 16px;color:#fff;font:inherit;font-size:15px;outline:none;width:100%}.accg input:focus{border-color:#4f9be8}.accg input::placeholder{color:#8c9ab3}.accm{font-size:14px;color:#9fd0ff;margin:12px 0 0;min-height:1em}@media(max-width:600px){.accg{grid-template-columns:1fr}}
 /* premium nav */
 .nsign{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,212,232,.72);white-space:nowrap}.nsign:hover{color:#fff}@media(max-width:1000px){.nsign{display:none}}
 nav{background:linear-gradient(180deg,rgba(8,16,32,.82),rgba(6,13,26,.66));border-bottom:0}
@@ -381,7 +383,19 @@ nav ul a.act{color:#fff;background:linear-gradient(180deg,rgba(159,208,255,.14),
 <div class="eyebrow">Early access</div>
 <h2>Be first to see what’s next.</h2>
 <p>We’re onboarding a small group of London teams. Tell us where you invest or expand and we’ll be in touch.</p>
-<a class="btn" href="mailto:hello@terrayne.co.uk?subject=Terrayne%20early%20access">Request access</a>
+<form id="acc" class="accf" novalidate><div class="accg"><input name="name" placeholder="Your name" autocomplete="name" required><input name="email" type="email" placeholder="Work email" autocomplete="email" required><input name="company" placeholder="Company" autocomplete="organization"><input name="interest" placeholder="Boroughs or sectors you’re interested in"></div><button class="btn" type="submit">Request access</button><p class="accm" id="accm" role="status"></p></form>
+<script src="assets/config.js"></script>
+<script>
+(function(){var f=document.getElementById("acc"),m=document.getElementById("accm");if(!f)return;
+f.onsubmit=async function(e){e.preventDefault();var d={};new FormData(f).forEach(function(v,k){d[k]=String(v).trim().slice(0,1000)});
+ if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.email||"")){m.textContent="Please enter a valid email.";return}
+ var C=window.TERRAYNE||{};
+ if(!C.supabaseUrl||!C.supabaseAnonKey){location.href="mailto:hello@terrayne.co.uk?subject="+encodeURIComponent("Terrayne early access")+"&body="+encodeURIComponent([d.name,d.company,d.interest].filter(Boolean).join("\n"));return}
+ f.querySelector("button").disabled=true;m.textContent="Sending…";
+ try{var r=await fetch(C.supabaseUrl+"/rest/v1/access_requests",{method:"POST",headers:{"apikey":C.supabaseAnonKey,"Authorization":"Bearer "+C.supabaseAnonKey,"Content-Type":"application/json","Prefer":"return=minimal"},body:JSON.stringify(d)});
+  if(!r.ok)throw 0;f.reset();m.textContent="Thanks. We’ll be in touch shortly."}catch(_){m.textContent="Something went wrong. Email hello@terrayne.co.uk instead."}
+ f.querySelector("button").disabled=false}})();
+</script>
 </div></div></section>
 
 <footer><div class="wrap"><span>© 2026 Terrayne. Property intelligence.</span><span>terrayne.co</span></div></footer>

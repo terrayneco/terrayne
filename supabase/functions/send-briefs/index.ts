@@ -3,7 +3,7 @@
 // Deploy with --no-verify-jwt (protected by CRON_SECRET instead).
 import { admin, SITE } from "../_shared/common.ts";
 
-const FROM = Deno.env.get("BRIEF_FROM") ?? "Terrayne <briefings@terrayne.co>";
+const FROM = Deno.env.get("BRIEF_FROM") ?? "Terrayne <briefings@terrayne.co.uk>";
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]!));
 
 function html(name: string, week: string, items: { area: string; title: string; body: string }[]) {
@@ -42,5 +42,6 @@ Deno.serve(async (req) => {
     });
     r.ok ? sent++ : failed.push(u.id);
   }
+  await admin.from("brief_sends").insert({ week, sent, failed: failed.length });
   return new Response(JSON.stringify({ sent, failed: failed.length }), { headers: { "Content-Type": "application/json" } });
 });

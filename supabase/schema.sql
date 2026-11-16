@@ -16,10 +16,13 @@ create table if not exists public.profiles (
   stripe_subscription_id text,
   team_owner uuid references public.profiles(id) on delete set null,  -- set for Enterprise team members
   brief_email boolean not null default true,
+  is_admin boolean not null default false,
   created_at timestamptz not null default now()
 );
 
 -- Neighbourhoods a user follows (names match data "n" field, e.g. 'Nine Elms').
+alter table public.profiles add column if not exists is_admin boolean not null default false;
+
 create table if not exists public.watchlist (
   user_id uuid not null references public.profiles(id) on delete cascade,
   area text not null,
@@ -55,8 +58,8 @@ create table if not exists public.briefs (
 create or replace function public.effective_plan(uid uuid) returns text
 language sql stable security definer set search_path = public as $$
   select case
-    when p.plan <> 'free' and p.status in ('active','trialing','past_due') then p.plan
-    when o.plan = 'enterprise' and o.status in ('active','trialing','past_due') then 'enterprise'
+    when p.plan <> 'free' and p.status in ('active','trialing','past_due','comp') then p.plan
+    when o.plan = 'enterprise' and o.status in ('active','trialing','past_due','comp') then 'enterprise'
     else 'free' end
   from public.profiles p left join public.profiles o on o.id = p.team_owner
   where p.id = uid
@@ -102,7 +105,7 @@ begin
     new.plan := old.plan; new.status := old.status; new.billing_interval := old.billing_interval;
     new.current_period_end := old.current_period_end; new.cancel_at_period_end := old.cancel_at_period_end;
     new.stripe_customer_id := old.stripe_customer_id; new.stripe_subscription_id := old.stripe_subscription_id;
-    new.email := old.email; new.id := old.id;
+    new.email := old.email; new.id := old.id; new.is_admin := old.is_admin;
     -- members may leave a team (set null) but not join one themselves
     if new.team_owner is distinct from old.team_owner and new.team_owner is not null then new.team_owner := old.team_owner; end if;
   end if;
@@ -170,3 +173,25 @@ language sql security definer set search_path = public as $$
 $$;
 grant execute on function public.remove_member(uuid) to authenticated;
 grant execute on function public.effective_plan(uuid) to authenticated;
+
+-- Founding-access requests from the home page form (anyone can submit; only admins read, via the admin function).
+create table if not exists public.access_requests (
+  id bigint generated always as identity primary key,
+  name text, email text not null, company text, interest text,
+  created_at timestamptz not null default now()
+);
+alter table public.access_requests enable row level security;
+drop policy if exists "anyone can request" on public.access_requests;
+create policy "anyone can request" on public.access_requests for insert to anon, authenticated
+  with check (length(email) between 3 and 200 and coalesce(length(name),0) < 200 and coalesce(length(company),0) < 200 and coalesce(length(interest),0) < 2000);
+
+-- Log of each weekly email run (written by send-briefs).
+create table if not exists public.brief_sends (
+  id bigint generated always as identity primary key,
+  week date not null, sent int not null, failed int not null,
+  created_at timestamptz not null default now()
+);
+alter table public.brief_sends enable row level security;
+
+-- Make yourself an admin (run once, with your own email):
+--   update public.profiles set is_admin = true where email = 'you@example.com';
