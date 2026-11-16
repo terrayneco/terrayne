@@ -1,0 +1,3 @@
+# GitHub Pages: publish the website, not the internal files.
+include: [".well-known"]
+exclude: [scripts, supabase, ".github", "CLAUDE.md", "SETUP.md", "README.md", ".cache"]

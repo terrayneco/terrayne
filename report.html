@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://api.postcodes.io https://*.supabase.co wss://*.supabase.co; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<script>if(window.top!==window.self){try{window.top.location=window.self.location}catch(e){document.documentElement.style.display="none"}}</script>
 <title>Postcode Report · Terrayne</title>
 <meta name="robots" content="noindex">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
@@ -64,7 +67,7 @@ function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){retur
 function nf(v){return Math.round(v||0).toLocaleString("en-GB")}
 function pcs(v){return v==null?"n/a":(v>=0?"+":"−")+Math.abs(v*100).toFixed(1)+"%"}
 var sb=null,plan="free",profile=null;
-function lib(){return new Promise(function(ok,no){if(window.supabase)return ok();var s=document.createElement("script");s.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js";s.onload=ok;s.onerror=no;document.head.appendChild(s)})}
+function lib(){return new Promise(function(ok,no){if(window.supabase)return ok();var s=document.createElement("script");s.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js";s.integrity="sha384-GFr3yTh5lJznCbZfpTtXnwboFsxqtTQoeTZCRHhE0579KrRmlCzen5AA8ohaB5ug";s.crossOrigin="anonymous";s.onload=ok;s.onerror=no;document.head.appendChild(s)})}
 async function access(pc){
  if(!C.supabaseUrl||!C.supabaseAnonKey)return {full:false,why:"offline"};
  try{await lib();sb=window.supabase.createClient(C.supabaseUrl,C.supabaseAnonKey);

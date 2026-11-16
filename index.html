@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://api.postcodes.io https://*.supabase.co wss://*.supabase.co; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<script>if(window.top!==window.self){try{window.top.location=window.self.location}catch(e){document.documentElement.style.display="none"}}</script>
 <title>Terrayne — Property Intelligence</title>
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="assets/favicon-48.png" sizes="48x48" type="image/png">
@@ -738,7 +741,7 @@ function tile(lat,lon){var n=8192;return [Math.floor((lon+180)/360*n),Math.floor
 async function J(u){var r=await fetch(u,{cache:"no-cache"});if(!r.ok)throw new Error(r.status);return r.json()}
 async function pts(x,y){var k=CC+":"+x+"_"+y;if(!(k in CACHE)){try{CACHE[k]=await J(CK_CITIES[CC].dir+"pts/"+x+"_"+y+".json")}catch(e){CACHE[k]=[]}}return CACHE[k]}
 async function paid(){if(PAID!==null)return PAID;PAID=false;var C=window.TERRAYNE||{};if(!C.supabaseUrl||!C.supabaseAnonKey)return false;
- try{if(!window.supabase)await new Promise(function(ok,no){var s=document.createElement("script");s.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js";s.onload=ok;s.onerror=no;document.head.appendChild(s)});
+ try{if(!window.supabase)await new Promise(function(ok,no){var s=document.createElement("script");s.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js";s.integrity="sha384-GFr3yTh5lJznCbZfpTtXnwboFsxqtTQoeTZCRHhE0579KrRmlCzen5AA8ohaB5ug";s.crossOrigin="anonymous";s.onload=ok;s.onerror=no;document.head.appendChild(s)});
   var sb=window.supabase.createClient(C.supabaseUrl,C.supabaseAnonKey),s=await sb.auth.getSession();if(!s.data.session)return false;
   var r=await sb.rpc("effective_plan",{uid:s.data.session.user.id});PAID=!!(r.data&&r.data!=="free")}catch(e){}return PAID}
 function verdict(s){return s>=80?["Changing fast","#4f9be8"]:s>=65?["Changing","#5fd6b8"]:s>=50?["Steady","#9aa3b5"]:["Quiet","#8c9ab3"]}

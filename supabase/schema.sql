@@ -270,3 +270,38 @@ drop policy if exists "see alerts" on public.alerts;
 create policy "see alerts" on public.alerts for select using (
   exists (select 1 from public.saved_places p where p.id = place_id and public.can_see_owner(p.owner)));
 grant execute on function public.can_see_owner(uuid) to authenticated;
+
+-- ============ Security hardening ============
+-- Access-request spam: at most 3 per email per day and 300 in total per day.
+create or replace function public.access_rate_limit() returns trigger
+language plpgsql security definer set search_path = public as $$
+begin
+  new.email := lower(trim(new.email));
+  if new.email !~ '^[^@\s]+@[^@\s]+\.[^@\s]+$' then raise exception 'Invalid email'; end if;
+  if (select count(*) from public.access_requests where email = new.email and created_at > now() - interval '1 day') >= 3
+     or (select count(*) from public.access_requests where created_at > now() - interval '1 day') >= 300 then
+    raise exception 'Too many requests, please try again tomorrow';
+  end if;
+  return new;
+end $$;
+drop trigger if exists access_rate_limit on public.access_requests;
+create trigger access_rate_limit before insert on public.access_requests for each row execute function public.access_rate_limit();
+
+-- Saved places: team members can see shared places, but only the creator or the team owner can change or delete them.
+drop policy if exists "change places" on public.saved_places;
+create policy "change places" on public.saved_places for update using (owner = auth.uid() or exists (select 1 from public.profiles m where m.id = saved_places.owner and m.team_owner = auth.uid())) with check (owner = auth.uid() or exists (select 1 from public.profiles m where m.id = saved_places.owner and m.team_owner = auth.uid()));
+drop policy if exists "remove places" on public.saved_places;
+create policy "remove places" on public.saved_places for delete using (owner = auth.uid() or exists (select 1 from public.profiles m where m.id = saved_places.owner and m.team_owner = auth.uid()));
+alter table public.saved_places drop constraint if exists saved_places_text_len;
+alter table public.saved_places add constraint saved_places_text_len check (length(label) <= 80 and length(postcode) <= 9 and lat between 49 and 61 and lon between -9 and 3);
+
+-- Profile field sizes and safe URLs (stops storing scripts or huge blobs).
+alter table public.profiles drop constraint if exists profiles_field_rules;
+alter table public.profiles add constraint profiles_field_rules check (
+  length(coalesce(full_name,'')) <= 120 and length(coalesce(company,'')) <= 120 and length(coalesce(job_title,'')) <= 120
+  and length(coalesce(brand_name,'')) <= 80
+  and (brand_logo is null or (brand_logo ~ '^https://' and length(brand_logo) <= 300))
+  and (slack_webhook is null or (slack_webhook ~ '^https://hooks\.slack\.com/services/' and length(slack_webhook) <= 300)));
+
+-- Belt and braces: the public (anon) role can't read any table directly.
+revoke select on public.access_requests, public.brief_sends from anon, authenticated;

@@ -63,3 +63,12 @@ Then Actions → "Weekly Momentum Index and Monday brief" → Run workflow (leav
 2. Subscription → Upgrade to Professional → pay with test card `4242 4242 4242 4242`, any future date, any CVC.
 3. Check: plan shows Professional, watchlist works, briefs and history appear, "Manage subscription" opens Stripe, cancelling shows "Cancels on …".
 4. Run the workflow with "send" on to receive a test brief.
+
+## 8. Security checklist (do these once)
+- **Two-factor login** on every account that controls the site: GitHub, Stripe, Supabase, Resend and your domain registrar. These are the real keys to the business.
+- **Supabase → Authentication → Settings:** keep "Confirm email" on, set minimum password length to 10, turn on "Leaked password protection", and turn on CAPTCHA (Cloudflare Turnstile is free) for sign-up and sign-in.
+- **Supabase → Authentication → URL configuration:** only `https://terrayne.co/account.html` as a redirect URL.
+- **Stripe:** use a *restricted* secret key for `STRIPE_SECRET_KEY` (Checkout Sessions, Customers, Subscriptions, Billing Portal, Invoices: write; everything else: none).
+- **Never** paste the Supabase service_role key, Stripe secret key, webhook secret or Resend key into the website, a chat, or a commit. They live only in Supabase/GitHub secrets.
+- Keep the number of admins small (`is_admin`), and remove ex-team members from the Enterprise team page.
+- If a key ever leaks: rotate it in that service, then update the secret in Supabase/GitHub.
