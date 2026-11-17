@@ -14,7 +14,7 @@ async function sync(sub: Stripe.Subscription) {
     plan: live && mapped ? mapped[0] : "free",
     billing_interval: mapped ? mapped[1] : null,
     status: sub.status,
-    current_period_end: new Date(sub.current_period_end * 1000).toISOString(),
+        current_period_end: (() => { const e = (sub as any).current_period_end ?? (item as any)?.current_period_end; return e ? new Date(e * 1000).toISOString() : null; })(),
     cancel_at_period_end: sub.cancel_at_period_end,
     stripe_subscription_id: live ? sub.id : null,
   };
