@@ -1,6 +1,6 @@
 {
  "city": "manchester",
- "generated": "2026-11-16",
+ "generated": "2026-11-17",
  "window_days": 365,
  "radius_km": 1.72,
  "tiles": 184,
@@ -425,7 +425,7 @@
    "lon": -2.1114,
    "s": 77,
    "c": null,
-   "u": "27.3 ha",
+   "u": "27.4 ha",
    "x": [
     88,
     79,
@@ -438,7 +438,7 @@
     "brownfield_homes": 2365,
     "brownfield_permissioned": 986,
     "brownfield_sites": 48,
-    "brownfield_ha": 27.3,
+    "brownfield_ha": 27.4,
     "newbuild_sales": 1,
     "transport": null,
     "stations": 0,
@@ -529,7 +529,7 @@
    },
    "raw": {},
    "schemes": [],
-   "t": "Oldham town centre scores highest on brownfield land identified for housing (top 12% of Greater Manchester). 48 brownfield register sites nearby (27.3 ha) could take about 2,365 homes, 986 of them with planning permission. 1 new-build homes sold in the last 12 months. Official statistics: population +5.7% (2021→2024); resale prices +4.4% on a year earlier, median £156,000."
+   "t": "Oldham town centre scores highest on brownfield land identified for housing (top 12% of Greater Manchester). 48 brownfield register sites nearby (27.4 ha) could take about 2,365 homes, 986 of them with planning permission. 1 new-build homes sold in the last 12 months. Official statistics: population +5.7% (2021→2024); resale prices +4.4% on a year earlier, median £156,000."
   },
   {
    "n": "Stockport",

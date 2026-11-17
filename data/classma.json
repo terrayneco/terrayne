@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-16",
+ "generated": "2026-11-17",
  "boroughs": [
   {
    "borough": "Croydon",
@@ -50,10 +50,10 @@
    "borough": "Richmond",
    "filed_12m": 21,
    "homes_12m": 41,
-   "decided_24m": 39,
-   "approval_rate": 0.795,
+   "decided_24m": 40,
+   "approval_rate": 0.8,
    "median_days": 50,
-   "pending": 6
+   "pending": 5
   },
   {
    "borough": "Lambeth",
@@ -111,10 +111,10 @@
   },
   {
    "borough": "Newham",
-   "filed_12m": 10,
-   "homes_12m": 233,
-   "decided_24m": 22,
-   "approval_rate": 0.409,
+   "filed_12m": 11,
+   "homes_12m": 240,
+   "decided_24m": 23,
+   "approval_rate": 0.391,
    "median_days": 55,
    "pending": 1
   },
@@ -273,9 +273,9 @@
   }
  ],
  "london": {
-  "filed_12m": 320,
-  "homes_12m": 3345,
-  "approval_rate": 0.693,
+  "filed_12m": 321,
+  "homes_12m": 3352,
+  "approval_rate": 0.692,
   "median_days": 56
  },
  "latest": [
@@ -352,20 +352,20 @@
    "ref": "HGY/2026/2729"
   },
   {
-   "borough": "Lambeth",
-   "site": "Streatham High Road",
-   "homes": 2,
-   "status": "Pending",
-   "valid": "2026-09-25",
-   "ref": "26/02793/P3MA"
-  },
-  {
    "borough": "Hammersmith & Fulham",
    "site": "Unit 1 Askew Road",
    "homes": 18,
    "status": "Pending",
    "valid": "2026-09-25",
    "ref": "P/2026/02481/PACU1"
+  },
+  {
+   "borough": "Lambeth",
+   "site": "Streatham High Road",
+   "homes": 2,
+   "status": "Pending",
+   "valid": "2026-09-25",
+   "ref": "26/02793/P3MA"
   },
   {
    "borough": "Westminster",

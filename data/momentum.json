@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-16",
+ "generated": "2026-11-17",
  "window_days": 365,
  "radius_km": 1.72,
  "tiles": 181,
@@ -64,7 +64,7 @@
   "act": 82,
   "pipe": 36.0,
   "ma": 0.0,
-  "com": 2111.299994468689,
+  "com": 2237.249985218048,
   "transport": 0.06355242799236316,
   "population": 0.02217997465145749,
   "prices": -0.010184316126214354,
@@ -82,7 +82,7 @@
    "c": -6,
    "u": "154",
    "x": [
-    77,
+    78,
     82,
     95,
     75,
@@ -92,7 +92,7 @@
    ],
    "hd": 82,
    "raw": {
-    "act": 177,
+    "act": 180,
     "pipe": 154,
     "ma": 57,
     "com": 7365,
@@ -254,208 +254,7 @@
      "sales": 226
     }
    },
-   "t": "Ilford town centre scores highest on office-to-residential (Class MA) conversions (top 5% of London). In the last 12 months: 177 significant applications, 154 net new homes proposed, 55 homes via Class MA and 7,365 m² of net commercial floorspace. Official statistics: station use +27.2% (TfL 2023→2025); population +6.7% (2021→2024); median sale price −1.0% on a year earlier, at £432,500. Largest live schemes: Development At Rigby Mews And 99 To 127 Cranbrook Road (45 homes, approved, ref 1801/26); Development At 10 The Drive (12 homes, commenced, ref 2668/25)."
-  },
-  {
-   "n": "Elephant",
-   "f": "Elephant & Castle",
-   "b": "LB Southwark / Lambeth",
-   "lat": 51.4945,
-   "lon": -0.1,
-   "s": 73,
-   "c": 1,
-   "u": "522",
-   "x": [
-    90,
-    93,
-    66,
-    92,
-    38,
-    81,
-    45
-   ],
-   "hd": 50,
-   "raw": {
-    "act": 294,
-    "pipe": 522,
-    "ma": 2,
-    "com": 31487,
-    "ma_n": 2
-   },
-   "off": {
-    "transport": 0.0281,
-    "stations": 9,
-    "population": 0.055,
-    "prices": -0.0142,
-    "median_price": 512500.0,
-    "sales": 706,
-    "transport_span": "TfL 2023→2025",
-    "population_span": "2021→2024"
-   },
-   "schemes": [
-    {
-     "ref": "26/AP/1196",
-     "lpa": "Southwark",
-     "site": "Tanner Street",
-     "units": 3,
-     "status": "Approved",
-     "valid": "28/04/2026"
-    },
-    {
-     "ref": "26/AP/1144",
-     "lpa": "Southwark",
-     "site": "Walworth Road",
-     "units": 3,
-     "status": "Application Under Consideration",
-     "valid": "29/05/2026"
-    },
-    {
-     "ref": "26/01121/P3G",
-     "lpa": "Lambeth",
-     "site": "140 Lower Marsh",
-     "units": 2,
-     "status": "Approved",
-     "valid": "09/04/2026"
-    },
-    {
-     "ref": "26/AP/2924",
-     "lpa": "Southwark",
-     "site": "John Ruskin Street",
-     "units": 2,
-     "status": "Application Under Consideration",
-     "valid": "15/10/2026"
-    },
-    {
-     "ref": "26/AP/2932",
-     "lpa": "Southwark",
-     "site": "Bermondsey Street",
-     "units": 2,
-     "status": "Application Under Consideration",
-     "valid": "27/10/2026"
-    },
-    {
-     "ref": "25/AP/3798",
-     "lpa": "Southwark",
-     "site": "Lagare Apartments",
-     "units": 1,
-     "status": "Approved",
-     "valid": "06/02/2026"
-    },
-    {
-     "ref": "26/AP/0505",
-     "lpa": "Southwark",
-     "site": "Bermondsey Exchange, Flat 7 Bermondsey Street",
-     "units": 1,
-     "status": "Completed",
-     "valid": "23/02/2026"
-    },
-    {
-     "ref": "25/AP/3461",
-     "lpa": "Southwark",
-     "site": "First Floor Front",
-     "units": 1,
-     "status": "Application Under Consideration",
-     "valid": "06/05/2026"
-    },
-    {
-     "ref": "25/03590/P3MA",
-     "lpa": "Lambeth",
-     "site": "Cricketers Court",
-     "units": 1,
-     "status": "Approved",
-     "valid": "18/11/2025"
-    },
-    {
-     "ref": "26/AP/0090",
-     "lpa": "Southwark",
-     "site": "Flat 4 Tanner Street",
-     "units": 0,
-     "status": "Completed",
-     "valid": "14/01/2026"
-    },
-    {
-     "ref": "26/AP/2027",
-     "lpa": "Southwark",
-     "site": "Green Walk",
-     "units": 0,
-     "status": "Approved",
-     "valid": "14/07/2026"
-    }
-   ],
-   "det": {
-    "transport": {
-     "now": 175068393,
-     "before": 170275960,
-     "top": [
-      [
-       "Waterloo",
-       74483879,
-       70329553
-      ],
-      [
-       "London Bridge",
-       56194070,
-       54765991
-      ],
-      [
-       "Elephant & Castle",
-       12991846,
-       14236050
-      ],
-      [
-       "Southwark",
-       8581018,
-       8508705
-      ],
-      [
-       "London Waterloo East",
-       6841002,
-       5429884
-      ],
-      [
-       "Oval",
-       4988300,
-       5615724
-      ]
-     ]
-    },
-    "population": {
-     "now": 125520,
-     "before": 118980,
-     "lsoas": 70
-    },
-    "prices": {
-     "types": [
-      [
-       "Flats",
-       625,
-       480000,
-       485000
-      ],
-      [
-       "Terraced",
-       70,
-       917500,
-       965000
-      ],
-      [
-       "Semi-detached",
-       5,
-       1250000,
-       null
-      ],
-      [
-       "Detached",
-       1,
-       755000,
-       null
-      ]
-     ],
-     "new_build": 5,
-     "sales": 706
-    }
-   },
-   "t": "Elephant & Castle scores highest on its housing pipeline (top 7% of London). In the last 12 months: 294 significant applications, 522 net new homes proposed, 1 home via Class MA and 31,487 m² of net commercial floorspace. Official statistics: station use +2.8% (TfL 2023→2025); population +5.5% (2021→2024); median sale price −1.4% on a year earlier, at £512,500."
+   "t": "Ilford town centre scores highest on office-to-residential (Class MA) conversions (top 5% of London). In the last 12 months: 180 significant applications, 154 net new homes proposed, 55 homes via Class MA and 7,365 m² of net commercial floorspace. Official statistics: station use +27.2% (TfL 2023→2025); population +6.7% (2021→2024); median sale price −1.0% on a year earlier, at £432,500. Largest live schemes: Development At Rigby Mews And 99 To 127 Cranbrook Road (45 homes, approved, ref 1801/26); Development At 10 The Drive (12 homes, commenced, ref 2668/25)."
   },
   {
    "n": "Nine Elms",
@@ -477,7 +276,7 @@
    ],
    "hd": 28,
    "raw": {
-    "act": 421,
+    "act": 424,
     "pipe": 626,
     "ma": 60,
     "com": 38894,
@@ -664,7 +463,7 @@
      "sales": 1003
     }
    },
-   "t": "Nine Elms & Vauxhall scores highest on its housing pipeline (top 4% of London). In the last 12 months: 421 significant applications, 626 net new homes proposed, 57 homes via Class MA and 38,894 m² of net commercial floorspace. Official statistics: station use +3.5% (TfL 2023→2025); population +4.0% (2021→2024); median sale price −3.6% on a year earlier, at £585,000. Largest live schemes: Units 1-6 Citadel Place (522 homes, application under consideration, ref 26/00601/FUL); Vincent Square (26 homes, approved, ref 26/00795/P3JPA)."
+   "t": "Nine Elms & Vauxhall scores highest on its housing pipeline (top 4% of London). In the last 12 months: 424 significant applications, 626 net new homes proposed, 57 homes via Class MA and 38,894 m² of net commercial floorspace. Official statistics: station use +3.5% (TfL 2023→2025); population +4.0% (2021→2024); median sale price −3.6% on a year earlier, at £585,000. Largest live schemes: Units 1-6 Citadel Place (522 homes, application under consideration, ref 26/00601/FUL); Vincent Square (26 homes, approved, ref 26/00795/P3JPA)."
   },
   {
    "n": "Old Kent Road",
@@ -676,7 +475,7 @@
    "c": 0,
    "u": "182",
    "x": [
-    75,
+    76,
     85,
     62,
     64,
@@ -686,7 +485,7 @@
    ],
    "hd": 75,
    "raw": {
-    "act": 166,
+    "act": 167,
     "pipe": 182,
     "ma": 2,
     "com": 4330,
@@ -810,7 +609,208 @@
      "sales": 712
     }
    },
-   "t": "Old Kent Road scores highest on growth in station use (top 5% of London). In the last 12 months: 166 significant applications, 182 net new homes proposed, 1 home via Class MA and 4,330 m² of net commercial floorspace. Official statistics: station use +34.4% (TfL 2023→2025); population +3.1% (2021→2024); median sale price −0.4% on a year earlier, at £450,000. Largest live schemes: Abbey Street (152 homes, application under consideration, ref 26/AP/0096)."
+   "t": "Old Kent Road scores highest on growth in station use (top 5% of London). In the last 12 months: 167 significant applications, 182 net new homes proposed, 1 home via Class MA and 4,330 m² of net commercial floorspace. Official statistics: station use +34.4% (TfL 2023→2025); population +3.1% (2021→2024); median sale price −0.4% on a year earlier, at £450,000. Largest live schemes: Abbey Street (152 homes, application under consideration, ref 26/AP/0096)."
+  },
+  {
+   "n": "Elephant",
+   "f": "Elephant & Castle",
+   "b": "LB Southwark / Lambeth",
+   "lat": 51.4945,
+   "lon": -0.1,
+   "s": 72,
+   "c": 0,
+   "u": "522",
+   "x": [
+    90,
+    93,
+    66,
+    92,
+    38,
+    81,
+    45
+   ],
+   "hd": 50,
+   "raw": {
+    "act": 296,
+    "pipe": 522,
+    "ma": 2,
+    "com": 31487,
+    "ma_n": 2
+   },
+   "off": {
+    "transport": 0.0281,
+    "stations": 9,
+    "population": 0.055,
+    "prices": -0.0142,
+    "median_price": 512500.0,
+    "sales": 706,
+    "transport_span": "TfL 2023→2025",
+    "population_span": "2021→2024"
+   },
+   "schemes": [
+    {
+     "ref": "26/AP/1196",
+     "lpa": "Southwark",
+     "site": "Tanner Street",
+     "units": 3,
+     "status": "Approved",
+     "valid": "28/04/2026"
+    },
+    {
+     "ref": "26/AP/1144",
+     "lpa": "Southwark",
+     "site": "Walworth Road",
+     "units": 3,
+     "status": "Application Under Consideration",
+     "valid": "29/05/2026"
+    },
+    {
+     "ref": "26/01121/P3G",
+     "lpa": "Lambeth",
+     "site": "140 Lower Marsh",
+     "units": 2,
+     "status": "Approved",
+     "valid": "09/04/2026"
+    },
+    {
+     "ref": "26/AP/2924",
+     "lpa": "Southwark",
+     "site": "John Ruskin Street",
+     "units": 2,
+     "status": "Application Under Consideration",
+     "valid": "15/10/2026"
+    },
+    {
+     "ref": "26/AP/2932",
+     "lpa": "Southwark",
+     "site": "Bermondsey Street",
+     "units": 2,
+     "status": "Application Under Consideration",
+     "valid": "27/10/2026"
+    },
+    {
+     "ref": "25/AP/3798",
+     "lpa": "Southwark",
+     "site": "Lagare Apartments",
+     "units": 1,
+     "status": "Approved",
+     "valid": "06/02/2026"
+    },
+    {
+     "ref": "26/AP/0505",
+     "lpa": "Southwark",
+     "site": "Bermondsey Exchange, Flat 7 Bermondsey Street",
+     "units": 1,
+     "status": "Completed",
+     "valid": "23/02/2026"
+    },
+    {
+     "ref": "25/AP/3461",
+     "lpa": "Southwark",
+     "site": "First Floor Front",
+     "units": 1,
+     "status": "Application Under Consideration",
+     "valid": "06/05/2026"
+    },
+    {
+     "ref": "25/03590/P3MA",
+     "lpa": "Lambeth",
+     "site": "Cricketers Court",
+     "units": 1,
+     "status": "Approved",
+     "valid": "18/11/2025"
+    },
+    {
+     "ref": "26/AP/0090",
+     "lpa": "Southwark",
+     "site": "Flat 4 Tanner Street",
+     "units": 0,
+     "status": "Completed",
+     "valid": "14/01/2026"
+    },
+    {
+     "ref": "26/AP/2027",
+     "lpa": "Southwark",
+     "site": "Green Walk",
+     "units": 0,
+     "status": "Approved",
+     "valid": "14/07/2026"
+    }
+   ],
+   "det": {
+    "transport": {
+     "now": 175068393,
+     "before": 170275960,
+     "top": [
+      [
+       "Waterloo",
+       74483879,
+       70329553
+      ],
+      [
+       "London Bridge",
+       56194070,
+       54765991
+      ],
+      [
+       "Elephant & Castle",
+       12991846,
+       14236050
+      ],
+      [
+       "Southwark",
+       8581018,
+       8508705
+      ],
+      [
+       "London Waterloo East",
+       6841002,
+       5429884
+      ],
+      [
+       "Oval",
+       4988300,
+       5615724
+      ]
+     ]
+    },
+    "population": {
+     "now": 125520,
+     "before": 118980,
+     "lsoas": 70
+    },
+    "prices": {
+     "types": [
+      [
+       "Flats",
+       625,
+       480000,
+       485000
+      ],
+      [
+       "Terraced",
+       70,
+       917500,
+       965000
+      ],
+      [
+       "Semi-detached",
+       5,
+       1250000,
+       null
+      ],
+      [
+       "Detached",
+       1,
+       755000,
+       null
+      ]
+     ],
+     "new_build": 5,
+     "sales": 706
+    }
+   },
+   "t": "Elephant & Castle scores highest on its housing pipeline (top 7% of London). In the last 12 months: 296 significant applications, 522 net new homes proposed, 1 home via Class MA and 31,487 m² of net commercial floorspace. Official statistics: station use +2.8% (TfL 2023→2025); population +5.5% (2021→2024); median sale price −1.4% on a year earlier, at £512,500."
   },
   {
    "n": "Wembley",
@@ -906,14 +906,6 @@
      "valid": "13/07/2026"
     },
     {
-     "ref": "26/0397",
-     "lpa": "Brent",
-     "site": "7 Chalfont Avenue, Wembley",
-     "units": 1,
-     "status": "Dismissed",
-     "valid": "26/02/2026"
-    },
-    {
      "ref": "26/2506",
      "lpa": "Brent",
      "site": "First Floor Flat, 517A High Road, Wembley",
@@ -922,12 +914,12 @@
      "valid": "12/10/2026"
     },
     {
-     "ref": "26/1723",
+     "ref": "26/0397",
      "lpa": "Brent",
-     "site": "128 Church Lane",
+     "site": "7 Chalfont Avenue, Wembley",
      "units": 1,
-     "status": "Approved",
-     "valid": "15/07/2026"
+     "status": "Dismissed",
+     "valid": "26/02/2026"
     },
     {
      "ref": "26/2408",
@@ -938,12 +930,20 @@
      "valid": "22/09/2026"
     },
     {
-     "ref": "26/0407",
+     "ref": "26/1723",
      "lpa": "Brent",
-     "site": "146 Wembley Hill Road, Wembley",
+     "site": "128 Church Lane",
+     "units": 1,
+     "status": "Approved",
+     "valid": "15/07/2026"
+    },
+    {
+     "ref": "26/1906",
+     "lpa": "Brent",
+     "site": "55 Chalkhill Road, Wembley",
      "units": 0,
-     "status": "Appeal Received",
-     "valid": "16/03/2026"
+     "status": "Approved",
+     "valid": "31/07/2026"
     }
    ],
    "det": {
@@ -1036,7 +1036,7 @@
    ],
    "hd": 15,
    "raw": {
-    "act": 591,
+    "act": 598,
     "pipe": 985,
     "ma": 561,
     "com": 44169,
@@ -1223,7 +1223,7 @@
      "sales": 796
     }
    },
-   "t": "Hammersmith & White City scores highest on office-to-residential (Class MA) conversions (top 1% of London). In the last 12 months: 591 significant applications, 985 net new homes proposed, 555 homes via Class MA and 44,169 m² of net commercial floorspace. Official statistics: station use +5.4% (TfL 2023→2025); population +2.2% (2021→2024); median sale price −5.7% on a year earlier, at £654,375. Largest live schemes: Sussex Place (292 homes, application received, ref P/2026/00633/FUL); Griffin House Hammersmith Road (140 homes, approved, ref P/2026/01329/PACU1)."
+   "t": "Hammersmith & White City scores highest on office-to-residential (Class MA) conversions (top 1% of London). In the last 12 months: 598 significant applications, 985 net new homes proposed, 555 homes via Class MA and 44,169 m² of net commercial floorspace. Official statistics: station use +5.4% (TfL 2023→2025); population +2.2% (2021→2024); median sale price −5.7% on a year earlier, at £654,375. Largest live schemes: Sussex Place (292 homes, application received, ref P/2026/00633/FUL); Griffin House Hammersmith Road (140 homes, approved, ref P/2026/01329/PACU1)."
   },
   {
    "n": "Croydon",
@@ -1335,20 +1335,20 @@
      "valid": "23/02/2026"
     },
     {
-     "ref": "26/01707/GPDO",
-     "lpa": "Croydon",
-     "site": "Altyre Road",
-     "units": 10,
-     "status": "Approved",
-     "valid": "11/06/2026"
-    },
-    {
      "ref": "26/01328/OUT",
      "lpa": "Croydon",
      "site": "Works Rear Of 209 - 225 Davidson Road",
      "units": 10,
      "status": "Application Under Consideration",
      "valid": "05/05/2026"
+    },
+    {
+     "ref": "26/01707/GPDO",
+     "lpa": "Croydon",
+     "site": "Altyre Road",
+     "units": 10,
+     "status": "Approved",
+     "valid": "11/06/2026"
     },
     {
      "ref": "26/00822/GPDO",
@@ -1444,7 +1444,7 @@
    ],
    "hd": 61,
    "raw": {
-    "act": 397,
+    "act": 398,
     "pipe": 1277,
     "ma": 0,
     "com": 74238,
@@ -1631,7 +1631,7 @@
      "sales": 755
     }
    },
-   "t": "Whitechapel & Aldgate scores highest on its housing pipeline (top 1% of London). In the last 12 months: 397 significant applications, 1,277 net new homes proposed and 74,238 m² of net commercial floorspace. Official statistics: station use +2.3% (TfL 2023→2025); population +6.4% (2021→2024); median sale price −4.9% on a year earlier, at £480,000. Largest live schemes: Calcutta House (794 homes, application under consideration, ref PA/26/00391/A1); 13-15 Blount Street (106 homes, approved, ref PA/26/00122/S)."
+   "t": "Whitechapel & Aldgate scores highest on its housing pipeline (top 1% of London). In the last 12 months: 398 significant applications, 1,277 net new homes proposed and 74,238 m² of net commercial floorspace. Official statistics: station use +2.3% (TfL 2023→2025); population +6.4% (2021→2024); median sale price −4.9% on a year earlier, at £480,000. Largest live schemes: Calcutta House (794 homes, application under consideration, ref PA/26/00391/A1); 13-15 Blount Street (106 homes, approved, ref PA/26/00122/S)."
   },
   {
    "n": "Stratford",
@@ -1862,7 +1862,7 @@
    ],
    "hd": 13,
    "raw": {
-    "act": 673,
+    "act": 680,
     "pipe": 563,
     "ma": 102,
     "com": 0,
@@ -2049,7 +2049,7 @@
      "sales": 616
     }
    },
-   "t": "King’s Cross & St Pancras scores highest on planning activity (top 3% of London). In the last 12 months: 673 significant applications, 563 net new homes proposed, 96 homes via Class MA. Official statistics: station use +5.9% (TfL 2023→2025); population +5.7% (2021→2024); median sale price −5.9% on a year earlier, at £674,250. Largest live schemes: Bonham Carter House (128 homes, application received, ref 2025/5802/P); Bangor Wharf Georgiana Street (153 homes, application received, ref 2026/2226/P)."
+   "t": "King’s Cross & St Pancras scores highest on planning activity (top 3% of London). In the last 12 months: 680 significant applications, 563 net new homes proposed, 96 homes via Class MA. Official statistics: station use +5.9% (TfL 2023→2025); population +5.7% (2021→2024); median sale price −5.9% on a year earlier, at £674,250. Largest live schemes: Bonham Carter House (128 homes, application received, ref 2025/5802/P); Bangor Wharf Georgiana Street (153 homes, application received, ref 2026/2226/P)."
   }
  ],
  "tracked": 18
