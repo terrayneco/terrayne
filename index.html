@@ -347,10 +347,12 @@ footer .ig{display:inline-flex;align-items:center;gap:8px}
 .wt{display:grid;gap:6px;margin-top:10px;font-size:14px}.wt div{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid var(--line)}.wt div:last-child{border-bottom:0}.wt b{font-family:ui-monospace,Menlo,monospace;font-weight:500;color:#fff;white-space:nowrap}.wt span{color:#c8d4e8}
 .bt{display:grid;gap:10px}.bt div{display:grid;grid-template-columns:120px 1fr 64px;align-items:center;gap:12px;font-size:14px}.bt span{color:#c8d4e8}.bt i{display:block;height:10px;border-radius:0 4px 4px 0;background:#5fd6b8}.bt b{font-family:ui-monospace,Menlo,monospace;font-weight:500;color:#fff;text-align:right}
 @media(max-width:600px){.bt div{grid-template-columns:96px 1fr 56px}}
+.cityline{display:flex;flex-wrap:wrap;align-items:center;gap:10px 26px;padding:18px 24px;border:1px solid rgba(255,255,255,.08);border-radius:16px;color:var(--mute);font-size:14px}.cityline .mono{font-size:11px;letter-spacing:.14em;text-transform:uppercase}.cityline b{color:#fff;font-weight:500;margin-right:4px}
 /* pricing: four tiers */
 .plan .g4{grid-template-columns:repeat(4,minmax(0,1fr));align-items:stretch}
 @media(max-width:1180px){.plan .g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:640px){.plan .g4{grid-template-columns:1fr}}
+@media(max-width:640px){.plan .g4{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;gap:12px;margin:0 -16px;padding:16px 16px 10px;scrollbar-width:none}.plan .g4::-webkit-scrollbar{display:none}.plan .g4>.card{flex:0 0 84%;scroll-snap-align:center}}
 .plan .card{display:flex;flex-direction:column}.plan .card ul{margin-bottom:6px}.plan .card .btn{margin-top:auto!important}.plan .card>p:not(.pline){min-height:3.2em}
 .plan .card{position:relative}.plan .card .badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);margin:0;font-size:10px;padding:5px 12px;background:#111f3d;white-space:nowrap}.plan .g4{padding-top:14px}
 .plan .pline{font-size:13px;color:var(--mute);margin:0 0 12px;min-height:1.2em}
@@ -427,28 +429,19 @@ nav ul a.act{color:#fff;background:linear-gradient(180deg,rgba(159,208,255,.14),
 <section id="problem"><div class="wrap">
 <div class="eyebrow">The problem in London</div>
 <h2><span style="color:var(--mute)">London:</span> 33 councils. 33 portals. Hours of reading.</h2>
-<p class="sub">London planning data is split across 32 boroughs and the City of London, each with its own portal, and buried in bureaucratic language like Class MA prior approvals (offices and shops turned into homes without full planning permission) and Section 106 agreements (what a developer must pay for or provide in return for permission). Manual analysis is slow, and by the time it’s done the opportunity has moved.</p>
-<div class="grid g3">
-<div class="card"><h3>Fragmented</h3><p>Every authority publishes differently. No single, consistent view of a city that’s changing everywhere at once.</p></div>
-<div class="card"><h3>Opaque</h3><p>Dense jargon hides what a filing actually means for a high street, a rent roll or a development appraisal.</p></div>
-<div class="card"><h3>Too slow</h3><p>Analysts spend hours on triage instead of decisions, and the signal arrives after prices have already adjusted.</p></div>
-</div></div></section>
-
-<section id="how" style="padding-top:0"><div class="wrap">
-<div class="eyebrow">How it works</div>
-<h2>From filings to a decision.</h2>
-<p class="sub">The product isn’t the data, it’s the interpretation of the data. Terrayne connects planning, housing-pipeline and conversion signals to explain where places are heading, built on the Greater London Authority’s <a href="https://www.london.gov.uk/programmes-strategies/planning/digital-planning/planning-london-datahub" target="_blank" rel="noopener" style="text-decoration:underline">Planning London Datahub</a>, which collects application data from London’s planning authorities.</p>
+<p class="sub">Every borough publishes planning data differently, in dense jargon, and by the time it’s been read the opportunity has moved. Terrayne reads it all for you, using the GLA’s <a href="https://www.london.gov.uk/programmes-strategies/planning/digital-planning/planning-london-datahub" target="_blank" rel="noopener" style="text-decoration:underline">Planning London Datahub</a>.</p>
 <div class="grid g3">
 <div class="card"><div class="num">01</div><h3>Ingest</h3><p>Planning applications from across London are pulled in automatically, filtered for major developments (10+ units) and Class MA conversions.</p></div>
 <div class="card"><div class="num">02</div><h3>Translate</h3><p>AI turns raw filings into plain-English commercial takeaways and scores every submarket on momentum.</p></div>
 <div class="card"><div class="num">03</div><h3>Decide</h3><p>Get a Monday morning brief, a watchlist of the areas you care about, and a postcode check for any site.</p></div>
-</div></div></section>
+</div></section>
+
 
 <section id="index" style="padding-top:0"><div class="wrap">
 <div class="eyebrow">The Development Momentum Index</div>
 <div class="cities" id="cities" role="tablist" aria-label="City"><button data-c="london" aria-selected="true">London</button><button data-c="manchester" aria-selected="false">Manchester <small>experimental</small></button><button disabled title="Coming soon">Birmingham <small>soon</small></button><button disabled title="Coming soon">Paris <small>soon</small></button></div>
 <h2 class="dash-h" style="margin-bottom:18px">One score for how fast a neighbourhood is changing.</h2>
-<p class="sub" style="margin-bottom:34px"><b style="color:#fff;font-weight:600">What is the Momentum Index?</b> A score from 0 to 100 for how much new development is planned in a neighbourhood compared with the rest of London. It combines seven signals from five official sources (the GLA Planning London Datahub, TfL, ORR, ONS and HM Land Registry) into one score: planning applications filed in the last 12 months (how many, how many new homes, office-to-home conversions, new commercial space), how fast local station use is growing (TfL and ORR), population growth (ONS) and resale price momentum (HM Land Registry). A score of 90 means more momentum than about 90% of London. Alongside it, <b style="color:#fff;font-weight:600">price headroom</b> shows how much cheaper an area still is than the rest of London, so you can spot momentum before prices catch up.</p>
+<p class="sub" style="margin-bottom:34px">A score from 0 to 100 for how fast a neighbourhood is changing, built from seven signals across five official sources: planning filings, station use, population and sale prices. A score of 90 means more momentum than about 90% of London. In a back-test, areas scoring 80+ grew their population <b style="color:#5fd6b8;font-weight:600">+5.3%</b> against +1.6% for areas under 40. <a href="methodology.html" style="text-decoration:underline">How it works</a></p>
 <div class="tabs" id="tabs"></div>
 <div class="dash" id="signals">
 <div class="panel mapp"><div class="ph"><div><small class="mono">Spatial intelligence layer</small><h3 id="maph">Greater London: tracked neighbourhoods</h3></div><div class="leg"><span><i style="background:#4f9be8"></i>80+ High</span><span><i style="background:#5fd6b8"></i>70–79 Active</span><span><i style="background:#8c9ab3"></i>&lt;70 Building</span></div></div>
@@ -456,13 +449,6 @@ nav ul a.act{color:#fff;background:linear-gradient(180deg,rgba(159,208,255,.14),
 <div class="panel" id="detail"></div>
 </div>
 <p class="note" id="minote" style="margin-top:18px"></p>
-</div></section>
-
-<section id="method" style="padding-top:0"><div class="wrap">
-<div class="eyebrow">Methodology &amp; evidence</div>
-<h2>How the score works, and what it has predicted.</h2>
-<p class="sub">Seven signals from five official sources, published weights, and a public back-test.</p>
-<div class="panel" style="display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap"><div><small class="mono" style="color:var(--mute);font-size:11px">BACK-TEST · LONDON, JUNE 2021 → MID-2024</small><h3 style="font-size:22px;margin:8px 0 4px;letter-spacing:-.01em">Areas scoring 80+ grew their population <span style="color:#5fd6b8">+5.3%</span>, against <span style="color:#c8d4e8">+1.6%</span> for areas under 40.</h3><p class="note" style="margin:0">Median growth per area, ONS population estimates.</p></div><a class="btn ghost" href="methodology.html">See the full methodology</a></div>
 </div></section>
 
 <section id="classma" style="padding-top:0"><div class="wrap">
@@ -480,7 +466,8 @@ nav ul a.act{color:#fff;background:linear-gradient(180deg,rgba(159,208,255,.14),
 <section id="feed" style="padding-top:0"><div class="wrap">
 <div class="feedhead"><div><div class="eyebrow mono">Automated Datahub translation</div><h2>London planning signal feed</h2><p class="sub">Terrayne pulls raw filings from the GLA’s Planning London Datahub, filters out minor domestic works, and translates commercial schemes into plain-English takeaways. The rows below are real applications.</p></div><div class="pills" id="pills"></div></div>
 <div class="tw"><table><thead><tr class="mono"><th>Borough</th><th>Site / corridor</th><th>Signal type</th><th>Net units / scale</th><th>Status</th><th>Plain-English commercial takeaway</th></tr></thead><tbody id="rows"></tbody></table></div>
-<p class="note" style="margin-top:18px">Real applications from the GLA <a href="https://www.london.gov.uk/programmes-strategies/planning/digital-planning/planning-london-datahub" target="_blank" rel="noopener" style="text-decoration:underline">Planning London Datahub</a>, retrieved 15 November 2026. Statuses may have changed since; search the council’s planning register by reference for the latest.</p>
+<p style="margin:18px 0 0"><a class="btn ghost" href="#pricing">Get the full feed for your boroughs</a></p>
+<p class="note" style="margin-top:14px">Real applications from the GLA <a href="https://www.london.gov.uk/programmes-strategies/planning/digital-planning/planning-london-datahub" target="_blank" rel="noopener" style="text-decoration:underline">Planning London Datahub</a>, retrieved 15 November 2026. Statuses may have changed since; search the council’s planning register by reference for the latest.</p>
 </div></section>
 
 <section id="brief" style="padding-top:0"><div class="wrap bgrid">
@@ -540,16 +527,7 @@ nav ul a.act{color:#fff;background:linear-gradient(180deg,rgba(159,208,255,.14),
 <p class="note" style="margin-top:18px">Founding members: Professional at £49/month, locked in for as long as you stay subscribed. Limited to the first 50 members. Cancel any time.</p>
 </div></section>
 
-<section id="roadmap" class="road" style="padding-top:0"><div class="wrap">
-<div class="eyebrow">Roadmap</div>
-<h2>London first. More cities coming.</h2>
-<p class="sub">Terrayne is being built to become a platform for understanding urban change across major cities.</p>
-<div class="grid g3" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
-<div class="card now"><div class="num">01</div><h3>London</h3><p>The full picture: planning applications from every borough, plus official transport, population and price data.</p><span class="tg2">Live</span></div>
-<div class="card"><div class="num">02</div><h3>Manchester</h3><p>An experimental index for all ten boroughs. Councils there don’t publish planning applications as open data, so it uses brownfield registers and new-build sales instead.</p><span class="tg2">Experimental beta</span></div>
-<div class="card"><div class="num">03</div><h3>Birmingham</h3><p>Regeneration and infrastructure-led growth across the West Midlands.</p><span class="tg2">Coming soon</span></div>
-<div class="card"><div class="num">04</div><h3>Paris</h3><p>Our first international city, built on French open data for building permits, sales and population.</p><span class="tg2">First international city · coming soon</span></div>
-</div></div></section>
+<section id="roadmap" class="road" style="padding-top:0"><div class="wrap"><div class="cityline"><span class="mono">Cities</span><span><b>London</b> live</span><span><b>Manchester</b> experimental</span><span><b>Birmingham</b> soon</span><span><b>Paris</b> soon</span></div></div></section>
 
 <section id="access" style="padding-top:0"><div class="wrap"><div class="final">
 <div class="eyebrow">Get started</div>
@@ -620,8 +598,7 @@ function render(){if(!D.length)return;
  document.getElementById("map").innerHTML=m;
  var P=pts(d),cols=["#4f9be8","#6aa9ec","#86b9f0","#a3c9f4","#5fd6b8","#80e0c8","#a2e9d8"];
  document.getElementById("mapx").innerHTML='<div class="mapx-h">WHAT DRIVES '+d.n.toUpperCase()+'’S '+d.s+'</div><div class="contrib" role="img" aria-label="Points contributed by each signal">'+P.map(function(v,i){return v>0?'<i title="'+L[i]+': '+v.toFixed(1)+' pts" style="width:'+v+'%;background:'+cols[i]+'"></i>':''}).join("")+'</div>'+
-  '<div class="clist">'+P.map(function(v,i){return '<div><span><em style="background:'+cols[i]+'"></em>'+L[i]+'</span><b>'+v.toFixed(1)+'</b></div>'}).join("")+'</div>'+
-  '<div class="mapx-h">RANKING</div><table class="rank">'+D.map(function(a,i){return '<tr class="'+(i==cur?"on":"")+'" onclick="pick('+i+')"><td style="color:var(--mute);width:24px">'+(i+1)+'</td><td>'+a.f+'</td><td class="n">'+a.s+'</td><td class="n" style="width:70px"><span class="chg"'+cs(a.c)+'>'+sg(a.c)+'</span></td></tr>'}).join("")+'</table>';
+  '<div class="clist">'+P.map(function(v,i){return '<div><span><em style="background:'+cols[i]+'"></em>'+L[i]+'</span><b>'+v.toFixed(1)+'</b></div>'}).join("")+'</div>';
  document.getElementById("detail").innerHTML='<div class="dh"><div><small class="mono" style="font-size:11px;color:var(--mute)">'+d.b+'</small><h3>'+d.f+'</h3><span class="chg"'+cs(d.c)+'>'+(d.c==null?'new':sg(d.c)+' pts (30d)')+'</span><span class="units mono">'+d.u+' '+((MI&&MI.unit_label)||'net new homes proposed (12m)')+'</span></div><div class="big"><b>'+d.s+'</b><em>/100</em><div class="mono">'+(d.s>=80?"High activity":d.s>=70?"Active":"Building")+'</div></div></div>'+
  d.x.map(function(v,i){return grp(i)+'<div class="sig"><button class="sigb" aria-expanded="'+(!!OPEN[i])+'" onclick="tog('+i+')"><div class="l"><span>'+L[i]+'</span><span>'+(v==null?'n/a':v+'/100')+'</span></div><div class="t"><i style="width:'+(v||0)+'%;background:'+(i<g2()?'#4f9be8':'#5fd6b8')+'"></i></div></button>'+(OPEN[i]?bd(d,i):'')+'</div>'}).join("")+
  (d.hd!=null?'<div class="sig" style="margin-top:14px"><div class="l"><span>Price headroom <small style="color:var(--mute)">(not in score: cheaper than '+d.hd+'% of London'+(d.off&&d.off.median_price?', median £'+Math.round(d.off.median_price).toLocaleString("en-GB"):'')+')</small></span><span>'+d.hd+'/100</span></div><div class="t"><i style="width:'+d.hd+'%;background:#9aa3b5"></i></div></div>':'')+
@@ -653,7 +630,7 @@ var F=[
 var P=[["all","All Signals"],["ma","Class MA (Office-to-Resi)"],["mr","Major Residential"],["rg","Early signal"]],fc="all";
 function feed(){
 document.getElementById("pills").innerHTML=P.map(function(p){return '<button class="fp'+(p[0]==fc?' on':'')+'" onclick="fsel(\''+p[0]+'\')">'+p[1]+'</button>'}).join("");
-document.getElementById("rows").innerHTML=F.filter(function(r){return fc=="all"||r.t==fc}).map(function(r){return '<tr><td>'+r.b+'</td><td class="sc" data-l="Site">'+r.s+'<br><small class="mono" style="color:var(--mute);font-size:11px">Ref '+r.r+'</small></td><td data-l="Signal type"><span class="tg '+r.t+'">'+r.k+'</span></td><td class="mn" data-l="Scale">'+r.u+'</td><td class="ai mn" data-l="Status">'+r.a+'</td><td class="tk" data-l="Commercial takeaway">'+r.x+'</td></tr>'}).join("");}
+document.getElementById("rows").innerHTML=F.filter(function(r){return fc=="all"||r.t==fc}).slice(0,3).map(function(r){return '<tr><td>'+r.b+'</td><td class="sc" data-l="Site">'+r.s+'<br><small class="mono" style="color:var(--mute);font-size:11px">Ref '+r.r+'</small></td><td data-l="Signal type"><span class="tg '+r.t+'">'+r.k+'</span></td><td class="mn" data-l="Scale">'+r.u+'</td><td class="ai mn" data-l="Status">'+r.a+'</td><td class="tk" data-l="Commercial takeaway">'+r.x+'</td></tr>'}).join("");}
 function fsel(c){fc=c;feed()}
 feed();
 </script>
@@ -780,7 +757,7 @@ var q=new URLSearchParams(location.search).get("pc");if(q){$("ckpc").value=q;run
 var D=null,key="filed_12m",ALLB=false;function nf(v){return v==null?"—":Math.round(v).toLocaleString("en-GB")}
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 function draw(){var B=D.boroughs.slice().sort(function(a,b){if(key==="borough")return a.borough.localeCompare(b.borough);var x=a[key],y=b[key];if(x==null)return 1;if(y==null)return -1;return key==="median_days"?x-y:y-x});
- var shown=ALLB?B:B.slice(0,Math.ceil(B.length/2)),mb=document.getElementById("mamore");
+ var shown=ALLB?B:B.slice(0,8),mb=document.getElementById("mamore");
  if(mb){mb.innerHTML=ALLB?'Show fewer <span class="chev up"></span>':'Show all '+B.length+' boroughs <span class="chev"></span>';mb.setAttribute("aria-expanded",ALLB);mb.onclick=function(){ALLB=!ALLB;draw();if(!ALLB)document.getElementById("mat").scrollIntoView({behavior:"smooth",block:"start"})}}
  tb.innerHTML=shown.map(function(r){return '<tr><td>'+esc(r.borough)+'</td><td class="n">'+nf(r.filed_12m)+'</td><td class="n">'+nf(r.homes_12m)+'</td><td class="n">'+(r.approval_rate==null?'<span style="color:var(--mute)">too few</span>':Math.round(r.approval_rate*100)+'%<span class="rate"><i style="width:'+r.approval_rate*100+'%"></i></span>')+'</td><td class="n">'+(r.median_days==null?'—':r.median_days+' days')+'</td><td class="n">'+nf(r.pending)+'</td></tr>'}).join("");
  document.querySelectorAll("#mat th").forEach(function(th){if(th.dataset.k===key)th.setAttribute("aria-sort","descending");else th.removeAttribute("aria-sort")})}
@@ -788,7 +765,7 @@ document.querySelectorAll("#mat th").forEach(function(th){th.onclick=function(){
 fetch("data/classma.json",{cache:"no-cache"}).then(function(r){return r.json()}).then(function(d){D=d;var L=d.london;
  document.getElementById("makpi").innerHTML='<div><b>'+nf(L.filed_12m)+'</b><span>Class MA filings, last 12 months</span></div><div><b>'+nf(L.homes_12m)+'</b><span>homes proposed</span></div><div><b>'+(L.approval_rate==null?'—':Math.round(L.approval_rate*100)+'%')+'</b><span>approved, of those decided (24m)</span></div><div><b>'+(L.median_days||'—')+' days</b><span>median decision (legal limit: 56)</span></div>';
  draw();
- document.querySelector("#malatest tbody").innerHTML=d.latest.slice(0,6).map(function(r){return '<tr><td>'+esc(r.valid)+'</td><td>'+esc(r.borough)+'</td><td>'+esc(r.site)+'</td><td class="n">'+nf(r.homes)+'</td><td>'+esc(r.status)+'</td><td class="mono" style="font-size:12px">'+esc(r.ref)+'</td></tr>'}).join("");
+ document.querySelector("#malatest tbody").innerHTML=d.latest.slice(0,3).map(function(r){return '<tr><td>'+esc(r.valid)+'</td><td>'+esc(r.borough)+'</td><td>'+esc(r.site)+'</td><td class="n">'+nf(r.homes)+'</td><td>'+esc(r.status)+'</td><td class="mono" style="font-size:12px">'+esc(r.ref)+'</td></tr>'}).join("");
  document.getElementById("manote").innerHTML='Updated '+new Date(d.generated+"T12:00:00Z").toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"})+'. Approval rate counts approved and “prior approval not required” against refused, over 24 months, shown where at least 5 were decided. Some boroughs record Class MA under other application types, so they may appear low. Professional subscribers get new filings in their boroughs every Monday.'}).catch(function(){});
 })();
 </script>
