@@ -42,7 +42,7 @@ Deno.serve(async (req) => {
     case "customer.subscription.created":
     case "customer.subscription.updated":
     case "customer.subscription.deleted":
-      await sync(event.data.object as Stripe.Subscription);
+           await sync(await stripe.subscriptions.retrieve((event.data.object as Stripe.Subscription).id));
       break;
   }
   return new Response(JSON.stringify({ received: true }), { headers: { "Content-Type": "application/json" } });
