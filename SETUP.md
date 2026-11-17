@@ -92,6 +92,8 @@ Sign up at terrayne.co/account.html, then in the Supabase SQL Editor:
 `update public.profiles set is_admin = true where email = 'you@example.com';`
 Check who is admin: `select email from public.profiles where is_admin;`
 Admin panel: terrayne.co/admin.html (revenue, users, plans, payments, access requests, free "comp" plans).
+Shared-login detector: the Users table shows devices and networks per account over 7 days and flags 4+.
+It needs the `admin_session_stats` function at the end of `supabase/schema.sql` (run that part in the SQL Editor).
 
 ## 7. Going live / switching Stripe accounts
 1. Complete Stripe's business verification.

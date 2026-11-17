@@ -81,7 +81,7 @@ Deno.serve(async (req) => {
     return error ? json({ error: error.message }, 500) : json({ ok: true });
   }
 
-  const [users, profilesR, watchR, reqR, snapR, briefR, sendR, billing] = await Promise.all([
+  const [users, profilesR, watchR, reqR, snapR, briefR, sendR, billing, sessR] = await Promise.all([
     allUsers(),
     admin.from("profiles").select("id,email,full_name,company,job_title,plan,status,billing_interval,current_period_end,cancel_at_period_end,team_owner,brief_email,is_admin,created_at"),
     admin.from("watchlist").select("user_id,area"),
@@ -90,9 +90,13 @@ Deno.serve(async (req) => {
     admin.from("briefs").select("week").order("week", { ascending: false }).limit(2000),
     admin.from("brief_sends").select("*").order("created_at", { ascending: false }).limit(12),
     stripeStats().catch((e) => ({ error: (e as Error).message })),
+    admin.rpc("admin_session_stats"),
   ]);
   const profiles = profilesR.data ?? [], watch = watchR.data ?? [];
   const authById = new Map(users.map((u) => [u.id, u]));
+  // Devices and IPs per account over 7 days. Missing if the SQL function has not been created yet.
+  const sess = new Map(((sessR.data ?? []) as { user_id: string; sessions: number; ips: number; devices: number }[]).map((r) => [r.user_id, r]));
+  const SHARE = (r?: { ips: number; devices: number }) => !!r && (r.ips >= 4 || r.devices >= 4);
   const wCount: Record<string, number> = {}, perUser: Record<string, number> = {};
   for (const w of watch) { wCount[w.area] = (wCount[w.area] ?? 0) + 1; perUser[w.user_id] = (perUser[w.user_id] ?? 0) + 1; }
   const now = Date.now();
@@ -131,9 +135,11 @@ Deno.serve(async (req) => {
     data: { latest_snapshot: snapR.data?.[0]?.generated ?? null, brief_weeks: briefWeeks.length, latest_brief_week: briefWeeks[0] ?? null, sends: sendR.data ?? [] },
     billing,
     requests: reqR.data ?? [],
+    sessions_ok: !sessR.error,
     people: profiles.map((p) => ({
       ...p, effective_plan: effective(p), watchlist: perUser[p.id] ?? 0,
       last_sign_in_at: authById.get(p.id)?.last_sign_in_at ?? null, confirmed: !!authById.get(p.id)?.email_confirmed_at,
+      devices_7d: sess.get(p.id)?.devices ?? 0, ips_7d: sess.get(p.id)?.ips ?? 0, sharing: SHARE(sess.get(p.id)),
     })).sort((a, b) => +new Date(b.created_at) - +new Date(a.created_at)),
   });
 });

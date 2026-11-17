@@ -305,3 +305,17 @@ alter table public.profiles add constraint profiles_field_rules check (
 
 -- Belt and braces: the public (anon) role can't read any table directly.
 revoke select on public.access_requests, public.brief_sends from anon, authenticated;
+
+-- Admin panel: devices and IP addresses each account used in the last 7 days (spots shared logins).
+-- Only the server (service_role) can call this.
+create or replace function public.admin_session_stats()
+returns table(user_id uuid, sessions int, ips int, devices int, last_seen timestamptz)
+language sql security definer set search_path = '' as $$
+  select s.user_id, count(*)::int, count(distinct host(s.ip))::int, count(distinct s.user_agent)::int,
+         max(greatest(s.updated_at, s.refreshed_at at time zone 'UTC'))
+  from auth.sessions s
+  where greatest(s.updated_at, s.refreshed_at at time zone 'UTC', s.created_at) > now() - interval '7 days'
+  group by s.user_id
+$$;
+revoke all on function public.admin_session_stats() from public, anon, authenticated;
+grant execute on function public.admin_session_stats() to service_role;
