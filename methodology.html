@@ -552,5 +552,14 @@ var last=null;new MutationObserver(function(){var b=document.querySelector("#det
  (function step(){var t=Date.now();if(!t0)t0=t;var k=Math.min(1,(t-t0)/600),e=1-Math.pow(1-k,3);b.textContent=Math.round(from+(to-from)*e);if(k<1)setTimeout(step,16)})()}).observe(document.getElementById("detail")||document.body,{childList:true,subtree:true});
 })();
 </script>
+<script src="assets/config.js"></script>
+<script>/* Signed in? Swap "Sign in / Start free" for "My account". */
+(function(){try{var k=Object.keys(localStorage).filter(function(x){return /^sb-.+-auth-token$/.test(x)})[0];if(!k)return;
+ var t=JSON.parse(localStorage.getItem(k)||"null");if(!t||!t.user)return;
+ document.querySelectorAll(".nsign").forEach(function(a){a.style.display="none"});
+ document.querySelectorAll(".ncta").forEach(function(a){a.textContent="My account";a.href="account.html"});
+ var m=document.querySelectorAll("#menu li.mcta");if(m[0]){m[0].querySelector("a").textContent="My account"}if(m[1]){m[1].style.display="none"}
+}catch(e){}})();
+</script>
 </body>
 </html>

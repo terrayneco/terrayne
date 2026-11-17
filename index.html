@@ -819,5 +819,14 @@ function set(k){bs.forEach(function(b){b.setAttribute("aria-checked",b.dataset.b
  document.querySelectorAll("#pricing a[data-plan]").forEach(function(a){a.href="account.html?signup&plan="+a.dataset.plan+(k==="y"?"&interval=year":"")})}
 bs.forEach(function(b){b.onclick=function(){set(b.dataset.b)}});})();
 </script>
+<script src="assets/config.js"></script>
+<script>/* Signed in? Swap "Sign in / Start free" for "My account". */
+(function(){try{var k=Object.keys(localStorage).filter(function(x){return /^sb-.+-auth-token$/.test(x)})[0];if(!k)return;
+ var t=JSON.parse(localStorage.getItem(k)||"null");if(!t||!t.user)return;
+ document.querySelectorAll(".nsign").forEach(function(a){a.style.display="none"});
+ document.querySelectorAll(".ncta").forEach(function(a){a.textContent="My account";a.href="account.html"});
+ var m=document.querySelectorAll("#menu li.mcta");if(m[0]){m[0].querySelector("a").textContent="My account"}if(m[1]){m[1].style.display="none"}
+}catch(e){}})();
+</script>
 </body>
 </html>

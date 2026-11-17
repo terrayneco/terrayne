@@ -21,6 +21,8 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 .top .in{max-width:1180px;margin:0 auto;padding:0 24px;height:68px;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .top img{height:40px;display:block}
 .who{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--mute)}
+.tr{display:flex;align-items:center;gap:20px}.back{font-size:13px;color:var(--mute);text-decoration:none;white-space:nowrap}.back:hover{color:#fff}
+@media(max-width:600px){.who span{display:none}.tr{gap:12px}}
 .wrap{max-width:1180px;margin:0 auto;padding:40px 24px 80px}
 h1{font-size:clamp(28px,4vw,40px);letter-spacing:-.02em;margin:0 0 8px;line-height:1.1}
 h2{font-size:22px;margin:0 0 6px;letter-spacing:-.01em}
@@ -94,7 +96,7 @@ svg.spark{display:block}
 </style>
 </head>
 <body>
-<div class="top"><div class="in"><a href="./"><img src="assets/logo-white.svg" alt="Terrayne"></a><div class="who" id="who"></div></div></div>
+<div class="top"><div class="in"><a href="./"><img src="assets/logo-white.svg" alt="Terrayne"></a><div class="tr"><a class="back" href="./">&larr; Back to website</a><div class="who" id="who"></div></div></div></div>
 <main class="wrap">
 
 <section id="v-off" class="auth hide">
