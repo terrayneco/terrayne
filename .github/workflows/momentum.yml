@@ -1,0 +1,54 @@
+name: Weekly Momentum Index and Monday brief
+
+on:
+  schedule:
+    - cron: "15 5 * * 1"   # every Monday 05:15 UTC: rebuild the index and email the brief
+  workflow_dispatch:
+    inputs:
+      send:
+        description: "Email the Monday brief to paying users"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: momentum
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build index, store briefs (and email on Mondays)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ] || [ "${{ inputs.send }}" = "true" ]; then
+            python3 scripts/publish.py --send
+          else
+            python3 scripts/publish.py
+          fi
+
+      - name: Publish the free top-6 data to the website
+        run: |
+          git config user.name "terrayne-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/
+          if git diff --cached --quiet; then
+            echo "No data changes."
+          else
+            git commit -m "Weekly Momentum Index update"
+            git pull --rebase origin main
+            git push origin main
+          fi
