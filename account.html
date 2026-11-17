@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://api.postcodes.io https://*.supabase.co wss://*.supabase.co; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://api.postcodes.io https://*.supabase.co wss://*.supabase.co; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <script>if(window.top!==window.self){try{window.top.location=window.self.location}catch(e){document.documentElement.style.display="none"}}</script>
 <title>Your account · Terrayne</title>
@@ -113,7 +113,8 @@ svg.spark{display:block}
 <form id="a-form">
 <div class="field hide" id="f-name"><label for="a-name">Full name</label><input id="a-name" autocomplete="name"></div>
 <div class="field" id="f-email"><label for="a-email">Email</label><input id="a-email" type="email" autocomplete="email" required></div>
-<div class="field" id="f-pass"><label for="a-pass">Password</label><input id="a-pass" type="password" autocomplete="current-password" minlength="8"></div>
+<div class="field" id="f-pass"><label for="a-pass">Password</label><input id="a-pass" type="password" autocomplete="current-password"></div>
+<div id="a-cap" class="hide" style="margin:4px 0 14px;min-height:65px"></div>
 <button class="btn" style="width:100%" id="a-go" type="submit">Sign in</button>
 </form>
 <p class="note" style="margin:14px 0 0;text-align:center"><a href="#" id="a-magic">Email me a sign-in link</a> · <a href="#" id="a-forgot">Forgot password?</a></p>
@@ -124,7 +125,7 @@ svg.spark{display:block}
 <section id="v-reset" class="auth hide">
 <div class="eyebrow">Reset password</div><h1>Choose a new password</h1>
 <div class="card"><div class="msg" id="r-msg"></div>
-<form id="r-form"><div class="field"><label for="r-pass">New password</label><input id="r-pass" type="password" minlength="8" autocomplete="new-password" required></div><button class="btn" style="width:100%">Save password</button></form></div>
+<form id="r-form"><div class="field"><label for="r-pass">New password</label><input id="r-pass" type="password" minlength="10" autocomplete="new-password" required></div><button class="btn" style="width:100%">Save password</button></form></div>
 </section>
 
 <section id="v-app" class="hide">
@@ -172,7 +173,7 @@ svg.spark{display:block}
 <button class="btn">Save</button></form>
 <div class="grid" style="align-content:start">
 <form class="card" id="em-form"><h3>Email address</h3><div class="msg" id="em-msg"></div><div class="field"><label for="em-email">Email</label><input id="em-email" type="email" required></div><button class="btn ghost">Change email</button><p class="note" style="margin:10px 0 0">We’ll send a confirmation link to the new address.</p></form>
-<form class="card" id="pw-form"><h3>Password</h3><div class="msg" id="pw-msg"></div><div class="field"><label for="pw-pass">New password</label><input id="pw-pass" type="password" minlength="8" autocomplete="new-password" required></div><button class="btn ghost">Change password</button></form>
+<form class="card" id="pw-form"><h3>Password</h3><div class="msg" id="pw-msg"></div><div class="field"><label for="pw-pass">New password</label><input id="pw-pass" type="password" minlength="10" autocomplete="new-password" required></div><button class="btn ghost">Change password</button></form>
 <form class="card hide" id="ent-form"><h3>Enterprise: branding and Slack</h3><div class="msg" id="ent-msg"></div>
 <div class="field"><label for="ent-brand">Brand name on reports and memos</label><input id="ent-brand" maxlength="80"></div>
 <div class="field"><label for="ent-logo">Logo URL (https, PNG or SVG)</label><input id="ent-logo" type="url" maxlength="300" placeholder="https://…"></div>
@@ -213,6 +214,13 @@ function sg(c){return (c>0?"+":c<0?"−":"")+Math.abs(c)}
 function chg(c){return '<span class="chg'+(c<0?" dn":c==0?" eq":"")+'">'+sg(c)+' pts</span>'}
 if(!C.supabaseUrl||!C.supabaseAnonKey||!window.supabase){show("v-off");return}
 var sb=window.supabase.createClient(C.supabaseUrl,C.supabaseAnonKey);
+/* CAPTCHA: Cloudflare Turnstile, switched on by turnstileSiteKey in assets/config.js */
+var CAP=null,capId=null;
+function capOpt(){return CAP?{captchaToken:CAP}:{}}
+function capReset(){if(capId!==null&&window.turnstile){window.turnstile.reset(capId)}CAP=null}
+function capNeed(){if(C.turnstileSiteKey&&!CAP){msg("a-msg","Please complete the security check above the button.");return true}return false}
+if(C.turnstileSiteKey){$("a-cap").classList.remove("hide");var ts=document.createElement("script");ts.src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";ts.async=true;
+ ts.onload=function(){capId=window.turnstile.render("#a-cap",{sitekey:C.turnstileSiteKey,theme:"dark",callback:function(t){CAP=t},"expired-callback":function(){CAP=null},"error-callback":function(){CAP=null}})};document.head.appendChild(ts)}
 var S={user:null,profile:null,plan:"free",watch:[],snaps:null,pub:null,briefs:null,interval:"month"};
 
 /* ---------- auth ---------- */
@@ -223,16 +231,17 @@ function setMode(m){mode=m;[].forEach.call($("a-seg").children,function(b){b.cla
 $("a-seg").onclick=function(e){if(e.target.dataset.m)setMode(e.target.dataset.m)};
 if(/[?&]signup/.test(location.search))setMode("up");
 $("a-form").onsubmit=async function(e){e.preventDefault();var em=$("a-email").value.trim(),pw=$("a-pass").value,r;
- if(pw.length<8){msg("a-msg","Use a password of at least 8 characters.");return}
+ if(mode==="up"&&pw.length<10){msg("a-msg","Use a password of at least 10 characters.");return}
+ if(capNeed())return;
  $("a-go").disabled=true;
- if(mode==="up"){r=await sb.auth.signUp({email:em,password:pw,options:{data:{full_name:$("a-name").value.trim()},emailRedirectTo:location.origin+location.pathname}});
+ if(mode==="up"){r=await sb.auth.signUp({email:em,password:pw,options:Object.assign({data:{full_name:$("a-name").value.trim()},emailRedirectTo:location.origin+location.pathname},capOpt())});
   if(!r.error&&!r.data.session)msg("a-msg","Check your inbox to confirm your email, then sign in.",true)}
- else r=await sb.auth.signInWithPassword({email:em,password:pw});
- $("a-go").disabled=false;if(r.error)msg("a-msg",r.error.message)};
-$("a-magic").onclick=async function(e){e.preventDefault();var em=$("a-email").value.trim();if(!em){msg("a-msg","Enter your email first.");return}
- var r=await sb.auth.signInWithOtp({email:em,options:{emailRedirectTo:location.origin+location.pathname}});msg("a-msg",r.error?r.error.message:"Sign-in link sent. Check your inbox.",!r.error)};
-$("a-forgot").onclick=async function(e){e.preventDefault();var em=$("a-email").value.trim();if(!em){msg("a-msg","Enter your email first.");return}
- var r=await sb.auth.resetPasswordForEmail(em,{redirectTo:location.origin+location.pathname});msg("a-msg",r.error?r.error.message:"Password reset link sent.",!r.error)};
+ else r=await sb.auth.signInWithPassword({email:em,password:pw,options:capOpt()});
+ capReset();$("a-go").disabled=false;if(r.error)msg("a-msg",r.error.message)};
+$("a-magic").onclick=async function(e){e.preventDefault();var em=$("a-email").value.trim();if(!em){msg("a-msg","Enter your email first.");return}if(capNeed())return;
+ var r=await sb.auth.signInWithOtp({email:em,options:Object.assign({emailRedirectTo:location.origin+location.pathname},capOpt())});capReset();msg("a-msg",r.error?r.error.message:"Sign-in link sent. Check your inbox.",!r.error)};
+$("a-forgot").onclick=async function(e){e.preventDefault();var em=$("a-email").value.trim();if(!em){msg("a-msg","Enter your email first.");return}if(capNeed())return;
+ var r=await sb.auth.resetPasswordForEmail(em,Object.assign({redirectTo:location.origin+location.pathname},capOpt()));capReset();msg("a-msg",r.error?r.error.message:"Password reset link sent.",!r.error)};
 $("r-form").onsubmit=async function(e){e.preventDefault();var r=await sb.auth.updateUser({password:$("r-pass").value});
  if(r.error)msg("r-msg",r.error.message);else{msg("r-msg","Password saved.",true);setTimeout(function(){boot()},800)}};
 async function signOut(){await sb.auth.signOut();location.hash="";show("v-auth")}

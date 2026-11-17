@@ -1,74 +1,125 @@
-# Turning on accounts and subscriptions
+# Terrayne: accounts, payments and emails
 
-Everything is built. These steps connect it to your own Supabase, Stripe and Resend accounts.
-Do them in order. Stripe **test mode** is fine to start; switch to live keys when ready.
+How the live site is connected to Supabase, Stripe and Resend, and how to set it up again from scratch.
+Status (November 2026): all of this is done and live. Use this file to rebuild, move projects or hand over.
+
+Never paste a secret key (Supabase service_role, Stripe `sk_`/`rk_`, `whsec_`, Resend `re_`, Turnstile secret)
+into the website, a chat or a commit. They live only in Supabase secrets and GitHub Actions secrets.
+Price IDs, the Supabase URL, the publishable key and the Turnstile site key are not secret.
 
 ## 1. Supabase (logins and data)
-1. supabase.com → New project → name `terrayne`, region London (eu-west-2).
-2. SQL Editor → New query → paste all of `supabase/schema.sql` → Run.
-3. Authentication → URL Configuration:
-   - Site URL: `https://terrayne.co/account.html`
-   - Redirect URLs: add `https://terrayne.co/account.html`
-4. Project Settings → API: copy **Project URL** and **anon public** key into `assets/config.js`.
-5. Keep the **service_role** key secret (never put it in the website).
+1. supabase.com → New project → name `terrayne`, region **London (eu-west-2)**. Tick "Enable automatic RLS".
+2. SQL Editor → New query → paste all of `supabase/schema.sql` → Run (accept the "destructive operations" warning on a new project).
+3. Authentication → URL Configuration: Site URL `https://terrayne.co/account.html`; add the same address as the only Redirect URL.
+4. Project Settings → API Keys: copy the **Project URL** (just `https://<ref>.supabase.co`, nothing after `.co`)
+   and the **Publishable key** (`sb_publishable_…`) into the values (not the comments) of `assets/config.js`.
+5. **Emails (required, or nobody outside your Supabase team can sign up):** Authentication → Emails → Set up SMTP →
+   Resend (or SMTP Settings: host `smtp.resend.com`, port `465`, user `resend`, password = a Resend sending key),
+   sender `noreply@terrayne.co`, name `Terrayne`. Then Authentication → Rate Limits → emails per hour `100`.
+6. Authentication → Sign In / Providers → Email: keep "Confirm email" on; minimum password length **10**.
 
 ## 2. Stripe (payments)
-1. Products → add **Terrayne Investor** with two prices: £19/month and £190/year.
-1. Add **Terrayne Professional** with two prices: £79/month and £790/year.
-2. Add **Terrayne Enterprise** with two prices: £399/month and £3,990/year.
-3. Add **Postcode Report** as a one-off price of £12 (not recurring).
-4. Copy the seven price IDs (`price_...`).
-   Founding offer: Products → Coupons → £30 off, duration **forever**, limited to **50 redemptions**, applies to Professional monthly only; add a promotion code (e.g. `FOUNDING`). Checkout already accepts promotion codes, so founding members pay £49/month for as long as they stay subscribed.
-4. Settings → Billing → Customer portal: enable "Customers can switch plans" (add all three products and all six prices), "Cancel subscriptions" (at end of billing period), "Update payment methods" and "Invoice history". Save.
-5. Developers → Webhooks → Add endpoint:
-   `https://<project-ref>.supabase.co/functions/v1/stripe-webhook`
-   Events: `checkout.session.completed`, `customer.subscription.created`, `customer.subscription.updated`, `customer.subscription.deleted`. Copy the signing secret (`whsec_...`).
+Build everything in the **sandbox** first, test it, then repeat in **live** mode.
+1. Product catalogue → add products (currency **GBP**):
+   - Terrayne Investor: £19/month and £190/year
+   - Terrayne Professional: £79/month and £790/year
+   - Terrayne Enterprise: £399/month and £3,990/year
+   - Postcode Report: £12 one-off
+   Live mode: use "Copy to live mode" on each product. Live price IDs are different from sandbox ones.
+2. Copy the seven price IDs (`price_…`). Open a product → ⋯ next to a price → Copy price ID.
+3. Coupons → Founding member: £30 off, applies to Terrayne Professional, duration **forever**, max **50** redemptions,
+   promotion code `FOUNDING`, "first-time orders only". (Stripe can't limit a coupon to one price, so it also works on
+   Professional yearly.) Coupons are not copied to live; recreate them.
+4. Customer portal: payment methods on; invoices on; cancellations on, **at end of billing period**, survey on,
+   no retention coupon; customer email not editable; tax ID editable; upgrades and downgrades on with all three
+   subscription products (both prices each), promotion codes **off**, increases apply immediately, decreases and
+   shorter billing periods apply at the end of the period, prorate and invoice immediately.
+5. Settings → Billing → Subscriptions and emails: renewal, expiring-card and failed-payment emails on; link to a
+   Stripe-hosted page; include a link to the customer portal. Payments needing confirmation: send the
+   Stripe-hosted confirmation link.
+6. Webhooks → Add destination → Your account, **Snapshot**, events `checkout.session.completed`,
+   `customer.subscription.created`, `customer.subscription.updated`, `customer.subscription.deleted` →
+   Webhook endpoint `https://<ref>.supabase.co/functions/v1/stripe-webhook`. Copy the signing secret (`whsec_…`).
+7. API keys → Create restricted key → "Building your own integration" → Custom permissions:
+   Checkout Sessions, Customers, Customer portal, Subscriptions: **Write**; Invoices, Products, Prices: **Read**;
+   everything else None. Copy the key (`rk_…`).
+8. Statement descriptor `TERRAYNE.CO`, shortened `TERRAYNE`. Stripe Tax, invoicing and Managed Payments: off
+   (revisit with an accountant before VAT registration).
 
-## 3. Resend (Monday emails)
-1. resend.com → Domains → add `terrayne.co` and add the DNS records it shows at your domain registrar.
-2. API Keys → create one.
+## 3. Resend (all email)
+1. resend.com → Domains → add `terrayne.co`, region EU (Ireland). Add the DNS records it shows at the registrar
+   (Wix → Domains → ⋯ → Manage DNS records): TXT `resend._domainkey`, CNAME `send`, CNAME `rsend`,
+   TXT `_dmarc` = `v=DMARC1; p=none;`. Use Resend's copy buttons; host names without `.terrayne.co`.
+2. API Keys → one key for the server functions (`RESEND_API_KEY`) and, if not using the Supabase integration,
+   one for Supabase SMTP. Sending access only.
+3. Free plan: 100 emails a day, 3,000 a month, shared between sign-up emails and Monday briefs.
 
-## 4. Deploy the server functions
-Install the Supabase CLI (`brew install supabase/tap/supabase`), then from this folder:
+## 4. Server functions
+Secrets: Supabase → Edge Functions → Secrets (easier than the command line, and keys stay out of shell history):
+`PRICE_INV_MONTH`, `PRICE_INV_YEAR`, `PRICE_PRO_MONTH`, `PRICE_PRO_YEAR`, `PRICE_ENT_MONTH`, `PRICE_ENT_YEAR`,
+`PRICE_REPORT`, `STRIPE_SECRET_KEY` (the `rk_` key), `STRIPE_WEBHOOK_SECRET`, `RESEND_API_KEY`,
+`CRON_SECRET` (any long random string; keep a copy for GitHub), `SITE_URL` = `https://terrayne.co`,
+`BRIEF_FROM` = `Terrayne <briefings@terrayne.co>`. `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are built in.
+
+Deploy (Mac Terminal, once: `brew install supabase/tap/supabase`):
 ```
+cd ~ && git clone https://github.com/terrayneco/terrayne.git terrayne-deploy && cd terrayne-deploy
 supabase login
-supabase link --project-ref <project-ref>
-supabase secrets set STRIPE_SECRET_KEY=sk_... STRIPE_WEBHOOK_SECRET=whsec_... \
-  PRICE_REPORT=price_... PRICE_INV_MONTH=price_... PRICE_INV_YEAR=price_... PRICE_PRO_MONTH=price_... PRICE_PRO_YEAR=price_... PRICE_ENT_MONTH=price_... PRICE_ENT_YEAR=price_... \
-  RESEND_API_KEY=re_... CRON_SECRET=<any long random string> SITE_URL=https://terrayne.co \
-  BRIEF_FROM="Terrayne <briefings@terrayne.co>"
-supabase functions deploy create-checkout
-supabase functions deploy customer-portal
-supabase functions deploy delete-account
-supabase functions deploy admin-stats
-supabase functions deploy slack-test
-supabase functions deploy create-report-checkout --no-verify-jwt
-supabase functions deploy verify-report --no-verify-jwt
-supabase functions deploy stripe-webhook --no-verify-jwt
-supabase functions deploy send-briefs --no-verify-jwt
+supabase link --project-ref <ref>
+supabase functions deploy create-checkout && \
+supabase functions deploy customer-portal && \
+supabase functions deploy delete-account && \
+supabase functions deploy admin-stats && \
+supabase functions deploy slack-test && \
+supabase functions deploy create-report-checkout --no-verify-jwt && \
+supabase functions deploy verify-report --no-verify-jwt && \
+supabase functions deploy stripe-webhook --no-verify-jwt && \
+supabase functions deploy send-briefs --no-verify-jwt && echo "ALL DEPLOYED"
 ```
+Answer Yes to each prompt. "Docker is not running" can be ignored. To redeploy one function after a code change:
+`cd ~/terrayne-deploy && git pull && supabase functions deploy <name>` (add `--no-verify-jwt` for the ones above).
 
-## 5. Weekly job (GitHub)
-Repo → Settings → Secrets and variables → Actions → add:
-`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `CRON_SECRET` (same value as above).
-Then Actions → "Weekly Momentum Index and Monday brief" → Run workflow (leave "send" off) to fill the first week of briefs and history.
+## 5. Weekly job (GitHub Actions)
+`.github/workflows/momentum.yml` runs every Monday 05:15 UTC: rebuilds the index, stores briefs in Supabase,
+emails paying users and publishes the free top 10 to `data/`.
+Repo → Settings → Secrets and variables → Actions: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`
+(Supabase → API Keys → Legacy → service_role), `CRON_SECRET` (same value as in Supabase).
+Run it by hand: Actions → "Weekly Momentum Index and Monday brief" → Run workflow (tick "Email" to send briefs).
+A healthy run ends with `stored snapshot and 18 briefs for <date>`.
 
-## 6. Make yourself an admin
-1. Create your own account at terrayne.co/account.html.
-2. Supabase → SQL Editor → run: `update public.profiles set is_admin = true where email = 'YOUR EMAIL';`
-3. Open terrayne.co/admin.html for users, revenue (MRR, ARR, churn), signups, plan mix, payments, access requests, and to give pilots free (“comp”) plans.
+## 6. Admins
+Sign up at terrayne.co/account.html, then in the Supabase SQL Editor:
+`update public.profiles set is_admin = true where email = 'you@example.com';`
+Check who is admin: `select email from public.profiles where is_admin;`
+Admin panel: terrayne.co/admin.html (revenue, users, plans, payments, access requests, free "comp" plans).
 
-## 7. Test
-1. terrayne.co/account.html → create an account → confirm the email.
-2. Subscription → Upgrade to Professional → pay with test card `4242 4242 4242 4242`, any future date, any CVC.
-3. Check: plan shows Professional, watchlist works, briefs and history appear, "Manage subscription" opens Stripe, cancelling shows "Cancels on …".
-4. Run the workflow with "send" on to receive a test brief.
+## 7. Going live / switching Stripe accounts
+1. Complete Stripe's business verification.
+2. Repeat section 2 in live mode (products copied; coupon, portal, emails, webhook and restricted key recreated).
+3. Replace the 7 `PRICE_…` secrets, `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET` in Supabase.
+4. Unlink any test accounts from old Stripe customers:
+   `update public.profiles set plan='free', status='none', billing_interval=null, current_period_end=null,
+   cancel_at_period_end=false, stripe_customer_id=null, stripe_subscription_id=null where email='you@example.com';`
+5. Test for free with a one-use 100%-off coupon on Investor, then cancel that subscription immediately in Stripe
+   and delete the coupon.
 
-## 8. Security checklist (do these once)
-- **Two-factor login** on every account that controls the site: GitHub, Stripe, Supabase, Resend and your domain registrar. These are the real keys to the business.
-- **Supabase → Authentication → Settings:** keep "Confirm email" on, set minimum password length to 10, turn on "Leaked password protection", and turn on CAPTCHA (Cloudflare Turnstile is free) for sign-up and sign-in.
-- **Supabase → Authentication → URL configuration:** only `https://terrayne.co/account.html` as a redirect URL.
-- **Stripe:** use a *restricted* secret key for `STRIPE_SECRET_KEY` (Checkout Sessions, Customers, Subscriptions, Billing Portal, Invoices: write; everything else: none).
-- **Never** paste the Supabase service_role key, Stripe secret key, webhook secret or Resend key into the website, a chat, or a commit. They live only in Supabase/GitHub secrets.
-- Keep the number of admins small (`is_admin`), and remove ex-team members from the Enterprise team page.
-- If a key ever leaks: rotate it in that service, then update the secret in Supabase/GitHub.
+## 8. Test checklist
+- Sign up with an email that is not on the Supabase team → confirmation arrives from Terrayne.
+- Upgrade → plan shows in the account within seconds → "Manage subscription" opens the portal →
+  cancelling shows "Cancels on …". If the plan doesn't change: Stripe → Webhooks → Event deliveries.
+- Profile → Delete account (never on the admin account).
+- Admin panel loads with live numbers.
+
+## 9. Security
+- Two-factor login on GitHub, Stripe, Supabase, Resend, Wix and the Gmail behind the admin account.
+- CAPTCHA (optional, stops bot sign-ups): Cloudflare Turnstile → add widget for `terrayne.co` (Managed) →
+  put the **site key** in `assets/config.js` as `turnstileSiteKey: "…"` and push → then Supabase →
+  Authentication → Attack Protection → enable CAPTCHA, provider Turnstile, paste the **secret key**.
+  Do it in that order: turning it on in Supabase first blocks every sign-in until the site sends tokens.
+- Keep admins to a minimum. If a key leaks, rotate it in that service and update the secret.
+
+## Notes
+- The homepage master copy is `terrayne.html` in iCloud (see CLAUDE.md). After any change made to `index.html`
+  on GitHub, copy it back:
+  `curl -s https://raw.githubusercontent.com/terrayneco/terrayne/main/index.html -o "$HOME/Library/Mobile Documents/com~apple~CloudDocs/TYE/website/terrayne.html"`
+- The webhook re-reads each subscription from Stripe, so event order and Stripe API versions don't matter.
