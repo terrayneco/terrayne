@@ -363,12 +363,16 @@ footer .ig{display:inline-flex;align-items:center;gap:8px}
 .oneoff{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:18px;padding:16px 22px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.02)}
 .oneoff p{margin:0;color:#c8d4e8}.oneoff b{color:#fff}.oneoff .btn{width:auto!important;margin:0!important}
 /* postcode check distance */
-.ckrad{display:inline-flex;gap:4px;padding:4px;border:1px solid rgba(255,255,255,.14);border-radius:14px;background:rgba(255,255,255,.04)}
-.ckrad button{background:none;border:0;color:#c8d4e8;font:inherit;font-size:14px;padding:10px 14px;border-radius:10px;cursor:pointer;white-space:nowrap;transition:background .2s,color .2s}
-.ckrad button small{font-size:11px;color:var(--mute);margin-left:4px}
+.ckrad{position:relative;display:inline-flex;align-items:stretch;padding:4px;border-radius:99px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.09);box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 12px 30px -16px rgba(0,0,0,.8)}
+.ckind{position:absolute;top:4px;bottom:4px;left:0;width:0;border-radius:99px;background:linear-gradient(180deg,rgba(159,208,255,.17),rgba(159,208,255,.05));box-shadow:inset 0 0 0 1px rgba(159,208,255,.3),0 0 24px -6px rgba(159,208,255,.45);transition:transform .45s cubic-bezier(.22,.8,.2,1),width .45s cubic-bezier(.22,.8,.2,1);pointer-events:none}
+.ckrad button{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;min-width:92px;padding:6px 20px;border:0;border-radius:99px;background:none;cursor:pointer;font:inherit;color:rgba(200,212,232,.58);transition:color .3s}
+.ckrad button b{font-size:14.5px;font-weight:500;letter-spacing:.01em;color:inherit}
+.ckrad button small{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(200,212,232,.38);transition:color .3s}
 .ckrad button:hover{color:#fff}
-.ckrad button[aria-checked="true"]{background:#fff;color:#0a1223}.ckrad button[aria-checked="true"] small{color:#4a5670}
-@media(max-width:600px){.ckrad{width:100%}.ckrad button{flex:1;padding:10px 8px}.ckrad button small{display:none}}
+.ckrad button[aria-checked="true"]{color:#fff}
+.ckrad button[aria-checked="true"] small{color:#9fd0ff}
+.ckrad button:focus-visible{outline:1px solid rgba(159,208,255,.6);outline-offset:-3px}
+@media(max-width:600px){.ckrad{width:100%}.ckrad button{flex:1;min-width:0;padding:6px 6px}}
 /* premium nav */
 .nsign{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,212,232,.72);white-space:nowrap}.nsign:hover{color:#fff}@media(max-width:1000px){.nsign{display:none}}
 nav{background:linear-gradient(180deg,rgba(8,16,32,.82),rgba(6,13,26,.66));border-bottom:0}
@@ -437,7 +441,7 @@ nav.open #menu>li.mcta+li.mcta a{margin:6px 0 4px;justify-content:center;border:
 <div class="eyebrow">Postcode check · free</div>
 <h2>Is this street about to change?</h2>
 <p class="sub">Enter any London postcode (Greater Manchester works too, in experimental beta). See its Momentum score and every significant scheme planned nearby: new homes, office-to-home conversions and commercial space, with council references so you can check the details.</p>
-<form class="ckf" id="ckf"><input id="ckpc" placeholder="e.g. SE1 7PB" autocomplete="postal-code" aria-label="London postcode" maxlength="9"><input type="hidden" id="ckr" value="0.8"><div class="ckrad" role="radiogroup" aria-label="Distance"><button type="button" role="radio" data-r="0.4" aria-checked="false">400 m</button><button type="button" role="radio" data-r="0.8" aria-checked="true">800 m <small>10-min walk</small></button><button type="button" role="radio" data-r="1.6" aria-checked="false">1.6 km</button></div><button class="btn" type="submit">Check</button></form>
+<form class="ckf" id="ckf"><input id="ckpc" placeholder="e.g. SE1 7PB" autocomplete="postal-code" aria-label="London postcode" maxlength="9"><input type="hidden" id="ckr" value="0.8"><div class="ckrad" role="radiogroup" aria-label="Walking distance"><span class="ckind" aria-hidden="true"></span><button type="button" role="radio" data-r="0.4" aria-checked="false"><b>5 min</b><small>400 m</small></button><button type="button" role="radio" data-r="0.8" aria-checked="true"><b>10 min</b><small>800 m</small></button><button type="button" role="radio" data-r="1.6" aria-checked="false"><b>20 min</b><small>1.6 km</small></button></div><button class="btn" type="submit">Check</button></form>
 <div class="ckex">Try: <button type="button" data-pc="SE16 7LL">Canada Water</button><button type="button" data-pc="IG1 1NY">Ilford</button><button type="button" data-pc="SE1 5BA">Old Kent Road</button><button type="button" data-pc="E15 1BX">Stratford</button><button type="button" data-pc="CR0 1LF">Croydon</button></div>
 <p class="ckmsg" id="ckmsg" role="status"></p><p class="note" id="ckleft" style="margin:4px 0 0"></p>
 <div id="ckout"></div>
@@ -762,8 +766,10 @@ async function run(pc,demo){var R=parseFloat($("ckr").value),msg=$("ckmsg"),out=
   try{history.replaceState(null,"","?pc="+encodeURIComponent(pc)+"#check")}catch(e){}
  }catch(e){msg.textContent="Something went wrong. Please try again."}}
 F.onsubmit=function(e){e.preventDefault();run($("ckpc").value)};
-document.querySelectorAll(".ckrad button").forEach(function(b){b.onclick=function(){document.querySelectorAll(".ckrad button").forEach(function(x){x.setAttribute("aria-checked",x===b)});$("ckr").value=b.dataset.r;
+document.querySelectorAll(".ckrad button").forEach(function(b){b.onclick=function(){document.querySelectorAll(".ckrad button").forEach(function(x){x.setAttribute("aria-checked",x===b)});$("ckr").value=b.dataset.r;ckInd();
  if($("ckout").innerHTML&&$("ckpc").value.trim())run($("ckpc").value,true)}});
+function ckInd(){var c=document.querySelector('.ckrad button[aria-checked="true"]'),i=document.querySelector(".ckind");if(!c||!i)return;i.style.width=c.offsetWidth+"px";i.style.transform="translateX("+c.offsetLeft+"px)"}
+ckInd();addEventListener("resize",ckInd);addEventListener("load",ckInd);if(document.fonts)document.fonts.ready.then(ckInd);
 document.querySelectorAll(".ckex button").forEach(function(b){b.onclick=function(){$("ckpc").value=b.dataset.pc;run(b.dataset.pc,true)}});
 paid().then(note);
 var q=new URLSearchParams(location.search).get("pc");if(q){$("ckpc").value=q;run(q)}
