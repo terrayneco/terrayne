@@ -4,6 +4,7 @@
   data/tiles.json        Momentum score for every ~3 km map tile in London
   data/pts/<x>_<y>.json  significant planning applications (last 24 months) per zoom-13 tile
   data/classma.json      Class MA (office/shop-to-home) league table by borough + latest filings
+  data/feed.json         latest significant filings with plain-English summaries (planning feed, sample brief)
 """
 import json, re, statistics, datetime as dt, pathlib, shutil
 import momentum as M
@@ -180,6 +181,39 @@ def build_classma(today):
                         "ref": s.get("lpa_app_no")} for s in latest]}
 
 
+
+def summary(r):
+    """One plain-English line built only from the filing's own figures (no guesswork)."""
+    u, com, kind, status = r[2] or 0, r[3] or 0, r[4], r[5]
+    done = status in ("Approved", "Started", "Completed")
+    if kind == "ma" and not u:
+        return ("Approved: offices or shops to become homes (number not stated)." if done
+                else "Offices or shops proposed for conversion to homes (number not stated).")
+    if kind == "ma":
+        return (f"Approved: offices or shops to become {u:,} home{'s' if u != 1 else ''}." if done
+                else f"Offices or shops proposed for conversion to {u:,} home{'s' if u != 1 else ''}.")
+    parts = []
+    if u: parts.append(f"{u:,} new home{'s' if u != 1 else ''}")
+    if com >= 100: parts.append(f"{com:,} m² of commercial space")
+    what = " and ".join(parts) or "a major scheme"
+    return f"Approved: {what}." if done else f"{what[0].upper() + what[1:]} proposed."
+
+
+def build_feed(today, datadir, days=60, limit=30):
+    """Latest significant filings across London, for the planning feed and the sample brief."""
+    rows = []
+    for f in (datadir / "pts").glob("*.json"):
+        rows += json.loads(f.read_text())
+    since = (today - dt.timedelta(days=days)).isoformat()
+    keep = [r for r in rows if (r[4] == "major" or (r[4] == "ma" and (r[2] or 0) >= 5))
+            and r[6] and r[6] >= since and r[5] not in ("Refused", "Withdrawn")]  # schemes that matter: majors and conversions of 5+ homes
+    keep.sort(key=lambda r: (r[6], r[2] or 0), reverse=True)
+    out = [{"borough": r[8], "site": r[9], "ref": r[7], "kind": r[4], "homes": r[2], "commercial_m2": r[3],
+            "status": r[5], "valid": r[6], "summary": summary(r), "description": r[10]} for r in keep[:limit]]
+    feed = {"generated": today.isoformat(), "window_days": days, "source": "GLA Planning London Datahub", "rows": out}
+    (datadir / "feed.json").write_text(json.dumps(feed, ensure_ascii=False, indent=1))
+    return len(out)
+
 def write_all(full, today=None):
     today = today or dt.date.today()
     data = ROOT / "data"
@@ -190,4 +224,5 @@ def write_all(full, today=None):
     n, files = build_points(today, data / "pts")
     cm = build_classma(today)
     (data / "classma.json").write_text(json.dumps(cm, ensure_ascii=False, indent=1))
-    return {"tiles": len(ts["tiles"]), "applications": n, "files": files, "classma_boroughs": len(cm["boroughs"])}
+    fd = build_feed(today, data)
+    return {"tiles": len(ts["tiles"]), "applications": n, "files": files, "classma_boroughs": len(cm["boroughs"]), "feed": fd}

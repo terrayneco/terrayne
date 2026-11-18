@@ -443,31 +443,26 @@ footer .fl{align-items:center}footer .fl a.tmark{color:#fff}.tmark{display:inlin
 </div></section>
 
 <section id="feed" style="padding-top:0"><div class="wrap">
-<div class="feedhead"><div><div class="eyebrow mono">Automated Datahub translation</div><h2>London planning signal feed</h2><p class="sub">Terrayne pulls raw filings from the GLA’s Planning London Datahub, filters out minor domestic works, and translates commercial schemes into plain-English takeaways. The rows below are real applications.</p></div><div class="pills" id="pills"></div></div>
-<div class="tw"><table><thead><tr class="mono"><th>Borough</th><th>Site / corridor</th><th>Signal type</th><th>Net units / scale</th><th>Status</th><th>Plain-English commercial takeaway</th></tr></thead><tbody id="rows"></tbody></table></div>
+<div class="feedhead"><div><div class="eyebrow mono">Automated Datahub translation</div><h2>London planning signal feed</h2><p class="sub">Terrayne pulls raw filings from the GLA’s Planning London Datahub, filters out minor domestic works, and sums up each significant scheme in plain English. Every row is a real application.</p></div><div class="pills" id="pills"></div></div>
+<div class="tw"><table><thead><tr class="mono"><th>Borough</th><th>Site / corridor</th><th>Signal type</th><th>Net units / scale</th><th>Status</th><th>In plain English</th></tr></thead><tbody id="rows"></tbody></table></div>
 <p style="margin:18px 0 0"><a class="btn ghost" href="./#pricing">Get new filings in your boroughs every Monday</a></p>
-<p class="note" style="margin-top:14px">Real applications from the GLA <a href="https://www.london.gov.uk/programmes-strategies/planning/digital-planning/planning-london-datahub" target="_blank" rel="noopener" style="text-decoration:underline">Planning London Datahub</a>, retrieved 15 November 2026. Statuses may have changed since; search the council’s planning register by reference for the latest.</p>
+<p class="note" style="margin-top:14px">The latest significant applications from the GLA <a href="https://www.london.gov.uk/programmes-strategies/planning/digital-planning/planning-london-datahub" target="_blank" rel="noopener" style="text-decoration:underline">Planning London Datahub</a> (last two months), updated every Monday. Last update: <span id="feedupd">…</span>. Summaries are built only from each application’s own figures; statuses can change, so check the council’s planning register by reference for the latest.</p>
 </div></section>
 
 <footer><div class="wrap"><span>© 2026 Terrayne. Property intelligence.</span><span class="fl"><a class="ig" href="https://www.instagram.com/terrayne.co/" target="_blank" rel="noopener" aria-label="Terrayne on Instagram"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.4" cy="6.6" r="1.2" fill="currentColor"/></svg><span>@terrayne.co</span></a><a href="about.html">About</a><a href="planning.html">Planning tracker</a><a href="methodology.html">Methodology</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a class="tmark" href="#" aria-label="Back to top"><svg viewBox="0 0 270 143" aria-hidden="true"><path d="M0 40L270 0V46H0Z" fill="currentColor"/><rect x="96" y="45" width="20" height="98" fill="currentColor"/></svg></a></span></div></footer>
 
 <script>
-var F=[
-{b:"Croydon",s:"Wellesley Grove, CR0",r:"26/02309/GPDO",t:"ma",k:"Class MA (Office-to-Resi)",u:"281 flats",a:"Under consideration",x:"Offices proposed for conversion to 281 flats in central Croydon, one of several large office-to-resi filings in the town centre this year."},
-{b:"Croydon",s:"2–8 Altyre Road, CR9",r:"26/01598/GPDO",t:"ma",k:"Class MA (Office-to-Resi)",u:"112 flats",a:"Approved Sep 2026",x:"Prior approval granted for 112 flats from commercial space near East Croydon station."},
-{b:"Islington",s:"Moorfields Eye Hospital, City Road, EC1",r:"P2026/2847/DRP",t:"rg",k:"Early signal",u:"c.1,700 units (mixed)",a:"Design review",x:"Proposals include c.500 build-to-rent homes, c.350 co-living units, c.150 homes and c.700 student rooms: a major new catchment on the City Road corridor."},
-{b:"Tower Hamlets",s:"Tent Street, E1",r:"PA/26/01533/A1",t:"mr",k:"Major Residential",u:"60 homes · 14 storeys",a:"Under consideration",x:"Up to 14 storeys with 60 homes and a community space in a restored railway viaduct, near Whitechapel."},
-{b:"Redbridge",s:"Cranbrook Road, Ilford",r:"0808/26",t:"mr",k:"Major Residential",u:"381 co-living + 177 BTR",a:"Under consideration",x:"Approved scheme being amended to swap office space for 381 co-living and 177 build-to-rent units, pointing to more rental demand in Ilford town centre."},
-{b:"Southwark",s:"737–745 Old Kent Road, SE15",r:"26/EES/0012",t:"rg",k:"Early signal",u:"Up to 31 storeys",a:"Pre-application",x:"Pre-application enquiry for a residential-led, mixed-use scheme of up to 31 storeys, adding to the Old Kent Road pipeline."},
-{b:"Westminster",s:"66 Porchester Road, W2",r:"26/07020/P3JPA",t:"ma",k:"Class MA (Office-to-Resi)",u:"32 units",a:"Under consideration",x:"Offices proposed for conversion to 32 homes in Bayswater."},
-{b:"Islington",s:"393–395 City Road, EC1",r:"P2026/1470/PRA",t:"ma",k:"Class MA (Office-to-Resi)",u:"20 units",a:"Approved Jul 2026",x:"Prior approval granted to convert a six-floor commercial building into 20 flats near Angel."}
-];
-var P=[["all","All Signals"],["ma","Class MA (Office-to-Resi)"],["mr","Major Residential"],["rg","Early signal"]],fc="all";
-function feed(){
+/* Planning feed: latest significant filings, rebuilt every Monday from the GLA Planning London Datahub (data/feed.json) */
+var F=[],P=[["all","All schemes"],["ma","Office-to-home (Class MA)"],["major","Major schemes"]],fc="all";
+function esc(t){return String(t==null?"":t).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function scale(r){var p=[];if(r.homes)p.push(r.homes.toLocaleString("en-GB")+" home"+(r.homes==1?"":"s"));if(r.commercial_m2>=100)p.push(r.commercial_m2.toLocaleString("en-GB")+" m² commercial");return p.join(" · ")||"n/a"}
+function day(d){return new Date(d+"T12:00:00").toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"})}
+function feed(){if(!document.getElementById("pills"))return;
 document.getElementById("pills").innerHTML=P.map(function(p){return '<button class="fp'+(p[0]==fc?' on':'')+'" onclick="fsel(\''+p[0]+'\')">'+p[1]+'</button>'}).join("");
-document.getElementById("rows").innerHTML=F.filter(function(r){return fc=="all"||r.t==fc}).map(function(r){return '<tr><td>'+r.b+'</td><td class="sc" data-l="Site">'+r.s+'<br><small class="mono" style="color:var(--mute);font-size:11px">Ref '+r.r+'</small></td><td data-l="Signal type"><span class="tg '+r.t+'">'+r.k+'</span></td><td class="mn" data-l="Scale">'+r.u+'</td><td class="ai mn" data-l="Status">'+r.a+'</td><td class="tk" data-l="Commercial takeaway">'+r.x+'</td></tr>'}).join("");}
+var L=F.filter(function(r){return fc=="all"||r.kind==fc});
+document.getElementById("rows").innerHTML=L.length?L.map(function(r){return '<tr><td>'+esc(r.borough)+'</td><td class="sc" data-l="Site">'+esc(r.site)+'<br><small class="mono" style="color:var(--mute);font-size:11px">Ref '+esc(r.ref)+' · filed '+day(r.valid)+'</small></td><td data-l="Signal type"><span class="tg '+(r.kind=="ma"?"ma":"mr")+'">'+(r.kind=="ma"?"Office-to-home (Class MA)":"Major scheme")+'</span></td><td class="mn" data-l="Scale">'+scale(r)+'</td><td class="ai mn" data-l="Status">'+esc(r.status)+'</td><td class="tk" data-l="In plain English">'+esc(r.summary)+'<br><small style="color:var(--mute)">Council description: '+esc(r.description)+'</small></td></tr>'}).join(""):'<tr><td colspan="6">No filings in this category in the last two months.</td></tr>'}
 function fsel(c){fc=c;feed()}
-feed();
+fetch("data/feed.json",{cache:"no-store"}).then(function(r){return r.json()}).then(function(d){F=d.rows||[];var u=document.getElementById("feedupd");if(u)u.textContent=day(d.generated);feed()}).catch(function(){var t=document.getElementById("rows");if(t)t.innerHTML='<tr><td colspan="6">The feed couldn’t load. Please refresh.</td></tr>'});
 </script>
 
 <script>
