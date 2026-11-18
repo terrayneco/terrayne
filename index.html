@@ -444,6 +444,17 @@ html.mapopen{overflow:hidden}
 .fq summary:after{content:"+";font-size:22px;color:var(--mute);transition:transform .25s}
 .fq[open] summary:after{transform:rotate(45deg)}
 .fq p{margin:0 0 20px;color:#c8d4e8;max-width:760px;line-height:1.6}.fq p a{color:#9fd0ff;text-decoration:underline}
+
+/* ---- Momentum Index, phones: compact ---- */
+@media(max-width:600px){
+#index .tabs{display:flex;overflow-x:auto;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none;gap:10px;margin:0 -16px 18px;padding:2px 16px 6px}
+#index .tabs::-webkit-scrollbar{display:none}
+#index .tab{flex:0 0 42%;scroll-snap-align:start}
+#index #mapx,#index .maphint{display:none}
+#index .take p.clamp,#minote.clamp{display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
+#minote.clamp{-webkit-line-clamp:3}
+.morebtn{background:none;border:0;color:#9fd0ff;font:inherit;font-size:14px;padding:8px 0 0;cursor:pointer;text-decoration:underline}
+}
 </style>
 <script>/* Refresh = start at the top of this page */(function(){try{var n=performance.getEntriesByType("navigation")[0];if(!n||n.type!=="reload")return;if("scrollRestoration" in history)history.scrollRestoration="manual";if(location.hash)history.replaceState(null,"",location.pathname+location.search);var t=function(){scrollTo(0,0)};t();addEventListener("DOMContentLoaded",t);addEventListener("load",function(){t();setTimeout(t,60)})}catch(e){}})();</script>
 </head>
@@ -501,7 +512,7 @@ html.mapopen{overflow:hidden}
 
 <section id="index" style="padding-top:0"><div class="wrap">
 <div class="eyebrow">The Development Momentum Index</div>
-<div class="cities" id="cities" role="tablist" aria-label="City"><button data-c="london" aria-selected="true">London</button><button data-c="manchester" aria-selected="false">Manchester <small>experimental</small></button><button disabled title="Coming soon">Birmingham <small>soon</small></button></div>
+<div class="cities" id="cities" role="tablist" aria-label="City"><button data-c="london" aria-selected="true">London</button><button data-c="manchester" aria-selected="false">Manchester <small>experimental</small></button><button disabled title="Coming soon">Birmingham <small>soon</small></button></div><p class="note" style="margin:-10px 0 22px;font-size:13px">Starting with UK cities, built to work anywhere that publishes its planning data. International cities to follow.</p>
 <h2 class="dash-h" style="margin-bottom:18px">One score for how fast a neighbourhood is changing.</h2>
 <p class="sub" style="margin-bottom:34px">A score from 0 to 100 for how fast a neighbourhood is changing, built from seven signals across five official sources: planning filings, station use, population and sale prices. A score of 90 means more momentum than about 90% of London. In a back-test, areas scoring 80+ grew their population <b style="color:#5fd6b8;font-weight:600">+5.3%</b> against +1.6% for areas under 40. <a href="methodology.html" style="text-decoration:underline">How it works</a></p>
 <div class="tabs" id="tabs"></div>
@@ -587,7 +598,7 @@ html.mapopen{overflow:hidden}
 <section id="faq" style="padding-top:0"><div class="wrap">
 <div class="eyebrow">Questions</div>
 <h2>Good to know.</h2>
-<div class="fqs"><details class="fq"><summary>Is there a free plan?</summary><p>Yes. Anyone can check 3 postcodes a month, see London’s top 10 neighbourhoods, the office-to-home (Class MA) tracker and the planning feed, with no card needed.</p></details><details class="fq"><summary>Can I cancel any time?</summary><p>Yes, in a couple of clicks from your account. You keep access until the end of the month or year you’ve paid for, and you won’t be charged again.</p></details><details class="fq"><summary>Where does the data come from?</summary><p>Only official open data: planning applications from the GLA’s Planning London Datahub, station use from TfL and the Office of Rail and Road, population from the ONS, and sale prices from HM Land Registry. <a href="methodology.html">See exactly how the score works</a>.</p></details><details class="fq"><summary>How up to date is it?</summary><p>Planning applications are refreshed every Monday. Station use, population and sale prices update when the government publishes them, which is monthly to yearly. Every page shows when its data was last updated.</p></details><details class="fq"><summary>Which areas are covered?</summary><p>All of Greater London. Greater Manchester is in experimental beta with its own method, and Birmingham is next.</p></details><details class="fq"><summary>What’s in the £12 Postcode Report?</summary><p>Everything planned within a 5, 10 or 20-minute walk of the postcode, with council references; how many homes and new residents that means; the area’s Momentum score and price headroom; and a short summary of demand, risks and the local market, as a downloadable PDF. <a href="report.html?pc=CR0%201LF&amp;r=800&amp;sample=1">See a sample</a>.</p></details><details class="fq"><summary>Can my team share an account?</summary><p>Each person needs their own login. Enterprise covers up to 5 named users with a shared watchlist and the Monday brief in Slack. <a href="mailto:hello@terrayne.co?subject=Terrayne%20Enterprise">Talk to us</a> for larger teams.</p></details><details class="fq"><summary>Is my payment secure?</summary><p>Payments are handled by Stripe, and Terrayne never sees or stores your card details.</p></details></div>
+<div class="fqs"><details class="fq"><summary>Is there a free plan?</summary><p>Yes. Anyone can check 3 postcodes a month, see London’s top 10 neighbourhoods, the office-to-home (Class MA) tracker and the planning feed, with no card needed.</p></details><details class="fq"><summary>Can I cancel any time?</summary><p>Yes, in a couple of clicks from your account. You keep access until the end of the month or year you’ve paid for, and you won’t be charged again.</p></details><details class="fq"><summary>Where does the data come from?</summary><p>Only official open data: planning applications from the GLA’s Planning London Datahub, station use from TfL and the Office of Rail and Road, population from the ONS, and sale prices from HM Land Registry. <a href="methodology.html">See exactly how the score works</a>.</p></details><details class="fq"><summary>How up to date is it?</summary><p>Planning applications are refreshed every Monday. Station use, population and sale prices update when the government publishes them, which is monthly to yearly. Every page shows when its data was last updated.</p></details><details class="fq"><summary>Which areas are covered?</summary><p>All of Greater London. Greater Manchester is in experimental beta with its own method, and Birmingham is next. After that, more UK cities and then international ones: the method works anywhere that publishes its planning data.</p></details><details class="fq"><summary>What’s in the £12 Postcode Report?</summary><p>Everything planned within a 5, 10 or 20-minute walk of the postcode, with council references; how many homes and new residents that means; the area’s Momentum score and price headroom; and a short summary of demand, risks and the local market, as a downloadable PDF. <a href="report.html?pc=CR0%201LF&amp;r=800&amp;sample=1">See a sample</a>.</p></details><details class="fq"><summary>Can my team share an account?</summary><p>Each person needs their own login. Enterprise covers up to 5 named users with a shared watchlist and the Monday brief in Slack. <a href="mailto:hello@terrayne.co?subject=Terrayne%20Enterprise">Talk to us</a> for larger teams.</p></details><details class="fq"><summary>Is my payment secure?</summary><p>Payments are handled by Stripe, and Terrayne never sees or stores your card details.</p></details></div>
 <p class="note" style="margin-top:22px">Anything else? Email <a href="mailto:hello@terrayne.co" style="color:#9fd0ff">hello@terrayne.co</a>.</p>
 </div></section>
 
@@ -780,6 +791,15 @@ svg.addEventListener("pointerup",up);svg.addEventListener("pointercancel",up);
 var ex=document.getElementById("mapexp");function toggle(on){wrap.classList.toggle("full",on);document.documentElement.classList.toggle("mapopen",on);ex.setAttribute("aria-expanded",on);ex.textContent=on?"✕ Close":"⤢ Expand";if(!on){VB=[0,0,640,440];setVB()}hide()}
 ex.onclick=function(){toggle(!wrap.classList.contains("full"))};document.addEventListener("keydown",function(e){if(e.key==="Escape"&&wrap.classList.contains("full"))toggle(false)});
 })();
+
+/* phones: shorten long text in the Index, with "Read more" */
+(function(){if(!matchMedia("(max-width:600px)").matches)return;
+function clamp(el){if(!el||el.dataset.cl)return;el.dataset.cl=1;el.classList.add("clamp");if(el.scrollHeight<=el.clientHeight+4){el.classList.remove("clamp");return}
+ var b=document.createElement("button");b.type="button";b.className="morebtn";b.textContent="Read more";b.onclick=function(){var o=el.classList.toggle("clamp");b.textContent=o?"Read more":"Show less"};el.insertAdjacentElement("afterend",b)}
+function go(){document.querySelectorAll("#detail .take p").forEach(clamp);clamp(document.getElementById("minote"))}
+var d=document.getElementById("detail"),n=document.getElementById("minote");
+if(d)new MutationObserver(function(){setTimeout(go,30)}).observe(d,{childList:true});if(n)new MutationObserver(function(){n.dataset.cl="";var nb=n.nextElementSibling;if(nb&&nb.classList.contains("morebtn"))nb.remove();setTimeout(go,30)}).observe(n,{childList:true});
+setTimeout(go,300)})();
 /* ---------- Solutions dropdown + tabs ---------- */
 (function(){var dd=document.getElementById("dd");if(!dd)return;var b=dd.querySelector("button");
 b.onclick=function(e){e.stopPropagation();var o=dd.classList.toggle("open");b.setAttribute("aria-expanded",o)};
