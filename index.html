@@ -7,6 +7,7 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <script>if(window.top!==window.self){try{window.top.location=window.self.location}catch(e){document.documentElement.style.display="none"}}</script>
 <title>Terrayne — Property Intelligence</title>
+<meta property="og:type" content="website"><meta property="og:site_name" content="Terrayne"><meta property="og:title" content="Terrayne — Property Intelligence"><meta property="og:description" content="See how your city is changing, before everyone else does. Check what’s planned around any London postcode, free."><meta property="og:url" content="https://terrayne.co/"><meta property="og:image" content="https://terrayne.co/assets/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Terrayne: see how your city is changing"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://terrayne.co/assets/og.png">
 <meta name="description" content="See how your city is changing, before everyone else does. Terrayne turns London planning applications, station use, population and sale prices into one clear answer for any street. Check any postcode free.">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="assets/favicon-48.png" sizes="48x48" type="image/png">
@@ -434,6 +435,15 @@ footer .fl{align-items:center}footer .fl a.tmark{color:#fff}.tmark{display:inlin
 .mapp.full #mapx{display:none}
 html.mapopen{overflow:hidden}
 .leg .lg-grad{display:inline-flex;align-items:center;gap:6px}.leg .lg-grad b{display:inline-block;width:70px;height:8px;border-radius:99px;background:linear-gradient(90deg,rgb(20,34,66),rgb(37,78,140),rgb(63,140,214),rgb(95,214,184))}.leg .lg-grad em{font-style:normal}.leg{flex-wrap:wrap;row-gap:6px}
+
+/* FAQ */
+.fqs{border-top:1px solid var(--line)}
+.fq{border-bottom:1px solid var(--line)}
+.fq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 0;font-size:17px;color:#fff}
+.fq summary::-webkit-details-marker{display:none}
+.fq summary:after{content:"+";font-size:22px;color:var(--mute);transition:transform .25s}
+.fq[open] summary:after{transform:rotate(45deg)}
+.fq p{margin:0 0 20px;color:#c8d4e8;max-width:760px;line-height:1.6}.fq p a{color:#9fd0ff;text-decoration:underline}
 </style>
 <script>/* Refresh = start at the top of this page */(function(){try{var n=performance.getEntriesByType("navigation")[0];if(!n||n.type!=="reload")return;if("scrollRestoration" in history)history.scrollRestoration="manual";if(location.hash)history.replaceState(null,"",location.pathname+location.search);var t=function(){scrollTo(0,0)};t();addEventListener("DOMContentLoaded",t);addEventListener("load",function(){t();setTimeout(t,60)})}catch(e){}})();</script>
 </head>
@@ -473,7 +483,7 @@ html.mapopen{overflow:hidden}
 <h2>Is this street about to change?</h2>
 <p class="sub">Enter any London postcode (Greater Manchester works too, in experimental beta). See its Momentum score (0 to 100: how fast the area is changing) and every significant scheme planned nearby: new homes, office-to-home conversions and commercial space, with council references so you can check the details.</p>
 <form class="ckf" id="ckf"><input id="ckpc" placeholder="e.g. SE1 7PB" autocomplete="postal-code" aria-label="London postcode" maxlength="9"><input type="hidden" id="ckr" value="0.8"><div class="ckrad" role="radiogroup" aria-label="Walking distance"><span class="ckind" aria-hidden="true"></span><button type="button" role="radio" data-r="0.4" aria-checked="false"><b>5 min</b><small>400 m</small></button><button type="button" role="radio" data-r="0.8" aria-checked="true"><b>10 min</b><small>800 m</small></button><button type="button" role="radio" data-r="1.6" aria-checked="false"><b>20 min</b><small>1.6 km</small></button></div><button class="btn" type="submit">Check</button></form>
-<div class="ckex">Try: <button type="button" data-pc="SE16 7LL">Canada Water</button><button type="button" data-pc="IG1 1NY">Ilford</button><button type="button" data-pc="SE1 5BA">Old Kent Road</button><button type="button" data-pc="E15 1BX">Stratford</button><button type="button" data-pc="CR0 1LF">Croydon</button></div>
+<div class="ckex">Try: <button type="button" data-pc="CR0 1LF">Croydon</button><button type="button" data-pc="IG1 1NY">Ilford</button><button type="button" data-pc="E15 1BX">Stratford</button></div>
 <p class="ckmsg" id="ckmsg" role="status"></p><p class="note" id="ckleft" style="margin:4px 0 0"></p>
 <div id="ckout"></div>
 </div></section>
@@ -491,7 +501,7 @@ html.mapopen{overflow:hidden}
 
 <section id="index" style="padding-top:0"><div class="wrap">
 <div class="eyebrow">The Development Momentum Index</div>
-<div class="cities" id="cities" role="tablist" aria-label="City"><button data-c="london" aria-selected="true">London</button><button data-c="manchester" aria-selected="false">Manchester <small>experimental</small></button><button disabled title="Coming soon">Birmingham <small>soon</small></button><button disabled title="Coming soon">Paris <small>soon</small></button></div>
+<div class="cities" id="cities" role="tablist" aria-label="City"><button data-c="london" aria-selected="true">London</button><button data-c="manchester" aria-selected="false">Manchester <small>experimental</small></button><button disabled title="Coming soon">Birmingham <small>soon</small></button></div>
 <h2 class="dash-h" style="margin-bottom:18px">One score for how fast a neighbourhood is changing.</h2>
 <p class="sub" style="margin-bottom:34px">A score from 0 to 100 for how fast a neighbourhood is changing, built from seven signals across five official sources: planning filings, station use, population and sale prices. A score of 90 means more momentum than about 90% of London. In a back-test, areas scoring 80+ grew their population <b style="color:#5fd6b8;font-weight:600">+5.3%</b> against +1.6% for areas under 40. <a href="methodology.html" style="text-decoration:underline">How it works</a></p>
 <div class="tabs" id="tabs"></div>
@@ -570,17 +580,16 @@ html.mapopen{overflow:hidden}
 <div class="card feat"><span class="badge">Recommended</span><div class="tag">03 · Professional</div><div class="price" data-m="£79" data-y="£790">£79<small data-m=" / month" data-y=" / year"> / month</small></div><p class="pline" data-m="or £790 a year (2 months free)" data-y="£65.83 a month, billed yearly">or £790 a year (2 months free)</p><p>For developers, agents and consultants who use this every week.</p><ul><li>Everything in Investor</li><li>Your Monday 7am brief, filtered to your boroughs</li><li>Live office-to-home (Class MA) leads: new filings in your areas, with addresses and references</li><li>Score history and weekly changes for every neighbourhood</li><li>Watchlist of 10 areas or sites, with alerts</li><li>CSV export and archive of every past brief</li></ul><a class="btn" data-plan="pro" href="account.html?signup&amp;plan=pro">Start Professional</a></div>
 <div class="card"><div class="tag">04 · Enterprise</div><div class="price" data-m="£399" data-y="£3,990">£399<small data-m=" / month" data-y=" / year"> / month</small></div><p class="pline" data-m="or £3,990 a year" data-y="£332.50 a month, billed yearly">or £3,990 a year</p><p>For retail expansion, acquisition and site-selection teams.</p><ul><li>Everything in Professional, for up to 5 users</li><li>Shared team watchlist, unlimited sites</li><li>Custom catchments drawn around your shortlist</li><li>New-residents forecasts within 400m / 800m / 1.6km of any site</li><li>Branded PDF reports and one-click Investment Committee memos</li><li>Monday brief delivered to Slack</li><li>Onboarding call and priority support</li></ul><a class="btn ghost" href="mailto:hello@terrayne.co?subject=Terrayne%20Enterprise">Talk to us</a></div>
 </div>
-<div class="oneoff"><p><b>Buying one property?</b> Get a full Postcode Report for £12, no subscription.</p><a class="btn ghost" href="report.html">Get a report</a></div>
+<div class="oneoff"><p><b>Buying one property?</b> Get a full Postcode Report for £12, no subscription.</p><span style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn ghost" href="report.html?pc=CR0%201LF&amp;r=800&amp;sample=1">See a sample</a><a class="btn ghost" href="report.html">Get a report</a></span></div>
 <p class="note" style="margin-top:18px">Founding members: Professional at £49/month, locked in for as long as you stay subscribed. Limited to the first 50 members. Cancel any time.</p>
 </div></section>
 
-<section id="access" style="padding-top:0"><div class="wrap"><div class="final">
-<div class="eyebrow">Get started</div>
-<h2>Start free. Upgrade when it’s your job.</h2>
-<p>Check postcodes, follow London’s top 10 neighbourhoods and see how your borough decides office-to-home conversions, free. Upgrade when you want alerts, reports and the Monday brief.</p>
-<a class="btn" href="account.html?signup" style="margin-top:8px">Start free</a>
-<p class="note" style="margin-top:18px">Questions? Email <a href="mailto:hello@terrayne.co" style="color:#9fd0ff">hello@terrayne.co</a></p>
-</div></div></section>
+<section id="faq" style="padding-top:0"><div class="wrap">
+<div class="eyebrow">Questions</div>
+<h2>Good to know.</h2>
+<div class="fqs"><details class="fq"><summary>Is there a free plan?</summary><p>Yes. Anyone can check 3 postcodes a month, see London’s top 10 neighbourhoods, the office-to-home (Class MA) tracker and the planning feed, with no card needed.</p></details><details class="fq"><summary>Can I cancel any time?</summary><p>Yes, in a couple of clicks from your account. You keep access until the end of the month or year you’ve paid for, and you won’t be charged again.</p></details><details class="fq"><summary>Where does the data come from?</summary><p>Only official open data: planning applications from the GLA’s Planning London Datahub, station use from TfL and the Office of Rail and Road, population from the ONS, and sale prices from HM Land Registry. <a href="methodology.html">See exactly how the score works</a>.</p></details><details class="fq"><summary>How up to date is it?</summary><p>Planning applications are refreshed every Monday. Station use, population and sale prices update when the government publishes them, which is monthly to yearly. Every page shows when its data was last updated.</p></details><details class="fq"><summary>Which areas are covered?</summary><p>All of Greater London. Greater Manchester is in experimental beta with its own method, and Birmingham is next.</p></details><details class="fq"><summary>What’s in the £12 Postcode Report?</summary><p>Everything planned within a 5, 10 or 20-minute walk of the postcode, with council references; how many homes and new residents that means; the area’s Momentum score and price headroom; and a short summary of demand, risks and the local market, as a downloadable PDF. <a href="report.html?pc=CR0%201LF&amp;r=800&amp;sample=1">See a sample</a>.</p></details><details class="fq"><summary>Can my team share an account?</summary><p>Each person needs their own login. Enterprise covers up to 5 named users with a shared watchlist and the Monday brief in Slack. <a href="mailto:hello@terrayne.co?subject=Terrayne%20Enterprise">Talk to us</a> for larger teams.</p></details><details class="fq"><summary>Is my payment secure?</summary><p>Payments are handled by Stripe, and Terrayne never sees or stores your card details.</p></details></div>
+<p class="note" style="margin-top:22px">Anything else? Email <a href="mailto:hello@terrayne.co" style="color:#9fd0ff">hello@terrayne.co</a>.</p>
+</div></section>
 
 <footer><div class="wrap"><span>© 2026 Terrayne. Property intelligence.</span><span class="fl"><a class="ig" href="https://www.instagram.com/terrayne.co/" target="_blank" rel="noopener" aria-label="Terrayne on Instagram"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.4" cy="6.6" r="1.2" fill="currentColor"/></svg><span>@terrayne.co</span></a><a href="about.html">About</a><a href="planning.html">Planning tracker</a><a href="methodology.html">Methodology</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a class="tmark" href="#top" aria-label="Back to top"><svg viewBox="0 0 270 143" aria-hidden="true"><path d="M0 40L270 0V46H0Z" fill="currentColor"/><rect x="96" y="45" width="20" height="98" fill="currentColor"/></svg></a></span></div></footer>
 <script>

@@ -7,6 +7,8 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <script>if(window.top!==window.self){try{window.top.location=window.self.location}catch(e){document.documentElement.style.display="none"}}</script>
 <title>Postcode Report · Terrayne</title>
+<meta name="description" content="Everything planned within walking distance of any London postcode, as a downloadable report.">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Terrayne"><meta property="og:title" content="Postcode Report — Terrayne"><meta property="og:description" content="Everything planned within walking distance of any London postcode, as a downloadable report."><meta property="og:url" content="https://terrayne.co/report.html"><meta property="og:image" content="https://terrayne.co/assets/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Terrayne: see how your city is changing"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://terrayne.co/assets/og.png">
 <meta name="robots" content="noindex">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <style>
@@ -69,7 +71,9 @@ function nf(v){return Math.round(v||0).toLocaleString("en-GB")}
 function pcs(v){return v==null?"n/a":(v>=0?"+":"−")+Math.abs(v*100).toFixed(1)+"%"}
 var sb=null,plan="free",profile=null;
 function lib(){return new Promise(function(ok,no){if(window.supabase)return ok();var s=document.createElement("script");s.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js";s.integrity="sha384-GFr3yTh5lJznCbZfpTtXnwboFsxqtTQoeTZCRHhE0579KrRmlCzen5AA8ohaB5ug";s.crossOrigin="anonymous";s.onload=ok;s.onerror=no;document.head.appendChild(s)})}
+var SAMPLE_PC="CR0 1LF";
 async function access(pc){
+ if(Q.get("sample")==="1"&&pc===SAMPLE_PC)return {full:true,why:"sample"};
  if(!C.supabaseUrl||!C.supabaseAnonKey)return {full:false,why:"offline"};
  try{await lib();sb=window.supabase.createClient(C.supabaseUrl,C.supabaseAnonKey);
   var s=await sb.auth.getSession();
@@ -133,7 +137,7 @@ async function run(){var pc=TerrayneReport.normPC(Q.get("pc")),r=parseInt(Q.get(
  var d=await TerrayneReport.build(pc,r/1000);if(d.error){$("msg").textContent=d.error;return}
  var acc=await access(pc);$("msg").textContent="";
  if(type==="memo"&&plan!=="enterprise"){$("out").innerHTML='<div class="page"><h1>IC memos are part of Enterprise</h1><p class="sub">Enterprise teams get one-click Investment Committee memos with their own branding. <a href="mailto:hello@terrayne.co?subject=Terrayne%20Enterprise">Talk to us</a>.</p></div>';return}
- $("out").innerHTML=type==="memo"?memo(d):report(d,acc.full);
+ $("out").innerHTML=(acc.why==="sample"?'<div class="page" style="padding:16px 22px;margin-bottom:14px;border:1px dashed #4f9be8"><b>Sample report.</b> This is a real, full report for '+SAMPLE_PC+' (Croydon), using live data. <a href="report.html">Get one for your postcode for £12</a>.</div>':"")+(type==="memo"?memo(d):report(d,acc.full));
  document.title=(type==="memo"?"IC memo ":"Postcode Report ")+d.pc+" · Terrayne";
  var act='';if(acc.full||type==="memo")act+='<button class="btn" id="pdf">Download PDF</button>';
  if(plan==="enterprise"&&type!=="memo")act+='<a class="btn ghost" href="?pc='+encodeURIComponent(d.pc)+'&r='+r+'&type=memo">IC memo</a>';

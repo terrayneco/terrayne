@@ -25,7 +25,7 @@ sync will overwrite your change. If you do edit here, copy `index.html` back to 
 ## Cities
 - London: full index (planning + official stats). Manchester (beta): `scripts/city.py` builds data/manchester/ from brownfield registers (scored on hectares), Land Registry new-build sales, ORR rail, ONS population, LR resale prices. Greater Manchester has no open planning-applications feed.
 - `scripts/signals.py` has a CITIES config; `signals.configure(city)` switches every loader. Add a city there + in `CITY_AREAS` (city.py) + `CITYCFG`/`CK_CITIES` in the page JS.
-- Birmingham and Paris are shown as "coming soon".
+- Birmingham is shown as "coming soon" (Paris removed: different planning system, not yet in progress).
 
 ## Accounts (Supabase + Stripe)
 - `account.html`, `admin.html`, `report.html`, `about.html`, `planning.html` (Class MA tracker + signal feed; copies the homepage styles, nav and those two sections), `methodology.html`, `terms.html`, `privacy.html`, `assets/config.js`, `assets/report-core.js`, `supabase/` live in THIS repo only (methodology.html copies the homepage's styles and nav; regenerate it if those change) (not in the iCloud folder); edit them here.
