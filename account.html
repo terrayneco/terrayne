@@ -136,6 +136,7 @@ svg.spark{display:block}
 </nav>
 <div>
 <div class="msg" id="g-msg"></div>
+<div id="invites"></div>
 
 <div id="p-overview" class="pane">
 <div class="eyebrow">Overview</div><h1 id="hello">Welcome</h1><p class="sub" id="o-sub"></p>
@@ -231,6 +232,7 @@ function setMode(m){mode=m;[].forEach.call($("a-seg").children,function(b){b.cla
  $("a-title").textContent=m==="up"?"Create your account":"Sign in";$("a-pass").autocomplete=m==="up"?"new-password":"current-password";msg("a-msg")}
 $("a-seg").onclick=function(e){if(e.target.dataset.m)setMode(e.target.dataset.m)};
 if(/[?&]signup/.test(location.search))setMode("up");
+(function(){var e=new URLSearchParams(location.search).get("email");if(e)$("a-email").value=e.slice(0,200)})();
 $("a-form").onsubmit=async function(e){e.preventDefault();var em=$("a-email").value.trim(),pw=$("a-pass").value,r;
  if(mode==="up"&&pw.length<10){msg("a-msg","Use a password of at least 10 characters.");return}
  if(capNeed())return;
@@ -415,8 +417,16 @@ $("ent-form").onsubmit=async function(e){e.preventDefault();var logo=$("ent-logo
  var r=await sb.from("profiles").update(u).eq("id",S.user.id);if(r.error)msg("ent-msg",r.error.message);else{Object.assign(S.profile,u);msg("ent-msg","Saved.",true)}};
 $("ent-test").onclick=async function(){var r=await sb.functions.invoke("slack-test",{body:{}});msg("ent-msg",r.data&&r.data.ok?"Test message sent to Slack.":((r.data&&r.data.error)||"Couldn’t reach Slack."),!!(r.data&&r.data.ok))};
 $("pw-form").onsubmit=async function(e){e.preventDefault();var r=await sb.auth.updateUser({password:$("pw-pass").value});msg("pw-msg",r.error?r.error.message:"Password changed.",!r.error);if(!r.error)$("pw-pass").value=""};
-$("tm-form").onsubmit=async function(e){e.preventDefault();var r=await sb.from("team_invites").insert({owner:S.user.id,email:$("tm-email").value.trim().toLowerCase()});
- if(r.error)msg("tm-msg",r.error.message);else{msg("tm-msg","Invite saved. Ask them to create an account at terrayne.co/account.html with that email.",true);$("tm-email").value="";P.team()}};
+$("tm-form").onsubmit=async function(e){e.preventDefault();var b=this.querySelector("button");b.disabled=true;
+ var r=await sb.functions.invoke("team-invite",{body:{email:$("tm-email").value.trim()}});b.disabled=false;
+ var t=r.error&&r.error.context&&r.error.context.json?await r.error.context.json().catch(function(){return{}}):{};
+ if(!r.data||!r.data.ok){msg("tm-msg",t.error||(r.data&&r.data.error)||"Couldn’t send the invite. Please try again.");return}
+ msg("tm-msg",r.data.emailed?(r.data.existing?"Invite emailed. They already have an account, so they just need to sign in and accept it.":"Invite emailed. They’ll join your team as soon as they create an account with that email."):"Invite saved, but the email didn’t send. Ask them to sign in at terrayne.co/account.html with that email.",true);
+ $("tm-email").value="";P.team()};
+async function showInvites(){var r=await sb.rpc("my_invites");var box=$("invites");if(!box)return;var l=(r.data||[]);
+ box.innerHTML=l.map(function(i){return '<div class="card" style="margin-bottom:16px"><h3 style="margin:0 0 6px">Team invitation</h3><p class="note" style="margin:0 0 12px">'+esc(i.owner_name)+(i.company?' at '+esc(i.company):'')+' has invited you to their Enterprise team. You’ll get full Enterprise access at no cost to you.</p><button class="btn sm" data-ok="'+i.owner+'">Accept</button> <button class="btn ghost sm" data-no="'+i.owner+'">Decline</button></div>'}).join("");
+ box.querySelectorAll("[data-ok]").forEach(function(b){b.onclick=async function(){b.disabled=true;var x=await sb.rpc("accept_invite",{o:b.dataset.ok});if(x.error){b.disabled=false;msg("g-msg",x.error.message);return}location.reload()}});
+ box.querySelectorAll("[data-no]").forEach(function(b){b.onclick=async function(){await sb.rpc("decline_invite",{o:b.dataset.no});showInvites()}});}
 $("del").onclick=async function(){if(!confirm("Delete your Terrayne account? Any subscription is cancelled immediately and your data is removed."))return;
  if(prompt('Type DELETE to confirm')!=="DELETE")return;var r=await sb.functions.invoke("delete-account",{body:{}});
  if(r.error){msg("g-msg","Couldn’t delete the account. Please contact us.");return}await sb.auth.signOut();location.href="./"};
@@ -437,7 +447,7 @@ async function boot(){var s=await sb.auth.getSession();if(!s.data.session){show(
  $("nav-team").classList.toggle("hide",!(S.plan==="enterprise"&&!S.profile.team_owner));
  var want=new URLSearchParams(location.search).get("plan");
  if(want&&!paid()&&(want==="investor"||want==="pro"||want==="enterprise")){history.replaceState(null,"",location.pathname+"#billing");S.interval=new URLSearchParams(location.search).get("interval")==="year"?"year":"month";}
- route()}
+ showInvites();route()}
 boot();
 })();
 </script>

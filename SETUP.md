@@ -71,6 +71,7 @@ supabase functions deploy customer-portal && \
 supabase functions deploy delete-account && \
 supabase functions deploy admin-stats && \
 supabase functions deploy slack-test && \
+supabase functions deploy team-invite && \
 supabase functions deploy create-report-checkout --no-verify-jwt && \
 supabase functions deploy verify-report --no-verify-jwt && \
 supabase functions deploy stripe-webhook --no-verify-jwt && \

@@ -319,3 +319,28 @@ language sql security definer set search_path = '' as $$
 $$;
 revoke all on function public.admin_session_stats() from public, anon, authenticated;
 grant execute on function public.admin_session_stats() to service_role;
+
+-- Team invites: invitees accept or decline from their own account (owners can't add people without consent).
+create or replace function public.my_invites() returns table(owner uuid, owner_name text, company text)
+language sql security definer set search_path = public as $$
+  select i.owner, coalesce(nullif(p.full_name,''), p.email), coalesce(p.company,'')
+  from public.team_invites i join public.profiles p on p.id = i.owner
+  where lower(i.email) = lower((select email from auth.users where id = auth.uid()))
+$$;
+create or replace function public.accept_invite(o uuid) returns void
+language plpgsql security definer set search_path = public as $$
+declare me uuid := auth.uid(); em text := (select lower(email) from auth.users where id = auth.uid());
+begin
+  if not exists (select 1 from public.team_invites where owner = o and lower(email) = em) then raise exception 'This invitation is no longer valid.'; end if;
+  if (select team_owner from public.profiles where id = me) is not null then raise exception 'You are already in a team. Leave it first.'; end if;
+  if exists (select 1 from public.profiles where team_owner = me) then raise exception 'You own a team, so you can’t join another.'; end if;
+  if public.effective_plan(o) <> 'enterprise' then raise exception 'That team’s Enterprise plan is no longer active.'; end if;
+  update public.profiles set team_owner = o where id = me;
+  delete from public.team_invites where lower(email) = em;
+end $$;
+create or replace function public.decline_invite(o uuid) returns void
+language sql security definer set search_path = public as $$
+  delete from public.team_invites where owner = o and lower(email) = (select lower(email) from auth.users where id = auth.uid())
+$$;
+revoke all on function public.my_invites(), public.accept_invite(uuid), public.decline_invite(uuid) from public, anon;
+grant execute on function public.my_invites(), public.accept_invite(uuid), public.decline_invite(uuid) to authenticated;

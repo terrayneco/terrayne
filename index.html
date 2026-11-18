@@ -295,7 +295,7 @@ nav ul a{padding:7px 14px}
 .soltabs button{background:none;border:1px solid var(--line);color:#c8d4e8;border-radius:99px;padding:10px 18px;font:inherit;font-size:14px;cursor:pointer}
 .soltabs button[aria-selected="true"]{background:linear-gradient(180deg,rgba(159,208,255,.17),rgba(159,208,255,.05));color:#fff;border-color:rgba(159,208,255,.35);box-shadow:0 0 24px -6px rgba(159,208,255,.45)}
 @media(min-width:601px){.soltabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}}@media(min-width:900px){.soltabs{grid-template-columns:repeat(3,minmax(0,1fr))}.soltabs button{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
-@media(max-width:600px){.soltabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -24px 18px;padding:2px 24px 6px;scroll-snap-type:x proximity}.soltabs::-webkit-scrollbar{display:none}.soltabs button{flex:0 0 auto;white-space:nowrap;scroll-snap-align:start}}
+@media(max-width:600px){.soltabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -24px 18px;padding:2px 24px 6px;scroll-padding-inline:24px;scroll-snap-type:x proximity}.soltabs::-webkit-scrollbar{display:none}.soltabs button{flex:0 0 auto;white-space:nowrap;scroll-snap-align:start}}
 .solp{display:grid;grid-template-columns:1.2fr 1fr;gap:18px}.solp[hidden]{display:none!important}.solp{transition:opacity .45s cubic-bezier(.2,.7,.2,1),transform .45s cubic-bezier(.2,.7,.2,1)}.solp.pre{opacity:0;transform:translateY(10px)}section[id]{scroll-margin-top:88px}@media(max-width:900px){.solp{grid-template-columns:1fr}}
 .solp h3{font-size:clamp(24px,3vw,32px);letter-spacing:-.02em;margin:0 0 10px;line-height:1.15}
 .solp ul{margin:16px 0 0;padding-left:18px;color:#c8d4e8}.solp li{margin-bottom:10px}
@@ -805,7 +805,7 @@ setTimeout(go,300)})();
 b.onclick=function(e){e.stopPropagation();var o=dd.classList.toggle("open");b.setAttribute("aria-expanded",o)};
 document.addEventListener("click",function(){dd.classList.remove("open");b.setAttribute("aria-expanded",false)});
 var tabs=document.querySelectorAll("#soltabs button"),panes=document.querySelectorAll(".solp");
-function sel(s){tabs.forEach(function(t){var on=t.dataset.s===s;t.setAttribute("aria-selected",on);if(on&&t.parentNode.scrollWidth>t.parentNode.clientWidth){t.parentNode.scrollTo({left:t.offsetLeft-24,behavior:"smooth"})}});panes.forEach(function(p){var on=p.dataset.s===s;p.hidden=!on;if(on){p.classList.add("pre");setTimeout(function(){p.classList.remove("pre")},30)}})}
+function sel(s){tabs.forEach(function(t){var on=t.dataset.s===s;t.setAttribute("aria-selected",on);if(on&&t.parentNode.scrollWidth>t.parentNode.clientWidth){var P=t.parentNode;P.scrollTo({left:Math.max(0,P.scrollLeft+t.getBoundingClientRect().left-P.getBoundingClientRect().left-24),behavior:"smooth"})}});panes.forEach(function(p){var on=p.dataset.s===s;p.hidden=!on;if(on){p.classList.add("pre");setTimeout(function(){p.classList.remove("pre")},30)}})}
 tabs.forEach(function(t){t.onclick=function(){sel(t.dataset.s)}});
 function go(s,smooth){sel(s);var t=document.getElementById("soltabs");if(!t)return;
  var navH=(document.querySelector("nav")||{}).offsetHeight||72,y=t.getBoundingClientRect().top+scrollY-navH-24;
