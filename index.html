@@ -744,7 +744,11 @@ function show(r,ev){var k=r.getAttribute("data-k"),t=(TL[CITY]||{})[k];if(!t)ret
  var w=tip.parentNode.getBoundingClientRect(),rr=r.getBoundingClientRect(),x=rr.left-w.left+rr.width/2,y=rr.top-w.top;tip.hidden=false;
  var tw=tip.offsetWidth,th=tip.offsetHeight;tip.style.left=Math.max(6,Math.min(w.width-tw-6,x-tw/2))+"px";tip.style.top=(y-th-8<6?rr.bottom-w.top+8:y-th-8)+"px"}
 function hide(){tip.hidden=true;if(sel)sel.classList.remove("on");sel=null}
-svg.addEventListener("mouseover",function(e){var r=e.target.closest&&e.target.closest("rect.ht");if(r&&matchMedia("(hover:hover)").matches)show(r,e)});
+var hv=null;function hoverOK(){return matchMedia("(hover:hover)").matches}
+svg.addEventListener("mouseover",function(e){var r=e.target.closest&&e.target.closest("rect.ht");if(!r||!hoverOK()||r===sel)return;clearTimeout(hv);
+ if(tip.hidden){show(r,e);return}hv=setTimeout(function(){if(!tip.matches(":hover"))show(r,e)},350)});
+svg.addEventListener("mouseout",function(e){if(e.target.closest&&e.target.closest("rect.ht"))clearTimeout(hv)});
+tip.addEventListener("mouseenter",function(){clearTimeout(hv)});
 svg.addEventListener("click",function(e){var r=e.target.closest&&e.target.closest("rect.ht");if(r){e.stopPropagation();show(r,e)}else if(!(e.target.closest&&e.target.closest("g.mk")))hide()});
 svg.addEventListener("mouseleave",function(e){if(matchMedia("(hover:hover)").matches&&!(e.relatedTarget&&tip.contains(e.relatedTarget)))setTimeout(function(){if(!tip.matches(":hover"))hide()},250)});
 document.addEventListener("click",function(e){if(!tip.hidden&&!tip.contains(e.target)&&!svg.contains(e.target))hide()});
