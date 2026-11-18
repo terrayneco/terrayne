@@ -414,6 +414,26 @@ nav .wrap{max-width:none!important;padding-left:clamp(20px,2.4vw,40px)!important
 /* T mark, bottom right of the footer */
 footer .fl{align-items:center}footer .fl a.tmark{color:#fff}.tmark{display:inline-flex;margin-left:6px;transition:color .25s,transform .25s}.tmark svg{width:44px;height:23px;display:block}footer .fl a.tmark:hover{color:#9fd0ff;transform:translateY(-2px)}
 @media(max-width:600px){footer .wrap{align-items:flex-end}.tmark{margin-left:auto}}
+
+/* ---- Momentum map: heat squares, tooltip, expand, zoom ---- */
+.mapwrap{position:relative}
+#map rect.ht{cursor:pointer;transition:stroke .15s}#map rect.ht:hover,#map rect.ht.on{stroke:#fff;stroke-width:1.5}
+#map{touch-action:pan-y}.mapp.full #map{touch-action:none}
+#maptip{position:absolute;z-index:5;min-width:190px;max-width:240px;background:rgba(10,20,38,.97);border:1px solid rgba(159,208,255,.25);border-radius:14px;padding:12px 14px;box-shadow:0 18px 40px -14px rgba(0,0,0,.8);font-size:13px}
+#maptip .tt-h{font-weight:600;color:#fff;display:flex;align-items:center;gap:8px}#maptip .tt-h i{width:9px;height:9px;border-radius:50%}
+#maptip .tt-p{color:var(--mute);margin:3px 0 8px}#maptip .tt-s{color:#c8d4e8;margin-bottom:10px}#maptip .tt-s a{color:#9fd0ff;text-decoration:underline}
+#maptip .tt-b{width:100%;background:#fff;color:#0a1223;border:0;border-radius:99px;padding:8px 10px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer}
+.mapexp{position:absolute;top:8px;right:8px;background:rgba(10,20,38,.85);border:1px solid rgba(255,255,255,.14);color:#c8d4e8;border-radius:99px;padding:6px 12px;font:inherit;font-size:12px;cursor:pointer}
+.mapexp:hover{color:#fff;border-color:rgba(159,208,255,.4)}
+.mapctl{position:absolute;bottom:8px;right:8px;display:flex;flex-direction:column;gap:4px}
+.mapctl button{width:32px;height:32px;border-radius:10px;background:rgba(10,20,38,.85);border:1px solid rgba(255,255,255,.14);color:#fff;font-size:17px;line-height:1;cursor:pointer}
+.maphint{font-size:12.5px;color:var(--mute);margin:10px 0 0}
+.mapp.full{position:fixed;inset:12px;z-index:60;overflow:auto;display:flex;flex-direction:column;box-shadow:0 0 0 100vmax rgba(3,7,15,.75)}
+.mapp.full .mapwrap{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+.mapp.full #map{max-height:calc(100vh - 170px);width:auto;max-width:100%;height:100%}
+.mapp.full #mapx{display:none}
+html.mapopen{overflow:hidden}
+.leg .lg-grad{display:inline-flex;align-items:center;gap:6px}.leg .lg-grad b{display:inline-block;width:70px;height:8px;border-radius:99px;background:linear-gradient(90deg,rgb(20,34,66),rgb(37,78,140),rgb(63,140,214),rgb(95,214,184))}.leg .lg-grad em{font-style:normal}.leg{flex-wrap:wrap;row-gap:6px}
 </style>
 <script>/* Refresh = start at the top of this page */(function(){try{var n=performance.getEntriesByType("navigation")[0];if(!n||n.type!=="reload")return;if("scrollRestoration" in history)history.scrollRestoration="manual";if(location.hash)history.replaceState(null,"",location.pathname+location.search);var t=function(){scrollTo(0,0)};t();addEventListener("DOMContentLoaded",t);addEventListener("load",function(){t();setTimeout(t,60)})}catch(e){}})();</script>
 </head>
@@ -476,8 +496,8 @@ footer .fl{align-items:center}footer .fl a.tmark{color:#fff}.tmark{display:inlin
 <p class="sub" style="margin-bottom:34px">A score from 0 to 100 for how fast a neighbourhood is changing, built from seven signals across five official sources: planning filings, station use, population and sale prices. A score of 90 means more momentum than about 90% of London. In a back-test, areas scoring 80+ grew their population <b style="color:#5fd6b8;font-weight:600">+5.3%</b> against +1.6% for areas under 40. <a href="methodology.html" style="text-decoration:underline">How it works</a></p>
 <div class="tabs" id="tabs"></div>
 <div class="dash" id="signals">
-<div class="panel mapp"><div class="ph"><div><small class="mono">Spatial intelligence layer</small><h3 id="maph">Greater London: tracked neighbourhoods</h3></div><div class="leg"><span><i style="background:#4f9be8"></i>80+ High</span><span><i style="background:#5fd6b8"></i>70–79 Active</span><span><i style="background:#8c9ab3"></i>&lt;70 Building</span></div></div>
-<svg id="map" viewBox="0 0 640 440"></svg><div id="mapx"></div></div>
+<div class="panel mapp"><div class="ph"><div><small class="mono">Spatial intelligence layer</small><h3 id="maph">Greater London: tracked neighbourhoods</h3></div><div class="leg"><span class="lg-grad"><em>Quieter</em><b></b><em>Changing fastest</em></span><span><i style="background:#4f9be8"></i>80+ High</span><span><i style="background:#5fd6b8"></i>70–79 Active</span><span><i style="background:#8c9ab3"></i>&lt;70 Building</span></div></div>
+<div class="mapwrap"><svg id="map" viewBox="0 0 640 440"></svg><div id="maptip" hidden></div><div class="mapctl"><button type="button" id="mapzin" aria-label="Zoom in">+</button><button type="button" id="mapzout" aria-label="Zoom out">−</button></div><button type="button" class="mapexp" id="mapexp" aria-expanded="false">⤢ Expand</button></div><p class="maphint">Every square is about 3 km across, coloured by its Momentum score: brighter means changing faster. Hover or tap one to explore.</p><div id="mapx"></div></div>
 <div class="panel" id="detail"></div>
 </div>
 <p class="note" id="minote" style="margin-top:18px"></p>
@@ -603,7 +623,21 @@ var CITY="london",CITYCFG={london:{data:"data/",name:"Greater London",lon0:-0.36
  regions:[[-0.33,51.6,"NORTH WEST"],[0.0,51.6,"NORTH EAST"],[-0.35,51.43,"RIVER THAMES"],[0.02,51.39,"SOUTH EAST"]],scope:"London"},
  manchester:{data:"data/manchester/",name:"Greater Manchester",lon0:-2.70,lat0:53.65,kx:66.2*11.8,ky:111.2*11.8,X0:25,Y0:22,river:false,
  regions:[[-2.66,53.635,"BOLTON & WIGAN"],[-2.20,53.64,"ROCHDALE & BURY"],[-2.10,53.47,"OLDHAM & TAMESIDE"],[-2.62,53.40,"TRAFFORD"],[-2.20,53.375,"STOCKPORT"]],scope:"Greater Manchester"}};
-function PJ(){return CITYCFG[CITY]}function px(lon){var c=PJ();return c.X0+(lon-c.lon0)*c.kx}function py(lat){var c=PJ();return c.Y0+(c.lat0-lat)*c.ky}
+function PJ(){return CITYCFG[CITY]}
+var TL={};function mX(lon){return (lon+180)/360*8192}function mY(lat){var r=lat*Math.PI/180;return (1-Math.asinh(Math.tan(r))/Math.PI)/2*8192}
+function px(lon){var c=PJ();return c.M?c.M.ox+(mX(lon)-c.M.x0)*c.M.s:c.X0+(lon-c.lon0)*c.kx}function py(lat){var c=PJ();return c.M?c.M.oy+(mY(lat)-c.M.y0)*c.M.s:c.Y0+(c.lat0-lat)*c.ky}
+function loadTiles(){var c=CITY;if(TL[c])return;TL[c]="…";fetch(CITYCFG[c].data+"tiles.json",{cache:"no-cache"}).then(function(r){return r.json()}).then(function(t){
+ var ks=Object.keys(t.tiles||{});if(!ks.length)return;var xs=ks.map(function(k){return +k.split("/")[1]}),ys=ks.map(function(k){return +k.split("/")[2]});
+ var x0=Math.min.apply(0,xs),x1=Math.max.apply(0,xs)+1,y0=Math.min.apply(0,ys),y1=Math.max.apply(0,ys)+1,sc=Math.min(620/(x1-x0),420/(y1-y0));
+ CITYCFG[c].M={x0:x0,y0:y0,s:sc,ox:(640-(x1-x0)*sc)/2,oy:(440-(y1-y0)*sc)/2};TL[c]=t.tiles;if(c===CITY)render()}).catch(function(){TL[c]=null})}
+function band(s){return s>=80?["High","#4f9be8"]:s>=70?["Active","#5fd6b8"]:["Building","#8c9ab3"]}
+function hcol(v){var st=[[25,[20,34,66]],[50,[37,78,140]],[65,[63,140,214]],[80,[95,214,184]]],a=st[0],b=st[st.length-1];
+ for(var i=0;i<st.length-1;i++)if(v>=st[i][0]&&v<=st[i+1][0]){a=st[i];b=st[i+1];break}if(v<st[0][0])b=a;if(v>b[0])a=b;
+ var t=a===b?0:(v-a[0])/(b[0]-a[0]);return "rgb("+a[1].map(function(c,j){return Math.round(c+(b[1][j]-c)*t)}).join(",")+")"}
+function heat(){var t=TL[CITY],c=PJ();if(!t||!c.M||typeof t!=="object")return"";var h='<g class="heat">';
+ Object.keys(t).forEach(function(k){var a=k.split("/"),x=c.M.ox+(a[1]-c.M.x0)*c.M.s,y=c.M.oy+(a[2]-c.M.y0)*c.M.s,v=t[k].s,b=band(v);
+  h+='<rect class="ht" data-k="'+k+'" x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+(c.M.s-1.5).toFixed(1)+'" height="'+(c.M.s-1.5).toFixed(1)+'" rx="3" fill="'+hcol(v)+'" fill-opacity=".85"/>'});
+ return h+'</g>'}
 var TH=[[-0.36,51.405],[-0.31,51.41],[-0.305,51.46],[-0.28,51.485],[-0.25,51.468],[-0.228,51.49],[-0.21,51.468],[-0.19,51.464],[-0.17,51.48],[-0.15,51.485],[-0.125,51.488],[-0.12,51.502],[-0.115,51.509],[-0.1,51.508],[-0.075,51.505],[-0.05,51.503],[-0.03,51.507],[-0.022,51.493],[-0.005,51.484],[0.005,51.505],[0.03,51.5],[0.07,51.494],[0.11,51.508],[0.16,51.514]];
 function setData(m){if(!m||!m.areas)return;MI=m;ALL=m.areas;if(m.labels)L=m.labels;D=ALL.slice(0,10);cur=Math.min(cur,D.length-1);
  var g=new Date(m.generated+"T12:00:00Z").toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
@@ -613,7 +647,7 @@ function setData(m){if(!m||!m.areas)return;MI=m;ALL=m.areas;if(m.labels)L=m.labe
  render()}
 function render(){if(!D.length)return;
  document.getElementById("tabs").innerHTML=D.map(function(d,i){return '<button class="tab'+(i==cur?' on':'')+'" onclick="pick('+i+')"><div class="r"><span>'+d.n+'</span><span class="chg"'+cs(d.c)+'>'+sg(d.c)+(d.c==null?'':' pts')+'</span></div><div class="s"><b>'+d.s+'<em>/100</em></b><span class="mono">Index</span></div><div class="m"><i style="width:'+d.s+'%"></i></div></button>'}).join("");
- var d=D[cur],m='<defs><pattern id="gr" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="#16233f" stroke-width="1"/></pattern></defs><rect width="640" height="440" fill="url(#gr)" opacity=".7"/>'+
+ var d=D[cur],m='<defs><pattern id="gr" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="#16233f" stroke-width="1"/></pattern></defs><rect width="640" height="440" fill="url(#gr)" opacity=".7"/>'+heat()+
  (PJ().river?'<path d="M'+TH.map(function(q){return px(q[0]).toFixed(1)+' '+py(q[1]).toFixed(1)}).join("L")+'" fill="none" stroke="#1d3358" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>':'')+
  '<g fill="#52617f" font-size="9" letter-spacing="2.5" font-family="ui-monospace,Menlo,monospace">'+PJ().regions.map(function(r){return '<text x="'+px(r[0])+'" y="'+py(r[1])+'">'+r[2]+'</text>'}).join("")+'</g>';
  ALL.forEach(function(a){if(a===d)return;var x=px(a.lon),y=py(a.lat),j=D.indexOf(a);
@@ -630,8 +664,8 @@ function render(){if(!D.length)return;
  '<div class="take"><div class="top mono"><span>● Plain-English commercial takeaway</span><span>From official data</span></div><p>'+d.t+'</p></div>';
 }
 function pick(i){cur=i;render()}
-setData(MI);
-function loadCity(c){if(!CITYCFG[c])return;CITY=c;cur=0;OPEN={};
+setData(MI);loadTiles();
+function loadCity(c){if(!CITYCFG[c])return;CITY=c;cur=0;OPEN={};loadTiles();
  document.querySelectorAll("#cities button[data-c]").forEach(function(b){b.setAttribute("aria-selected",b.dataset.c===c)});
  try{localStorage.setItem("terrayne-city",c)}catch(e){}
  if(c==="london"&&LONDONMI){setData(LONDONMI);return}
@@ -693,6 +727,46 @@ var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isInter
 (function(){var s=document.querySelector(".sky");if(!s)return;function f(){var r=s.getBoundingClientRect();s.setAttribute("preserveAspectRatio",r.width/r.height>4?"xMidYMax meet":"xMidYMax slice")}f();addEventListener("resize",f)})();
 </script>
 <script>
+
+/* ---------- Map: hover/tap a square, expand, zoom ---------- */
+(function(){var svg=document.getElementById("map"),tip=document.getElementById("maptip"),wrap=svg&&svg.closest(".mapp");if(!svg||!tip)return;
+var VB=[0,0,640,440],sel=null;function setVB(){svg.setAttribute("viewBox",VB.map(function(v){return v.toFixed(1)}).join(" "))}
+function near(lat,lon){var b=null,bd=1e9;(ALL||[]).forEach(function(a){var d=Math.hypot((a.lat-lat)*111,(a.lon-lon)*69);if(d<bd){bd=d;b=a}});return b&&bd<3.2?b.f:null}
+function centre(k){var a=k.split("/"),x=+a[1]+.5,y=+a[2]+.5,n=8192;return{lon:x/n*360-180,lat:Math.atan(Math.sinh(Math.PI*(1-2*y/n)))*180/Math.PI}}
+function show(r,ev){var k=r.getAttribute("data-k"),t=(TL[CITY]||{})[k];if(!t)return;var b=band(t.s),c=centre(k),nm=near(c.lat,c.lon);
+ if(sel)sel.classList.remove("on");sel=r;r.classList.add("on");
+ tip.innerHTML='<div class="tt-h"><i style="background:'+b[1]+'"></i>'+b[0]+' momentum</div><div class="tt-p">'+(nm?'Around '+nm:'This area')+'</div><div class="tt-s" id="ttscore">Exact score with <a href="#pricing">Investor</a></div><button type="button" class="tt-b">Check a postcode here →</button>';
+ if(window.tPaid)window.tPaid().then(function(ok){var e=document.getElementById("ttscore");if(ok&&e&&sel===r)e.innerHTML='Score <b>'+t.s+'</b>/100'+(t.hd!=null?' · price headroom '+t.hd:'')});
+ tip.querySelector(".tt-b").onclick=function(){var bt=this;bt.textContent="Finding a postcode…";
+  fetch("https://api.postcodes.io/postcodes?lon="+c.lon+"&lat="+c.lat+"&radius=2000&limit=1").then(function(x){return x.json()}).then(function(j){var pc=j.result&&j.result[0]&&j.result[0].postcode;if(!pc){bt.textContent="No postcode found here";return}
+   if(wrap.classList.contains("full"))toggle(false);var i=document.getElementById("ckpc"),f=document.getElementById("ckf");if(!i||!f)return;i.value=pc;document.getElementById("check").scrollIntoView({behavior:"smooth"});setTimeout(function(){f.requestSubmit?f.requestSubmit():f.dispatchEvent(new Event("submit",{cancelable:true}))},350)}).catch(function(){bt.textContent="Couldn’t find a postcode"})};
+ if(!nm){var key=k;fetch("https://api.postcodes.io/postcodes?lon="+c.lon+"&lat="+c.lat+"&radius=2000&limit=1").then(function(x){return x.json()}).then(function(j){var q=j.result&&j.result[0];if(q&&sel===r){var e=tip.querySelector(".tt-p");if(e)e.textContent="Around "+[q.admin_ward,q.admin_district].filter(Boolean).join(", ")}}).catch(function(){})}
+ var w=tip.parentNode.getBoundingClientRect(),rr=r.getBoundingClientRect(),x=rr.left-w.left+rr.width/2,y=rr.top-w.top;tip.hidden=false;
+ var tw=tip.offsetWidth,th=tip.offsetHeight;tip.style.left=Math.max(6,Math.min(w.width-tw-6,x-tw/2))+"px";tip.style.top=(y-th-8<6?rr.bottom-w.top+8:y-th-8)+"px"}
+function hide(){tip.hidden=true;if(sel)sel.classList.remove("on");sel=null}
+svg.addEventListener("mouseover",function(e){var r=e.target.closest&&e.target.closest("rect.ht");if(r&&matchMedia("(hover:hover)").matches)show(r,e)});
+svg.addEventListener("click",function(e){var r=e.target.closest&&e.target.closest("rect.ht");if(r){e.stopPropagation();show(r,e)}else if(!(e.target.closest&&e.target.closest("g.mk")))hide()});
+svg.addEventListener("mouseleave",function(e){if(matchMedia("(hover:hover)").matches&&!(e.relatedTarget&&tip.contains(e.relatedTarget)))setTimeout(function(){if(!tip.matches(":hover"))hide()},250)});
+document.addEventListener("click",function(e){if(!tip.hidden&&!tip.contains(e.target)&&!svg.contains(e.target))hide()});
+/* zoom and pan (expanded view and +/- buttons) */
+function zoom(f,cx,cy){var w=VB[2]*f,h=VB[3]*f;if(w>640){w=640;h=440}if(w<120){w=120;h=82.5}cx=cx==null?VB[0]+VB[2]/2:cx;cy=cy==null?VB[1]+VB[3]/2:cy;
+ VB=[Math.max(0,Math.min(640-w,cx-(cx-VB[0])*w/VB[2])),Math.max(0,Math.min(440-h,cy-(cy-VB[1])*h/VB[3])),w,h];setVB();hide()}
+function pt(e){var r=svg.getBoundingClientRect();return[VB[0]+(e.clientX-r.left)/r.width*VB[2],VB[1]+(e.clientY-r.top)/r.height*VB[3]]}
+document.getElementById("mapzin").onclick=function(){zoom(.7)};document.getElementById("mapzout").onclick=function(){zoom(1/.7)};
+svg.addEventListener("wheel",function(e){if(!wrap.classList.contains("full"))return;e.preventDefault();var q=pt(e);zoom(e.deltaY<0?.85:1/.85,q[0],q[1])},{passive:false});
+var P={},drag=null,pinch=null;
+svg.addEventListener("pointerdown",function(e){if(VB[2]>=640&&!wrap.classList.contains("full"))return;P[e.pointerId]=[e.clientX,e.clientY];var ids=Object.keys(P);
+ if(ids.length===1)drag={x:e.clientX,y:e.clientY,vb:VB.slice(),moved:false};else if(ids.length===2){var a=P[ids[0]],b=P[ids[1]];pinch={d:Math.hypot(a[0]-b[0],a[1]-b[1]),vb:VB.slice()};drag=null}});
+svg.addEventListener("pointermove",function(e){if(!(e.pointerId in P))return;P[e.pointerId]=[e.clientX,e.clientY];var r=svg.getBoundingClientRect(),ids=Object.keys(P);
+ if(pinch&&ids.length===2){var a=P[ids[0]],b=P[ids[1]],d=Math.hypot(a[0]-b[0],a[1]-b[1]);VB=pinch.vb.slice();zoom(pinch.d/d,VB[0]+VB[2]/2,VB[1]+VB[3]/2);e.preventDefault()}
+ else if(drag){var dx=(e.clientX-drag.x)/r.width*VB[2],dy=(e.clientY-drag.y)/r.height*VB[3];if(Math.abs(e.clientX-drag.x)+Math.abs(e.clientY-drag.y)>4)drag.moved=true;
+  if(drag.moved){VB[0]=Math.max(0,Math.min(640-VB[2],drag.vb[0]-dx));VB[1]=Math.max(0,Math.min(440-VB[3],drag.vb[1]-dy));setVB();hide()}}});
+function up(e){delete P[e.pointerId];if(Object.keys(P).length<2)pinch=null;if(!Object.keys(P).length)drag=null}
+svg.addEventListener("pointerup",up);svg.addEventListener("pointercancel",up);
+/* expand */
+var ex=document.getElementById("mapexp");function toggle(on){wrap.classList.toggle("full",on);document.documentElement.classList.toggle("mapopen",on);ex.setAttribute("aria-expanded",on);ex.textContent=on?"✕ Close":"⤢ Expand";if(!on){VB=[0,0,640,440];setVB()}hide()}
+ex.onclick=function(){toggle(!wrap.classList.contains("full"))};document.addEventListener("keydown",function(e){if(e.key==="Escape"&&wrap.classList.contains("full"))toggle(false)});
+})();
 /* ---------- Solutions dropdown + tabs ---------- */
 (function(){var dd=document.getElementById("dd");if(!dd)return;var b=dd.querySelector("button");
 b.onclick=function(e){e.stopPropagation();var o=dd.classList.toggle("open");b.setAttribute("aria-expanded",o)};
@@ -724,7 +798,7 @@ async function pts(x,y){var k=CC+":"+x+"_"+y;if(!(k in CACHE)){try{CACHE[k]=awai
 async function paid(){if(PAID!==null)return PAID;PAID=false;var C=window.TERRAYNE||{};if(!C.supabaseUrl||!C.supabaseAnonKey)return false;
  try{if(!window.supabase)await new Promise(function(ok,no){var s=document.createElement("script");s.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js";s.integrity="sha384-GFr3yTh5lJznCbZfpTtXnwboFsxqtTQoeTZCRHhE0579KrRmlCzen5AA8ohaB5ug";s.crossOrigin="anonymous";s.onload=ok;s.onerror=no;document.head.appendChild(s)});
   var sb=window.supabase.createClient(C.supabaseUrl,C.supabaseAnonKey),s=await sb.auth.getSession();if(!s.data.session)return false;
-  var r=await sb.rpc("effective_plan",{uid:s.data.session.user.id});PAID=!!(r.data&&r.data!=="free")}catch(e){}return PAID}
+  var r=await sb.rpc("effective_plan",{uid:s.data.session.user.id});PAID=!!(r.data&&r.data!=="free")}catch(e){}return PAID}window.tPaid=paid;
 function verdict(s){return s>=80?["Changing fast","#4f9be8"]:s>=65?["Changing","#5fd6b8"]:s>=50?["Steady","#9aa3b5"]:["Quiet","#8c9ab3"]}
 var KIND={ma:"Office/shop to homes (Class MA)",major:"Major scheme",res:"New homes",com:"Commercial space",bf:"Brownfield register site"};
 async function geo(pc){var r=await fetch("https://api.postcodes.io/postcodes/"+encodeURIComponent(pc));
