@@ -318,7 +318,8 @@ nav ul a{padding:7px 14px}
 .cities{display:inline-flex;flex-wrap:wrap;gap:4px;padding:4px;border:1px solid var(--line);border-radius:99px;margin:0 0 22px;background:rgba(255,255,255,.02)}
 .cities button{background:none;border:0;color:#c8d4e8;font:inherit;font-size:13.5px;padding:8px 16px;border-radius:99px;cursor:pointer}
 .cities button small{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);margin-left:4px}
-.cities button[aria-selected="true"]{background:#fff;color:#0a1223}.cities button[aria-selected="true"] small{color:#4a5670}
+.cities button[aria-selected="true"]{background:linear-gradient(180deg,rgba(159,208,255,.17),rgba(159,208,255,.05));color:#fff;box-shadow:inset 0 0 0 1px rgba(159,208,255,.3),0 0 24px -6px rgba(159,208,255,.45)}.cities button[aria-selected="true"] small{color:#9fd0ff}
+@media(max-width:600px){.cities{display:grid;grid-template-columns:1fr 1fr;width:100%;border-radius:22px;gap:4px}.cities button{border-radius:18px;padding:11px 8px;text-align:center}.cities button small{display:block;margin:2px 0 0}}
 .cities button:disabled{cursor:default;opacity:.55}
 /* class MA show-all */
 .mamore{text-align:center;margin-top:14px}
