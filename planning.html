@@ -447,6 +447,7 @@ footer .fl{align-items:center}footer .fl a.tmark{color:#fff}.tmark{display:inlin
 <section id="feed" style="padding-top:0"><div class="wrap">
 <div class="feedhead"><div><div class="eyebrow mono">Automated Datahub translation</div><h2>London planning signal feed</h2><p class="sub">Terrayne pulls raw filings from the GLA’s Planning London Datahub, filters out minor domestic works, and sums up each significant scheme in plain English. Every row is a real application.</p></div><div class="pills" id="pills"></div></div>
 <div class="tw"><table><thead><tr class="mono"><th>Borough</th><th>Site / corridor</th><th>Signal type</th><th>Net units / scale</th><th>Status</th><th>In plain English</th></tr></thead><tbody id="rows"></tbody></table></div>
+<p style="text-align:center;margin:18px 0 0"><button id="fmore" class="fp" hidden onclick="FN=1e9;feed()">Show all filings</button></p>
 <p style="margin:18px 0 0"><a class="btn ghost" href="./#pricing">Get new filings in your boroughs every Monday</a></p>
 <p class="note" style="margin-top:14px">The latest significant applications from the GLA <a href="https://www.london.gov.uk/programmes-strategies/planning/digital-planning/planning-london-datahub" target="_blank" rel="noopener" style="text-decoration:underline">Planning London Datahub</a> (last two months), updated every Monday. Last update: <span id="feedupd">…</span>. Summaries are built only from each application’s own figures; statuses can change, so check the council’s planning register by reference for the latest.</p>
 </div></section>
@@ -462,8 +463,10 @@ function day(d){return new Date(d+"T12:00:00").toLocaleDateString("en-GB",{day:"
 function feed(){if(!document.getElementById("pills"))return;
 document.getElementById("pills").innerHTML=P.map(function(p){return '<button class="fp'+(p[0]==fc?' on':'')+'" onclick="fsel(\''+p[0]+'\')">'+p[1]+'</button>'}).join("");
 var L=F.filter(function(r){return fc=="all"||r.kind==fc});
-document.getElementById("rows").innerHTML=L.length?L.map(function(r){return '<tr><td>'+esc(r.borough)+'</td><td class="sc" data-l="Site">'+esc(r.site)+'<br><small class="mono" style="color:var(--mute);font-size:11px">Ref '+esc(r.ref)+' · filed '+day(r.valid)+'</small></td><td data-l="Signal type"><span class="tg '+(r.kind=="ma"?"ma":"mr")+'">'+(r.kind=="ma"?"Office-to-home (Class MA)":"Major scheme")+'</span></td><td class="mn" data-l="Scale">'+scale(r)+'</td><td class="ai mn" data-l="Status">'+esc(r.status)+'</td><td class="tk" data-l="In plain English">'+esc(r.summary)+'<br><small style="color:var(--mute)">Council description: '+esc(r.description)+'</small></td></tr>'}).join(""):'<tr><td colspan="6">No filings in this category in the last two months.</td></tr>'}
-function fsel(c){fc=c;feed()}
+var M=L.length>FN?L.slice(0,FN):L;var mb=document.getElementById("fmore");if(mb){mb.hidden=L.length<=FN;mb.textContent="Show all "+L.length+" filings"}
+document.getElementById("rows").innerHTML=L.length?M.map(function(r){return '<tr><td>'+esc(r.borough)+'</td><td class="sc" data-l="Site">'+esc(r.site)+'<br><small class="mono" style="color:var(--mute);font-size:11px">Ref '+esc(r.ref)+' · filed '+day(r.valid)+'</small></td><td data-l="Signal type"><span class="tg '+(r.kind=="ma"?"ma":"mr")+'">'+(r.kind=="ma"?"Office-to-home (Class MA)":"Major scheme")+'</span></td><td class="mn" data-l="Scale">'+scale(r)+'</td><td class="ai mn" data-l="Status">'+esc(r.status)+'</td><td class="tk" data-l="In plain English">'+esc(r.summary)+'<br><small style="color:var(--mute)">Council description: '+esc(r.description)+'</small></td></tr>'}).join(""):'<tr><td colspan="6">No filings in this category in the last two months.</td></tr>'}
+function fsel(c){fc=c;FN=10;feed()}
+var FN=10;
 fetch("data/feed.json",{cache:"no-store"}).then(function(r){return r.json()}).then(function(d){F=d.rows||[];var u=document.getElementById("feedupd");if(u)u.textContent=day(d.generated);feed()}).catch(function(){var t=document.getElementById("rows");if(t)t.innerHTML='<tr><td colspan="6">The feed couldn’t load. Please refresh.</td></tr>'});
 </script>
 

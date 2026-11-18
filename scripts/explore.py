@@ -184,7 +184,7 @@ def build_classma(today):
 
 def summary(r):
     """One plain-English line built only from the filing's own figures (no guesswork)."""
-    u, com, kind, status = r[2] or 0, r[3] or 0, r[4], r[5]
+    u, com, kind, status = max(0, r[2] or 0), r[3] or 0, r[4], r[5]
     done = status in ("Approved", "Started", "Completed")
     if kind == "ma" and not u:
         return ("Approved: offices or shops to become homes (number not stated)." if done
@@ -208,7 +208,7 @@ def build_feed(today, datadir, days=60, limit=30):
     keep = [r for r in rows if (r[4] == "major" or (r[4] == "ma" and (r[2] or 0) >= 5))
             and r[6] and r[6] >= since and r[5] not in ("Refused", "Withdrawn")]  # schemes that matter: majors and conversions of 5+ homes
     keep.sort(key=lambda r: (r[6], r[2] or 0), reverse=True)
-    out = [{"borough": r[8], "site": r[9], "ref": r[7], "kind": r[4], "homes": r[2], "commercial_m2": r[3],
+    out = [{"borough": r[8], "site": r[9], "ref": r[7], "kind": r[4], "homes": max(0, r[2] or 0), "commercial_m2": r[3],
             "status": r[5], "valid": r[6], "summary": summary(r), "description": r[10]} for r in keep[:limit]]
     feed = {"generated": today.isoformat(), "window_days": days, "source": "GLA Planning London Datahub", "rows": out}
     (datadir / "feed.json").write_text(json.dumps(feed, ensure_ascii=False, indent=1))

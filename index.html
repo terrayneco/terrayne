@@ -196,7 +196,7 @@ img,svg{max-width:100%}
 .sky{flex:0 0 auto;overflow:visible;height:clamp(110px,24vh,300px);width:100%;margin-top:clamp(-40px,-3vh,-16px)}
 /* Grids never force sideways scrolling */
 .dash>*,.split>*,.bgrid>*,.feedhead>*,.grid>*{min-width:0}
-.tabs{grid-template-columns:repeat(auto-fit,minmax(min(150px,100%),1fr))}
+.tabs{grid-template-columns:repeat(auto-fit,minmax(min(150px,100%),1fr))}@media(min-width:1001px){.tabs{grid-template-columns:repeat(5,minmax(0,1fr))}}
 .g3{grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr))}
 .grid.g3[style]{grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr))!important}
 .mb{flex-wrap:wrap}
@@ -299,7 +299,7 @@ nav ul a{padding:7px 14px}
 .solp{display:grid;grid-template-columns:1.2fr 1fr;gap:18px}.solp[hidden]{display:none!important}.solp{transition:opacity .45s cubic-bezier(.2,.7,.2,1),transform .45s cubic-bezier(.2,.7,.2,1)}.solp.pre{opacity:0;transform:translateY(10px)}section[id]{scroll-margin-top:88px}@media(max-width:900px){.solp{grid-template-columns:1fr}}
 .solp h3{font-size:clamp(24px,3vw,32px);letter-spacing:-.02em;margin:0 0 10px;line-height:1.15}
 .solp ul{margin:16px 0 0;padding-left:18px;color:#c8d4e8}.solp li{margin-bottom:10px}
-.solp .tools a{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--line);color:#fff}.solp .tools a:last-of-type{border-bottom:0}.solp .tools a span{color:var(--mute);font-size:13px}
+.solp .tools a{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--line);color:#fff}.solp .tools a:last-of-type{border-bottom:0}.solp .tools a span{color:var(--mute);font-size:13px}.solp .panel>small{display:block;line-height:1.7;margin-bottom:8px}@media(max-width:600px){.solp .tools a{flex-direction:column;align-items:flex-start;gap:3px}}
 /* class MA tracker */
 .makpi{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:18px}@media(max-width:800px){.makpi{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .makpi div{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px 18px}.makpi b{display:block;font-size:28px;font-weight:600;letter-spacing:-.02em}.makpi span{font-size:12.5px;color:var(--mute)}
