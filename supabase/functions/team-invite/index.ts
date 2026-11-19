@@ -35,7 +35,7 @@ Deno.serve(async (req) => {
     ? "Sign in to Terrayne and accept the invitation at the top of your account page."
     : `Create your free account with <b>${esc(email)}</b> and you’ll join the team straight away.`;
   const html = `<div style="font-family:-apple-system,Helvetica,Arial,sans-serif;max-width:520px;margin:0 auto;color:#0a1223">
-<p style="font-size:13px;letter-spacing:.2em;color:#4f6b94">TERRAYNE</p>
+<div style="background:#060d1a;border-radius:14px;padding:18px 0;text-align:center;margin:0 0 20px"><img src="https://terrayne.co/assets/email-logo.png" width="210" height="70" alt="Terrayne" style="display:inline-block;border:0;color:#ffffff;font-size:18px"></div>
 <h2 style="margin:8px 0 12px">${who}${org} has invited you to their Terrayne team</h2>
 <p style="line-height:1.6">Terrayne is property intelligence for London: what’s being planned around any site, how fast each neighbourhood is changing, and a brief every Monday. As part of the team you get full Enterprise access at no cost to you.</p>
 <p style="line-height:1.6">${action}</p>

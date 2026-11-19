@@ -10,7 +10,8 @@ function html(name: string, week: string, items: { area: string; title: string; 
   const d = new Date(week + "T07:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
   return `<div style="background:#060d1a;padding:32px 16px;font-family:-apple-system,Helvetica,Arial,sans-serif;color:#fff">
 <div style="max-width:620px;margin:0 auto">
-<p style="letter-spacing:.2em;font-size:11px;color:#9fd0ff;text-transform:uppercase;margin:0 0 8px">Terrayne · Monday Brief · ${d}</p>
+<img src="https://terrayne.co/assets/email-logo.png" width="180" height="60" alt="Terrayne" style="display:block;border:0;color:#ffffff;font-size:18px;margin:0 0 14px">
+<p style="letter-spacing:.2em;font-size:11px;color:#9fd0ff;text-transform:uppercase;margin:0 0 8px">Monday Brief · ${d}</p>
 <h1 style="font-size:24px;margin:0 0 20px">Good morning${name ? ", " + esc(name.split(" ")[0]) : ""}.</h1>
 ${items.map((b) => `<div style="background:#0d1830;border:1px solid #1c2b4d;border-radius:16px;padding:18px 20px;margin:0 0 12px">
 <p style="font-size:12px;color:#8c9ab3;margin:0 0 4px">${esc(b.area)}</p><h2 style="font-size:17px;margin:0 0 8px">${esc(b.title)}</h2>
