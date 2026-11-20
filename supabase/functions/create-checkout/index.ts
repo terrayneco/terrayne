@@ -36,6 +36,13 @@ Deno.serve(async (req) => {
       ...(trial ? { trial_period_days: 14, trial_settings: { end_behavior: { missing_payment_method: "cancel" } } } : {}),
     },
     ...(trial ? { payment_method_collection: "if_required" as const } : {}),
+    custom_text: {
+      submit: {
+        message: trial
+          ? "Your 14-day free trial starts today. Cancel any time from your Terrayne account and you won't be charged."
+          : "Cancel any time from your Terrayne account. You keep access until the end of the period you've paid for.",
+      },
+    },
     success_url: `${SITE}/account.html?checkout=success#billing`,
     cancel_url: `${SITE}/account.html?checkout=cancelled#billing`,
   });
