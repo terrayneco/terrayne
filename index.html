@@ -1035,6 +1035,17 @@ function set(k){bs.forEach(function(b){b.setAttribute("aria-checked",b.dataset.b
 bs.forEach(function(b){b.onclick=function(){set(b.dataset.b)}});})();
 </script>
 <script src="assets/config.js"></script>
+<script>/* Signed-in visitors: show the right pricing buttons (trial only if they still qualify). */
+(async function(){try{
+ if(!Object.keys(localStorage).some(function(x){return /^sb-.+-auth-token$/.test(x)})||!window.tPaid)return;
+ var isPaid=await window.tPaid();if(!window.supabase)return;var C=window.TERRAYNE||{};
+ var B=document.querySelectorAll("#pricing a[data-plan]");
+ if(isPaid){B.forEach(function(a){a.removeAttribute("data-plan");a.href="account.html#billing";a.textContent="Manage in your account"});return}
+ var sb=window.supabase.createClient(C.supabaseUrl,C.supabaseAnonKey),r=await sb.functions.invoke("create-checkout",{body:{check:true}});
+ if(r.data&&r.data.trial)return;
+ B.forEach(function(a){a.textContent=a.dataset.plan==="pro"?"Upgrade to Pro":"Upgrade to Team"});
+}catch(e){}})();
+</script>
 <script>/* Signed in? Swap "Sign in / Start free" for "My account". */
 (function(){try{var k=Object.keys(localStorage).filter(function(x){return /^sb-.+-auth-token$/.test(x)})[0];if(!k)return;
  var t=JSON.parse(localStorage.getItem(k)||"null");if(!t||!t.user)return;
