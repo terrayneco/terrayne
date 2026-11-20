@@ -214,7 +214,7 @@ def why(r, ts, ma, big):
         s, c12 = ts.get("s"), ts.get("c12")
         if s is not None:
             band = "one of London’s faster-changing areas" if s >= 75 else "an area that is changing" if s >= 55 else "a quieter area, so it could be an early sign of change"
-            bits.append(f"It sits in {band} (Momentum {s}/100" + (f", {'+' if c12 > 0 else '−' if c12 < 0 else ''}{abs(c12)} in 12 months" if c12 is not None else "") + ")")
+            bits.append(f"It sits in {band} (Momentum {s}/100" + ((", unchanged over 12 months" if c12 == 0 else f", {'+' if c12 > 0 else '−'}{abs(c12)} in 12 months") if c12 is not None else "") + ")")
     if kind == "ma" and ma and ma.get("approval_rate") is not None and ma.get("decided_24m", 0) >= 5:
         bits.append(f"{r[8]} approves {round(ma['approval_rate'] * 100)}% of office-to-home conversions, typically in {ma['median_days']} days")
     if status in ("Approved", "Started"):
