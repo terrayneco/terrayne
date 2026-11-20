@@ -82,10 +82,10 @@
    "c": -7,
    "c12": -6,
    "tr": [
-    "d",
-    "d",
-    "d",
-    "d",
+    "f",
+    "u",
+    "f",
+    "u",
     "u",
     "u",
     "f"
@@ -283,7 +283,7 @@
     "f",
     "u",
     "f",
-    "d",
+    "f",
     "u",
     "u",
     "f"
@@ -655,10 +655,10 @@
    "c": -1,
    "c12": -2,
    "tr": [
+    "f",
     "d",
     "d",
-    "d",
-    "d",
+    "u",
     "u",
     "u",
     "d"
@@ -878,7 +878,7 @@
    "c": -2,
    "c12": -2,
    "tr": [
-    "d",
+    "u",
     "u",
     "f",
     "u",
@@ -972,14 +972,6 @@
      "valid": "13/07/2026"
     },
     {
-     "ref": "26/2506",
-     "lpa": "Brent",
-     "site": "First Floor Flat, 517A High Road, Wembley",
-     "units": 2,
-     "status": "Application Received",
-     "valid": "12/10/2026"
-    },
-    {
      "ref": "26/0397",
      "lpa": "Brent",
      "site": "7 Chalfont Avenue, Wembley",
@@ -988,12 +980,12 @@
      "valid": "26/02/2026"
     },
     {
-     "ref": "26/2408",
+     "ref": "26/2506",
      "lpa": "Brent",
-     "site": "9-11 Bridge Road, Wembley",
+     "site": "First Floor Flat, 517A High Road, Wembley",
      "units": 2,
      "status": "Application Received",
-     "valid": "22/09/2026"
+     "valid": "12/10/2026"
     },
     {
      "ref": "26/1723",
@@ -1004,12 +996,20 @@
      "valid": "15/07/2026"
     },
     {
-     "ref": "26/1906",
+     "ref": "26/2408",
      "lpa": "Brent",
-     "site": "55 Chalkhill Road, Wembley",
+     "site": "9-11 Bridge Road, Wembley",
+     "units": 2,
+     "status": "Application Received",
+     "valid": "22/09/2026"
+    },
+    {
+     "ref": "26/0407",
+     "lpa": "Brent",
+     "site": "146 Wembley Hill Road, Wembley",
      "units": 0,
-     "status": "Approved",
-     "valid": "31/07/2026"
+     "status": "Appeal Received",
+     "valid": "16/03/2026"
     }
    ],
    "det": {
@@ -1096,10 +1096,10 @@
    "c": 0,
    "c12": 2,
    "tr": [
-    "d",
+    "f",
     "f",
     "d",
-    "u",
+    "f",
     "u",
     "u",
     "d"
@@ -1532,7 +1532,7 @@
    "c": -1,
    "c12": 1,
    "tr": [
-    "d",
+    "f",
     "u",
     "f",
     "d",
@@ -1755,8 +1755,8 @@
    "c": -1,
    "c12": -4,
    "tr": [
-    "d",
     "u",
+    "f",
     "d",
     "u",
     "f",
@@ -1980,7 +1980,7 @@
    "tr": [
     "f",
     "d",
-    "d",
+    "f",
     "d",
     "u",
     "u",
