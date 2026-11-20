@@ -104,8 +104,9 @@ function header(d,title,brandOn){var brand=brandOn&&profile&&(profile.brand_name
  var logo=brandOn&&profile&&/^https:\/\//.test(profile.brand_logo||"")?'<img src="'+esc(profile.brand_logo)+'" alt="">':'';
  return '<div class="hd"><div class="brand">'+(logo||'')+'<b>'+esc(brand||"TERRAYNE")+'</b></div><div class="meta">'+esc(title)+'<br>Prepared '+new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"})+'<br>Data updated '+esc(d.generated)+'</div></div>'}
 
+var CFR={H:"High confidence",M:"Medium confidence",L:"Low confidence"};
 function summary(d){var s=d.stats,ts=d.ts;
- return (ts?'<div class="score"><div class="n">'+ts.s+'<small>/100</small></div><div><span class="v">'+TerrayneReport.verdict(ts.s)+'</span><p>Momentum Index for the surrounding ~3 km area'+(ts.hd!=null?'. Price headroom '+ts.hd+'/100: cheaper than '+ts.hd+'% of '+esc(d.cityInfo.name)+'.':'.')+(d.city!=="london"?' Manchester is an experimental beta with its own method.':'')+'</p></div></div>':'')+
+ return (ts?'<div class="score"><div class="n">'+ts.s+'<small>/100</small></div><div><span class="v">'+TerrayneReport.verdict(ts.s)+'</span>'+(ts.cf&&CFR[ts.cf[0]]?' <span class="v" style="margin-left:6px">'+CFR[ts.cf[0]]+'</span>':'')+'<p>Momentum Index for the surrounding ~3 km area'+(ts.hd!=null?'. Price headroom '+ts.hd+'/100: cheaper than '+ts.hd+'% of '+esc(d.cityInfo.name)+'.':'.')+(d.city!=="london"?' Manchester is an experimental beta with its own method.':'')+'</p></div></div>':'')+
  '<div class="kpis"><div class="kpi"><b>'+nf(s.homes)+'</b><span>net new homes '+(d.city!=="london"?"(where published)":"proposed")+'</span></div><div class="kpi"><b>≈ '+nf(s.residents)+'</b><span>new residents if built</span></div><div class="kpi"><b>'+nf(s.approved)+'</b><span>homes approved or started</span></div><div class="kpi"><b>'+(d.city!=="london"?(Math.round(s.com*10)/10)+' ha':nf(s.com)+' m²')+'</b><span>'+(d.city!=="london"?"brownfield land":"new commercial space")+'</span></div></div>'}
 
 function sources(d){return '<div class="ft">Sources: '+(d.city==="london"?'GLA Planning London Datahub (applications validated in the last 24 months, live or approved)':'MHCLG brownfield land registers')+'; Terrayne Momentum Index (TfL, ORR, ONS, HM Land Registry); postcode location via postcodes.io. New residents use '+esc(d.cityInfo.hhLabel)+' (ONS Census 2021). Planning statuses change: check the council’s register by reference before relying on them. This report is information, not investment, legal or planning advice. Contains public sector information licensed under the Open Government Licence v3.0. © Terrayne '+new Date().getFullYear()+'.</div>'}
@@ -122,6 +123,7 @@ function memo(d){var s=d.stats,ts=d.ts,rm=d.R*1000+" m",risks=[];
  if(s.pending>s.approved)risks.push("Most nearby homes ("+nf(s.pending)+") are not yet approved; timing and delivery are uncertain.");
  if(ts&&ts.hd!=null&&ts.hd<30)risks.push("Low price headroom ("+ts.hd+"/100): the area is already expensive relative to "+d.cityInfo.name+".");
  if(ts&&ts.x&&ts.x[6]!=null&&ts.x[6]<30)risks.push("Weak resale price momentum locally.");
+ if(ts&&ts.cf&&ts.cf[0]!=="H"&&ts.cf[1].length)risks.push(CFR[ts.cf[0]]+" in the score: "+ts.cf[1].join("; ")+".");
  risks.push("Planning data reflects applications, not completions; statuses can change.");
  return '<div class="page">'+header(d,"Investment Committee memo",true)+'<h1>'+esc(d.pc)+': site catchment memo</h1><p class="sub">'+esc([d.g.ward,d.g.district].filter(Boolean).join(", "))+' · catchment '+rm+'</p>'+
  '<h2>1. Summary</h2>'+summary(d)+

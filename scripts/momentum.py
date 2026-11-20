@@ -18,6 +18,8 @@ Method (shown on the site as well):
   Each signal becomes a percentile (0-100) against every 9.3 km2 map tile in Greater London
   (zoom-13 web-map tiles, the same area as the circles). The Index is the weighted average of
   the signals available for that neighbourhood (weights re-scaled if one is missing).
+  Confidence (shown alongside): High / Medium / Low, from how many signals have data and how big
+  the samples are (see confidence()).
   Price headroom (shown alongside, not in the score) = how cheap the median sale is vs London.
   The 30-day change is today's Index minus the Index with planning data for the 12 months
   ending 30 days ago (the official statistics update monthly to yearly).
@@ -162,6 +164,26 @@ def score(sig, dist, extra=None):
     return round(sum(parts[k] * w for k, w in have.items()) / sum(have.values())), parts
 
 
+MISSING_WHY = {"act": "No planning applications to measure", "pipe": "No housing pipeline data",
+               "ma": "No office-to-home data", "com": "No commercial floorspace data",
+               "transport": "No stations nearby, so station use isn't counted",
+               "population": "Not enough population data", "prices": "Too few home sales to measure price change"}
+
+
+def confidence(parts, act=None, sales=None, lsoas=None):
+    """How solid the data behind a score is: ["H"|"M"|"L", [reasons]].
+    One point off for each missing signal and each thin sample; 0 = High, 1-2 = Medium, 3+ = Low.
+    (Data freshness is the same for every area, so it is shown on the methodology page, not here.)"""
+    why = [MISSING_WHY[k] for k in WEIGHTS if parts.get(k) is None]
+    if act is not None and parts.get("act") is not None and act < 20:
+        why.append(f"Only {fnum(act)} significant planning application{'' if act == 1 else 's'} in 12 months")
+    if sales is not None and parts.get("prices") is not None and sales < 60:
+        why.append(f"Price change based on only {fnum(sales)} sales")
+    if lsoas is not None and parts.get("population") is not None and lsoas < 8:
+        why.append(f"Population based on only {lsoas} small areas")
+    return ["H" if not why else "M" if len(why) <= 2 else "L", why]
+
+
 def km(a, b, c, d):
     return math.hypot((d - b) * 69.4, (c - a) * 111.2)
 
@@ -283,23 +305,27 @@ def build(today=None):
                     "u": fnum(sig["pipe"]), "x": [parts[k] for k in WEIGHTS], "hd": headroom,
                     "raw": {k: round(v) for k, v in sig.items()},
                     "off": {k: (round(v, 4) if isinstance(v, float) else v) for k, v in offv.items()},
-                    "schemes": schemes, "det": det, "t": takeaway(full, sig, parts, schemes, offv)})
+                    "schemes": schemes, "det": det, "t": takeaway(full, sig, parts, schemes, offv),
+                    "cf": confidence(parts, sig["act"], offv.get("sales"), (det.get("population") or {}).get("lsoas"))})
     out.sort(key=lambda d: -d["s"])
     # A score for every map tile in London (powers the postcode check).
     tile_scores = {}
     for key, sig in tk_now.items():
-        extra, off, hd = {}, {}, None
+        extra, off, hd, cnt = {}, {}, None, {}
         for name in OFFICIAL_W:
             a = (aggs.get(name) or {}).get(key)
             g = a["growth"] if a else None
             extra[name] = pct(g, odist[name]) if g is not None and odist.get(name) else None
             off[name] = round(g, 4) if g is not None else None
+            if a:
+                cnt[name] = a.get("sales") if name == "prices" else a.get("n")
             if name == "prices" and a and a["median"] is not None:
                 off["median_price"] = a["median"]; hd = 100 - pct(a["median"], odist["price_level"])
         s, parts = score(sig, dist_now, extra)
         lat, lon = tile_centre(key)
         tile_scores[key] = {"s": s, "x": [parts[k] for k in WEIGHTS], "hd": hd, "lat": lat, "lon": lon,
-                            "raw": {k: round(sig[k]) for k in PLAN_W}, "off": off}
+                            "raw": {k: round(sig[k]) for k in PLAN_W}, "off": off,
+                            "cf": confidence(parts, sig["act"], cnt.get("prices"), cnt.get("population"))}
     return {"generated": today.isoformat(), "window_days": 365, "radius_km": RADIUS_KM, "tiles": len(dist_now),
             "weights": WEIGHTS, "labels": [LABELS[k] for k in WEIGHTS], "keys": list(WEIGHTS),
             "sources": SOURCES, "official": meta, "errors": errors,
