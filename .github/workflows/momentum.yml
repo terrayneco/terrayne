@@ -9,6 +9,10 @@ on:
         description: "Email the Monday brief to paying users"
         type: boolean
         default: false
+      data_only:
+        description: "Only refresh the public website data (no Supabase snapshot, briefs, alerts or emails)"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -34,7 +38,9 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
-          if [ "${{ github.event_name }}" = "schedule" ] || [ "${{ inputs.send }}" = "true" ]; then
+          if [ "${{ inputs.data_only }}" = "true" ]; then
+            env -u SUPABASE_URL -u SUPABASE_SERVICE_ROLE_KEY python3 scripts/publish.py
+          elif [ "${{ github.event_name }}" = "schedule" ] || [ "${{ inputs.send }}" = "true" ]; then
             python3 scripts/publish.py --send
           else
             python3 scripts/publish.py

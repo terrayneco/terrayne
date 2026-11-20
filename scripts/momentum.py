@@ -21,6 +21,9 @@ Method (shown on the site as well):
   Confidence (shown alongside): High / Medium / Low, from how many signals have data and how big
   the samples are (see confidence()).
   Price headroom (shown alongside, not in the score) = how cheap the median sale is vs London.
+  The 12-month change is today's Index minus the Index with planning data for the 12 months ending a year ago
+  (official statistics held at their latest values, as they are already growth rates). Each signal also gets a
+  direction (rising / stable / falling): see trend().
   The 30-day change is today's Index minus the Index with planning data for the 12 months
   ending 30 days ago (the official statistics update monthly to yearly).
 No API key needed: uses the Datahub's public guest endpoint. Standard library only.
@@ -184,6 +187,34 @@ def confidence(parts, act=None, sales=None, lsoas=None):
     return ["H" if not why else "M" if len(why) <= 2 else "L", why]
 
 
+# Direction of travel per signal: "u" rising, "f" stable, "d" falling (None = no data).
+# Planning signals compare the last 12 months with the 12 months before; the official statistics are already
+# growth rates, so their direction is the sign of that growth (with a small dead band).
+PLAN_MIN = {"act": 5, "pipe": 20, "ma": 10, "com": 500}  # smallest change worth calling a move
+OFFICIAL_BAND = {"transport": (0.02, -0.02), "population": (0.01, -0.005), "prices": (0.02, -0.02)}
+
+
+def trend(sig, sig_prev, off):
+    out = []
+    for k in WEIGHTS:
+        if k in PLAN_W:
+            if sig_prev is None:
+                out.append(None); continue
+            now, was = sig.get(k) or 0, sig_prev.get(k) or 0
+            d = now - was
+            if abs(d) < PLAN_MIN[k] or abs(d) < 0.15 * max(was, 1):
+                out.append("f")
+            else:
+                out.append("u" if d > 0 else "d")
+        else:
+            g = (off or {}).get(k)
+            if g is None:
+                out.append(None); continue
+            up, down = OFFICIAL_BAND[k]
+            out.append("u" if g >= up else "d" if g <= down else "f")
+    return out
+
+
 def km(a, b, c, d):
     return math.hypot((d - b) * 69.4, (c - a) * 111.2)
 
@@ -250,8 +281,11 @@ def takeaway(full, sig, parts, schemes, off=None):
 def build(today=None):
     today = today or dt.date.today()
     prior = today - dt.timedelta(days=30)
+    year_ago = today - dt.timedelta(days=365)
     tk_now = tiles(today, keyed=True)
     dist_now, dist_prev = list(tk_now.values()), tiles(prior)
+    tk_year = tiles(year_ago, keyed=True)
+    dist_year = list(tk_year.values())
     import signals as official
     loaded, errors = official.load_all(today)
     odist, meta, aggs = {}, {}, {}
@@ -289,6 +323,8 @@ def build(today=None):
         offv["transport_span"], offv["population_span"] = span["transport"], span["population"]
         s, parts = score(sig, dist_now, extra)
         s_prev, _ = score(signals(area_query(lat, lon, prior)["aggregations"]), dist_prev, extra)
+        sig_year = signals(area_query(lat, lon, year_ago)["aggregations"])
+        s_year, _ = score(sig_year, dist_year, extra)
         schemes = []
         for h in r["hits"]["hits"]:
             src = h["_source"]; c = src.get("centroid") or {}
@@ -301,7 +337,8 @@ def build(today=None):
             site = label(src.get("site_name"), src.get("street_name"))
             schemes.append({"ref": src.get("lpa_app_no"), "lpa": src.get("lpa_name"), "site": site, "units": u,
                             "status": src.get("status") or "", "valid": src.get("valid_date")})
-        out.append({"n": n, "f": full, "b": boro, "lat": lat, "lon": lon, "s": s, "c": s - s_prev,
+        out.append({"n": n, "f": full, "b": boro, "lat": lat, "lon": lon, "s": s, "c": s - s_prev, "c12": s - s_year,
+                    "tr": trend(sig, sig_year, offv),
                     "u": fnum(sig["pipe"]), "x": [parts[k] for k in WEIGHTS], "hd": headroom,
                     "raw": {k: round(v) for k, v in sig.items()},
                     "off": {k: (round(v, 4) if isinstance(v, float) else v) for k, v in offv.items()},
@@ -322,10 +359,13 @@ def build(today=None):
             if name == "prices" and a and a["median"] is not None:
                 off["median_price"] = a["median"]; hd = 100 - pct(a["median"], odist["price_level"])
         s, parts = score(sig, dist_now, extra)
+        sy = tk_year.get(key)
+        c12 = (s - score(sy, dist_year, extra)[0]) if sy else None
         lat, lon = tile_centre(key)
         tile_scores[key] = {"s": s, "x": [parts[k] for k in WEIGHTS], "hd": hd, "lat": lat, "lon": lon,
                             "raw": {k: round(sig[k]) for k in PLAN_W}, "off": off,
-                            "cf": confidence(parts, sig["act"], cnt.get("prices"), cnt.get("population"))}
+                            "cf": confidence(parts, sig["act"], cnt.get("prices"), cnt.get("population")),
+                            "c12": c12, "tr": trend(sig, sy, off)}
     return {"generated": today.isoformat(), "window_days": 365, "radius_km": RADIUS_KM, "tiles": len(dist_now),
             "weights": WEIGHTS, "labels": [LABELS[k] for k in WEIGHTS], "keys": list(WEIGHTS),
             "sources": SOURCES, "official": meta, "errors": errors,

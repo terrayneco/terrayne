@@ -104,9 +104,32 @@ function header(d,title,brandOn){var brand=brandOn&&profile&&(profile.brand_name
  var logo=brandOn&&profile&&/^https:\/\//.test(profile.brand_logo||"")?'<img src="'+esc(profile.brand_logo)+'" alt="">':'';
  return '<div class="hd"><div class="brand">'+(logo||'')+'<b>'+esc(brand||"TERRAYNE")+'</b></div><div class="meta">'+esc(title)+'<br>Prepared '+new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"})+'<br>Data updated '+esc(d.generated)+'</div></div>'}
 
+var SIGN=["planning activity","the housing pipeline","office-to-home conversions","commercial floorspace","station use","population growth","resale prices"];
+function opps(d){var s=d.stats,ts=d.ts,o=[],L=d.cityInfo.name;if(d.city!=="london"||!ts)return o;
+ var x=ts.x||[],tr=ts.tr||[];
+ if(ts.s>=70&&ts.hd!=null&&ts.hd>=60)o.push("Strong momentum ("+ts.s+"/100) while homes cost less than in "+ts.hd+"% of "+L+": worth checking whether local prices reflect the change underway.");
+ if(ts.c12!=null&&ts.c12>=5)o.push("The area’s score has risen "+ts.c12+" points in 12 months, so change here is picking up rather than levelling off.");
+ var up=tr.map(function(t,i){return t==="u"&&x[i]!=null&&x[i]>=60?SIGN[i]:null}).filter(Boolean);
+ if(up.length)o.push("Rising and already above most of "+L+": "+up.slice(0,3).join(", ")+".");
+ if(s.residents>=500)o.push("About "+nf(s.residents)+" new residents if the planned homes are built: demand for local shops, services and rentals.");
+ if(s.ma>=20)o.push(nf(s.ma)+" homes proposed nearby through office-to-home (Class MA) conversions: offices and shops here are turning into housing.");
+ if(s.com>=2000)o.push(nf(s.com)+" m² of new commercial space proposed nearby, which can bring jobs and footfall.");
+ if(x[4]!=null&&x[4]>=75)o.push("Station use is growing faster than in "+x[4]+"% of "+L+".");
+ return o.slice(0,5)}
+function risks(d){var s=d.stats,ts=d.ts,k=[],L=d.cityInfo.name;
+ if(s.homes>500)k.push("A large pipeline nearby ("+nf(s.homes)+" homes) means construction disruption and new competing supply.");
+ if(s.pending>s.approved)k.push("Most nearby homes ("+nf(s.pending)+") are not yet approved; timing and delivery are uncertain.");
+ if(ts&&ts.hd!=null&&ts.hd<30)k.push("Low price headroom ("+ts.hd+"/100): the area is already expensive relative to "+L+".");
+ if(ts&&ts.x&&ts.x[6]!=null&&ts.x[6]<30)k.push("Weak resale price momentum locally.");
+ if(ts&&ts.c12!=null&&ts.c12<=-5)k.push("The area’s score has fallen "+Math.abs(ts.c12)+" points in 12 months.");
+ var dn=(ts&&ts.tr||[]).map(function(t,i){return t==="d"?SIGN[i]:null}).filter(Boolean);if(dn.length)k.push("Falling over the last year: "+dn.slice(0,3).join(", ")+".");
+ if(ts&&ts.cf&&ts.cf[0]!=="H"&&ts.cf[1].length)k.push("Data confidence is "+(ts.cf[0]==="L"?"low":"medium")+": "+ts.cf[1].join("; ")+".");
+ k.push("Planning data reflects applications, not completions; statuses can change.");return k}
+function lst(a){return '<ul>'+a.map(function(t){return '<li>'+esc(t)+'</li>'}).join("")+'</ul>'}
+function oppSection(d,n){var o=opps(d);return '<h2>'+(n?n+'. ':'')+'Worth investigating</h2>'+(o.length?lst(o):'<p>Nothing here stands out strongly in the data. That can mean a stable area rather than a weak one.</p>')+'<p class="note">Leads to check, drawn only from the figures in this report. They aren’t predictions or advice.</p>'}
 var CFR={H:"Data confidence: High",M:"Data confidence: Medium",L:"Data confidence: Low"};
 function summary(d){var s=d.stats,ts=d.ts;
- return (ts?'<div class="score"><div class="n">'+ts.s+'<small>/100</small></div><div><span class="v">'+TerrayneReport.verdict(ts.s)+'</span>'+(ts.cf&&CFR[ts.cf[0]]?' <span class="v" style="margin-left:6px">'+CFR[ts.cf[0]]+'</span>':'')+'<p>Momentum Index for the surrounding ~3 km area'+(ts.hd!=null?'. Price headroom '+ts.hd+'/100: cheaper than '+ts.hd+'% of '+esc(d.cityInfo.name)+'.':'.')+(d.city!=="london"?' Manchester is an experimental beta with its own method.':'')+'</p></div></div>':'')+
+ return (ts?'<div class="score"><div class="n">'+ts.s+'<small>/100</small></div><div><span class="v">'+TerrayneReport.verdict(ts.s)+'</span>'+(ts.cf&&CFR[ts.cf[0]]?' <span class="v" style="margin-left:6px">'+CFR[ts.cf[0]]+'</span>':'')+'<p>Momentum Index for the surrounding ~3 km area'+(ts.c12!=null?' ('+(ts.c12>0?'up ':ts.c12<0?'down ':'unchanged')+(ts.c12?Math.abs(ts.c12)+' points':'')+' over 12 months)':'')+(ts.hd!=null?'. Price headroom '+ts.hd+'/100: cheaper than '+ts.hd+'% of '+esc(d.cityInfo.name)+'.':'.')+(d.city!=="london"?' Manchester is an experimental beta with its own method.':'')+'</p></div></div>':'')+
  '<div class="kpis"><div class="kpi"><b>'+nf(s.homes)+'</b><span>net new homes '+(d.city!=="london"?"(where published)":"proposed")+'</span></div><div class="kpi"><b>≈ '+nf(s.residents)+'</b><span>new residents if built</span></div><div class="kpi"><b>'+nf(s.approved)+'</b><span>homes approved or started</span></div><div class="kpi"><b>'+(d.city!=="london"?(Math.round(s.com*10)/10)+' ha':nf(s.com)+' m²')+'</b><span>'+(d.city!=="london"?"brownfield land":"new commercial space")+'</span></div></div>'}
 
 function sources(d){return '<div class="ft">Sources: '+(d.city==="london"?'GLA Planning London Datahub (applications validated in the last 24 months, live or approved)':'MHCLG brownfield land registers')+'; Terrayne Momentum Index (TfL, ORR, ONS, HM Land Registry); postcode location via postcodes.io. New residents use '+esc(d.cityInfo.hhLabel)+' (ONS Census 2021). Planning statuses change: check the council’s register by reference before relying on them. This report is information, not investment, legal or planning advice. Contains public sector information licensed under the Open Government Licence v3.0. © Terrayne '+new Date().getFullYear()+'.</div>'}
@@ -115,23 +138,18 @@ function report(d,full){var rm=d.R*1000+" m";
  var h='<div class="page">'+header(d,"Postcode Report",plan==="enterprise")+'<h1>'+esc(d.pc)+'</h1><p class="sub">'+esc([d.g.ward,d.g.district].filter(Boolean).join(", "))+' · catchment of '+rm+' (about a '+(d.R<=0.4?"5":d.R<=0.8?"10":"20")+'-minute walk)</p>'+
   summary(d)+'<h2>What’s planned within '+rm+'</h2>'+schemes(d,full?0:3);
  if(!full){h+='<div class="lock noprint"><h3>'+(d.near.length>3?(d.near.length-3)+' more schemes, the full signal breakdown and a PDF':'Full signal breakdown and a PDF')+'</h3><p>Unlock this report for £12, no subscription. Or get unlimited reports with Investor at £19 a month.</p><button class="btn dark" id="buy">Unlock this report · £12</button> <a class="btn" style="border:1px solid var(--line)" href="./#pricing">See Investor</a></div>'}
- else h+='<h2>Momentum signals</h2>'+signals(d)+(d.nearest&&d.nearest.d<3?'<p class="note" style="margin-top:10px">Nearest tracked neighbourhood: '+esc(d.nearest.a.f)+' ('+d.nearest.d.toFixed(1)+' km).</p>':'');
+ else h+='<h2>Momentum signals</h2>'+signals(d)+(d.nearest&&d.nearest.d<3?'<p class="note" style="margin-top:10px">Nearest tracked neighbourhood: '+esc(d.nearest.a.f)+' ('+d.nearest.d.toFixed(1)+' km).</p>':'')+oppSection(d)+'<h2>Risks and unknowns</h2>'+lst(risks(d));
  return h+sources(d)+'</div>'}
 
-function memo(d){var s=d.stats,ts=d.ts,rm=d.R*1000+" m",risks=[];
- if(s.homes>500)risks.push("A large pipeline nearby ("+nf(s.homes)+" homes) brings new customers but also construction disruption and possible new competing retail.");
- if(s.pending>s.approved)risks.push("Most nearby homes ("+nf(s.pending)+") are not yet approved; timing and delivery are uncertain.");
- if(ts&&ts.hd!=null&&ts.hd<30)risks.push("Low price headroom ("+ts.hd+"/100): the area is already expensive relative to "+d.cityInfo.name+".");
- if(ts&&ts.x&&ts.x[6]!=null&&ts.x[6]<30)risks.push("Weak resale price momentum locally.");
- if(ts&&ts.cf&&ts.cf[0]!=="H"&&ts.cf[1].length)risks.push("Data confidence is "+(ts.cf[0]==="L"?"low":"medium")+": "+ts.cf[1].join("; ")+".");
- risks.push("Planning data reflects applications, not completions; statuses can change.");
+function memo(d){var s=d.stats,ts=d.ts,rm=d.R*1000+" m";
  return '<div class="page">'+header(d,"Investment Committee memo",true)+'<h1>'+esc(d.pc)+': site catchment memo</h1><p class="sub">'+esc([d.g.ward,d.g.district].filter(Boolean).join(", "))+' · catchment '+rm+'</p>'+
  '<h2>1. Summary</h2>'+summary(d)+
  '<h2>2. Demand outlook</h2><p>'+nf(s.homes)+' net new homes are proposed within '+rm+', '+nf(s.approved)+' of them approved or under way. If built, that is roughly '+nf(s.residents)+' new residents within walking distance.'+(ts&&ts.x&&ts.x[5]!=null?' Local population growth scores '+ts.x[5]+'/100 against '+esc(d.cityInfo.name)+'.':'')+'</p>'+
  '<h2>3. Development pipeline</h2>'+schemes(d,10)+
  '<h2>4. Market</h2>'+signals(d)+
- '<h2>5. Risks and considerations</h2><ul>'+risks.map(function(r){return '<li>'+esc(r)+'</li>'}).join("")+'</ul>'+
- '<h2>6. Recommendation</h2><div class="memo-line"></div><div class="memo-line"></div><div class="memo-line"></div><p class="note">Prepared for internal discussion.</p>'+sources(d)+'</div>'}
+ '<h2>5. Worth investigating</h2>'+oppSection(d).replace(/^<h2>.*?<\/h2>/,'')+
+ '<h2>6. Risks and considerations</h2>'+lst(risks(d))+
+ '<h2>7. Recommendation</h2><div class="memo-line"></div><div class="memo-line"></div><div class="memo-line"></div><p class="note">Prepared for internal discussion.</p>'+sources(d)+'</div>'}
 
 async function run(){var pc=TerrayneReport.normPC(Q.get("pc")),r=parseInt(Q.get("r")||"800",10);if([400,800,1600].indexOf(r)<0)r=800;var type=Q.get("type");
  if(!pc){$("pc").focus();return}

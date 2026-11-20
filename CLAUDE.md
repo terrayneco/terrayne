@@ -19,6 +19,10 @@ sync will overwrite your change. If you do edit here, copy `index.html` back to 
 - Scores come from `scripts/momentum.py` (method + weights in its docstring): 4 planning signals from the GLA Planning London Datahub, plus 3 official-statistics signals from `scripts/signals.py` (TfL/ORR station usage, ONS LSOA population, HM Land Registry resale prices; locations from NaPTAN, ONS Open Geography, OS Code-Point Open). Downloads cache in `.cache/` (git-ignored). If a source fails, it is skipped and listed under `errors` in the output.
 - `scripts/publish.py` is the entry point: writes `data/momentum.json` with the free top 10 only, plus (via explore.py) `data/feed.json`, the live planning feed and sample brief, and (with Supabase env vars) stores the full snapshot + weekly briefs in Supabase for paying users. Never commit the full all-areas data publicly.
 - Confidence: `confidence()` in momentum.py gives every area and tile `cf: ["H"|"M"|"L", [reasons]]` (missing signals + thin samples). Shown via `cfb()` on the homepage, report.html and account.html; explained at methodology.html#confidence.
+- Direction of travel: `c12` (12-month score change) and `tr` (per-signal "u"/"f"/"d") on every area and tile, from `trend()` in momentum.py; shown with `trw()` on the homepage, compare, report and account.
+- Signal feed rows carry `why` and `next` (explore.why()); planning.html links each ref to a search for the council record.
+- The postcode and compare boxes accept place names (`placePC()`: postcodes.io places -> nearest postcode).
+- To refresh public data midweek without touching Supabase/briefs: run the workflow with `data_only: true`.
 - Compare (`#compare` on the homepage): up to 3 areas side by side. Free: the public top-10 neighbourhoods. Postcodes (from data/tiles.json): paid plans only.
 - The home page loads `data/momentum.json` live and also embeds a snapshot between `/*MI*/` markers.
 - The GitHub Action `.github/workflows/momentum.yml` runs publish.py every Monday 05:15 UTC and emails briefs.

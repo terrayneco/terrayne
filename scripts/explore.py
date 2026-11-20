@@ -199,6 +199,34 @@ def summary(r):
     return f"Approved: {what}." if done else f"{what[0].upper() + what[1:]} proposed."
 
 
+HH = 2.47  # London average household size (ONS Census 2021)
+
+
+def why(r, ts, ma, big):
+    """Why a filing matters, built only from its own figures, the local Momentum tile and borough Class MA stats."""
+    u, com, kind, status = max(0, r[2] or 0), r[3] or 0, r[4], r[5]
+    bits = []
+    if u >= 10:
+        bits.append(f"If built, about {int(round(u * HH, -1)):,} new residents" + (", one of the largest housing filings in London in the last two months" if u >= big else ""))
+    if com >= 1000 and kind != "ma":  # for Class MA the floorspace is being converted away from commercial use
+        bits.append(f"{com:,} m² of new commercial space, which can bring jobs and footfall")
+    if ts:
+        s, c12 = ts.get("s"), ts.get("c12")
+        if s is not None:
+            band = "one of London’s faster-changing areas" if s >= 75 else "an area that is changing" if s >= 55 else "a quieter area, so it could be an early sign of change"
+            bits.append(f"It sits in {band} (Momentum {s}/100" + (f", {'+' if c12 > 0 else '−' if c12 < 0 else ''}{abs(c12)} in 12 months" if c12 is not None else "") + ")")
+    if kind == "ma" and ma and ma.get("approval_rate") is not None and ma.get("decided_24m", 0) >= 5:
+        bits.append(f"{r[8]} approves {round(ma['approval_rate'] * 100)}% of office-to-home conversions, typically in {ma['median_days']} days")
+    if status in ("Approved", "Started"):
+        bits.append("It already has approval, so it is more likely to go ahead")
+    elif status == "Pending":
+        bits.append("No decision yet: worth watching")
+    text = ". ".join(bits[:3]) + "." if bits else ""
+    nxt = "Check the council record for the applicant, height, affordable housing and decision date." if kind != "ma" \
+        else "Check the council record for the applicant and whether prior approval was granted."
+    return text, nxt
+
+
 def build_feed(today, datadir, days=60, limit=30):
     """Latest significant filings across London, for the planning feed and the sample brief."""
     rows = []
@@ -208,8 +236,23 @@ def build_feed(today, datadir, days=60, limit=30):
     keep = [r for r in rows if (r[4] == "major" or (r[4] == "ma" and (r[2] or 0) >= 5))
             and r[6] and r[6] >= since and r[5] not in ("Refused", "Withdrawn")]  # schemes that matter: majors and conversions of 5+ homes
     keep.sort(key=lambda r: (r[6], r[2] or 0), reverse=True)
-    out = [{"borough": r[8], "site": r[9], "ref": r[7], "kind": r[4], "homes": max(0, r[2] or 0), "commercial_m2": r[3],
-            "status": r[5], "valid": r[6], "summary": summary(r), "description": r[10]} for r in keep[:limit]]
+    try:
+        tiles = json.loads((datadir / "tiles.json").read_text()).get("tiles", {})
+    except (OSError, ValueError):
+        tiles = {}
+    try:
+        ma = {b["borough"]: b for b in json.loads((datadir / "classma.json").read_text()).get("boroughs", [])}
+    except (OSError, ValueError):
+        ma = {}
+    sizes = sorted((max(0, r[2] or 0) for r in keep), reverse=True)
+    big = max(150, sizes[max(0, len(sizes) // 10 - 1)]) if sizes else 10 ** 9  # top ~10% of recent filings
+    out = []
+    for r in keep[:limit]:
+        z, x, y = M_tile(r[0], r[1])
+        w, nxt = why(r, tiles.get(f"{z}/{x}/{y}"), ma.get(r[8]), big)
+        out.append({"borough": r[8], "site": r[9], "ref": r[7], "kind": r[4], "homes": max(0, r[2] or 0), "commercial_m2": r[3],
+                    "status": r[5], "valid": r[6], "summary": summary(r), "why": w, "next": nxt, "description": r[10],
+                    "lat": r[0], "lon": r[1]})
     feed = {"generated": today.isoformat(), "window_days": days, "source": "GLA Planning London Datahub", "rows": out}
     (datadir / "feed.json").write_text(json.dumps(feed, ensure_ascii=False, indent=1))
     return len(out)
