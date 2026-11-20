@@ -143,3 +143,9 @@ existing Investor subscribers keep working.
 7. Deploy the checkout function (adds the 14-day, no-card trial): `supabase functions deploy create-checkout`
 8. **Supabase → SQL Editor**: run `supabase/2026-11-pricing.sql` (updates upgrade messages; limits unchanged).
 9. Test: sign up with a new email, start a Pro trial, check Stripe shows a trialing subscription at £29 with no card.
+
+## One free trial per card (Nov 2026)
+Trials need a card (charged when the trial ends). `stripe-webhook` records each subscription's card fingerprint in
+`trial_cards`; a new trial on a card already used by another customer is ended immediately. Run
+`supabase/2026-11-trial-cards.sql` once, then redeploy `create-checkout` and `stripe-webhook` (keep JWT verification OFF
+for stripe-webhook).

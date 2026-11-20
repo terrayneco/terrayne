@@ -24,6 +24,22 @@ async function sync(sub: Stripe.Subscription) {
   }
 }
 
+// One free trial per card: remember every card used for a subscription; if a new trial uses a card
+// already seen on a different Stripe customer, end that trial now (the card is charged as normal).
+async function oneTrialPerCard(subId: string) {
+  const sub = await stripe.subscriptions.retrieve(subId, { expand: ["default_payment_method"] });
+  const pm = sub.default_payment_method as Stripe.PaymentMethod | null;
+  const fp = pm && typeof pm === "object" ? pm.card?.fingerprint : null;
+  if (!fp) return;
+  const customer = typeof sub.customer === "string" ? sub.customer : sub.customer.id;
+  const { data: seen } = await admin.from("trial_cards").select("customer").eq("fingerprint", fp).maybeSingle();
+  if (seen && seen.customer !== customer) {
+    if (sub.status === "trialing") await stripe.subscriptions.update(sub.id, { trial_end: "now", proration_behavior: "none" });
+    return;
+  }
+  if (!seen) await admin.from("trial_cards").insert({ fingerprint: fp, customer });
+}
+
 Deno.serve(async (req) => {
   const sig = req.headers.get("Stripe-Signature");
   const body = await req.text();
@@ -36,7 +52,10 @@ Deno.serve(async (req) => {
   switch (event.type) {
     case "checkout.session.completed": {
       const s = event.data.object as Stripe.Checkout.Session;
-      if (s.subscription) await sync(await stripe.subscriptions.retrieve(s.subscription as string));
+      if (s.subscription) {
+        try { await oneTrialPerCard(s.subscription as string); } catch (e) { console.error("trial card check", e); }
+        await sync(await stripe.subscriptions.retrieve(s.subscription as string));
+      }
       break;
     }
     case "customer.subscription.created":

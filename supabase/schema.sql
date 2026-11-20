@@ -344,3 +344,11 @@ language sql security definer set search_path = public as $$
 $$;
 revoke all on function public.my_invites(), public.accept_invite(uuid), public.decline_invite(uuid) from public, anon;
 grant execute on function public.my_invites(), public.accept_invite(uuid), public.decline_invite(uuid) to authenticated;
+
+-- One free trial per card (Nov 2026). Card fingerprints only (not card numbers); readable by the server only.
+create table if not exists public.trial_cards (
+  fingerprint text primary key,
+  customer text not null,
+  created_at timestamptz not null default now()
+);
+alter table public.trial_cards enable row level security;

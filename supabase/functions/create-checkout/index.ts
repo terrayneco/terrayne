@@ -1,8 +1,8 @@
 // POST { plan: "pro"|"enterprise", interval: "month"|"year" } -> { url } of a Stripe Checkout page.
 // POST { check: true } -> { trial: boolean }: whether this account still qualifies for the free trial.
-// ("enterprise" is shown on the site as "Team".) First-time subscribers get a 14-day free trial with no card
-// needed; if no payment method is added by the end, Stripe cancels the subscription and the webhook moves
-// them back to the free plan.
+// ("enterprise" is shown on the site as "Team".) First-time subscribers get a 14-day free trial. A card is
+// required but not charged until the trial ends; the webhook ends the trial early if that card has already
+// been used on another account (one free trial per card).
 import { cors, json, currentUser, ensureCustomer, PRICES, stripe, SITE } from "../_shared/common.ts";
 
 Deno.serve(async (req) => {
@@ -40,13 +40,12 @@ Deno.serve(async (req) => {
     client_reference_id: me.profile.id,
     subscription_data: {
       metadata: { user_id: me.profile.id },
-      ...(trial ? { trial_period_days: 14, trial_settings: { end_behavior: { missing_payment_method: "cancel" } } } : {}),
+      ...(trial ? { trial_period_days: 14 } : {}),
     },
-    ...(trial ? { payment_method_collection: "if_required" as const } : {}),
     custom_text: {
       submit: {
         message: trial
-          ? "Your 14-day free trial starts today. Cancel any time from your Terrayne account and you won't be charged."
+          ? "Your 14-day free trial starts today. Your card won't be charged until it ends, and you can cancel any time before then from your Terrayne account. One free trial per person."
           : "Cancel any time from your Terrayne account. You keep access until the end of the period you've paid for.",
       },
     },
