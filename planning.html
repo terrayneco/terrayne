@@ -418,6 +418,7 @@ footer .fl{align-items:center}footer .fl a.tmark{color:#fff}.tmark{display:inlin
 @media(max-width:600px){footer .wrap{align-items:flex-end}.tmark{margin-left:auto}}
 </style>
 <script>/* Refresh = start at the top of this page */(function(){try{var n=performance.getEntriesByType("navigation")[0];if(!n||n.type!=="reload")return;if("scrollRestoration" in history)history.scrollRestoration="manual";if(location.hash)history.replaceState(null,"",location.pathname+location.search);var t=function(){scrollTo(0,0)};t();addEventListener("DOMContentLoaded",t);addEventListener("load",function(){t();setTimeout(t,60)})}catch(e){}})();</script>
+<script src="assets/config.js"></script>
 </head>
 <body>
 <nav><div class="wrap">
@@ -469,7 +470,12 @@ var cap=PRO?FN:Math.min(FN,10),M=L.length>cap?L.slice(0,cap):L;var mb=document.g
 document.getElementById("rows").innerHTML=L.length?M.map(function(r,i){return '<tr><td>'+esc(r.borough)+'</td><td class="sc" data-l="Site">'+esc(r.site)+'<br><small class="mono" style="color:var(--mute);font-size:11px">Ref '+esc(r.ref)+' · filed '+day(r.valid)+'</small></td><td data-l="Signal type"><span class="tg '+(r.kind=="ma"?"ma":"mr")+'">'+(r.kind=="ma"?"Office-to-home (Class MA)":"Major scheme")+'</span></td><td class="mn" data-l="Scale">'+scale(r)+'</td><td class="ai mn" data-l="Status">'+esc(r.status)+'</td><td class="tk" data-l="Why it matters">'+esc(r.summary)+(r.why?(PRO||i<3?'<div class="why"><b>Why it matters:</b> '+esc(r.why)+'</div>':'<div class="why"><b>Why it matters:</b> <a href="./#pricing" style="color:#9fd0ff">included with Pro</a></div>'):'')+'<small style="color:var(--mute)">Council description: '+esc(r.description)+'</small>'+'<div class="src">'+(r.next?'<span>'+esc(r.next)+'</span> ':'')+'<a href="'+src(r)+'" target="_blank" rel="noopener" title="Opens a web search for this reference, which usually finds the council’s own page first">Search for ref '+esc(r.ref)+' ('+esc(r.borough)+' Council) →</a></div></td></tr>'}).join(""):'<tr><td colspan="6">No filings in this category in the last two months.</td></tr>'}
 function fsel(c){fc=c;FN=10;feed()}
 var FN=10,PRO=false;
-addEventListener("load",function(){if(typeof paid==="function")paid().then(function(ok){PRO=!!ok;feed()})});
+addEventListener("load",async function(){try{
+ if(!Object.keys(localStorage).some(function(x){return /^sb-.+-auth-token$/.test(x)}))return;
+ var C=window.TERRAYNE||{};if(!C.supabaseUrl||!C.supabaseAnonKey)return;
+ if(!window.supabase)await new Promise(function(ok,no){var s=document.createElement("script");s.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js";s.integrity="sha384-GFr3yTh5lJznCbZfpTtXnwboFsxqtTQoeTZCRHhE0579KrRmlCzen5AA8ohaB5ug";s.crossOrigin="anonymous";s.onload=ok;s.onerror=no;document.head.appendChild(s)});
+ var sb=window.supabase.createClient(C.supabaseUrl,C.supabaseAnonKey),s=await sb.auth.getSession();if(!s.data.session)return;
+ var r=await sb.rpc("effective_plan",{uid:s.data.session.user.id});PRO=!!(r.data&&r.data!=="free");feed()}catch(e){}});
 fetch("data/feed.json",{cache:"no-store"}).then(function(r){return r.json()}).then(function(d){F=d.rows||[];var u=document.getElementById("feedupd");if(u)u.textContent=day(d.generated);feed()}).catch(function(){var t=document.getElementById("rows");if(t)t.innerHTML='<tr><td colspan="6">The feed couldn’t load. Please refresh.</td></tr>'});
 </script>
 
@@ -516,10 +522,10 @@ function km(a,b,c,d){return Math.hypot((d-b)*111.32*Math.cos((a+c)/2*Math.PI/180
 function tile(lat,lon){var n=8192;return [Math.floor((lon+180)/360*n),Math.floor((1-Math.asinh(Math.tan(lat*Math.PI/180))/Math.PI)/2*n)]}
 async function J(u){var r=await fetch(u,{cache:"no-cache"});if(!r.ok)throw new Error(r.status);return r.json()}
 async function pts(x,y){var k=CC+":"+x+"_"+y;if(!(k in CACHE)){try{CACHE[k]=await J(CK_CITIES[CC].dir+"pts/"+x+"_"+y+".json")}catch(e){CACHE[k]=[]}}return CACHE[k]}
-async function paid(){if(PAID!==null)return PAID;PAID=false;var C=window.TERRAYNE||{};if(!C.supabaseUrl||!C.supabaseAnonKey)return false;
+async function paid(){if(PAID!==null)return PAID;var C=window.TERRAYNE||{};if(!C.supabaseUrl||!C.supabaseAnonKey)return false;PAID=false;
  try{if(!window.supabase)await new Promise(function(ok,no){var s=document.createElement("script");s.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js";s.integrity="sha384-GFr3yTh5lJznCbZfpTtXnwboFsxqtTQoeTZCRHhE0579KrRmlCzen5AA8ohaB5ug";s.crossOrigin="anonymous";s.onload=ok;s.onerror=no;document.head.appendChild(s)});
   var sb=window.supabase.createClient(C.supabaseUrl,C.supabaseAnonKey),s=await sb.auth.getSession();if(!s.data.session)return false;
-  var r=await sb.rpc("effective_plan",{uid:s.data.session.user.id});PAID=!!(r.data&&r.data!=="free")}catch(e){}return PAID}
+  var r=await sb.rpc("effective_plan",{uid:s.data.session.user.id});PAID=!!(r.data&&r.data!=="free")}catch(e){}return PAID}window.tPaid=paid;
 function verdict(s){return s>=80?["Changing fast","#4f9be8"]:s>=65?["Changing","#5fd6b8"]:s>=50?["Steady","#9aa3b5"]:["Quiet","#8c9ab3"]}
 var KIND={ma:"Office/shop to homes (Class MA)",major:"Major scheme",res:"New homes",com:"Commercial space",bf:"Brownfield register site"};
 async function geo(pc){var r=await fetch("https://api.postcodes.io/postcodes/"+encodeURIComponent(pc));
@@ -620,7 +626,6 @@ function set(k){bs.forEach(function(b){b.setAttribute("aria-checked",b.dataset.b
  document.querySelectorAll("#pricing a[data-plan]").forEach(function(a){a.href="account.html?signup&plan="+a.dataset.plan+(k==="y"?"&interval=year":"")})}
 bs.forEach(function(b){b.onclick=function(){set(b.dataset.b)}});})();
 </script>
-<script src="assets/config.js"></script>
 <script>/* Signed in? Swap "Sign in / Start free" for "My account". */
 (function(){try{var k=Object.keys(localStorage).filter(function(x){return /^sb-.+-auth-token$/.test(x)})[0];if(!k)return;
  var t=JSON.parse(localStorage.getItem(k)||"null");if(!t||!t.user)return;

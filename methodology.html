@@ -408,6 +408,7 @@ footer .fl{align-items:center}footer .fl a.tmark{color:#fff}.tmark{display:inlin
 @media(max-width:600px){footer .wrap{align-items:flex-end}.tmark{margin-left:auto}}
 </style>
 <script>/* Refresh = start at the top of this page */(function(){try{var n=performance.getEntriesByType("navigation")[0];if(!n||n.type!=="reload")return;if("scrollRestoration" in history)history.scrollRestoration="manual";if(location.hash)history.replaceState(null,"",location.pathname+location.search);var t=function(){scrollTo(0,0)};t();addEventListener("DOMContentLoaded",t);addEventListener("load",function(){t();setTimeout(t,60)})}catch(e){}})();</script>
+<script src="assets/config.js"></script>
 </head>
 <body>
 <nav><div class="wrap">
@@ -494,10 +495,10 @@ function km(a,b,c,d){return Math.hypot((d-b)*111.32*Math.cos((a+c)/2*Math.PI/180
 function tile(lat,lon){var n=8192;return [Math.floor((lon+180)/360*n),Math.floor((1-Math.asinh(Math.tan(lat*Math.PI/180))/Math.PI)/2*n)]}
 async function J(u){var r=await fetch(u,{cache:"no-cache"});if(!r.ok)throw new Error(r.status);return r.json()}
 async function pts(x,y){var k=CC+":"+x+"_"+y;if(!(k in CACHE)){try{CACHE[k]=await J(CK_CITIES[CC].dir+"pts/"+x+"_"+y+".json")}catch(e){CACHE[k]=[]}}return CACHE[k]}
-async function paid(){if(PAID!==null)return PAID;PAID=false;var C=window.TERRAYNE||{};if(!C.supabaseUrl||!C.supabaseAnonKey)return false;
+async function paid(){if(PAID!==null)return PAID;var C=window.TERRAYNE||{};if(!C.supabaseUrl||!C.supabaseAnonKey)return false;PAID=false;
  try{if(!window.supabase)await new Promise(function(ok,no){var s=document.createElement("script");s.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js";s.integrity="sha384-GFr3yTh5lJznCbZfpTtXnwboFsxqtTQoeTZCRHhE0579KrRmlCzen5AA8ohaB5ug";s.crossOrigin="anonymous";s.onload=ok;s.onerror=no;document.head.appendChild(s)});
   var sb=window.supabase.createClient(C.supabaseUrl,C.supabaseAnonKey),s=await sb.auth.getSession();if(!s.data.session)return false;
-  var r=await sb.rpc("effective_plan",{uid:s.data.session.user.id});PAID=!!(r.data&&r.data!=="free")}catch(e){}return PAID}
+  var r=await sb.rpc("effective_plan",{uid:s.data.session.user.id});PAID=!!(r.data&&r.data!=="free")}catch(e){}return PAID}window.tPaid=paid;
 function verdict(s){return s>=80?["Changing fast","#4f9be8"]:s>=65?["Changing","#5fd6b8"]:s>=50?["Steady","#9aa3b5"]:["Quiet","#8c9ab3"]}
 var KIND={ma:"Office/shop to homes (Class MA)",major:"Major scheme",res:"New homes",com:"Commercial space",bf:"Brownfield register site"};
 async function geo(pc){var r=await fetch("https://api.postcodes.io/postcodes/"+encodeURIComponent(pc));
@@ -588,7 +589,6 @@ var last=null;new MutationObserver(function(){var b=document.querySelector("#det
  (function step(){var t=Date.now();if(!t0)t0=t;var k=Math.min(1,(t-t0)/600),e=1-Math.pow(1-k,3);b.textContent=Math.round(from+(to-from)*e);if(k<1)setTimeout(step,16)})()}).observe(document.getElementById("detail")||document.body,{childList:true,subtree:true});
 })();
 </script>
-<script src="assets/config.js"></script>
 <script>/* Signed in? Swap "Sign in / Start free" for "My account". */
 (function(){try{var k=Object.keys(localStorage).filter(function(x){return /^sb-.+-auth-token$/.test(x)})[0];if(!k)return;
  var t=JSON.parse(localStorage.getItem(k)||"null");if(!t||!t.user)return;

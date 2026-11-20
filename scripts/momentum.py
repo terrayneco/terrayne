@@ -237,6 +237,15 @@ def tidy(s):
     return re.sub(r"\s+", " ", (s or "")).strip()
 
 
+def clip(s, n):
+    """Shorten text to about n characters at a word boundary, adding an ellipsis."""
+    s = tidy(s)
+    if len(s) <= n:
+        return s
+    cut = s[:n].rsplit(" ", 1)[0].rstrip(",;:-–(")
+    return cut + "…"
+
+
 def label(site, street):
     site, street = tidy(site), tidy(street)
     if street and street.lower() not in site.lower() and (len(site) < 14 or site.lower().endswith((" to", " at", " and"))

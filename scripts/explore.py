@@ -111,7 +111,7 @@ def row(s, c):
     v = dmy(s.get("valid_date"))
     return [round(c[0], 5), round(c[1], 5), u, max(com, 0), kind, short_status(s), v.isoformat() if v else "",
             s.get("lpa_app_no") or "", s.get("lpa_name") or "", M.label(s.get("site_name"), s.get("street_name"))[:70],
-            M.tidy(s.get("description"))[:160]]
+            M.clip(s.get("description"), 160)]
 
 
 def build_points(today, outdir):

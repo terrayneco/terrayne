@@ -55,7 +55,7 @@ def new_filings(area, since, seen):
         kind = "Class MA conversion" if "Use Class E) to Dwellinghouses" in (s.get("application_type_full") or "") or re.search(r"class ma", s.get("description") or "", re.I) else (s.get("application_type_full") or "Application")
         out.append({"ref": s["lpa_app_no"], "lpa": s.get("lpa_name"), "site": M.label(s.get("site_name"), s.get("street_name")),
                     "units": units, "status": s.get("status") or "", "valid": s.get("valid_date"), "kind": kind,
-                    "desc": M.tidy(s.get("description"))[:220]})
+                    "desc": M.clip(s.get("description"), 220)})
     out.sort(key=lambda x: -(x["units"] or 0))
     return out[:6]
 
