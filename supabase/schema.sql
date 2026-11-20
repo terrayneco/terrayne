@@ -128,9 +128,9 @@ language plpgsql security definer set search_path = public as $$
 declare pl text := public.effective_plan(new.user_id); n int;
 begin
   select count(*) into n from public.watchlist where user_id = new.user_id;
-  if pl = 'free' then raise exception 'Upgrade to Investor or Professional to save places'; end if;
+  if pl = 'free' then raise exception 'Upgrade to Pro to save places'; end if;
   if pl = 'investor' and n >= 3 then raise exception 'Investor includes up to 3 saved places'; end if;
-  if pl = 'pro' and n >= 10 then raise exception 'Professional watchlists hold up to 10 neighbourhoods'; end if;
+  if pl = 'pro' and n >= 10 then raise exception 'Pro watchlists hold up to 10 neighbourhoods'; end if;
   return new;
 end $$;
 drop trigger if exists watchlist_limit on public.watchlist;
@@ -142,9 +142,9 @@ language plpgsql security definer set search_path = public as $$
 declare n int;
 begin
   if public.effective_plan(new.owner) <> 'enterprise' or (select team_owner from public.profiles where id = new.owner) is not null then
-    raise exception 'Only Enterprise account owners can invite colleagues'; end if;
+    raise exception 'Only Team account owners can invite colleagues'; end if;
   select (select count(*) from public.profiles where team_owner = new.owner) + (select count(*) from public.team_invites where owner = new.owner) into n;
-  if n >= 4 then raise exception 'Enterprise includes up to 5 users'; end if;
+  if n >= 4 then raise exception 'Team includes up to 5 people'; end if;
   new.email := lower(new.email);
   return new;
 end $$;
@@ -247,9 +247,9 @@ language plpgsql security definer set search_path = public as $$
 declare pl text := public.effective_plan(new.owner); n int;
 begin
   select count(*) into n from public.saved_places where owner = new.owner;
-  if pl = 'free' then raise exception 'Upgrade to Investor to save places and get alerts'; end if;
+  if pl = 'free' then raise exception 'Upgrade to Pro to save places and get alerts'; end if;
   if pl = 'investor' and n >= 3 then raise exception 'Investor includes up to 3 saved places'; end if;
-  if pl = 'pro' and n >= 10 then raise exception 'Professional includes up to 10 saved places'; end if;
+  if pl = 'pro' and n >= 10 then raise exception 'Pro includes up to 10 saved places'; end if;
   if pl <> 'enterprise' then new.radius_m := 800; end if;  -- custom catchment sizes are Enterprise
   return new;
 end $$;

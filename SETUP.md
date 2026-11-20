@@ -126,3 +126,20 @@ It needs the `admin_session_stats` function at the end of `supabase/schema.sql` 
   on GitHub, copy it back:
   `curl -s https://raw.githubusercontent.com/terrayneco/terrayne/main/index.html -o "$HOME/Library/Mobile Documents/com~apple~CloudDocs/TYE/website/terrayne.html"`
 - The webhook re-reads each subscription from Stripe, so event order and Stripe API versions don't matter.
+
+## Pricing change, November 2026: Free / Pro £29 / Team £99
+
+Internal plan keys stay the same: `pro` is sold as **Pro**, `enterprise` is sold as **Team**. `investor` is no longer sold;
+existing Investor subscribers keep working.
+
+1. **Stripe → Product catalogue → Terrayne Professional**: rename to **Terrayne Pro**. Add price **£29 / month** (recurring)
+   and **£290 / year**. Copy both price IDs (`price_…`). Archive the old £79 and £790 prices.
+2. **Terrayne Enterprise**: rename to **Terrayne Team**. Add **£99 / month** and **£990 / year**. Copy both IDs. Archive £399 and £3,990.
+3. **Terrayne Investor**: archive the product (existing subscribers are unaffected).
+4. **Coupons**: delete or archive the `FOUNDING` promotion code.
+5. **Settings → Billing → Customer portal → Products**: replace the old prices with the four new ones (Pro and Team, monthly
+   and yearly), remove Investor. Make sure customers can **update payment methods** (needed to keep a plan after the trial).
+6. **Supabase → Edge Functions → Secrets**: set `PRICE_PRO_MONTH`, `PRICE_PRO_YEAR`, `PRICE_ENT_MONTH`, `PRICE_ENT_YEAR` to the four new IDs.
+7. Deploy the checkout function (adds the 14-day, no-card trial): `supabase functions deploy create-checkout`
+8. **Supabase → SQL Editor**: run `supabase/2026-11-pricing.sql` (updates upgrade messages; limits unchanged).
+9. Test: sign up with a new email, start a Pro trial, check Stripe shows a trialing subscription at £29 with no card.
