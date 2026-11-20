@@ -424,7 +424,7 @@ footer .fl{align-items:center}footer .fl a.tmark{color:#fff}.tmark{display:inlin
 <div class="grid g3">
 <div class="card"><div class="num">01</div><h3>What we do</h3><p>We track planning filings, station use, population and sale prices across London, score how fast each neighbourhood is changing, and send a short brief every Monday on what’s new in the areas you care about.</p></div>
 <div class="card"><div class="num">02</div><h3>Who it’s for</h3><p>Investors checking a street before they buy, developers and agents looking for the next site, businesses deciding where to open, and residents, councillors and journalists who want to know what’s being built nearby.</p></div>
-<div class="card"><div class="num">03</div><h3>Why it matters</h3><p>By the time change is obvious, prices have already moved. Planning data shows it years earlier. We want that early view to be available to everyone, not only to large firms with research teams.</p></div>
+<div class="card"><div class="num">03</div><h3>Why it matters</h3><p>By the time change is obvious on the street, it has usually been in the planning system for years. We want that early view to be available to everyone, not only to large firms with research teams.</p></div>
 </div></div></section>
 <section style="padding-top:0"><div class="wrap">
 <div class="eyebrow">How we work</div>
@@ -552,7 +552,7 @@ fetch("data/classma.json",{cache:"no-cache"}).then(function(r){return r.json()})
  document.getElementById("makpi").innerHTML='<div><b>'+nf(L.filed_12m)+'</b><span>Class MA filings, last 12 months</span></div><div><b>'+nf(L.homes_12m)+'</b><span>homes proposed</span></div><div><b>'+(L.approval_rate==null?'—':Math.round(L.approval_rate*100)+'%')+'</b><span>approved, of those decided (24m)</span></div><div><b>'+(L.median_days||'—')+' days</b><span>median decision (legal limit: 56)</span></div>';
  draw();
  document.querySelector("#malatest tbody").innerHTML=d.latest.slice(0,6).map(function(r){return '<tr><td>'+esc(r.valid)+'</td><td>'+esc(r.borough)+'</td><td>'+esc(r.site)+'</td><td class="n">'+nf(r.homes)+'</td><td>'+esc(r.status)+'</td><td class="mono" style="font-size:12px">'+esc(r.ref)+'</td></tr>'}).join("");
- document.getElementById("manote").innerHTML='Updated '+new Date(d.generated+"T12:00:00Z").toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"})+'. Approval rate counts approved and “prior approval not required” against refused, over 24 months, shown where at least 5 were decided. Some boroughs record Class MA under other application types, so they may appear low. Pro subscribers get new filings in their boroughs every Monday.'}).catch(function(){});
+ document.getElementById("manote").innerHTML='Updated '+new Date(d.generated+"T12:00:00Z").toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"})+'. Approval rate counts approved and “prior approval not required” against refused, over 24 months, shown where at least 5 were decided. Some boroughs record Class MA under other application types, so they may appear low. Pro subscribers get new filings in the neighbourhoods they watch every Monday.'}).catch(function(){});
 })();
 </script>
 <script>

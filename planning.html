@@ -7,8 +7,8 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <script>if(window.top!==window.self){try{window.top.location=window.self.location}catch(e){document.documentElement.style.display="none"}}</script>
 <title>Planning tracker — Terrayne</title>
-<meta name="description" content="Office-to-home (Class MA) approval rates for every London borough, and the latest significant planning applications in plain English.">
-<meta property="og:type" content="website"><meta property="og:site_name" content="Terrayne"><meta property="og:title" content="Planning tracker — Terrayne"><meta property="og:description" content="Office-to-home (Class MA) approval rates for every London borough, and the latest significant planning applications in plain English."><meta property="og:url" content="https://terrayne.co/planning.html"><meta property="og:image" content="https://terrayne.co/assets/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Terrayne: see how your city is changing"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://terrayne.co/assets/og.png">
+<meta name="description" content="Office-to-home (Class MA) approval rates across London’s boroughs, and the latest significant planning applications in plain English.">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Terrayne"><meta property="og:title" content="Planning tracker — Terrayne"><meta property="og:description" content="Office-to-home (Class MA) approval rates across London’s boroughs, and the latest significant planning applications in plain English."><meta property="og:url" content="https://terrayne.co/planning.html"><meta property="og:image" content="https://terrayne.co/assets/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Terrayne: see how your city is changing"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://terrayne.co/assets/og.png">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="assets/favicon-48.png" sizes="48x48" type="image/png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -429,7 +429,7 @@ footer .fl{align-items:center}footer .fl a.tmark{color:#fff}.tmark{display:inlin
 <section id="ptop" style="padding-top:clamp(48px,8vh,96px);padding-bottom:0"><div class="wrap">
 <div class="eyebrow">Planning tracker</div>
 <h2>London planning, read for you.</h2>
-<p class="sub">How every borough handles office-to-home conversions, and the significant schemes being filed right now, translated into plain English. Free to browse; subscribers get new filings in their boroughs every Monday.</p>
+<p class="sub">How every borough handles office-to-home conversions, and the significant schemes being filed right now, translated into plain English. Free to browse; Pro subscribers get new filings in the neighbourhoods they watch, and near places they’ve saved, every Monday.</p>
 </div></section>
 
 
@@ -449,7 +449,7 @@ footer .fl{align-items:center}footer .fl a.tmark{color:#fff}.tmark{display:inlin
 <div class="feedhead"><div><div class="eyebrow mono">Automated Datahub translation</div><h2>London planning signal feed</h2><p class="sub">Terrayne pulls raw filings from the GLA’s Planning London Datahub, filters out minor domestic works, and sums up each significant scheme in plain English, with why it matters and where to check the original record. Every row is a real application.</p></div><div class="pills" id="pills"></div></div>
 <div class="tw"><table><thead><tr class="mono"><th>Borough</th><th>Site / corridor</th><th>Signal type</th><th>Net units / scale</th><th>Status</th><th>What it is, and why it matters</th></tr></thead><tbody id="rows"></tbody></table></div>
 <p style="text-align:center;margin:18px 0 0"><button id="fmore" class="fp" hidden onclick="FN=1e9;feed()">Show all filings</button><a id="fpro" class="fp" hidden href="./#pricing" style="text-decoration:none">See the full feed with Pro →</a></p>
-<p style="margin:18px 0 0"><a class="btn ghost" href="./#pricing">Get new filings in your boroughs every Monday</a></p>
+<p style="margin:18px 0 0"><a class="btn ghost" href="./#pricing">Get new filings in your areas every Monday</a></p>
 <p class="note" style="margin-top:14px">The latest significant applications from the GLA <a href="https://www.london.gov.uk/programmes-strategies/planning/digital-planning/planning-london-datahub" target="_blank" rel="noopener" style="text-decoration:underline">Planning London Datahub</a> (last two months), updated every Monday. Last update: <span id="feedupd">…</span>. Summaries and “why it matters” are built only from each application’s own figures, the local Momentum score and borough decision data; statuses can change, so check the council’s planning register by reference for the latest.</p>
 </div></section>
 
@@ -590,7 +590,7 @@ fetch("data/classma.json",{cache:"no-cache"}).then(function(r){return r.json()})
  document.getElementById("makpi").innerHTML='<div><b>'+nf(L.filed_12m)+'</b><span>Class MA filings, last 12 months</span></div><div><b>'+nf(L.homes_12m)+'</b><span>homes proposed</span></div><div><b>'+(L.approval_rate==null?'—':Math.round(L.approval_rate*100)+'%')+'</b><span>approved, of those decided (24m)</span></div><div><b>'+(L.median_days||'—')+' days</b><span>median decision (legal limit: 56)</span></div>';
  draw();
  document.querySelector("#malatest tbody").innerHTML=d.latest.slice(0,3).map(function(r){return '<tr><td>'+esc(r.valid)+'</td><td>'+esc(r.borough)+'</td><td>'+esc(r.site)+'</td><td class="n">'+nf(r.homes)+'</td><td>'+esc(r.status)+'</td><td class="mono" style="font-size:12px">'+esc(r.ref)+'</td></tr>'}).join("");
- document.getElementById("manote").innerHTML='Updated '+new Date(d.generated+"T12:00:00Z").toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"})+'. Approval rate counts approved and “prior approval not required” against refused, over 24 months, shown where at least 5 were decided. Some boroughs record Class MA under other application types, so they may appear low. Pro subscribers get new filings in their boroughs every Monday.'}).catch(function(){});
+ document.getElementById("manote").innerHTML='Updated '+new Date(d.generated+"T12:00:00Z").toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"})+'. Approval rate counts approved and “prior approval not required” against refused, over 24 months, shown where at least 5 were decided. Some boroughs record Class MA under other application types, so they may appear low. Pro subscribers get new filings in the neighbourhoods they watch every Monday.'}).catch(function(){});
 })();
 </script>
 <script>
