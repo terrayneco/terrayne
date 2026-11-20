@@ -188,8 +188,10 @@ def confidence(parts, act=None, sales=None, lsoas=None):
 
 
 # Direction of travel per signal: "u" rising, "f" stable, "d" falling (None = no data).
-# Planning signals compare the last 12 months with the 12 months before; the official statistics are already
+# Planning signals compare the 12 months to LAG_DAYS ago with the 12 months before that: councils log
+# filings late, so the newest weeks are undercounted and would make everything look like it is falling; the official statistics are already
 # growth rates, so their direction is the sign of that growth (with a small dead band).
+LAG_DAYS = 60
 PLAN_MIN = {"act": 5, "pipe": 20, "ma": 10, "com": 500}  # smallest change worth calling a move
 OFFICIAL_BAND = {"transport": (0.02, -0.02), "population": (0.01, -0.005), "prices": (0.02, -0.02)}
 
@@ -198,7 +200,7 @@ def trend(sig, sig_prev, off):
     out = []
     for k in WEIGHTS:
         if k in PLAN_W:
-            if sig_prev is None:
+            if sig is None or sig_prev is None:
                 out.append(None); continue
             now, was = sig.get(k) or 0, sig_prev.get(k) or 0
             d = now - was
@@ -286,6 +288,8 @@ def build(today=None):
     dist_now, dist_prev = list(tk_now.values()), tiles(prior)
     tk_year = tiles(year_ago, keyed=True)
     dist_year = list(tk_year.values())
+    lag, lag_prev = today - dt.timedelta(days=LAG_DAYS), today - dt.timedelta(days=LAG_DAYS + 365)
+    tk_lag, tk_lag_prev = tiles(lag, keyed=True), tiles(lag_prev, keyed=True)
     import signals as official
     loaded, errors = official.load_all(today)
     odist, meta, aggs = {}, {}, {}
@@ -338,7 +342,8 @@ def build(today=None):
             schemes.append({"ref": src.get("lpa_app_no"), "lpa": src.get("lpa_name"), "site": site, "units": u,
                             "status": src.get("status") or "", "valid": src.get("valid_date")})
         out.append({"n": n, "f": full, "b": boro, "lat": lat, "lon": lon, "s": s, "c": s - s_prev, "c12": s - s_year,
-                    "tr": trend(sig, sig_year, offv),
+                    "tr": trend(signals(area_query(lat, lon, lag)["aggregations"]),
+                                signals(area_query(lat, lon, lag_prev)["aggregations"]), offv),
                     "u": fnum(sig["pipe"]), "x": [parts[k] for k in WEIGHTS], "hd": headroom,
                     "raw": {k: round(v) for k, v in sig.items()},
                     "off": {k: (round(v, 4) if isinstance(v, float) else v) for k, v in offv.items()},
@@ -365,7 +370,7 @@ def build(today=None):
         tile_scores[key] = {"s": s, "x": [parts[k] for k in WEIGHTS], "hd": hd, "lat": lat, "lon": lon,
                             "raw": {k: round(sig[k]) for k in PLAN_W}, "off": off,
                             "cf": confidence(parts, sig["act"], cnt.get("prices"), cnt.get("population")),
-                            "c12": c12, "tr": trend(sig, sy, off)}
+                            "c12": c12, "tr": trend(tk_lag.get(key), tk_lag_prev.get(key), off)}
     return {"generated": today.isoformat(), "window_days": 365, "radius_km": RADIUS_KM, "tiles": len(dist_now),
             "weights": WEIGHTS, "labels": [LABELS[k] for k in WEIGHTS], "keys": list(WEIGHTS),
             "sources": SOURCES, "official": meta, "errors": errors,
