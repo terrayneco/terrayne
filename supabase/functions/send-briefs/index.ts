@@ -71,9 +71,9 @@ Deno.serve(async (req) => {
   for (const u of users ?? []) {
     const { data: plan } = await admin.rpc("effective_plan", { uid: u.id });
     if (plan === "free" || !plan) continue;
-    const alerts = await alertsFor(u.id, week);              // Investor and up: alerts near saved places
+    const alerts = await alertsFor(u.id, week);              // Any paid plan: alerts near saved places
     let items: { area: string; title: string; body: string }[] = [];
-    if (plan === "pro" || plan === "enterprise") {           // Monday brief is Professional and up
+    if (plan === "pro" || plan === "enterprise") {           // Monday brief is Pro and Team
       const { data: wl } = await admin.from("watchlist").select("area").eq("user_id", u.id);
       items = (wl ?? []).map((w) => byArea.get(w.area)).filter(Boolean) as typeof items;
     }

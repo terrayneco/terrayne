@@ -101,7 +101,7 @@ svg.spark{display:block}
 <main class="wrap">
 
 <section id="v-off" class="auth hide">
-<div class="card"><div class="eyebrow">Accounts</div><h2>Accounts are launching soon.</h2><p class="sub" style="margin-bottom:18px">We’re onboarding founding members first. Request access and we’ll set up your account.</p><a class="btn" href="./#access">Request founding access</a></div>
+<div class="card"><div class="eyebrow">Accounts</div><h2>Accounts are unavailable right now.</h2><p class="sub" style="margin-bottom:18px">Please try again in a few minutes. If it keeps happening, email us and we’ll sort it out.</p><a class="btn" href="mailto:hello@terrayne.co?subject=Terrayne%20account">Email hello@terrayne.co</a></div>
 </section>
 
 <section id="v-auth" class="auth hide">
@@ -280,7 +280,7 @@ function latest(){return S.snaps&&S.snaps.length?S.snaps[0].data:S.pub}
 async function loadBriefs(){if(!briefsOK()||S.briefs)return;var r=await sb.from("briefs").select("week,area,title,body").order("week",{ascending:false}).limit(1000);S.briefs=r.data||[]}
 function paid(){return S.plan!=="free"}
 function briefsOK(){return S.plan==="pro"||S.plan==="enterprise"}
-function lock(what){return '<div class="card lock"><span class="pill">Pro</span><h2 style="margin-top:12px">'+what+'</h2><p>Pro (£29 a month, 14 days free) unlocks every London neighbourhood with history and trends, unlimited postcode checks, comparisons, the Monday brief and every past brief, and 10 saved places with alerts.</p><a class="btn" href="#billing">See plans</a></div>'}
+function lock(what){return '<div class="card lock"><span class="pill">Pro</span><h2 style="margin-top:12px">'+what+'</h2><p>Pro (£29 a month, 14 days free) unlocks all tracked neighbourhoods with history and trends, unlimited postcode checks, comparisons, the Monday brief and every past brief, and 10 saved places with alerts.</p><a class="btn" href="#billing">See plans</a></div>'}
 
 /* ---------- panes ---------- */
 function P_places(){P.places()}
@@ -326,7 +326,7 @@ watchlist:function(){
   if(r.error)msg("g-msg",r.error.message);else{msg("g-msg");S.watch=on?S.watch.filter(function(x){return x!==n}):S.watch.concat(n)}P.watchlist()}});
 },
 briefs:function(){
- if(!briefsOK()){$("b-body").innerHTML=lock("The Monday brief is part of Professional");return}
+ if(!briefsOK()){$("b-body").innerHTML=lock("The Monday brief is part of Pro");return}
  if(!S.briefs.length){$("b-body").innerHTML='<div class="card"><p class="note" style="margin:0">Your first brief arrives on Monday at 7am. Past briefs will appear here.</p></div>';return}
  var only=S.briefsMine!==false&&S.watch.length>0;
  var list=S.briefs.filter(function(b){return !only||S.watch.indexOf(b.area)>=0});
@@ -385,7 +385,7 @@ billing:function(){
  $("bl-sub").textContent=live||team?"":"New subscribers get 14 days free, with no card needed. Prices in GBP; no VAT is added.";
  $("bl-cur").innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap"><div><div class="note">Current plan</div><div class="score">'+cur+' '+(st==="past_due"?'<span class="pill warn">Payment due</span>':p.cancel_at_period_end?'<span class="pill warn">Cancelling</span>':'')+'</div><div class="note">'+esc(line)+'</div></div>'+(live&&!team?'<button class="btn ghost" id="portal">Manage subscription</button>':'')+'</div>';
  var I=S.interval,plans=[["free","Free","£0",["3 postcode checks a month","Top 10 neighbourhoods, and compare them","Preview of the signal feed and Class MA tracker","Sample Monday brief"]],
-  ["pro","Pro","£"+pr.pro[I].toLocaleString()+"<small> / "+I+"</small>",["Every neighbourhood, with history and 12-month trends","Unlimited postcode checks and comparisons","Monday 7am brief and full signal feed","Live Class MA leads","10 saved places with alerts","PDF reports and CSV export"]],
+  ["pro","Pro","£"+pr.pro[I].toLocaleString()+"<small> / "+I+"</small>",["All tracked neighbourhoods, with history and 12-month trends","Unlimited postcode checks and comparisons","Monday 7am brief and full signal feed","Live Class MA leads","10 saved places with alerts","PDF reports and CSV export"]],
   ["enterprise","Team","£"+pr.enterprise[I].toLocaleString()+"<small> / "+I+"</small>",["Everything in Pro, for up to 5 people","Shared team watchlist and alerts","Unlimited saved places","Custom catchments, branded reports, Slack brief"]]];
  if(S.plan==="investor")plans.splice(1,0,["investor","Investor","Your current plan",["You’re on an older plan, which keeps working.","Switch to Pro any time for the full product."]]);
  $("bl-plans").innerHTML=plans.map(function(x){var isCur=x[0]===S.plan,btn="";

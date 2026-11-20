@@ -137,7 +137,7 @@ function sources(d){return '<div class="ft">Sources: '+(d.city==="london"?'GLA P
 function report(d,full){var rm=d.R*1000+" m";
  var h='<div class="page">'+header(d,"Postcode Report",plan==="enterprise")+'<h1>'+esc(d.pc)+'</h1><p class="sub">'+esc([d.g.ward,d.g.district].filter(Boolean).join(", "))+' · catchment of '+rm+' (about a '+(d.R<=0.4?"5":d.R<=0.8?"10":"20")+'-minute walk)</p>'+
   summary(d)+'<h2>What’s planned within '+rm+'</h2>'+schemes(d,full?0:3);
- if(!full){h+='<div class="lock noprint"><h3>'+(d.near.length>3?(d.near.length-3)+' more schemes, the full signal breakdown and a PDF':'Full signal breakdown and a PDF')+'</h3><p>Unlock this report for £12, no subscription. Or get unlimited reports, alerts and the whole of London with Pro at £29 a month (14 days free).</p><button class="btn dark" id="buy">Unlock this report · £12</button> <a class="btn" style="border:1px solid var(--line)" href="./#pricing">See Investor</a></div>'}
+ if(!full){h+='<div class="lock noprint"><h3>'+(d.near.length>3?(d.near.length-3)+' more schemes, the full signal breakdown and a PDF':'Full signal breakdown and a PDF')+'</h3><p>Unlock this report for £12, no subscription. Or get unlimited reports, alerts and the whole of London with Pro at £29 a month (14 days free).</p><button class="btn dark" id="buy">Unlock this report · £12</button> <a class="btn" style="border:1px solid var(--line)" href="./#pricing">See Pro</a></div>'}
  else h+='<h2>Momentum signals</h2>'+signals(d)+(d.nearest&&d.nearest.d<3?'<p class="note" style="margin-top:10px">Nearest tracked neighbourhood: '+esc(d.nearest.a.f)+' ('+d.nearest.d.toFixed(1)+' km).</p>':'')+oppSection(d)+'<h2>Risks and unknowns</h2>'+lst(risks(d));
  return h+sources(d)+'</div>'}
 
