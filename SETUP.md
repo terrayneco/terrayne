@@ -140,12 +140,7 @@ existing Investor subscribers keep working.
 5. **Settings → Billing → Customer portal → Products**: replace the old prices with the four new ones (Pro and Team, monthly
    and yearly), remove Investor. Make sure customers can **update payment methods** (needed to keep a plan after the trial).
 6. **Supabase → Edge Functions → Secrets**: set `PRICE_PRO_MONTH`, `PRICE_PRO_YEAR`, `PRICE_ENT_MONTH`, `PRICE_ENT_YEAR` to the four new IDs.
-7. Deploy the checkout function (adds the 14-day, no-card trial): `supabase functions deploy create-checkout`
+7. Deploy the checkout function: `supabase functions deploy create-checkout` (no free trial; "cancel any time" note on checkout)
 8. **Supabase → SQL Editor**: run `supabase/2026-11-pricing.sql` (updates upgrade messages; limits unchanged).
-9. Test: sign up with a new email, start a Pro trial, check Stripe shows a trialing subscription at £29 with no card.
+9. Test: sign up with a new email, choose Pro, check Stripe checkout shows £29/month.
 
-## One free trial per card (Nov 2026)
-Trials need a card (charged when the trial ends). `stripe-webhook` records each subscription's card fingerprint in
-`trial_cards`; a new trial on a card already used by another customer is ended immediately. Run
-`supabase/2026-11-trial-cards.sql` once, then redeploy `create-checkout` and `stripe-webhook` (keep JWT verification OFF
-for stripe-webhook).

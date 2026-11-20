@@ -3,6 +3,5 @@ window.TERRAYNE = {
   supabaseUrl: "https://wpkfxynevyaxmiikzgsb.supabase.co",
   turnstileSiteKey: "0x4AAAAAAGF0aHOUGMay74-L",
   supabaseAnonKey: "sb_publishable_XhPkpSKRuwGc-Jg2Ka2Jdw_3cqB9-Vk",
-  prices: { pro: { month: 29, year: 290 }, enterprise: { month: 99, year: 990 } },  // "enterprise" is sold as "Team"
-  trialDays: 14
+  prices: { pro: { month: 29, year: 290 }, enterprise: { month: 99, year: 990 } }  // "enterprise" is sold as "Team"
 };
