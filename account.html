@@ -232,6 +232,7 @@ function setMode(m){mode=m;[].forEach.call($("a-seg").children,function(b){b.cla
  $("a-title").textContent=m==="up"?"Create your account":"Sign in";$("a-pass").autocomplete=m==="up"?"new-password":"current-password";msg("a-msg")}
 $("a-seg").onclick=function(e){if(e.target.dataset.m)setMode(e.target.dataset.m)};
 if(/[?&]signup/.test(location.search))setMode("up");
+(function(){try{var q=new URLSearchParams(location.search),p=q.get("plan");if(p==="pro"||p==="enterprise")localStorage.setItem("terrayne-want",JSON.stringify({plan:p,interval:q.get("interval")==="year"?"year":"month",t:Date.now()}))}catch(e){}})();
 (function(){var e=new URLSearchParams(location.search).get("email");if(e)$("a-email").value=e.slice(0,200)})();
 $("a-form").onsubmit=async function(e){e.preventDefault();var em=$("a-email").value.trim(),pw=$("a-pass").value,r;
  if(mode==="up"&&pw.length<10){msg("a-msg","Use a password of at least 10 characters.");return}
@@ -391,7 +392,7 @@ billing:function(){
  $("bl-plans").innerHTML=plans.map(function(x){var isCur=x[0]===S.plan,btn="";
   if(team)btn="";else if(isCur)btn='<button class="btn ghost" disabled>Current plan</button>';
   else if(x[0]==="free")btn=live?'<button class="btn ghost" data-portal="1">Cancel subscription</button>':"";
-  else btn='<button class="btn" data-plan="'+x[0]+'">'+(live?"Switch to ":"Upgrade to ")+x[1]+'</button>';
+  else btn='<button class="btn" data-plan="'+x[0]+'">'+(live?"Switch to "+x[1]:!p.status&&!p.stripe_subscription_id?"Start 14-day free trial":"Upgrade to "+x[1])+'</button>';
   return '<div class="plan'+(isCur?" cur":"")+'"><div class="note">'+x[1]+'</div><div class="p">'+x[2]+'</div><ul>'+x[3].map(function(f){return "<li>"+f+"</li>"}).join("")+'</ul><div style="margin-top:auto">'+btn+'</div></div>'}).join("");
  [].forEach.call($("bl-int").children,function(b){b.classList.toggle("on",b.dataset.i===I);b.onclick=function(){S.interval=b.dataset.i;P.billing()}});
  $("bl-plans").querySelectorAll("[data-plan]").forEach(function(b){b.onclick=function(){go("create-checkout",{plan:b.dataset.plan,interval:S.interval},b)}});
@@ -456,8 +457,11 @@ async function boot(){var s=await sb.auth.getSession();if(!s.data.session){show(
  $("who").innerHTML='<span>'+esc(S.user.email)+'</span><button class="btn ghost sm" id="so">Sign out</button>';$("so").onclick=signOut;
  $("nav-team").classList.toggle("hide",!(S.plan==="enterprise"&&!S.profile.team_owner));
  var want=new URLSearchParams(location.search).get("plan");
- if(want&&!paid()&&(want==="investor"||want==="pro"||want==="enterprise")){history.replaceState(null,"",location.pathname+"#billing");S.interval=new URLSearchParams(location.search).get("interval")==="year"?"year":"month";}
- showInvites();route()}
+ var wi=new URLSearchParams(location.search).get("interval")==="year"?"year":"month",auto=false;
+ try{var st=JSON.parse(localStorage.getItem("terrayne-want")||"null");if(!want&&st&&Date.now()-st.t<864e5){want=st.plan;wi=st.interval}localStorage.removeItem("terrayne-want")}catch(e){}
+ if(want&&!paid()&&!S.profile.team_owner&&(want==="pro"||want==="enterprise")){history.replaceState(null,"",location.pathname+"#billing");S.interval=wi;auto=true}
+ showInvites();route();
+ if(auto){var bs=$("bl-sub");if(bs)bs.textContent="Taking you to checkout for "+(want==="pro"?"Pro":"Team")+"…";go("create-checkout",{plan:want,interval:wi})}}
 boot();
 })();
 </script>
