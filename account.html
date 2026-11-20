@@ -383,7 +383,8 @@ billing:function(){
  var st=p.status,live=["active","trialing","past_due"].indexOf(st)>=0;
  var cur={free:"Free",investor:"Investor (older plan)",pro:"Pro",enterprise:"Team"}[S.plan];
  var line=team?"Your Team access is provided by your team owner.":!live?"You’re on the free plan.":st==="trialing"?"Free trial until "+fmtDate(p.current_period_end)+". Add a payment method under Manage subscription to keep Pro features after that; otherwise you’ll move to the free plan.":p.cancel_at_period_end?"Cancels on "+fmtDate(p.current_period_end)+". You keep access until then.":"Renews on "+fmtDate(p.current_period_end)+" ("+(p.billing_interval==="year"?"yearly":"monthly")+").";
- $("bl-sub").textContent=live||team?"":"New subscribers get 14 days free, with no card needed. Prices in GBP; no VAT is added.";
+ $("bl-sub").textContent=live||team?"":S.trialOK?"Your first 14 days are free, with no card needed. Prices in GBP; no VAT is added.":"Prices in GBP; no VAT is added.";
+ if(!live&&!team&&S.trialOK===undefined){S.trialOK=false;sb.functions.invoke("create-checkout",{body:{check:true}}).then(function(r){S.trialOK=!!(r.data&&r.data.trial);if(S.trialOK&&location.hash==="#billing")route()}).catch(function(){})}
  $("bl-cur").innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap"><div><div class="note">Current plan</div><div class="score">'+cur+' '+(st==="past_due"?'<span class="pill warn">Payment due</span>':p.cancel_at_period_end?'<span class="pill warn">Cancelling</span>':'')+'</div><div class="note">'+esc(line)+'</div></div>'+(live&&!team?'<button class="btn ghost" id="portal">Manage subscription</button>':'')+'</div>';
  var I=S.interval,plans=[["free","Free","£0",["3 postcode checks a month","Top 10 neighbourhoods, and compare them","Preview of the signal feed and Class MA tracker","Sample Monday brief"]],
   ["pro","Pro","£"+pr.pro[I].toLocaleString()+"<small> / "+I+"</small>",["All tracked neighbourhoods, with history and 12-month trends","Unlimited postcode checks and comparisons","Monday 7am brief and full signal feed","Live Class MA leads","10 saved places with alerts","PDF reports and CSV export"]],
@@ -392,7 +393,7 @@ billing:function(){
  $("bl-plans").innerHTML=plans.map(function(x){var isCur=x[0]===S.plan,btn="";
   if(team)btn="";else if(isCur)btn='<button class="btn ghost" disabled>Current plan</button>';
   else if(x[0]==="free")btn=live?'<button class="btn ghost" data-portal="1">Cancel subscription</button>':"";
-  else btn='<button class="btn" data-plan="'+x[0]+'">'+(live?"Switch to "+x[1]:!p.status&&!p.stripe_subscription_id?"Start 14-day free trial":"Upgrade to "+x[1])+'</button>';
+  else btn='<button class="btn" data-plan="'+x[0]+'">'+(live?"Switch to "+x[1]:S.trialOK?"Start 14-day free trial":"Upgrade to "+x[1])+'</button>';
   return '<div class="plan'+(isCur?" cur":"")+'"><div class="note">'+x[1]+'</div><div class="p">'+x[2]+'</div><ul>'+x[3].map(function(f){return "<li>"+f+"</li>"}).join("")+'</ul><div style="margin-top:auto">'+btn+'</div></div>'}).join("");
  [].forEach.call($("bl-int").children,function(b){b.classList.toggle("on",b.dataset.i===I);b.onclick=function(){S.interval=b.dataset.i;P.billing()}});
  $("bl-plans").querySelectorAll("[data-plan]").forEach(function(b){b.onclick=function(){go("create-checkout",{plan:b.dataset.plan,interval:S.interval},b)}});

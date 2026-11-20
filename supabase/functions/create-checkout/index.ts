@@ -1,4 +1,5 @@
 // POST { plan: "pro"|"enterprise", interval: "month"|"year" } -> { url } of a Stripe Checkout page.
+// POST { check: true } -> { trial: boolean }: whether this account still qualifies for the free trial.
 // ("enterprise" is shown on the site as "Team".) First-time subscribers get a 14-day free trial with no card
 // needed; if no payment method is added by the end, Stripe cancels the subscription and the webhook moves
 // them back to the free plan.
@@ -8,7 +9,13 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
   const me = await currentUser(req);
   if (!me) return json({ error: "Please sign in first." }, 401);
-  const { plan, interval } = await req.json().catch(() => ({}));
+  const { plan, interval, check } = await req.json().catch(() => ({}));
+  if (check) {
+    // Never subscribed (no Stripe customer, or no past subscriptions) = still eligible.
+    if (!me.profile.stripe_customer_id) return json({ trial: true });
+    const had = await stripe.subscriptions.list({ customer: me.profile.stripe_customer_id, status: "all", limit: 1 });
+    return json({ trial: had.data.length === 0 });
+  }
   const price = PRICES[`${plan}:${interval}`];
   if (!price) return json({ error: "Unknown plan." }, 400);
   if (me.profile.team_owner) return json({ error: "Your plan is managed by your team owner." }, 400);
