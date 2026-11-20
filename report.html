@@ -137,7 +137,7 @@ function sources(d){return '<div class="ft">Sources: '+(d.city==="london"?'GLA P
 function report(d,full){var rm=d.R*1000+" m";
  var h='<div class="page">'+header(d,"Postcode Report",plan==="enterprise")+'<h1>'+esc(d.pc)+'</h1><p class="sub">'+esc([d.g.ward,d.g.district].filter(Boolean).join(", "))+' · catchment of '+rm+' (about a '+(d.R<=0.4?"5":d.R<=0.8?"10":"20")+'-minute walk)</p>'+
   summary(d)+'<h2>What’s planned within '+rm+'</h2>'+schemes(d,full?0:3);
- if(!full){h+='<div class="lock noprint"><h3>'+(d.near.length>3?(d.near.length-3)+' more schemes, the full signal breakdown and a PDF':'Full signal breakdown and a PDF')+'</h3><p>Unlock this report for £12, no subscription. Or get unlimited reports with Investor at £19 a month.</p><button class="btn dark" id="buy">Unlock this report · £12</button> <a class="btn" style="border:1px solid var(--line)" href="./#pricing">See Investor</a></div>'}
+ if(!full){h+='<div class="lock noprint"><h3>'+(d.near.length>3?(d.near.length-3)+' more schemes, the full signal breakdown and a PDF':'Full signal breakdown and a PDF')+'</h3><p>Unlock this report for £12, no subscription. Or get unlimited reports, alerts and the whole of London with Pro at £29 a month (14 days free).</p><button class="btn dark" id="buy">Unlock this report · £12</button> <a class="btn" style="border:1px solid var(--line)" href="./#pricing">See Investor</a></div>'}
  else h+='<h2>Momentum signals</h2>'+signals(d)+(d.nearest&&d.nearest.d<3?'<p class="note" style="margin-top:10px">Nearest tracked neighbourhood: '+esc(d.nearest.a.f)+' ('+d.nearest.d.toFixed(1)+' km).</p>':'')+oppSection(d)+'<h2>Risks and unknowns</h2>'+lst(risks(d));
  return h+sources(d)+'</div>'}
 
@@ -156,7 +156,7 @@ async function run(){var pc=TerrayneReport.normPC(Q.get("pc")),r=parseInt(Q.get(
  $("pc").value=pc;$("r").value=String(r);$("msg").textContent="Building report…";
  var d=await TerrayneReport.build(pc,r/1000);if(d.error){$("msg").textContent=d.error;return}
  var acc=await access(pc);$("msg").textContent="";
- if(type==="memo"&&plan!=="enterprise"){$("out").innerHTML='<div class="page"><h1>IC memos are part of Enterprise</h1><p class="sub">Enterprise teams get one-click Investment Committee memos with their own branding. <a href="mailto:hello@terrayne.co?subject=Terrayne%20Enterprise">Talk to us</a>.</p></div>';return}
+ if(type==="memo"&&plan!=="enterprise"){$("out").innerHTML='<div class="page"><h1>IC memos are part of Team</h1><p class="sub">Team plans get one-click Investment Committee memos with their own branding, for £99 a month (14 days free). <a href="./#pricing">See plans</a>.</p></div>';return}
  $("out").innerHTML=(acc.why==="sample"?'<div class="page" style="padding:16px 22px;margin-bottom:14px;border:1px dashed #4f9be8"><b>Sample report.</b> This is a real, full report for '+SAMPLE_PC+' (Croydon), using live data. <a href="report.html">Get one for your postcode for £12</a>.</div>':"")+(type==="memo"?memo(d):report(d,acc.full));
  document.title=(type==="memo"?"IC memo ":"Postcode Report ")+d.pc+" · Terrayne";
  var act='';if(acc.full||type==="memo")act+='<button class="btn" id="pdf">Download PDF</button>';

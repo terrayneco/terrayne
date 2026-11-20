@@ -176,7 +176,7 @@ svg.spark{display:block}
 <div class="grid" style="align-content:start">
 <form class="card" id="em-form"><h3>Email address</h3><div class="msg" id="em-msg"></div><div class="field"><label for="em-email">Email</label><input id="em-email" type="email" required></div><button class="btn ghost">Change email</button><p class="note" style="margin:10px 0 0">We’ll send a confirmation link to the new address.</p></form>
 <form class="card" id="pw-form"><h3>Password</h3><div class="msg" id="pw-msg"></div><div class="field"><label for="pw-pass">New password</label><input id="pw-pass" type="password" minlength="10" autocomplete="new-password" required></div><button class="btn ghost">Change password</button></form>
-<form class="card hide" id="ent-form"><h3>Enterprise: branding and Slack</h3><div class="msg" id="ent-msg"></div>
+<form class="card hide" id="ent-form"><h3>Team: branding and Slack</h3><div class="msg" id="ent-msg"></div>
 <div class="field"><label for="ent-brand">Brand name on reports and memos</label><input id="ent-brand" maxlength="80"></div>
 <div class="field"><label for="ent-logo">Logo URL (https, PNG or SVG)</label><input id="ent-logo" type="url" maxlength="300" placeholder="https://…"></div>
 <div class="field"><label for="ent-slack">Slack incoming-webhook URL</label><input id="ent-slack" type="url" maxlength="300" placeholder="https://hooks.slack.com/services/…"></div>
@@ -195,7 +195,7 @@ svg.spark{display:block}
 </div>
 
 <div id="p-team" class="pane hide">
-<div class="eyebrow">Team</div><h1>Your Enterprise team</h1><p class="sub">Enterprise includes up to 5 users. Invited colleagues get full access when they create an account with the invited email.</p>
+<div class="eyebrow">Team</div><h1>Your team</h1><p class="sub">Team includes up to 5 people. Invited colleagues get full access when they create an account with the invited email.</p>
 <div class="grid g2"><form class="card" id="tm-form"><h3>Invite a colleague</h3><div class="msg" id="tm-msg"></div><div class="field"><label for="tm-email">Work email</label><input id="tm-email" type="email" required></div><button class="btn">Send invite</button></form><div class="card"><h3>Members</h3><div id="tm-list"></div></div></div>
 </div>
 
@@ -280,7 +280,7 @@ function latest(){return S.snaps&&S.snaps.length?S.snaps[0].data:S.pub}
 async function loadBriefs(){if(!briefsOK()||S.briefs)return;var r=await sb.from("briefs").select("week,area,title,body").order("week",{ascending:false}).limit(1000);S.briefs=r.data||[]}
 function paid(){return S.plan!=="free"}
 function briefsOK(){return S.plan==="pro"||S.plan==="enterprise"}
-function lock(what){return '<div class="card lock"><span class="pill">Professional</span><h2 style="margin-top:12px">'+what+'</h2><p>Investor (£19 a month) unlocks every neighbourhood, unlimited postcode checks and 3 saved places. Professional adds the Monday brief, every past brief, 10 watchlist places and the full Index history.</p><a class="btn" href="#billing">See plans</a></div>'}
+function lock(what){return '<div class="card lock"><span class="pill">Pro</span><h2 style="margin-top:12px">'+what+'</h2><p>Pro (£29 a month, 14 days free) unlocks every London neighbourhood with history and trends, unlimited postcode checks, comparisons, the Monday brief and every past brief, and 10 saved places with alerts.</p><a class="btn" href="#billing">See plans</a></div>'}
 
 /* ---------- panes ---------- */
 function P_places(){P.places()}
@@ -289,10 +289,10 @@ overview:function(){
  var d=latest(),pr=S.profile,first=(pr.full_name||"").split(" ")[0];
  $("hello").textContent=first?"Welcome back, "+first:"Welcome back";
  $("o-sub").textContent=d&&d.generated?"Momentum Index updated "+fmtDate(d.generated)+".":"";
- var pl={free:"Discover (free)",investor:"Investor",pro:"Professional",enterprise:"Enterprise"}[S.plan];
+ var pl={free:"Free",investor:"Investor (older plan)",pro:"Pro",enterprise:"Team"}[S.plan];
  $("o-stats").innerHTML='<div class="card"><div class="note">Plan</div><div class="score">'+pl+'</div></div><div class="card"><div class="note">Watchlist</div><div class="score">'+S.watch.length+'<em> neighbourhoods</em></div></div><div class="card"><div class="note">Briefs</div><div class="score">'+(paid()?(S.briefs?uniqWeeks().length:"—"):"Sample")+'<em> '+(paid()?"weeks":"")+'</em></div></div>';
  var A=(d&&d.areas)||[];
- $("o-watch").innerHTML=!paid()?'<p class="note">The watchlist is part of Professional. <a href="#billing">Upgrade</a></p>':S.watch.length?S.watch.map(function(n){var a=A.find(function(x){return x.n===n});return '<div class="row"><span>'+esc(a?a.f:n)+'</span><span>'+(a?'<b>'+a.s+'</b>/100 '+chg(a.c):'')+'</span></div>'}).join(""):'<p class="note">You’re not following any neighbourhoods yet. <a href="#watchlist">Add some</a>.</p>';
+ $("o-watch").innerHTML=!paid()?'<p class="note">The watchlist is part of Pro. <a href="#billing">Upgrade</a></p>':S.watch.length?S.watch.map(function(n){var a=A.find(function(x){return x.n===n});return '<div class="row"><span>'+esc(a?a.f:n)+'</span><span>'+(a?'<b>'+a.s+'</b>/100 '+chg(a.c):'')+'</span></div>'}).join(""):'<p class="note">You’re not following any neighbourhoods yet. <a href="#watchlist">Add some</a>.</p>';
  if(!paid()){$("o-brief").innerHTML='<p class="note">See a sample on the <a href="./#brief">home page</a>, or <a href="#billing">upgrade</a> to receive yours every Monday.</p>';return}
  var b=S.briefs&&S.briefs.find(function(x){return S.watch.indexOf(x.area)>=0})||(S.briefs&&S.briefs[0]);
  $("o-brief").innerHTML=b?'<p class="note">'+fmtDate(b.week)+'</p><p><b>'+esc(b.title)+'</b></p><a href="#briefs">Read all briefs</a>':'<p class="note">Your first brief arrives on Monday at 7am.</p>';
@@ -300,7 +300,7 @@ overview:function(){
 watchlist:function(){
  if(!paid()){$("w-body").innerHTML=lock("Build your watchlist");$("w-limit").textContent="";return}
  var lim=S.plan==="pro"?10:S.plan==="investor"?3:0,A=(latest()&&latest().areas)||[];
- $("w-limit").textContent=lim?(S.plan==="investor"?"Investor":"Professional")+": up to "+lim+" ("+S.watch.length+" used).":"Enterprise: unlimited.";
+ $("w-limit").textContent=lim?(S.plan==="investor"?"Investor":"Pro")+": up to "+lim+" ("+S.watch.length+" used).":"Team: unlimited.";
  /* history per neighbourhood, oldest first */
  var hist={};(S.snaps||[]).slice().reverse().forEach(function(sn){(sn.data.areas||[]).forEach(function(a){(hist[a.n]=hist[a.n]||[]).push(a.s)})});
  var MODES=[["w","This week"],["c","30 days"],["h","Headroom"]],mode=S.pillMode||"w";
@@ -358,12 +358,12 @@ places:async function(){
  var ent=S.plan==="enterprise",lim=S.plan==="investor"?3:S.plan==="pro"?10:0;
  var r=await sb.from("saved_places").select("id,label,postcode,radius_m,created_at,owner").order("created_at",{ascending:true});var P=r.data||[];
  var ids=P.map(function(x){return x.id}),A=ids.length?((await sb.from("alerts").select("place_id,week,items").in("place_id",ids).order("week",{ascending:false}).limit(200)).data||[]):[];
- $("pl-limit").textContent=lim?(S.plan==="investor"?"Investor":"Professional")+": up to "+lim+" ("+P.length+" used).":"Enterprise: unlimited, shared with your team.";
+ $("pl-limit").textContent=lim?(S.plan==="investor"?"Investor":"Pro")+": up to "+lim+" ("+P.length+" used).":"Team: unlimited, shared with your team.";
  var latest={};A.forEach(function(a){if(!latest[a.place_id])latest[a.place_id]=a});
  $("pl-body").innerHTML='<form class="card" id="pl-form" style="margin-bottom:16px"><h3>Add a place</h3><div class="msg" id="pl-msg"></div><div style="display:grid;grid-template-columns:1fr 1.4fr '+(ent?'160px ':'')+'auto;gap:10px;align-items:end">'+
   '<div><label for="pl-pc">Postcode</label><input id="pl-pc" required maxlength="9" style="text-transform:uppercase"></div><div><label for="pl-lab">Label (optional)</label><input id="pl-lab" maxlength="60" placeholder="e.g. 14 High St, Unit 3"></div>'+
   (ent?'<div><label for="pl-r">Catchment</label><select id="pl-r"><option value="400">400 m</option><option value="800" selected>800 m</option><option value="1600">1.6 km</option></select></div>':'')+
-  '<button class="btn">Save place</button></div>'+(ent?'':'<p class="note" style="margin:10px 0 0">Alerts cover 800 m. Custom catchments of 400 m or 1.6 km are part of Enterprise.</p>')+'</form>'+
+  '<button class="btn">Save place</button></div>'+(ent?'':'<p class="note" style="margin:10px 0 0">Alerts cover 800 m. Custom catchments of 400 m or 1.6 km are part of Team.</p>')+'</form>'+
   (P.length?'<div class="card"><div class="tw"><table><thead><tr><th>Place</th><th>Catchment</th><th>Latest alert</th><th></th></tr></thead><tbody>'+P.map(function(x){var a=latest[x.id],n=a?(a.items||[]).length:0,q="pc="+encodeURIComponent(x.postcode)+"&r="+x.radius_m;
    return '<tr><td><b>'+esc(x.label||x.postcode)+'</b><div class="note">'+esc(x.postcode)+(x.owner!==S.user.id?' · shared by your team':'')+'</div></td><td>'+(x.radius_m>=1000?(x.radius_m/1000)+' km':x.radius_m+' m')+'</td><td>'+(a?(n?'<b>'+n+' new filing'+(n>1?'s':'')+'</b><div class="note">'+esc(a.week)+'</div>':'<span class="note">Nothing new ('+esc(a.week)+')</span>'):'<span class="note">First check on Monday</span>')+'</td>'+
    '<td style="text-align:right;white-space:nowrap"><a class="btn ghost sm" href="report.html?'+q+'" target="_blank" rel="noopener">Report</a> '+(ent?'<a class="btn ghost sm" href="report.html?'+q+'&type=memo" target="_blank" rel="noopener">IC memo</a> ':'')+'<button class="btn danger sm" data-del="'+x.id+'">Remove</button></td></tr>'+
@@ -378,16 +378,16 @@ places:async function(){
 },
 profile:function(){var p=S.profile;$("ent-form").classList.toggle("hide",!(S.plan==="enterprise"&&!p.team_owner));$("ent-brand").value=p.brand_name||"";$("ent-logo").value=p.brand_logo||"";$("ent-slack").value=p.slack_webhook||"";$("pf-name").value=p.full_name||"";$("pf-company").value=p.company||"";$("pf-title").value=p.job_title||"";$("pf-brief").checked=p.brief_email!==false;$("em-email").value=S.user.email||""},
 billing:function(){
- var p=S.profile,pr=C.prices||{investor:{month:19,year:190},pro:{month:79,year:790},enterprise:{month:399,year:3990}},team=!!p.team_owner;
+ var p=S.profile,pr=C.prices||{pro:{month:29,year:290},enterprise:{month:99,year:990}},team=!!p.team_owner;
  var st=p.status,live=["active","trialing","past_due"].indexOf(st)>=0;
- var cur={free:"Discover (free)",investor:"Investor",pro:"Professional",enterprise:"Enterprise"}[S.plan];
- var line=team?"Your Enterprise access is provided by your team owner.":!live?"You’re on the free plan.":p.cancel_at_period_end?"Cancels on "+fmtDate(p.current_period_end)+". You keep access until then.":"Renews on "+fmtDate(p.current_period_end)+" ("+(p.billing_interval==="year"?"yearly":"monthly")+").";
- $("bl-sub").textContent="";
+ var cur={free:"Free",investor:"Investor (older plan)",pro:"Pro",enterprise:"Team"}[S.plan];
+ var line=team?"Your Team access is provided by your team owner.":!live?"You’re on the free plan.":st==="trialing"?"Free trial until "+fmtDate(p.current_period_end)+". Add a payment method under Manage subscription to keep Pro features after that; otherwise you’ll move to the free plan.":p.cancel_at_period_end?"Cancels on "+fmtDate(p.current_period_end)+". You keep access until then.":"Renews on "+fmtDate(p.current_period_end)+" ("+(p.billing_interval==="year"?"yearly":"monthly")+").";
+ $("bl-sub").textContent=live||team?"":"New subscribers get 14 days free, with no card needed. Prices in GBP; no VAT is added.";
  $("bl-cur").innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap"><div><div class="note">Current plan</div><div class="score">'+cur+' '+(st==="past_due"?'<span class="pill warn">Payment due</span>':p.cancel_at_period_end?'<span class="pill warn">Cancelling</span>':'')+'</div><div class="note">'+esc(line)+'</div></div>'+(live&&!team?'<button class="btn ghost" id="portal">Manage subscription</button>':'')+'</div>';
- var I=S.interval,plans=[["free","Discover","Free",["3 postcode checks a month","Top 10 Momentum Index","Class MA approval rates","Sample Monday brief"]],
-  ["investor","Investor","£"+pr.investor[I].toLocaleString()+"<small> / "+I+"</small>",["Unlimited postcode checks, every scheme","Score and price headroom everywhere","Alerts near 3 saved properties","PDF postcode reports"]],
-  ["pro","Professional","£"+pr.pro[I].toLocaleString()+"<small> / "+I+"</small>",["Everything in Investor","Monday 7am brief for your boroughs","Live Class MA leads","Score history, watchlist of 10","CSV export and brief archive"]],
-  ["enterprise","Enterprise","£"+pr.enterprise[I].toLocaleString()+"<small> / "+I+"</small>",["Everything in Professional, 5 users","Custom catchments and team watchlist","Branded PDFs, IC memos, Slack brief","Onboarding and priority support"]]];
+ var I=S.interval,plans=[["free","Free","£0",["3 postcode checks a month","Top 10 neighbourhoods, and compare them","Preview of the signal feed and Class MA tracker","Sample Monday brief"]],
+  ["pro","Pro","£"+pr.pro[I].toLocaleString()+"<small> / "+I+"</small>",["Every neighbourhood, with history and 12-month trends","Unlimited postcode checks and comparisons","Monday 7am brief and full signal feed","Live Class MA leads","10 saved places with alerts","PDF reports and CSV export"]],
+  ["enterprise","Team","£"+pr.enterprise[I].toLocaleString()+"<small> / "+I+"</small>",["Everything in Pro, for up to 5 people","Shared team watchlist and alerts","Unlimited saved places","Custom catchments, branded reports, Slack brief"]]];
+ if(S.plan==="investor")plans.splice(1,0,["investor","Investor","Your current plan",["You’re on an older plan, which keeps working.","Switch to Pro any time for the full product."]]);
  $("bl-plans").innerHTML=plans.map(function(x){var isCur=x[0]===S.plan,btn="";
   if(team)btn="";else if(isCur)btn='<button class="btn ghost" disabled>Current plan</button>';
   else if(x[0]==="free")btn=live?'<button class="btn ghost" data-portal="1">Cancel subscription</button>':"";
@@ -434,7 +434,7 @@ $("tm-form").onsubmit=async function(e){e.preventDefault();var b=this.querySelec
  msg("tm-msg",r.data.emailed?(r.data.existing?"Invite emailed. They already have an account, so they just need to sign in and accept it.":"Invite emailed. They’ll join your team as soon as they create an account with that email."):"Invite saved, but the email didn’t send. Ask them to sign in at terrayne.co/account.html with that email.",true);
  $("tm-email").value="";P.team()};
 async function showInvites(){var r=await sb.rpc("my_invites");var box=$("invites");if(!box)return;var l=(r.data||[]);
- box.innerHTML=l.map(function(i){return '<div class="card" style="margin-bottom:16px"><h3 style="margin:0 0 6px">Team invitation</h3><p class="note" style="margin:0 0 12px">'+esc(i.owner_name)+(i.company?' at '+esc(i.company):'')+' has invited you to their Enterprise team. You’ll get full Enterprise access at no cost to you.</p><button class="btn sm" data-ok="'+i.owner+'">Accept</button> <button class="btn ghost sm" data-no="'+i.owner+'">Decline</button></div>'}).join("");
+ box.innerHTML=l.map(function(i){return '<div class="card" style="margin-bottom:16px"><h3 style="margin:0 0 6px">Team invitation</h3><p class="note" style="margin:0 0 12px">'+esc(i.owner_name)+(i.company?' at '+esc(i.company):'')+' has invited you to their Terrayne team. You’ll get full Team access at no cost to you.</p><button class="btn sm" data-ok="'+i.owner+'">Accept</button> <button class="btn ghost sm" data-no="'+i.owner+'">Decline</button></div>'}).join("");
  box.querySelectorAll("[data-ok]").forEach(function(b){b.onclick=async function(){b.disabled=true;var x=await sb.rpc("accept_invite",{o:b.dataset.ok});if(x.error){b.disabled=false;msg("g-msg",x.error.message);return}location.reload()}});
  box.querySelectorAll("[data-no]").forEach(function(b){b.onclick=async function(){await sb.rpc("decline_invite",{o:b.dataset.no});showInvites()}});}
 $("del").onclick=async function(){if(!confirm("Delete your Terrayne account? Any subscription is cancelled immediately and your data is removed."))return;
