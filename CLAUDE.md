@@ -7,6 +7,7 @@ The master copy is on the Mac: `~/Library/Mobile Documents/com~apple~CloudDocs/T
 (logo in `assets/logo.jpg` beside it). An auto-sync (launchd `co.terrayne.sync`) copies it here as
 `index.html` and pushes whenever it is saved. Edit `terrayne.html`, not `index.html`, or the next
 sync will overwrite your change. If you do edit here, copy `index.html` back to `terrayne.html` too.
+When giving Charlie the Mac copy command, pin it to the pushed commit (`https://raw.githubusercontent.com/terrayneco/terrayne/<full sha>/index.html`), never `/main/`: raw.githubusercontent caches `main` for minutes, and a stale copy gets auto-synced back over the live site.
 
 ## Every time you make a change
 1. Run `git pull` first, so you're editing the latest version.
