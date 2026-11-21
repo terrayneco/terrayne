@@ -184,7 +184,7 @@ $("hist").onclick=async function(){var b=$("hist");b.disabled=true;b.textContent
   say("Downloaded "+n(out.snapshots.length)+" weeks of snapshots and "+n(out.briefs.length)+" briefs. Save the file somewhere safe, such as iCloud Drive.","info");histNote()}
  catch(e){say(esc(e.message||"Couldn’t download the history."))}
  b.disabled=false;b.textContent="Download full history"};
-var G=null,STEPS=[["pc_check","Postcode checks"],["cmp_add","Areas added to compare"],["brief_signup","Sample brief sign-ups"],["signup_click","Clicked “Start free”"],["account_created","Accounts created"],["plan_click","Clicked “Get Pro” or “Get Team”"],["checkout_start","Started checkout"],["checkout_done","Subscribed"],["report_click","Clicked “Get a report”"],["report_checkout","Started £12 report checkout"],["report_bought","Reports bought"],["demo_click","Walkthrough requests (Class MA page)"]];
+var G=null,STEPS=[["pc_check","Postcode checks"],["cmp_add","Areas added to compare"],["brief_signup","Sample brief sign-ups"],["signup_click","Clicked “Start free”"],["account_created","Accounts created"],["plan_click","Clicked “Get Pro” or “Get Team”"],["checkout_start","Started checkout"],["checkout_done","Subscribed"],["report_click","Clicked “Get a report”"],["report_checkout","Started £12 report checkout"],["report_bought","Reports bought"],["demo_click","Walkthrough requests"],["brief_pdf","Monday brief PDFs downloaded"]];
 async function growth(){
  var r=await sb.rpc("admin_growth",{days:30});
  if(r.error){$("growth").innerHTML='<p class="note">Not switched on yet: run <b>supabase/2026-11-growth.sql</b> in the Supabase SQL Editor (see SETUP.md).</p>';return}

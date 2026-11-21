@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://cloudflareinsights.com https://api.postcodes.io https://*.supabase.co wss://*.supabase.co; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<script>if(window.top!==window.self){try{window.top.location=window.self.location}catch(e){document.documentElement.style.display="none"}}</script>
+<title>Monday Brief · Terrayne</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<style>
+:root{--ink:#0b1f3a;--ink2:#3a4a66;--mute:#6b7890;--line:#dde3ee;--soft:#f4f6fa;--blue:#2f6fb5;--green:#1f9e7a;--warn:#c8662f;--bg:#e9edf3}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--blue)}
+.bar{position:sticky;top:0;z-index:5;background:#060d1a;color:#fff;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.bar img{height:30px;display:block}.bar .r{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:99px;padding:9px 16px;font:inherit;font-weight:600;font-size:13.5px;background:#fff;color:#0a1223;cursor:pointer;text-decoration:none}
+.btn.ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.3)}.btn.dark{background:var(--ink);color:#fff}
+.btn[disabled]{opacity:.5;cursor:default}
+select,input{font:inherit;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;color:var(--ink)}
+.page{max-width:820px;margin:28px auto;background:#fff;box-shadow:0 10px 40px -20px rgba(11,31,58,.35);border-radius:6px;padding:48px 56px}
+.hd{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;border-bottom:2px solid var(--ink);padding-bottom:18px;margin-bottom:22px}
+.brand{display:flex;align-items:center;gap:12px}.brand img{max-height:38px;max-width:180px}.brand b{font-size:18px;letter-spacing:.02em}
+.meta{text-align:right;font-size:12px;color:var(--mute)}
+h1{font-size:28px;letter-spacing:-.02em;margin:0 0 4px;line-height:1.15}
+h2{font-size:15px;text-transform:uppercase;letter-spacing:.12em;color:var(--ink2);margin:26px 0 10px}
+.sub{color:var(--ink2);margin:0 0 18px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.kpi{background:var(--soft);border-radius:10px;padding:12px 14px}.kpi b{display:block;font-size:24px;letter-spacing:-.01em}.kpi span{font-size:11.5px;color:var(--mute)}
+.score{display:flex;gap:18px;align-items:center;background:var(--ink);color:#fff;border-radius:12px;padding:16px 20px;margin:0 0 14px}
+.score .n{font-size:46px;font-weight:700;letter-spacing:-.03em;line-height:1}.score .n small{font-size:14px;color:#9fb2d4;font-weight:400}
+.score p{margin:0;color:#c8d4e8;font-size:13.5px}.score .v{display:inline-block;background:rgba(255,255,255,.12);border-radius:99px;padding:2px 10px;font-size:12px;margin-bottom:6px}
+.sig{display:grid;grid-template-columns:200px 1fr 40px;gap:10px;align-items:center;font-size:13px;margin:5px 0}
+.sig i{display:block;height:7px;border-radius:4px;background:var(--line);overflow:hidden}.sig i em{display:block;height:100%;background:var(--blue);border-radius:4px}
+.sig b{text-align:right;font-variant-numeric:tabular-nums}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{text-align:left;color:var(--mute);font-weight:500;border-bottom:1px solid var(--line);padding:6px 6px 6px 0}
+td{border-bottom:1px solid var(--line);padding:7px 6px 7px 0;vertical-align:top}td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+td small{color:var(--mute)}
+.note{font-size:11.5px;color:var(--mute)}
+.lock{border:1px dashed var(--line);border-radius:12px;padding:22px;text-align:center;margin-top:16px;background:var(--soft)}
+.lock h3{margin:0 0 6px}.lock p{color:var(--ink2);margin:0 0 14px}
+.memo-line{border-bottom:1px solid var(--line);height:26px}
+.ft{margin-top:28px;padding-top:14px;border-top:1px solid var(--line);font-size:11px;color:var(--mute)}
+.form{max-width:820px;margin:28px auto;background:#fff;border-radius:6px;padding:28px 32px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.form input{flex:1 1 200px;text-transform:uppercase}
+.msg{max-width:820px;margin:10px auto;color:var(--warn);text-align:center}
+.hide{display:none!important}
+@media(max-width:700px){.page{padding:28px 20px;margin:12px}.kpis{grid-template-columns:repeat(2,1fr)}.sig{grid-template-columns:130px 1fr 34px}.hd{flex-direction:column}.meta{text-align:left}}
+@media screen and (max-width:700px){.page table thead{display:none}.page table,.page table tbody,.page table tr{display:block;width:100%}.page table tr{padding:12px 0;border-bottom:1px solid #e3e7ef}.page table td{display:block;border:0!important;padding:2px 0!important;text-align:left!important}.page table td[data-l]{display:inline-block;margin:6px 14px 0 0;font-size:12.5px}.page table td[data-l]:before{content:attr(data-l)": ";color:#7b879c}}
+@media print{body{background:#fff}.bar,.form,.msg,.noprint{display:none!important}.page{box-shadow:none;margin:0;max-width:none;padding:0}@page{size:A4;margin:16mm}h2{break-after:avoid}tr,.kpi,.score{break-inside:avoid}}
+.bh h2{margin-top:30px}.bh .t{font-size:16px;font-weight:700;margin:0 0 8px;color:var(--ink)}.bh .bd{font-size:13.5px;color:var(--ink2)}.bh .bd p{margin:0 0 10px}.bh .bd ul{margin:0 0 10px;padding-left:18px}.bh .bd li{margin-bottom:8px}
+.bh{break-inside:avoid-page}.tog{font-size:12.5px;margin:0 0 6px}
+#wk{padding:7px 10px;border-radius:99px;font-size:13px}
+@media print{html,body{background:#fff!important}.bh h2{margin-top:20px}}
+</style>
+<script src="assets/config.js"></script>
+</head>
+<body>
+<div class="bar"><a href="./"><img src="assets/logo-white.svg" alt="Terrayne"></a><div class="r"><select id="wk" class="hide" aria-label="Choose a week"></select><button class="btn" id="pdf" disabled>Download PDF</button><a class="btn ghost" href="account.html#briefs">All briefs</a></div></div>
+<div class="page" id="out"><p class="note">Loading your brief…</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" integrity="sha384-GFr3yTh5lJznCbZfpTtXnwboFsxqtTQoeTZCRHhE0579KrRmlCzen5AA8ohaB5ug" crossorigin="anonymous"></script>
+<script>
+/* Printable Monday brief for the signed-in Pro/Team user: brief.html?week=YYYY-MM-DD[&all=1][&pdf=1]
+   "Download PDF" uses the browser's Save as PDF (A4). pdf=1 (the link in the email) opens that straight away. */
+(async function(){
+var C=window.TERRAYNE||{},$=function(i){return document.getElementById(i)};
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function fmt(d){return new Date(d+"T12:00:00Z").toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"})}
+var qs=new URLSearchParams(location.search),week=qs.get("week")||"",all=qs.get("all")==="1",auto=qs.get("pdf")==="1";
+if(!/^\d{4}-\d{2}-\d{2}$/.test(week))week="";
+function lock(h,p,btn){$("out").innerHTML='<div class="lock"><h3>'+h+'</h3><p>'+p+'</p>'+(btn||"")+'</div>';$("pdf").classList.add("hide")}
+if(!C.supabaseUrl||!C.supabaseAnonKey||!window.supabase){lock("Briefs aren’t available right now","Please try again in a few minutes.");return}
+var sb=window.supabase.createClient(C.supabaseUrl,C.supabaseAnonKey);
+var s=(await sb.auth.getSession()).data.session;
+if(!s){lock("Sign in to see your brief","Your Monday brief is kept in your Terrayne account.",'<a class="btn dark" href="account.html?next='+encodeURIComponent("brief.html"+location.search)+'">Sign in</a>');return}
+var plan=(await sb.rpc("effective_plan",{uid:s.user.id})).data;
+if(plan!=="pro"&&plan!=="enterprise"){lock("The Monday brief is part of Pro","Every Monday by 7am: what was filed and what moved in the neighbourhoods you follow, and new filings near the places you save.",'<a class="btn dark" href="account.html#billing">See Pro</a>');return}
+var prof=(await sb.from("profiles").select("full_name,company,brand_name,brand_logo").eq("id",s.user.id).single()).data||{};
+var wl=((await sb.from("watchlist").select("area").eq("user_id",s.user.id)).data||[]).map(function(x){return x.area});
+var wr=(await sb.from("briefs").select("week").order("week",{ascending:false}).limit(1000)).data||[];
+var weeks=[];wr.forEach(function(x){if(weeks.indexOf(x.week)<0)weeks.push(x.week)});
+if(!weeks.length){lock("Your first brief is on its way","It arrives on Monday at 7am UK time, and you can download it here as a PDF.");return}
+if(weeks.indexOf(week)<0)week=weeks[0];
+var sel=$("wk");sel.innerHTML=weeks.map(function(w){return '<option value="'+w+'"'+(w===week?" selected":"")+'>'+fmt(w)+'</option>'}).join("");sel.classList.remove("hide");
+sel.onchange=function(){location.search="?week="+sel.value+(all?"&all=1":"")};
+var mine=!all&&wl.length>0;
+var B=((await sb.from("briefs").select("area,title,body").eq("week",week).order("area")).data||[]).filter(function(b){return !mine||wl.indexOf(b.area)>=0});
+var P=(await sb.from("saved_places").select("id,label,postcode,radius_m")).data||[],A=[];
+if(P.length)A=((await sb.from("alerts").select("place_id,items").eq("week",week).in("place_id",P.map(function(p){return p.id}))).data||[]).filter(function(a){return (a.items||[]).length});
+var team=plan==="enterprise",brand=team&&(prof.brand_name||prof.company),logo=team&&/^https:\/\//.test(prof.brand_logo||"")?'<img src="'+esc(prof.brand_logo)+'" alt="">':"";
+var who=[prof.full_name,prof.company].filter(Boolean).map(esc).join(" · ");
+var h='<div class="hd"><div class="brand">'+(logo||'<b>'+(brand?esc(brand):"TERRAYNE")+'</b>')+'</div><div class="meta">Monday Brief<br>'+fmt(week)+(who?'<br>Prepared for '+who:"")+'</div></div>'+
+ '<h1>Your Monday Brief</h1><p class="sub">'+(B.length?'New planning filings and Momentum Index changes for '+(mine?B.length+' neighbourhood'+(B.length===1?"":"s")+' on your watchlist':'all '+B.length+' tracked neighbourhoods'):'No neighbourhood briefs for this week.')+(A.length?', plus new filings near your saved places':"")+'.</p>'+
+ (wl.length?'<p class="tog noprint"><a href="?week='+week+(mine?"&all=1":"")+'">'+(mine?"Show every neighbourhood":"Show only my watchlist")+'</a></p>':'<p class="tog noprint note">Your watchlist is empty, so this shows every neighbourhood. <a href="account.html#watchlist">Choose your neighbourhoods</a>.</p>');
+B.forEach(function(b){h+='<div class="bh"><h2>'+esc(b.area)+'</h2><p class="t">'+esc(b.title)+'</p><div class="bd">'+b.body+'</div></div>'});
+if(A.length){h+='<h2>New near your saved places</h2>';
+ A.forEach(function(a){var p=P.filter(function(x){return x.id===a.place_id})[0]||{};
+  h+='<p class="t" style="margin-top:14px">'+esc(p.label||p.postcode||"Saved place")+' <span class="note">· within '+esc(p.radius_m||"")+' m</span></p><table><thead><tr><th>Site</th><th class="n">Homes</th><th>Type</th><th>Status</th><th>Reference</th><th class="n">Distance</th></tr></thead><tbody>'+
+   a.items.map(function(i){return '<tr><td><b>'+esc(i.site)+'</b></td><td class="n" data-l="Homes">'+(i.units>0?esc(i.units):"—")+'</td><td data-l="Type">'+esc(i.kind)+'</td><td data-l="Status">'+esc(i.status)+'</td><td data-l="Ref">'+esc(i.lpa)+' '+esc(i.ref)+'</td><td class="n" data-l="Distance">'+esc(i.dist)+' m</td></tr>'}).join("")+'</tbody></table>'})}
+h+='<div class="ft">Built from the GLA Planning London Datahub and official statistics (TfL, ONS, HM Land Registry). Statuses can change, so check the council record by reference. Scores describe activity, not future prices, and aren’t investment advice. For use within your organisation. © Terrayne '+new Date().getFullYear()+'.</div>';
+$("out").innerHTML=h;document.title="Terrayne Monday Brief "+week;
+var btn=$("pdf");btn.disabled=false;btn.onclick=function(){if(window.tyTrack)tyTrack("brief_pdf",week);window.print()};
+if(auto){try{history.replaceState(null,"","?week="+week+(all?"&all=1":""))}catch(e){}setTimeout(function(){btn.click()},700)}
+})();
+</script>
+<script src="assets/track.js"></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "ed3ce7710a55414f8f881c84da8964aa"}'></script>
+</body>
+</html>

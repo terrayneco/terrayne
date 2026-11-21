@@ -158,3 +158,7 @@ Every Monday's full snapshot and briefs are stored only in Supabase (the free pl
 1. **Supabase → SQL Editor**: run `supabase/2026-11-history.sql` (lets admin accounts read snapshots and briefs).
 2. Once a month: open **admin.html → Data & briefs → Download full history**, and save the file to iCloud Drive (e.g. `TYE/backups/`). The page warns you if it's been over 35 days.
 3. When there's revenue, Supabase's paid plan adds automatic daily backups.
+
+## Monday brief PDF (November 2026)
+The brief email now has a "Download this brief as a PDF" button (to `brief.html`). To switch it on, update the **send-briefs** function:
+**Supabase → Edge Functions → send-briefs → Code → index.ts**, replace it with `supabase/functions/send-briefs/index.ts` from the repo, and click **Deploy** (leave the `_shared` file as it is; "Verify JWT" stays off).

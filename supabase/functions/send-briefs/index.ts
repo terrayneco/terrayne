@@ -17,6 +17,7 @@ ${items.map((b) => `<div style="background:#0d1830;border:1px solid #1c2b4d;bord
 <p style="font-size:12px;color:#8c9ab3;margin:0 0 4px">${esc(b.area)}</p><h2 style="font-size:17px;margin:0 0 8px">${esc(b.title)}</h2>
 <div style="font-size:14px;line-height:1.55;color:#c8d4e8">${b.body}</div></div>`).join("")}
 ${alertsHtml(alerts)}
+<p style="margin:22px 0 0"><a href="${SITE}/brief.html?week=${week}&pdf=1" style="display:inline-block;padding:10px 18px;border-radius:999px;background:#ffffff;color:#060d1a;font-weight:600;font-size:14px;text-decoration:none">Download this brief as a PDF</a></p>
 <p style="font-size:13px;color:#8c9ab3;margin:24px 0 0"><a href="${SITE}/account.html#briefs" style="color:#9fd0ff">Open all briefs</a> · <a href="${SITE}/account.html#profile" style="color:#9fd0ff">Email settings</a></p>
 <p style="font-size:11px;color:#52617f">Built from the GLA Planning London Datahub. Statuses can change; check the council register by reference.</p>
 </div></div>`;

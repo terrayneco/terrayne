@@ -296,7 +296,7 @@ overview:function(){
  $("o-watch").innerHTML=!paid()?'<p class="note">The watchlist is part of Pro. <a href="#billing">Upgrade</a></p>':S.watch.length?S.watch.map(function(n){var a=A.find(function(x){return x.n===n});return '<div class="row"><span>'+esc(a?a.f:n)+'</span><span>'+(a?'<b>'+a.s+'</b>/100 '+chg(a.c):'')+'</span></div>'}).join(""):'<p class="note">You’re not following any neighbourhoods yet. <a href="#watchlist">Add some</a>.</p>';
  if(!paid()){$("o-brief").innerHTML='<p class="note">See a sample on the <a href="./#brief">home page</a>, or <a href="#billing">upgrade</a> to receive yours every Monday.</p>';return}
  var b=S.briefs&&S.briefs.find(function(x){return S.watch.indexOf(x.area)>=0})||(S.briefs&&S.briefs[0]);
- $("o-brief").innerHTML=b?'<p class="note">'+fmtDate(b.week)+'</p><p><b>'+esc(b.title)+'</b></p><a href="#briefs">Read all briefs</a>':'<p class="note">Your first brief arrives on Monday at 7am.</p>';
+ $("o-brief").innerHTML=b?'<p class="note">'+fmtDate(b.week)+'</p><p><b>'+esc(b.title)+'</b></p><a href="#briefs">Read all briefs</a> · <a href="brief.html?week='+b.week+'&pdf=1" target="_blank" rel="noopener">Download PDF</a>':'<p class="note">Your first brief arrives on Monday at 7am.</p>';
 },
 watchlist:function(){
  if(!paid()){$("w-body").innerHTML=lock("Build your watchlist");$("w-limit").textContent="";return}
@@ -332,7 +332,7 @@ briefs:function(){
  var only=S.briefsMine!==false&&S.watch.length>0;
  var list=S.briefs.filter(function(b){return !only||S.watch.indexOf(b.area)>=0});
  var html='<div class="chips" style="margin-bottom:16px"><button class="chip'+(only?" on":"")+'" id="bm">My watchlist</button><button class="chip'+(!only?" on":"")+'" id="ba">All neighbourhoods</button></div>',wk="";
- list.forEach(function(b){if(b.week!==wk){wk=b.week;html+='<h3 style="margin:22px 0 10px">'+fmtDate(b.week)+'</h3>'}
+ list.forEach(function(b){if(b.week!==wk){wk=b.week;html+='<h3 style="margin:22px 0 10px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">'+fmtDate(b.week)+'<a class="btn ghost sm" href="brief.html?week='+b.week+(only?"":"&all=1")+'&pdf=1" target="_blank" rel="noopener">Download PDF</a></h3>'}
   html+='<details class="brief"><summary><span><span class="note">'+esc(b.area)+'</span><br><b>'+esc(b.title)+'</b></span><span class="note">▾</span></summary><div class="bd">'+b.body+'</div></details>'});
  $("b-body").innerHTML=html||'<p class="note">No briefs for your watchlist yet.</p>';
  $("bm").onclick=function(){S.briefsMine=true;P.briefs()};$("ba").onclick=function(){S.briefsMine=false;P.briefs()};
@@ -453,6 +453,7 @@ async function route(){var h=(location.hash||"#overview").slice(1);if(panes.inde
 addEventListener("hashchange",route);
 
 async function boot(){var s=await sb.auth.getSession();if(!s.data.session){show("v-auth");return}
+ try{var nx=new URLSearchParams(location.search).get("next");if(nx&&/^brief\.html(\?[\w=&.%-]*)?$/.test(nx)){location.replace(nx);return}}catch(e){}
  S.user=s.data.session.user;await loadProfile();await loadIndex();show("v-app");
  $("who").innerHTML='<span>'+esc(S.user.email)+'</span><button class="btn ghost sm" id="so">Sign out</button>';$("so").onclick=signOut;
  $("nav-team").classList.toggle("hide",!(S.plan==="enterprise"&&!S.profile.team_owner));
