@@ -147,7 +147,7 @@ existing Investor subscribers keep working.
 
 ## Growth: sample-brief sign-ups, funnel counts, neighbourhood pages (November 2026)
 1. **Supabase → SQL Editor**: paste and run `supabase/2026-11-growth.sql` (creates `brief_signups`, `events` and the `admin_growth` function the admin page uses).
-2. **Supabase → Edge Functions → Deploy a new function** named `sample-brief`, paste `supabase/functions/sample-brief/index.ts`, and turn **off** "Verify JWT" (anyone can request a sample; the database limits it to 2 per email and 300 a day). It also needs `../_shared/common.ts`, like the other functions. It uses the existing `RESEND_API_KEY` secret, so no new secrets.
+2. **Supabase → Edge Functions → Deploy a new function** named `sample-brief`, paste `supabase/functions/sample-brief/index.ts`, and turn **off** "Verify JWT" (anyone can request a sample; the database limits it to 2 per email and 300 a day). It's self-contained, so paste just that one file. It uses the existing `RESEND_API_KEY` secret, so no new secrets.
 3. Test: on terrayne.co, fill in "Get a free sample Monday brief" with your own email. You should get the email within a minute, and see the sign-up on admin.html under **Growth funnel**.
 4. **Google Search Console** (search.google.com/search-console): add `terrayne.co`, then submit `https://terrayne.co/sitemap.xml` so Google finds the neighbourhood pages and the Class MA page.
 

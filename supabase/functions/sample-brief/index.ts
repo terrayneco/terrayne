@@ -3,7 +3,18 @@
 //   POST { unsubscribe: "<token>" }                  -> stops all emails to that address
 // Anyone can call it, so in the Supabase dashboard turn OFF "Verify JWT" for this function.
 // Spam is limited by the database (2 per email per day, 300 per day in total) and a hidden form field.
-import { admin, SITE, cors, json } from "../_shared/common.ts";
+// Self-contained (no shared files), so it can be pasted straight into the Supabase dashboard editor.
+import { createClient } from "npm:@supabase/supabase-js@2.45.4";
+
+const SITE = Deno.env.get("SITE_URL") ?? "https://terrayne.co";
+const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!, { auth: { persistSession: false } });
+const cors = {
+  "Access-Control-Allow-Origin": SITE,
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+};
+const json = (body: unknown, status = 200) =>
+  new Response(JSON.stringify(body), { status, headers: { ...cors, "Content-Type": "application/json" } });
 
 const FROM = Deno.env.get("BRIEF_FROM") ?? "Terrayne <briefings@terrayne.co>";
 const AREAS = ["Nine Elms", "Stratford", "Canada Water", "Whitechapel", "King’s Cross", "Croydon", "Old Kent Road", "Elephant",
