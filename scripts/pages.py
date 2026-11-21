@@ -144,7 +144,8 @@ EXTRA_CSS = """<style>
 .apg3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
 .kn{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.kn.k4{grid-template-columns:repeat(4,minmax(0,1fr))}
 .kn .apc b{display:block;font-size:clamp(24px,3vw,30px);letter-spacing:-.02em;line-height:1.15}
-.kn .apc span{display:block;color:var(--mute);font-size:13.5px;margin-top:6px;line-height:1.45}
+.kn .apc span{display:block;color:var(--mute);font-size:13.5px;margin-top:6px;line-height:1.45}.kn .apc em{display:block;font-style:normal;color:#9fd0ff;font-size:12.5px;margin-top:8px}
+.sgh{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#9fd0ff;margin:16px 0 2px}.sgh:first-of-type{margin-top:8px}.sgh span{letter-spacing:0;text-transform:none;color:var(--mute);margin-left:6px}
 .score{display:flex;align-items:baseline;gap:6px;margin:4px 0 10px}.score b{font-size:clamp(64px,9vw,92px);line-height:.95;letter-spacing:-.04em}.score span{color:var(--mute);font-size:18px}
 .apt{display:inline-block;font-size:12.5px;letter-spacing:0;text-transform:none;border:1px solid var(--line);border-radius:999px;padding:4px 11px;margin:0 6px 8px 0;color:#c8d4e8}
 .apt.hi{background:rgba(79,155,232,.16);border-color:rgba(79,155,232,.45);color:#cfe6ff}
@@ -276,20 +277,25 @@ def area_page(meta, a, rank, pub, cm, feed):
         tr = a.get("tr") or []
         off, raw = a.get("off") or {}, a.get("raw") or {}
         labels = pub["labels"]
-        sig = "".join(
-            f'<div class="sg"><span>{e(labels[i])}</span><span class="sgv">{x}</span>'
-            f'<span class="sgt {TREND.get(tr[i] if i < len(tr) else "", ("", "", ""))[2]}">{TREND.get(tr[i] if i < len(tr) else "", ("", "", ""))[1]} {TREND.get(tr[i] if i < len(tr) else "", ("—", "", ""))[0]}</span>'
-            f'<div class="sgb"><i style="width:{max(2, min(100, x or 0))}%"></i></div></div>'
-            for i, x in enumerate(a.get("x", [])))
-        kn = [(nf(raw.get("act")), "significant planning applications in the last 12 months"),
-              (homes(a), "net new homes proposed"),
-              (f"{nf(raw.get('com'))} m²", "net new commercial floorspace proposed")]
+        def sgrow(i, x):
+            k = tr[i] if i < len(tr) else ""
+            return (f'<div class="sg"><span>{e(labels[i])}</span><span class="sgv">{x}</span>'
+                    f'<span class="sgt {TREND.get(k, ("", "", ""))[2]}">{TREND.get(k, ("", "", ""))[1]} {TREND.get(k, ("—", "", ""))[0]}</span>'
+                    f'<div class="sgb"><i style="width:{max(2, min(100, x or 0))}%"></i></div></div>')
+        xs = a.get("x", [])
+        sig = ('<div class="sgh">What’s coming <span>planning filings, last 12 months</span></div>' + "".join(sgrow(i, x) for i, x in enumerate(xs[:4]))
+               + '<div class="sgh">What’s already changing <span>official statistics</span></div>' + "".join(sgrow(i + 4, x) for i, x in enumerate(xs[4:])))
+        B = pub.get("bench") or {}
+        typ = lambda v: f'<em>Typical London area: {v}</em>'
+        kn = [(nf(raw.get("act")), "significant planning applications in the last 12 months" + (typ(nf(B["act"])) if "act" in B else "")),
+              (homes(a), "net new homes proposed" + (typ(nf(B["pipe"])) if "pipe" in B else "")),
+              (f"{nf(raw.get('com'))} m²", "net new commercial floorspace proposed" + (typ(nf(B["com"]) + " m²") if "com" in B else ""))]
         if off.get("transport") is not None:
-            kn.append((pct(off["transport"]), f"change in station use ({e(off.get('transport_span', ''))})"))
+            kn.append((pct(off["transport"]), f"change in station use ({e(off.get('transport_span', ''))})" + (typ(pct(B["transport"])) if "transport" in B else "")))
         if off.get("population") is not None:
-            kn.append((pct(off["population"]), f"population change ({e(off.get('population_span', ''))})"))
+            kn.append((pct(off["population"]), f"population change ({e(off.get('population_span', ''))})" + (typ(pct(B["population"])) if "population" in B else "")))
         if off.get("median_price"):
-            kn.append((f"£{nf(off['median_price'])}", f"median sale price, {pct(off.get('prices'))} on a year earlier"))
+            kn.append((f"£{nf(off['median_price'])}", f"median sale price, {pct(off.get('prices'))} on a year earlier" + (typ("£" + nf(B["price_level"])) if "price_level" in B else "")))
         schemes = a.get("schemes") or []
         sch = ('<ul class="lst">' + "".join(
             f'<li><b>{e(tidy(x["site"]))}</b><span class="muted small">{nf(x["units"]) + " homes · " if x.get("units", 0) > 0 else ""}'
@@ -309,10 +315,10 @@ def area_page(meta, a, rank, pub, cm, feed):
 <p class="small muted" style="margin:10px 0 0">A score from 0 to 100 for how fast an area is changing compared with the rest of London, from seven signals. It measures activity, not where prices will go. Price headroom {a.get('hd', '—')}/100: cheaper than {a.get('hd', '—')}% of London. <a href="/methodology.html" style="color:var(--accent)">How the score works</a>.</p>
 {cta}</div>
 <div class="apc"><div class="eyebrow" style="margin-bottom:4px">The seven signals</div>{sig}
-<p class="small muted" style="margin:10px 0 0">Arrows show the direction over the last 12 months.</p></div>
+<p class="small muted" style="margin:10px 0 0">Arrows show the direction over the last 12 months. Applications aren’t approvals: <a href="/methodology.html#signals" style="color:var(--accent)">what each signal tells you</a>.</p></div>
 </div></div></section>
 <section class="ap-s" style="padding-top:10px"><div class="wrap">
-<h2>The numbers</h2>
+<h2>The numbers</h2><p class="ap-sub">Each figure is for the area within about {radius} km of the centre, next to the median for every same-sized area of London.</p>
 <div class="kn">{''.join(f'<div class="apc"><b>{v_}</b><span>{l_}</span></div>' for v_, l_ in kn)}</div>
 <div class="apc" style="margin-top:14px"><div class="eyebrow" style="margin-bottom:8px">In plain English</div><p style="margin:0;color:#c8d4e8;line-height:1.7">{e(a.get('t', ''))}</p></div>
 </div></section>
@@ -323,7 +329,7 @@ def area_page(meta, a, rank, pub, cm, feed):
         qs = [(f"Is {full} changing?",
                f"{full} scores {s}/100 on Terrayne’s Momentum Index this week ({v.lower()}), ranked {rank} of {pub['tracked']} tracked London neighbourhoods, "
                f"and {pts(a.get('c12'))} over the last 12 months. In the last 12 months there were {nf(raw.get('act'))} significant planning applications "
-               f"within about {radius} km of the centre."),
+               f"within about {radius} km of the centre" + (f", against {nf(pub['bench']['act'])} for a typical same-sized area of London." if pub.get('bench', {}).get('act') else ".")),
               (f"How many new homes are planned in {full}?",
                f"Significant planning applications in the last 12 months propose {homes(a)} net new homes within about {radius} km of {full}, "
                f"along with {nf(raw.get('com'))} m² of net new commercial floorspace. Figures come from the GLA Planning London Datahub."),
@@ -363,7 +369,7 @@ def area_page(meta, a, rank, pub, cm, feed):
 <section class="ap-s"><div class="wrap">
 <h2>Other London neighbourhoods</h2><p class="ap-sub">Terrayne tracks {pub['tracked']} of London’s fastest-changing neighbourhoods. Check any London postcode free on the <a href="/#check" style="color:var(--accent)">homepage</a>.</p>
 {other_links(short)}
-<p class="small muted" style="margin-top:26px">Sources: GLA Planning London Datahub, TfL, Office of Rail and Road, ONS and HM Land Registry. Contains public sector information licensed under the Open Government Licence v3.0. Statuses can change, so check the council record by reference. Scores describe activity, not future prices, and aren’t investment advice.</p>
+<p class="small muted" style="margin-top:26px">Sources: GLA Planning London Datahub, TfL, Office of Rail and Road, ONS and HM Land Registry. Contains public sector information licensed under the Open Government Licence v3.0. Powered by TfL Open Data. Contains OS, Royal Mail, National Statistics and HM Land Registry data © copyright and database right 2026 (<a href="/methodology.html#sources" style="color:inherit;text-decoration:underline">full data credits</a>). Statuses can change, so check the council record by reference. Scores describe activity, not future prices, and aren’t investment advice.</p>
 </div></section>"""
     title = f"{full} regeneration and planning: what’s changing | Terrayne"
     return page(title, desc, f"/london/{slug}/", body, faq_ld(qs))
@@ -458,6 +464,7 @@ def classma_page(cm):
 <div class="apc" style="text-align:center;padding:clamp(26px,4vw,44px)">
 <h2 style="font-size:clamp(26px,3.6vw,38px)">Get new Class MA filings near your sites, every Monday.</h2>
 <p class="ap-sub" style="margin:0 auto 6px">Pro is £29 a month, or £290 a year. Cancel any time. Team is £99 a month for up to 5 people.</p>
+<p class="ap-sub" style="margin:0 auto 6px">Work at a planning consultancy or developer? We’re taking on a small number of London firms as founding partners, with a guided setup and a say in what we build next.</p>
 <div class="ap-cta" style="justify-content:center"><a class="btn" href="/account.html?signup&amp;plan=pro">Get Pro</a><a class="btn ghost" href="/account.html?signup">Start free</a>
 <a class="btn ghost" href="mailto:hello@terrayne.co?subject=Terrayne%20walkthrough" data-ev="demo_click">Book a 15-minute walkthrough</a></div></div>
 </div></section>
