@@ -6,17 +6,50 @@ import { admin, SITE } from "../_shared/common.ts";
 const FROM = Deno.env.get("BRIEF_FROM") ?? "Terrayne <briefings@terrayne.co>";
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]!));
 
-function html(name: string, week: string, items: { area: string; title: string; body: string }[], alerts: Alert[] = []) {
+type Item = { site: string; lpa: string; ref: string; units: number; com: number; kind: string; status: string; why?: string; url?: string; desc?: string };
+type BriefData = { name?: string; move?: number; items?: Item[]; decided?: Item[]; london?: Item[] };
+type Brief = { area: string; title: string; body: string; data?: BriefData | null };
+const plural = (n: number, w: string) => `${n.toLocaleString("en-GB")} ${w}${n === 1 ? "" : "s"}`;
+
+// One-line summary across the reader's neighbourhoods (only for briefs built since the data fields were added).
+function headline(items: Brief[]) {
+  const ds = items.map((b) => b.data).filter((d): d is BriefData => !!d && Array.isArray(d.items));
+  if (!ds.length) return "";
+  const n = ds.reduce((s, d) => s + (d.items?.length ?? 0), 0);
+  const homes = ds.reduce((s, d) => s + (d.items ?? []).reduce((t, i) => t + Math.max(0, i.units || 0), 0), 0);
+  const dec = ds.flatMap((d) => d.decided ?? []);
+  const ok = dec.filter((i) => i.status === "Approved").length;
+  const mv = ds.filter((d) => typeof d.move === "number").sort((a, b) => Math.abs(b.move!) - Math.abs(a.move!))[0];
+  const where = ds.length === 1 ? "your neighbourhood" : `your ${ds.length} neighbourhoods`;
+  const what = n || dec.length
+    ? `This week across ${where}: ${n ? plural(n, "new significant filing") + (homes ? ` (${plural(homes, "home")})` : "") : "no new significant filings"}` +
+      (dec.length ? ` and ${plural(dec.length, "decision")} (${ok} approved, ${dec.length - ok} refused)` : "") + "."
+    : `A quiet week across ${where}: no new significant filings or decisions.`;
+  const big = mv && mv.move ? ` Biggest mover: ${mv.name}, ${mv.move > 0 ? "up" : "down"} ${Math.abs(mv.move)} pts.` : "";
+  return what + big;
+}
+
+function londonHtml(items: Brief[]) {
+  const top = items.map((b) => b.data?.london).find((l) => l && l.length) ?? [];
+  if (!top.length) return "";
+  return `<h2 style="font-size:17px;margin:22px 0 10px">Biggest new schemes in London this week</h2><div style="background:#0d1830;border:1px solid #1c2b4d;border-radius:16px;padding:16px 18px;margin:0 0 12px"><ul style="margin:0;padding-left:18px;font-size:14px;line-height:1.55;color:#c8d4e8">` +
+    top.map((i) => `<li style="margin-bottom:10px"><b style="color:#fff">${esc(i.site)}</b> (${esc(i.lpa || "")}): ${[i.units > 0 ? plural(i.units, "home") : "", i.com >= 200 ? `${i.com.toLocaleString("en-GB")} m² commercial` : "", esc(i.kind)].filter(Boolean).join(" · ")}` +
+      (i.why ? `<br>${esc(i.why)}` : "") + (i.url ? `<br><a href="${esc(i.url)}" style="color:#5aa9ff">Ref ${esc(i.ref)} →</a>` : "") + `</li>`).join("") + `</ul></div>`;
+}
+
+function html(name: string, week: string, items: Brief[], alerts: Alert[] = []) {
+  const hl = headline(items);
   const d = new Date(week + "T07:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
   return `<div style="background:#060d1a;padding:32px 16px;font-family:-apple-system,Helvetica,Arial,sans-serif;color:#fff">
 <div style="max-width:620px;margin:0 auto">
 <img src="https://terrayne.co/assets/email-logo.png" width="180" height="60" alt="Terrayne" style="display:block;border:0;color:#ffffff;font-size:18px;margin:0 0 14px">
 <p style="letter-spacing:.2em;font-size:11px;color:#9fd0ff;text-transform:uppercase;margin:0 0 8px">Monday Brief · ${d}</p>
-<h1 style="font-size:24px;margin:0 0 20px">Good morning${name ? ", " + esc(name.split(" ")[0]) : ""}.</h1>
-${items.map((b) => `<div style="background:#0d1830;border:1px solid #1c2b4d;border-radius:16px;padding:18px 20px;margin:0 0 12px">
+<h1 style="font-size:24px;margin:0 0 ${hl ? 10 : 20}px">Good morning${name ? ", " + esc(name.split(" ")[0]) : ""}.</h1>
+${hl ? `<p style="font-size:15px;line-height:1.55;color:#c8d4e8;margin:0 0 20px">${esc(hl)}</p>` : ""}${items.map((b) => `<div style="background:#0d1830;border:1px solid #1c2b4d;border-radius:16px;padding:18px 20px;margin:0 0 12px">
 <p style="font-size:12px;color:#8c9ab3;margin:0 0 4px">${esc(b.area)}</p><h2 style="font-size:17px;margin:0 0 8px">${esc(b.title)}</h2>
 <div style="font-size:14px;line-height:1.55;color:#c8d4e8">${b.body}</div></div>`).join("")}
 ${alertsHtml(alerts)}
+${londonHtml(items)}
 <p style="margin:22px 0 0"><a href="${SITE}/brief.html?week=${week}&pdf=1" style="display:inline-block;padding:10px 18px;border-radius:999px;background:#ffffff;color:#060d1a;font-weight:600;font-size:14px;text-decoration:none">Download this brief as a PDF</a></p>
 <p style="font-size:13px;color:#8c9ab3;margin:24px 0 0"><a href="${SITE}/account.html#briefs" style="color:#9fd0ff">Open all briefs</a> · <a href="${SITE}/account.html#profile" style="color:#9fd0ff">Email settings</a></p>
 <p style="font-size:11px;color:#52617f">Built from the GLA Planning London Datahub. Statuses can change; check the council register by reference.</p>
@@ -63,7 +96,7 @@ async function alertsFor(uid: string, week: string): Promise<Alert[]> {
 Deno.serve(async (req) => {
   if (req.headers.get("x-cron-secret") !== Deno.env.get("CRON_SECRET")) return new Response("forbidden", { status: 403 });
   const { week } = await req.json();
-  const { data: briefs } = await admin.from("briefs").select("area,title,body").eq("week", week);
+  const { data: briefs } = await admin.from("briefs").select("area,title,body,data").eq("week", week);
   if (!briefs?.length) return new Response(JSON.stringify({ sent: 0, reason: "no briefs" }));
   const byArea = new Map(briefs.map((b) => [b.area, b]));
   const { data: users } = await admin.from("profiles").select("id,email,full_name,brief_email,slack_webhook,team_owner").eq("brief_email", true);
@@ -73,7 +106,7 @@ Deno.serve(async (req) => {
     const { data: plan } = await admin.rpc("effective_plan", { uid: u.id });
     if (plan === "free" || !plan) continue;
     const alerts = await alertsFor(u.id, week);              // Any paid plan: alerts near saved places
-    let items: { area: string; title: string; body: string }[] = [];
+    let items: Brief[] = [];
     if (plan === "pro" || plan === "enterprise") {           // Monday brief is Pro and Team
       const { data: wl } = await admin.from("watchlist").select("area").eq("user_id", u.id);
       items = (wl ?? []).map((w) => byArea.get(w.area)).filter(Boolean) as typeof items;

@@ -45,7 +45,26 @@ NOISE = re.compile(r"pursuant to|details of condition|discharge|\bs106\b|section
                    r"|certificate of lawful|lawful development|advertisement|illuminated|signage|fascia|shopfront|window"
                    r"|cladding|external wall|solar panel|\btrees?\b|telecom|street hub|pre-application", re.I)
 BRIEF_SRC = ["lpa_app_no", "lpa_name", "site_name", "street_name", "description", "status", "decision", "valid_date",
-             "application_type_full", "centroid", M.PROP, M.EXIST, M.GAIN, M.LOST]
+             "decision_date", "application_type_full", "centroid", M.PROP, M.EXIST, M.GAIN, M.LOST]
+CTX = {"tiles": {}, "ma": {}}   # local Momentum tiles + borough Class MA stats, filled in main() for the "why it matters" lines
+
+
+def council_link(ref, lpa):
+    """A web search for the reference, which usually finds the council's own page first (same as planning.html)."""
+    import urllib.parse
+    return "https://www.google.com/search?q=" + urllib.parse.quote(f'"{ref}" {lpa or ""} council planning application')
+
+
+def why_line(s):
+    """Why it matters, built only from the filing's own figures, its local Momentum tile and borough decision data."""
+    import explore as X
+    c = X.coord(s.get("centroid"))
+    if not c:
+        return ""
+    r = X.row(s, c)
+    z, x, y = X.M_tile(c[0], c[1])
+    w, _ = X.why(r, CTX["tiles"].get(f"{z}/{x}/{y}"), CTX["ma"].get(r[8]), 150)
+    return w
 
 
 def brief_item(s, since, today):
@@ -62,7 +81,8 @@ def brief_item(s, since, today):
             else "New homes" if u > 0 else "Commercial space")
     return {"ref": s.get("lpa_app_no"), "lpa": s.get("lpa_name"), "site": M.label(s.get("site_name"), s.get("street_name")),
             "units": max(u, 0), "com": max(com, 0), "status": X.short_status(s) or s.get("status") or "",
-            "valid": s.get("valid_date"), "kind": kind, "desc": M.clip(s.get("description"), 220)}
+            "valid": s.get("valid_date"), "kind": kind, "desc": M.clip(s.get("description"), 220),
+            "why": why_line(s), "url": council_link(s.get("lpa_app_no"), s.get("lpa_name"))}
 
 
 def hits(body):
@@ -123,28 +143,109 @@ def near_filings(lat, lon, radius_m, since, seen):
     return out[:8]
 
 
-def brief_for(a, prev, items):
+def decisions(area, since, seen):
+    """Significant schemes nearby that were approved or refused since `since` (by the council's decision date)."""
+    import explore as X
+    n, full, boro, lat, lon = area
+    geo = {"geo_distance": {"distance": f"{M.RADIUS_KM}km", "centroid": {"lat": lat, "lon": lon}}}
+    by_dec = {"range": {"decision_date": {"gte": since.strftime("%d/%m/%Y"), "format": "dd/MM/yyyy"}}}
+    filed = {"range": {"valid_date": {"gte": (since - dt.timedelta(days=900)).strftime("%d/%m/%Y"), "format": "dd/MM/yyyy"}}}
+    base = {"size": 80, "query": {"bool": {"filter": [geo, M.QUALIFYING, BRIEF_WANT], "must_not": X.NOT_DUP}},
+            "sort": [{M.PROP: {"order": "desc", "missing": "_last"}}], "_source": BRIEF_SRC}
+    try:
+        b = json.loads(json.dumps(base)); b["query"]["bool"]["filter"].append(by_dec)
+        rows = M.q(b)["hits"]["hits"]
+    except Exception as e:  # noqa: BLE001  decision_date not searchable: scan recent decided filings instead
+        print(f"decisions fell back to a scan: {type(e).__name__}: {e}")
+        b = json.loads(json.dumps(base)); b["size"] = 400; b["query"]["bool"]["filter"].append(filed)
+        try:
+            rows = M.q(b)["hits"]["hits"]
+        except Exception as e2:  # noqa: BLE001
+            print(f"decisions skipped: {e2}"); return []
+    out, today = [], dt.date.today()
+    for h in rows:
+        s = h["_source"]; c = X.coord(s.get("centroid"))
+        st = X.short_status(s); d = X.dmy(s.get("decision_date"))
+        if st not in ("Approved", "Refused") or not d or d < since or d > today or s.get("lpa_app_no") in seen:
+            continue
+        if c and M.nearest(c[0], c[1]) != n:
+            continue
+        it = brief_item({**s, "valid_date": d.strftime("%d/%m/%Y")}, since, today)   # same "worth it" test as filings
+        if it:
+            it["status"] = st; it["decided"] = d.isoformat(); it["valid"] = s.get("valid_date")
+            out.append(it)
+    out.sort(key=lambda x: (x["status"] != "Approved", -(x["units"] or 0), -(x["com"] or 0)))
+    return out[:5]
+
+
+def london_top(since, seen):
+    """The three biggest new filings anywhere in London, so every brief has something even in a quiet week."""
+    import explore as X
+    rng = {"range": {"valid_date": {"gte": since.strftime("%d/%m/%Y"), "format": "dd/MM/yyyy"}}}
+    geo = {"geo_bounding_box": {"centroid": M.BBOX}}
+    body = {"size": 60, "query": {"bool": {"filter": [rng, geo, M.QUALIFYING, BRIEF_WANT],
+                                           "must_not": [M.terms("status", M.DEAD)] + X.NOT_DUP}},
+            "sort": [{M.PROP: {"order": "desc", "missing": "_last"}}], "_source": BRIEF_SRC}
+    out, today = [], dt.date.today()
+    try:
+        rows = hits(body)
+    except Exception as e:  # noqa: BLE001
+        print(f"London top skipped: {e}"); return []
+    for h in rows:
+        s = h["_source"]
+        if s.get("lpa_app_no") in seen:
+            continue
+        it = brief_item(s, since, today)
+        if it and (it["units"] >= 10 or it["com"] >= 1000 or it["kind"].startswith("Office")):
+            out.append(it)
+    out.sort(key=lambda x: (-(x["units"] or 0), -(x["com"] or 0)))
+    return out[:3]
+
+
+def size_txt(i):
+    return " · ".join(x for x in [f"{i['units']:,} home{'s' if i['units'] != 1 else ''}" if (i["units"] or 0) > 0 else "",
+                                  f"{i['com']:,} m² commercial" if (i.get("com") or 0) >= 200 else ""] if x)
+
+
+def li(i, decided=False):
+    G = "color:#8c9ab3"
+    tag = ""
+    if decided:
+        col = "#1fa971" if i["status"] == "Approved" else "#e05252"
+        tag = f"<b style='color:{col}'>{H.escape(i['status'])}</b> · "
+    meta = " · ".join(x for x in [size_txt(i), i["kind"], "" if decided else i["status"]] if x)
+    why = f"<br><span>{H.escape(i['why'])}</span>" if i.get("why") and not decided else ""
+    return (f"<li style='margin:0 0 10px'>{tag}<b>{H.escape(i['site'])}</b>: {H.escape(meta)}{why}<br>"
+            f"<span style='{G}'>{H.escape(i['desc'])}</span><br>"
+            f"<a href='{H.escape(i['url'])}' style='color:#4c9bff'>{H.escape(i['lpa'] or 'Council')} ref {H.escape(i['ref'] or '')} →</a></li>")
+
+
+def brief_for(a, prev, items, decided=(), keys=None):
     d = (a["s"] - prev["s"]) if prev else a["c"]
     when = "since last week" if prev else "over 30 days"
     move = f"up {d} pts" if d > 0 else f"down {-d} pts" if d < 0 else "unchanged"
-    title = f"{a['f']}: {a['s']}/100, {move} {when}"
-    units = sum(max(0, i["units"] or 0) for i in items)
-    com = sum(max(0, i.get("com") or 0) for i in items)
-    p = [f"<p>Momentum Index <b>{a['s']}/100</b> ({move} {when}). {H.escape(a['t'])}</p>"]
+    bits = [f"{len(items)} new" if items else "", f"{len(decided)} decided" if decided else ""]
+    title = f"{a['f']}: {a['s']}/100, {move} {when}" + (" · " + ", ".join(b for b in bits if b) if any(bits) else "")
+    names = {"act": "planning activity", "pipe": "housing pipeline", "ma": "office-to-home conversions", "com": "commercial floorspace",
+             "transport": "station use", "population": "population", "prices": "house prices"}
+    tr = dict(zip(keys or [], a.get("tr") or []))
+    up = [names[k] for k, v in tr.items() if v == "u" and k in names]
+    dn = [names[k] for k, v in tr.items() if v == "d" and k in names]
+    trend = " ".join(x for x in [f"Rising over 12 months: {', '.join(up)}." if up else "",
+                                 f"Falling: {', '.join(dn)}." if dn else ""] if x)
+    p = [f"<p>Momentum Index <b>{a['s']}/100</b> ({move} {when}). {H.escape(trend)}</p>"]
+    if decided:
+        p.append(f"<p><b>Decided this week</b></p><ul style='padding-left:18px'>" + "".join(li(i, True) for i in decided) + "</ul>")
     if items:
+        units = sum(max(0, i["units"] or 0) for i in items)
+        com = sum(max(0, i.get("com") or 0) for i in items)
         prop = " and ".join(x for x in [f"{units:,} net new home{'s' if units != 1 else ''}" if units else "",
                                          f"{com:,} m² of commercial space" if com else ""] if x)
         p.append(f"<p><b>{len(items)} new significant filing{'s' if len(items) != 1 else ''}</b>"
-                 + (f" proposing {prop}" if prop else "") + ":</p><ul>")
-        for i in items:
-            u = (f"{i['units']} home{'s' if i['units'] != 1 else ''} · " if (i["units"] or 0) > 0 else "") + \
-                (f"{i['com']:,} m² commercial · " if (i.get("com") or 0) >= 200 else "")
-            p.append(f"<li><b>{H.escape(i['site'])}</b>: {u}{H.escape(i['kind'])} · {H.escape(i['status'])} "
-                     f"<span style='color:#8c9ab3'>(ref {H.escape(i['ref'])}, {H.escape(i['lpa'] or '')})</span><br>"
-                     f"<span style='color:#8c9ab3'>{H.escape(i['desc'])}</span></li>")
-        p.append("</ul>")
-    else:
-        p.append("<p>No new homes, office-to-home conversions or sizeable commercial schemes were filed nearby this week.</p>")
+                 + (f", proposing {prop}" if prop else "") + "</p><ul style='padding-left:18px'>"
+                 + "".join(li(i) for i in items) + "</ul>")
+    if not items and not decided:
+        p.append("<p>A quiet week here: no new homes, office-to-home conversions or sizeable commercial schemes were filed or decided.</p>")
     return title, "".join(p)
 
 
@@ -193,14 +294,27 @@ def main():
     prev = {a["n"]: a for a in prev_rows[0]["data"]["areas"]} if prev_rows else {}
     seen_rows = sb("GET", f"/rest/v1/briefs?select=data&week=gte.{(week - dt.timedelta(days=120)).isoformat()}&week=lt.{week.isoformat()}") or []
     seen = {r for row in seen_rows for r in (row["data"] or {}).get("refs", [])}
+    dseen = {r for row in seen_rows for r in (row["data"] or {}).get("drefs", [])}
+    lseen = {r for row in seen_rows for r in (row["data"] or {}).get("lrefs", [])}
+    CTX["tiles"] = full.get("tile_scores", {})
+    try:
+        CTX["ma"] = {b["borough"]: b for b in json.loads((ROOT / "data" / "classma.json").read_text()).get("boroughs", [])}
+    except (OSError, ValueError):
+        pass
     since = week - dt.timedelta(days=21)
+    top = london_top(since, lseen)
     rows = []
     for area in M.AREAS:
         a = next(x for x in full["areas"] if x["n"] == area[0])
         items = new_filings(area, since, seen)
-        title, body = brief_for(a, prev.get(a["n"]), items)
+        dec = decisions(area, since, dseen)
+        pa = prev.get(a["n"])
+        title, body = brief_for(a, pa, items, dec, full.get("keys"))
         rows.append({"week": week.isoformat(), "area": a["n"], "title": title, "body": body,
-                     "data": {"score": a["s"], "refs": [i["ref"] for i in items], "items": items}})
+                     "data": {"score": a["s"], "move": (a["s"] - pa["s"]) if pa else a["c"], "name": a["f"],
+                              "refs": [i["ref"] for i in items], "items": items,
+                              "drefs": [i["ref"] for i in dec], "decided": dec,
+                              "lrefs": [i["ref"] for i in top], "london": top}})
     sb("POST", "/rest/v1/briefs?on_conflict=week,area", rows, up)
     print(f"stored snapshot and {len(rows)} briefs for {week}")
     try:  # anonymous funnel counts are kept for two years (privacy policy)
