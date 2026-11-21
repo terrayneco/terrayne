@@ -28,7 +28,7 @@
     var id = "bs" + i;
     el.innerHTML = '<div class="bs"><h3>' + esc(title) + '</h3><p class="bs-sub">' + esc(sub) + '</p>' +
       '<form novalidate><label class="bs-hp" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>' +
-      '<input type="email" name="email" required autocomplete="email" placeholder="Your work email" aria-label="Your email">' +
+      '<input type="email" name="email" required autocomplete="email" placeholder="Your email" aria-label="Your email">' +
       '<select name="area" aria-label="Neighbourhood"><option value="">Choose a neighbourhood</option>' +
       AREAS.map(function (a) { return '<option value="' + esc(a[0]) + '"' + (a[0] === pre ? " selected" : "") + ">" + esc(a[1]) + "</option>"; }).join("") + "</select>" +
       '<button type="submit">Send my brief</button>' +
