@@ -876,7 +876,7 @@ def london_page(pub, hist=None):
 <h2>Who uses it</h2>
 <div class="apg3">
 <div class="apc"><div class="eyebrow">Developers</div><p class="small muted" style="margin:8px 0 0">Shortlist areas where planning, transport and population are all moving, then check the schemes and decisions behind the score before you spend time on a site.</p></div>
-<div class="apc"><div class="eyebrow">Planning consultants</div><p class="small muted" style="margin:8px 0 0">Evidence on how an area is changing for the advice you give, with council references for every scheme, plus <a href="/class-ma/" style="color:var(--accent)">office-to-home approval rates</a> by borough.</p></div>
+<div class="apc"><div class="eyebrow">Planning consultants</div><p class="small muted" style="margin:8px 0 0">Evidence for clients on how an area is changing, with council references for every scheme, plus <a href="/class-ma/" style="color:var(--accent)">office-to-home approval rates</a> by borough.</p></div>
 <div class="apc"><div class="eyebrow">Agents and investors</div><p class="small muted" style="margin:8px 0 0">Context for valuations and listings: what’s planned within walking distance, how the area compares with London, and how much price headroom is left.</p></div>
 </div>
 </div></section>
@@ -1018,7 +1018,11 @@ def developers_page(pub, cm, feed):
            "every afternoon from Tuesday to Friday."),
           ("Can the whole team use it?",
            "Team (£99 a month) covers up to 5 people, each with their own login, sharing one watchlist and one set of saved places. Briefs, reports and PDFs can be shared "
-           "within your firm. For larger teams, or to get Terrayne’s data into your own systems, email hello@terrayne.co."),
+           "within your firm, and with your clients for the project you’re advising on. For larger teams, or to get Terrayne’s data into your own systems, email hello@terrayne.co."),
+          ("Can we share reports with our clients?",
+           "Yes. Briefs, reports and PDFs can go to your own clients for the project you’re advising them on, as long as they keep their Terrayne source credits. On Team, "
+           "reports carry your firm’s name and logo. What you can’t do is resell the data or give clients ongoing access in place of their own subscription. "
+           "<a href=\"/terms.html\">See the terms</a>."),
           ("Does it show who the applicant is?",
            "No. The GLA removes personal information, including applicant and agent names, from the Datahub. Each scheme links to a search for the council’s record, "
            "where the applicant and documents are published."),
@@ -1056,7 +1060,7 @@ def developers_page(pub, cm, feed):
 <div class="apc ix-plans" style="display:block"><div class="eyebrow">Team · £99 a month</div><h2 style="margin:6px 0 10px">Built for a small firm working on sites together.</h2>
 {ticks(["Up to 5 people, each with their own login", "A shared watchlist and unlimited saved places", "Same-day email alerts when a big scheme near a saved place is filed, approved or refused",
         "The Monday Brief for every neighbourhood you follow, by email, PDF or Slack", "Unlimited postcode checks and Postcode Reports, with custom catchment sizes",
-        "Reports and investment-committee memos with your firm’s name and logo", "Every tracked neighbourhood, with history and 12-month trends"])}
+        "Reports and investment-committee memos with your firm’s name and logo, ready to share with clients", "Every tracked neighbourhood, with history and 12-month trends"])}
 <div class="ap-cta"><a class="btn" href="/account.html?signup&amp;plan=enterprise">Start with Team</a><a class="btn ghost" href="/#pricing">Compare plans</a></div></div>
 <div class="apc"><div class="eyebrow">Founding partners</div><h2 style="margin:6px 0 10px">Help shape what we build.</h2>
 <p class="muted" style="margin:0 0 12px">We’re working closely with a small number of London developers and planning consultancies as founding partners: a guided setup, a direct line to us, and a say in what we build next.</p>
@@ -1105,7 +1109,7 @@ def brief_page(pub, feed):
     qs = [("When does it arrive?", "Every Monday by 7am UK time. When you first subscribe and pick your neighbourhoods, we email you that week’s brief straight away, so you don’t wait until Monday."),
           ("Which areas does it cover?", "The neighbourhoods on your watchlist (up to 10 on Pro), new filings near the places you save, and the biggest new schemes across London. On Team the watchlist and saved places are shared by up to 5 people."),
           ("What counts as a significant filing?", "New homes, office-to-home (Class MA) conversions, or 200 m² or more of commercial space. Paperwork on old permissions, signs, windows, cladding and similar small applications are left out, so the brief stays short."),
-          ("Can I share it?", "Yes, within your organisation. Every brief downloads as an A4 PDF, and Team can also get it in a Slack channel."),
+          ("Can I share it?", "Yes, within your organisation, and with your own clients for the project you’re advising them on, as long as it keeps its Terrayne credits. Every brief downloads as an A4 PDF, and Team can also get it in a Slack channel."),
           ("Can I stop it?", "Any time: turn it off on your profile page, or cancel your plan in a couple of clicks. You keep every past brief while your plan is active."),
           ("Can I see one first?", "Yes. Ask for a free sample on this page: pick a neighbourhood and we’ll email you this week’s brief, with no account or card needed.")]
     body = f"""<section class="ap-h"><div class="wrap">
@@ -1130,7 +1134,7 @@ def brief_page(pub, feed):
 
 <section class="ap-s"><div class="wrap">
 <div class="apg3">
-<div class="apc"><div class="eyebrow">Download and share</div><p class="small muted" style="margin:8px 0 0">Every brief downloads as a clean A4 PDF with the Terrayne logo, from the email or your account, to forward around your organisation. Every past brief stays in your account.</p></div>
+<div class="apc"><div class="eyebrow">Download and share</div><p class="small muted" style="margin:8px 0 0">Every brief downloads as a clean A4 PDF with the Terrayne logo, from the email or your account, to forward around your organisation or to a client. Every past brief stays in your account.</p></div>
 <div class="apc"><div class="eyebrow">First brief straight away</div><p class="small muted" style="margin:8px 0 0">Subscribe, pick your neighbourhoods, and this week’s brief lands in your inbox within a minute. From then on, every Monday by 7am UK time.</p></div>
 <div class="apc"><div class="eyebrow">Same-day alerts (Team)</div><p class="small muted" style="margin:8px 0 0">Team doesn’t wait for Monday: when a big scheme near a saved place is filed, approved or refused, everyone on the team gets an email that afternoon.</p></div>
 </div>
@@ -1156,6 +1160,7 @@ def report_page(pub, feed):
           ("How current is it?", "It uses the latest weekly data at the moment you buy it, and shows the date of each source. It’s a snapshot: it doesn’t update afterwards."),
           ("Is it a substitute for local authority searches or a survey?", "No. It summarises what has been filed and measured around a postcode, from official open data, to help your research. It isn’t a legal search, a survey or advice."),
           ("How do I pay?", "By card through Stripe, £12 per report, with no subscription. Terrayne never sees your card details."),
+          ("Can I give it to a client?", "Yes. You can share it within your organisation and with your own client for their project, as long as it keeps its Terrayne source credits. It can’t be resold or published online."),
           ("What if something goes wrong?", "If a report fails to load or is wrong because of a fault on our side, email hello@terrayne.co and we’ll fix it or refund you."),
           ("I need lots of reports.", "Pro (£29 a month) includes unlimited postcode checks and reports. Team adds reports and investment-committee memos with your firm’s name and logo.")]
     body = f"""<section class="ap-h"><div class="wrap">
