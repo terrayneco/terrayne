@@ -212,6 +212,12 @@ EXTRA_CSS = """<style>
  .lb td.rk{display:none!important}.lb .rkm{display:inline}.lb td[data-l="Score"]{display:block!important;margin:6px 0 2px!important}.lb td[data-l="Score"]:before{content:none!important}.scb{max-width:260px}}
 </style>"""
 
+DD2_JS = '''<script>/* second menu dropdown: Tools */(function(){var d=document.getElementById("dd2");if(!d)return;var b=d.querySelector("button"),d1=document.getElementById("dd");
+function shut(){d.classList.remove("open");b.setAttribute("aria-expanded",false)}
+b.onclick=function(e){e.stopPropagation();var o=d.classList.toggle("open");b.setAttribute("aria-expanded",o);if(d1){d1.classList.remove("open");var b1=d1.querySelector("button");if(b1)b1.setAttribute("aria-expanded",false)}};
+document.addEventListener("click",shut);if(d1){var b1=d1.querySelector("button");if(b1)b1.addEventListener("click",shut)}
+d.querySelectorAll("a").forEach(function(a){a.addEventListener("click",function(){shut();var n=document.querySelector("nav");if(n)n.classList.remove("open")})})})();</script>'''
+
 DD_JS = """<script>(function(){var dd=document.getElementById("dd");if(!dd)return;var b=dd.querySelector("button");
 b.onclick=function(e){e.stopPropagation();var o=dd.classList.toggle("open");b.setAttribute("aria-expanded",o)};
 document.addEventListener("click",function(){dd.classList.remove("open");b.setAttribute("aria-expanded",false)})})();</script>"""
@@ -236,7 +242,7 @@ def page(title, desc, path, body, jsonld=None):
             f'<meta name="twitter:card" content="summary_large_image">\n')
     ld = f'<script type="application/ld+json">{json.dumps(jsonld, ensure_ascii=False)}</script>\n' if jsonld else ""
     head = head.replace('<meta name="viewport"', meta + '<meta name="viewport"', 1)
-    return (f"{head}{EXTRA_CSS}\n{ld}</head>\n<body>\n{nav}\n<main>\n{body}\n</main>\n{footer()}\n{nav_js}\n{DD_JS}\n"
+    return (f"{head}{EXTRA_CSS}\n{ld}</head>\n<body>\n{nav}\n<main>\n{body}\n</main>\n{footer()}\n{nav_js}\n{DD_JS}\n{DD2_JS}\n"
             f'<script src="/assets/track.js"></script><script src="/assets/brief.js"></script>\n{CF_BEACON}\n</body>\n</html>\n')
 
 
