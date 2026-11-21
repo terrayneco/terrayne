@@ -392,7 +392,7 @@ billing:function(){
  $("bl-plans").innerHTML=plans.map(function(x){var isCur=x[0]===S.plan,btn="";
   if(team)btn="";else if(isCur){btn='<button class="btn ghost" disabled>Current plan</button>';
    if(live&&x[0]!=="free")btn+=p.cancel_at_period_end?'<p class="note" style="margin:12px 0 0">Cancels on '+fmtDate(p.current_period_end)+'. <a href="#" data-portal="1" style="color:inherit;text-decoration:underline">Keep it</a></p>':'<p class="note" style="margin:12px 0 0"><a href="#" data-portal="1" style="color:inherit;text-decoration:underline">Cancel subscription</a></p>'}
-  else if(x[0]==="free")btn=live?'<button class="btn ghost" data-portal="1">Switch to Free</button>':"";
+  else if(x[0]==="free")btn=!live?"":p.cancel_at_period_end?'<p class="note" style="margin:0">You move to Free on '+fmtDate(p.current_period_end)+'.</p>':'<button class="btn ghost" data-portal="1">Switch to Free</button>';
   else btn='<button class="btn" data-plan="'+x[0]+'">'+(live?"Switch to ":"Upgrade to ")+x[1]+'</button>';
   return '<div class="plan'+(isCur?" cur":"")+'"><div class="note">'+x[1]+'</div><div class="p">'+x[2]+'</div><ul>'+x[3].map(function(f){return "<li>"+f+"</li>"}).join("")+'</ul><div style="margin-top:auto">'+btn+'</div></div>'}).join("");
  [].forEach.call($("bl-int").children,function(b){b.classList.toggle("on",b.dataset.i===I);b.onclick=function(){S.interval=b.dataset.i;P.billing()}});
