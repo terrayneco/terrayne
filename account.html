@@ -174,6 +174,7 @@ svg.spark{display:block}
 <div class="field"><label for="pf-company">Company</label><input id="pf-company" autocomplete="organization"></div>
 <div class="field"><label for="pf-title">Job title</label><input id="pf-title" autocomplete="organization-title"></div>
 <label class="toggle" style="margin:6px 0 16px"><input type="checkbox" id="pf-brief"> Email me the Monday Brief</label>
+<label class="toggle hide" id="pf-instant-w" style="margin:-6px 0 16px"><input type="checkbox" id="pf-instant"> Email me same-day alerts when a big scheme is filed, approved or refused near my saved places (Team)</label>
 <button class="btn">Save</button></form>
 <div class="grid" style="align-content:start">
 <form class="card" id="em-form"><h3>Email address</h3><div class="msg" id="em-msg"></div><div class="field"><label for="em-email">Email</label><input id="em-email" type="email" required></div><button class="btn ghost">Change email</button><p class="note" style="margin:10px 0 0">We’ll send a confirmation link to the new address.</p></form>
@@ -287,7 +288,7 @@ function briefHeadline(B){var ds=B.map(function(b){return b.data}).filter(functi
 async function loadBriefs(){if(!briefsOK()||S.briefs)return;var r=await sb.from("briefs").select("week,area,title,body,data").order("week",{ascending:false}).limit(1000);S.briefs=r.data||[]}
 function paid(){return S.plan!=="free"}
 function briefsOK(){return S.plan==="pro"||S.plan==="enterprise"}
-function lock(what){return '<div class="card lock"><span class="pill">Pro</span><h2 style="margin-top:12px">'+what+'</h2><p>Pro (£29 a month) unlocks all tracked neighbourhoods with history and trends, unlimited postcode checks, comparisons, the Monday Brief and every past brief, and 10 saved places with alerts.</p><a class="btn" href="#billing">See plans</a></div>'}
+function lock(what){return '<div class="card lock"><span class="pill">Pro</span><h2 style="margin-top:12px">'+what+'</h2><p>Pro (£29 a month) unlocks all tracked neighbourhoods with history and trends, unlimited postcode checks, comparisons, the Monday Brief and every past brief, and 10 saved places with new filings nearby in your brief.</p><a class="btn" href="#billing">See plans</a></div>'}
 
 /* ---------- panes ---------- */
 function P_places(){P.places()}
@@ -302,7 +303,7 @@ overview:function(){
  $("o-watch").innerHTML=!paid()?'<p class="note">The watchlist is part of Pro. <a href="#billing">Upgrade</a></p>':S.watch.length?S.watch.map(function(n){var a=A.find(function(x){return x.n===n});return '<div class="row"><span>'+esc(a?a.f:n)+'</span><span>'+(a?'<b>'+a.s+'</b>/100 '+chg(a.c):'')+'</span></div>'}).join(""):'<p class="note">You’re not following any neighbourhoods yet. <a href="#watchlist">Add some</a>.</p>';
  if(!paid()){$("o-brief").innerHTML='<p class="note">See a sample on the <a href="./#brief">home page</a>, or <a href="#billing">upgrade</a> to receive yours every Monday.</p>';return}
  var wk=S.briefs&&S.briefs.length?S.briefs[0].week:null;
- if(!wk){$("o-brief").innerHTML='<p class="note">Your first brief arrives on Monday at 7am.</p>';return}
+ if(!wk){$("o-brief").innerHTML='<p class="note">'+(S.watch.length?'Your first brief is on its way.':'Add neighbourhoods to your <a href="#watchlist">watchlist</a> and we’ll email you this week’s brief straight away.')+' After that, it arrives every Monday by 7am UK time.</p>';return}
  var mineB=S.briefs.filter(function(x){return x.week===wk&&S.watch.indexOf(x.area)>=0}),all=!mineB.length,WB=all?S.briefs.filter(function(x){return x.week===wk}):mineB;
  var q="brief.html?week="+wk+(all?"&all=1":""),hl=briefHeadline(WB);
  $("o-brief").innerHTML='<p class="note" style="margin-top:0">Week of '+fmtDate(wk)+' · '+WB.length+' neighbourhood'+(WB.length===1?"":"s")+(all?" (all tracked)":"")+'</p>'+
@@ -336,11 +337,11 @@ watchlist:function(){
  $("w-body").querySelectorAll("[data-mode]").forEach(function(b){b.onclick=function(){var k=MODES.map(function(m){return m[0]}),n=k[(k.indexOf(mode)+1)%k.length];S.pillMode=n;P.watchlist()}});
  $("w-body").querySelectorAll("button[data-a]").forEach(function(b){b.onclick=async function(){var n=b.dataset.a,on=S.watch.indexOf(n)>=0,r;b.disabled=true;
   r=on?await sb.from("watchlist").delete().eq("user_id",S.user.id).eq("area",n):await sb.from("watchlist").insert({user_id:S.user.id,area:n});
-  if(r.error)msg("g-msg",r.error.message);else{msg("g-msg");S.watch=on?S.watch.filter(function(x){return x!==n}):S.watch.concat(n)}P.watchlist()}});
+  if(r.error)msg("g-msg",r.error.message);else{msg("g-msg");S.watch=on?S.watch.filter(function(x){return x!==n}):S.watch.concat(n);if(!on)firstBrief()}P.watchlist()}});
 },
 briefs:function(){
  if(!briefsOK()){$("b-body").innerHTML=lock("The Monday Brief is part of Pro");return}
- if(!S.briefs.length){$("b-body").innerHTML='<div class="card"><p class="note" style="margin:0">Your first brief arrives on Monday at 7am. Past briefs will appear here.</p></div>';return}
+ if(!S.briefs.length){$("b-body").innerHTML='<div class="card"><p class="note" style="margin:0">Your first brief is on its way: add neighbourhoods to your watchlist and we’ll email you this week’s brief straight away. Past briefs will appear here.</p></div>';return}
  var only=S.briefsMine!==false&&S.watch.length>0;
  var list=S.briefs.filter(function(b){return !only||S.watch.indexOf(b.area)>=0});
  var html='<div class="chips" style="margin-bottom:16px"><button class="chip'+(only?" on":"")+'" id="bm">My watchlist</button><button class="chip'+(!only?" on":"")+'" id="ba">All neighbourhoods</button></div>',wk="";
@@ -390,7 +391,7 @@ places:async function(){
   var x=await sb.from("saved_places").insert(row);if(x.error){msg("pl-msg",x.error.message);return}P_places()};
  $("pl-body").querySelectorAll("[data-del]").forEach(function(b){b.onclick=async function(){if(!confirm("Remove this place and its alerts?"))return;await sb.from("saved_places").delete().eq("id",b.dataset.del);P_places()}});
 },
-profile:function(){var p=S.profile;$("ent-form").classList.toggle("hide",!(S.plan==="enterprise"&&!p.team_owner));$("ent-brand").value=p.brand_name||"";$("ent-logo").value=p.brand_logo||"";$("ent-slack").value=p.slack_webhook||"";$("pf-name").value=p.full_name||"";$("pf-company").value=p.company||"";$("pf-title").value=p.job_title||"";$("pf-brief").checked=p.brief_email!==false;$("em-email").value=S.user.email||""},
+profile:function(){var p=S.profile;$("ent-form").classList.toggle("hide",!(S.plan==="enterprise"&&!p.team_owner));$("ent-brand").value=p.brand_name||"";$("ent-logo").value=p.brand_logo||"";$("ent-slack").value=p.slack_webhook||"";$("pf-name").value=p.full_name||"";$("pf-company").value=p.company||"";$("pf-title").value=p.job_title||"";$("pf-brief").checked=p.brief_email!==false;$("pf-instant-w").classList.toggle("hide",S.plan!=="enterprise");$("pf-instant").checked=p.instant_email!==false;$("em-email").value=S.user.email||""},
 billing:function(){
  var p=S.profile,pr=C.prices||{pro:{month:29,year:290},enterprise:{month:99,year:990}},team=!!p.team_owner;
  var st=p.status,live=["active","trialing","past_due"].indexOf(st)>=0;
@@ -399,8 +400,8 @@ billing:function(){
  $("bl-sub").textContent=live||team?"":"Monthly or yearly, cancel any time. Prices in GBP; no VAT is added.";
  $("bl-cur").innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap"><div><div class="note">Current plan</div><div class="score">'+cur+' '+(st==="past_due"?'<span class="pill warn">Payment due</span>':p.cancel_at_period_end?'<span class="pill warn">Cancelling</span>':'')+'</div><div class="note">'+esc(line)+'</div></div>'+(live&&!team?'<button class="btn ghost" id="portal">Manage subscription</button>':'')+'</div>';
  var I=S.interval,plans=[["free","Free","£0",["3 postcode checks a month","Top 10 neighbourhoods, and compare them","Preview of the signal feed and Class MA tracker","Sample Monday Brief"]],
-  ["pro","Pro","£"+pr.pro[I].toLocaleString()+"<small> / "+I+"</small>",["All tracked neighbourhoods, with history and 12-month trends","Unlimited postcode checks and comparisons","Monday 7am brief and full signal feed","Live Class MA leads","10 saved places with alerts","PDF reports and CSV export"]],
-  ["enterprise","Team","£"+pr.enterprise[I].toLocaleString()+"<small> / "+I+"</small>",["Everything in Pro, for up to 5 people","Shared team watchlist and alerts","Unlimited saved places","Custom catchments, branded reports, Slack brief"]]];
+  ["pro","Pro","£"+pr.pro[I].toLocaleString()+"<small> / "+I+"</small>",["All tracked neighbourhoods, with history and 12-month trends","Unlimited postcode checks and comparisons","Monday 7am brief and full signal feed","Live Class MA leads","10 saved places, with new filings in your brief","PDF reports and CSV export"]],
+  ["enterprise","Team","£"+pr.enterprise[I].toLocaleString()+"<small> / "+I+"</small>",["Everything in Pro, for up to 5 people","Shared team watchlist and saved places","Same-day alerts near your saved places","Unlimited saved places","Custom catchments, branded reports, Slack brief"]]];
  if(S.plan==="investor")plans.splice(1,0,["investor","Investor","Your current plan",["You’re on an older plan, which keeps working.","Switch to Pro any time for the full product."]]);
  $("bl-plans").innerHTML=plans.map(function(x){var isCur=x[0]===S.plan,btn="";
   if(team)btn="";else if(isCur){btn='<button class="btn ghost" disabled>Current plan</button>';
@@ -432,7 +433,7 @@ async function go(fn,body,btn){if(btn)btn.disabled=true;msg("g-msg");if(fn==="cr
  location.href=r.data.url}
 
 /* ---------- forms ---------- */
-$("pf-form").onsubmit=async function(e){e.preventDefault();var u={full_name:$("pf-name").value.trim(),company:$("pf-company").value.trim(),job_title:$("pf-title").value.trim(),brief_email:$("pf-brief").checked};
+$("pf-form").onsubmit=async function(e){e.preventDefault();var u={full_name:$("pf-name").value.trim(),company:$("pf-company").value.trim(),job_title:$("pf-title").value.trim(),brief_email:$("pf-brief").checked};if(S.plan==="enterprise")u.instant_email=$("pf-instant").checked;
  var r=await sb.from("profiles").update(u).eq("id",S.user.id);if(r.error)msg("pf-msg",r.error.message);else{Object.assign(S.profile,u);msg("pf-msg","Saved.",true)}};
 $("em-form").onsubmit=async function(e){e.preventDefault();var r=await sb.auth.updateUser({email:$("em-email").value.trim()},{emailRedirectTo:location.origin+location.pathname});msg("em-msg",r.error?r.error.message:"Check both inboxes to confirm the change.",!r.error)};
 $("ent-form").onsubmit=async function(e){e.preventDefault();var logo=$("ent-logo").value.trim(),hook=$("ent-slack").value.trim();
@@ -466,6 +467,14 @@ async function route(){var h=(location.hash||"#overview").slice(1);if(panes.inde
  await P[h]();}
 addEventListener("hashchange",route);
 
+// A new Pro/Team subscriber gets this week's brief straight away (once per account; the server checks too).
+async function firstBrief(){
+ if(!briefsOK()||!S.watch.length||S.profile.brief_email===false)return;
+ var k="ty-first-"+S.user.id;try{if(localStorage.getItem(k))return}catch(e){}
+ var r=await sb.functions.invoke("send-briefs",{body:{first:true}}),d=r.data||{};
+ if(d.sent||d.reason==="already"){try{localStorage.setItem(k,"1")}catch(e){}}
+ if(d.sent){msg("g-msg","We’ve just emailed you this week’s brief for your neighbourhoods. The next one arrives on Monday by 7am UK time.",true);if(window.tyTrack)tyTrack("first_brief")}
+}
 async function boot(){var s=await sb.auth.getSession();if(!s.data.session){show("v-auth");return}
  try{var nx=new URLSearchParams(location.search).get("next");if(nx&&/^brief\.html(\?[\w=&.%-]*)?$/.test(nx)){location.replace(nx);return}}catch(e){}
  S.user=s.data.session.user;await loadProfile();await loadIndex();show("v-app");
@@ -475,7 +484,7 @@ async function boot(){var s=await sb.auth.getSession();if(!s.data.session){show(
  var wi=new URLSearchParams(location.search).get("interval")==="year"?"year":"month",auto=false;
  try{var st=JSON.parse(localStorage.getItem("terrayne-want")||"null");if(!want&&st&&Date.now()-st.t<864e5){want=st.plan;wi=st.interval}localStorage.removeItem("terrayne-want")}catch(e){}
  if(want&&!paid()&&!S.profile.team_owner&&(want==="pro"||want==="enterprise")){history.replaceState(null,"",location.pathname+"#billing");S.interval=wi;auto=true}
- showInvites();route();
+ showInvites();route();firstBrief();
  if(auto){var bs=$("bl-sub");if(bs)bs.textContent="Taking you to checkout for "+(want==="pro"?"Pro":"Team")+"…";go("create-checkout",{plan:want,interval:wi})}}
 boot();
 })();

@@ -162,3 +162,9 @@ Every Monday's full snapshot and briefs are stored only in Supabase (the free pl
 ## Monday Brief PDF (November 2026)
 The brief email now has a "Download this brief as a PDF" button (to `brief.html`). To switch it on, update the **send-briefs** function:
 **Supabase → Edge Functions → send-briefs → Code → index.ts**, replace it with `supabase/functions/send-briefs/index.ts` from the repo, and click **Deploy** (leave the `_shared` file as it is; "Verify JWT" stays off).
+
+
+## Same-day alerts and first brief (November 2026)
+1. Supabase → SQL Editor: run `supabase/2026-11-alerts.sql`.
+2. Redeploy the `send-briefs` Edge Function with the latest code (it now also sends same-day alerts and the first brief). Keep "Verify JWT" off.
+3. Nothing to add in GitHub: the alerts workflow uses the existing SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY and CRON_SECRET secrets.

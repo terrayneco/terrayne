@@ -417,7 +417,7 @@ def classma_page(cm):
         for r in cm.get("latest", [])[:8])
     uses = [("Advise on the odds", "Approval rates for office-to-home conversions in every London borough, so you can tell a client how a council has treated similar applications before you take the job on."),
             ("Set expectations on timing", "Median decision times against the 56-day limit, borough by borough, so your programme and your client’s finance line up with reality."),
-            ("Hear about new filings first", "Save the sites and patches you work on. Every new Class MA application within a 5, 10 or 20-minute walk lands in your Monday Brief by 7am."),
+            ("Hear about new filings first", "Save the sites and patches you work on. Every new Class MA application within a 5, 10 or 20-minute walk lands in your Monday Brief by 7am, and Team plans get an email the same day."),
             ("Find the council record fast", "Every filing comes with its council reference and a direct search link, so you can pull up comparable decisions in seconds.")]
     qs = [("What is Class MA?",
            "Class MA is a permitted development right in England that lets buildings in commercial, business and service use (Class E), such as offices and shops, become homes "
@@ -432,7 +432,7 @@ def classma_page(cm):
            "Councils add applications to the GLA’s Planning London Datahub every day. Terrayne collects and processes them early every Monday, and everything is updated by 7am UK time."),
           ("What do I get free, and what’s in Pro?",
            "The borough table and the latest filings are free, with no account. Pro (£29 a month) adds alerts for new filings near the sites you save, the Monday Brief, the full "
-           "planning signal feed with “why it matters”, unlimited postcode checks and PDF reports. Team (£99 a month) covers up to 5 people.")]
+           "planning signal feed with “why it matters”, unlimited postcode checks and PDF reports. Team (£99 a month) covers up to 5 people and adds same-day email alerts when a big scheme near your saved places is filed, approved or refused.")]
     body = f"""<section class="ap-h"><div class="wrap">
 <div class="crumb"><a href="/">Terrayne</a> › Class MA tracker</div>
 <div class="eyebrow">For planning consultants and developers · Updated {e(upd)}</div>

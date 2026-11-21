@@ -138,16 +138,16 @@ def near_filings(lat, lon, radius_m, since, seen):
         except (KeyError, TypeError, ValueError):
             d = 0
         out.append({"ref": it["ref"], "lpa": it["lpa"], "site": it["site"], "units": it["units"], "com": it["com"],
-                    "kind": it["kind"], "status": it["status"], "dist": d})
+                    "kind": it["kind"], "status": it["status"], "dist": d, "why": it.get("why", ""), "url": it.get("url", ""),
+                    "desc": it.get("desc", "")})
     out.sort(key=lambda x: (-(x["units"] or 0), -(x["com"] or 0), x["dist"]))
     return out[:8]
 
 
-def decisions(area, since, seen):
-    """Significant schemes nearby that were approved or refused since `since` (by the council's decision date)."""
+def decided_near(lat, lon, radius_m, since, seen, area_name=None):
+    """Significant schemes within radius_m that were approved or refused since `since` (by the council's decision date)."""
     import explore as X
-    n, full, boro, lat, lon = area
-    geo = {"geo_distance": {"distance": f"{M.RADIUS_KM}km", "centroid": {"lat": lat, "lon": lon}}}
+    geo = {"geo_distance": {"distance": f"{radius_m}m", "centroid": {"lat": lat, "lon": lon}}}
     by_dec = {"range": {"decision_date": {"gte": since.strftime("%d/%m/%Y"), "format": "dd/MM/yyyy"}}}
     filed = {"range": {"valid_date": {"gte": (since - dt.timedelta(days=900)).strftime("%d/%m/%Y"), "format": "dd/MM/yyyy"}}}
     base = {"size": 80, "query": {"bool": {"filter": [geo, M.QUALIFYING, BRIEF_WANT], "must_not": X.NOT_DUP}},
@@ -168,14 +168,21 @@ def decisions(area, since, seen):
         st = X.short_status(s); d = X.dmy(s.get("decision_date"))
         if st not in ("Approved", "Refused") or not d or d < since or d > today or s.get("lpa_app_no") in seen:
             continue
-        if c and M.nearest(c[0], c[1]) != n:
+        if area_name and c and M.nearest(c[0], c[1]) != area_name:
             continue
         it = brief_item({**s, "valid_date": d.strftime("%d/%m/%Y")}, since, today)   # same "worth it" test as filings
         if it:
             it["status"] = st; it["decided"] = d.isoformat(); it["valid"] = s.get("valid_date")
+            if c:
+                it["dist"] = int(M.km(lat, lon, c[0], c[1]) * 1000)
             out.append(it)
     out.sort(key=lambda x: (x["status"] != "Approved", -(x["units"] or 0), -(x["com"] or 0)))
     return out[:5]
+
+
+def decisions(area, since, seen):
+    n, full, boro, lat, lon = area
+    return decided_near(lat, lon, int(M.RADIUS_KM * 1000), since, seen, n)
 
 
 def london_top(since, seen):

@@ -92,7 +92,7 @@ var prof=(await sb.from("profiles").select("full_name,company,brand_name,brand_l
 var wl=((await sb.from("watchlist").select("area").eq("user_id",s.user.id)).data||[]).map(function(x){return x.area});
 var wr=(await sb.from("briefs").select("week").order("week",{ascending:false}).limit(1000)).data||[];
 var weeks=[];wr.forEach(function(x){if(weeks.indexOf(x.week)<0)weeks.push(x.week)});
-if(!weeks.length){lock("Your first brief is on its way","It arrives on Monday at 7am UK time, and you can download it here as a PDF.");return}
+if(!weeks.length){lock("Your first brief is on its way","Add neighbourhoods to your watchlist and we’ll email you this week’s brief straight away. Each new brief appears here every Monday by 7am UK time, ready to download as a PDF.");return}
 if(weeks.indexOf(week)<0)week=weeks[0];
 var sel=$("wk");sel.innerHTML=weeks.map(function(w){return '<option value="'+w+'"'+(w===week?" selected":"")+'>'+fmt(w)+'</option>'}).join("");sel.classList.remove("hide");
 sel.onchange=function(){location.search="?week="+sel.value+(all?"&all=1":"")};
