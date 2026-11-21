@@ -540,7 +540,7 @@ html.mapopen{overflow:hidden}
 <div class="panel" id="detail"></div>
 </div>
 <p class="note" id="minote" style="margin-top:18px"></p>
-<p class="note" style="margin-top:6px">Momentum measures how much is changing in an area, not where prices will go. A high score isn’t a guarantee of price growth or investment returns. Each score also shows its <a href="methodology.html#confidence" style="color:inherit;text-decoration:underline">data confidence</a>: how complete the data behind it is. <a href="methodology.html" style="color:inherit;text-decoration:underline">How the score works</a>.</p>
+<p class="note" style="margin-top:6px">Momentum measures how much is changing in an area, not where prices will go. A high score isn’t a guarantee of price growth or investment returns. Each score also shows its <a href="methodology.html#confidence" style="color:inherit;text-decoration:underline">data confidence</a>: how complete the data behind it is. <a href="methodology.html" style="color:inherit;text-decoration:underline">How the score works</a>. <a href="london/" style="color:#9fd0ff">See every neighbourhood’s page →</a></p>
 </div></section>
 
 <section id="compare" style="padding-top:0"><div class="wrap">
@@ -601,7 +601,8 @@ html.mapopen{overflow:hidden}
 <div class="mail"><div class="mb"><i></i><i></i><i></i><span>briefings@terrayne.co</span><em>MON 7AM</em></div>
 <div class="mh"><div class="t mono"><b>Terrayne</b><span>Sample issue • London edition</span></div><h3 id="mt"></h3><p>Built from real filings in the 30 days to <span id="bdupd">…</span></p></div>
 <div class="mbody" id="mbody"></div></div>
-</div></section>
+</div>
+<div class="wrap" style="margin-top:clamp(28px,4vw,44px)"><div data-brief-signup></div></div></section>
 
 <section id="pricing" class="plan" style="padding-top:0"><div class="wrap">
 <div class="eyebrow">Pricing</div>
@@ -626,7 +627,7 @@ html.mapopen{overflow:hidden}
 <p class="note" style="margin-top:22px">Anything else? Email <a href="mailto:hello@terrayne.co" style="color:#9fd0ff">hello@terrayne.co</a>.</p>
 </div></section>
 
-<footer><div class="wrap"><span>© 2026 Terrayne. Property intelligence.</span><span class="fl"><a href="about.html">About</a><a href="planning.html">Planning tracker</a><a href="methodology.html">Methodology</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a class="tmark" href="#top" aria-label="Back to top"><svg viewBox="0 0 270 143" aria-hidden="true"><path d="M0 40L270 0V46H0Z" fill="currentColor"/><rect x="96" y="45" width="20" height="98" fill="currentColor"/></svg></a></span></div></footer>
+<footer><div class="wrap"><span>© 2026 Terrayne. Property intelligence.</span><span class="fl"><a href="about.html">About</a><a href="london/">Neighbourhoods</a><a href="class-ma/">Class MA</a><a href="planning.html">Planning tracker</a><a href="methodology.html">Methodology</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a class="tmark" href="#top" aria-label="Back to top"><svg viewBox="0 0 270 143" aria-hidden="true"><path d="M0 40L270 0V46H0Z" fill="currentColor"/><rect x="96" y="45" width="20" height="98" fill="currentColor"/></svg></a></span></div></footer>
 <script>
 async function placePC(q){/* place or neighbourhood name -> nearest postcode (London only), via postcodes.io / OS Open Names */
  q=String(q||"").replace(/[’‘]/g,"'").trim();if(q.length<3)return null;
@@ -911,7 +912,8 @@ async function run(pc,demo){var R=parseFloat($("ckr").value),msg=$("ckmsg"),out=
    var s=rows.map(function(r){return r.map(function(v){v=String(v==null?"":v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}).join(",")}).join("\n");var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([s],{type:"text/csv"}));a.download="terrayne-"+pc.replace(/\s/g,"")+".csv";a.click()};
   try{history.replaceState(null,"","?pc="+encodeURIComponent(pc)+"#check")}catch(e){}
  }catch(e){msg.textContent="Something went wrong. Please try again."}}
-F.onsubmit=function(e){e.preventDefault();run($("ckpc").value)};
+try{var q0=new URLSearchParams(location.search).get("q");if(q0&&!$("ckpc").value)$("ckpc").value=q0.slice(0,40)}catch(e){}
+F.onsubmit=function(e){e.preventDefault();var v=$("ckpc").value;if(window.tyTrack)tyTrack("pc_check",(String(v).trim().toUpperCase().match(/^[A-Z]{1,2}\d[A-Z\d]?/)||["place"])[0]);run(v)};
 document.querySelectorAll(".ckrad button").forEach(function(b){b.onclick=function(){document.querySelectorAll(".ckrad button").forEach(function(x){x.setAttribute("aria-checked",x===b)});$("ckr").value=b.dataset.r;ckInd();
  if($("ckout").innerHTML&&$("ckpc").value.trim())run($("ckpc").value,true)}});
 function ckInd(){var c=document.querySelector('.ckrad button[aria-checked="true"]'),i=document.querySelector(".ckind");if(!c||!i)return;i.style.width=c.offsetWidth+"px";i.style.transform="translateX("+c.offsetLeft+"px)"}
@@ -992,7 +994,7 @@ function draw(){chipsN();
  var mixed=SEL.some(function(p){return p.id[0]==="p"})&&SEL.some(function(p){return p.id[0]==="n"});
  h+='<p class="note" style="margin-top:12px">'+(mixed?'Neighbourhoods cover 1.7 km around their centre; postcodes use the surrounding ~3 km map square, so their figures cover different-sized areas. ':'')+'Scores measure how much is changing, not where prices will go. <a href="methodology.html" style="color:#9fd0ff">How the score works</a>.</p>';
  out.innerHTML=h}
-document.getElementById("cmpf").onsubmit=async function(ev){ev.preventDefault();var pc=document.getElementById("cmppc").value.trim().replace(/\s+/g," "),nm=null;if(!pc){msg.textContent="Enter a London postcode or area name.";return}
+document.getElementById("cmpf").onsubmit=async function(ev){ev.preventDefault();if(window.tyTrack)tyTrack("cmp_add");var pc=document.getElementById("cmppc").value.trim().replace(/\s+/g," "),nm=null;if(!pc){msg.textContent="Enter a London postcode or area name.";return}
  if(SEL.length>=MAX){msg.textContent="You can compare up to three areas. Remove one first.";return}
  msg.textContent="Checking…";
  var ok=await paid();if(!ok){msg.innerHTML='Comparing any postcode or area is included with <a href="#pricing" style="color:#9fd0ff">Pro</a>. On the free plan you can compare the neighbourhoods above.';return}
@@ -1051,6 +1053,7 @@ bs.forEach(function(b){b.onclick=function(){set(b.dataset.b)}});})();
  var m=document.querySelectorAll("#menu li.mcta");if(m[0]){m[0].querySelector("a").textContent="My account"}if(m[1]){m[1].style.display="none"}
 }catch(e){}})();
 </script>
+<script src="assets/track.js"></script><script src="assets/brief.js"></script>
 <!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "ed3ce7710a55414f8f881c84da8964aa"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>

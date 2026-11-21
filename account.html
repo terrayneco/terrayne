@@ -239,7 +239,7 @@ $("a-form").onsubmit=async function(e){e.preventDefault();var em=$("a-email").va
  if(capNeed())return;
  $("a-go").disabled=true;
  if(mode==="up"){r=await sb.auth.signUp({email:em,password:pw,options:Object.assign({data:{full_name:$("a-name").value.trim()},emailRedirectTo:location.origin+location.pathname},capOpt())});
-  if(!r.error&&!r.data.session){setMode("in");$("a-email").value=em;msg("a-msg","Almost done: we’ve emailed you a link to confirm your address. Click it, then sign in here. Can’t see it after a minute? Check your junk or spam folder.",true);resendBtn(em)}}
+  if(!r.error&&window.tyTrack)tyTrack("account_created");if(!r.error&&!r.data.session){setMode("in");$("a-email").value=em;msg("a-msg","Almost done: we’ve emailed you a link to confirm your address. Click it, then sign in here. Can’t see it after a minute? Check your junk or spam folder.",true);resendBtn(em)}}
  else r=await sb.auth.signInWithPassword({email:em,password:pw,options:capOpt()});
  capReset();$("a-go").disabled=false;if(r.error){var t=nice(r.error.message);msg("a-msg",t);if(/not confirmed/i.test(r.error.message))resendBtn(em)}};
 function nice(m){m=m||"";
@@ -398,7 +398,7 @@ billing:function(){
  $("bl-plans").querySelectorAll("[data-plan]").forEach(function(b){b.onclick=function(){go("create-checkout",{plan:b.dataset.plan,interval:S.interval},b)}});
  $("bl-plans").querySelectorAll("[data-portal]").forEach(function(b){b.onclick=function(){go("customer-portal",{},b)}});
  if($("portal"))$("portal").onclick=function(){go("customer-portal",{},this)};
- if(/checkout=success/.test(location.search))msg("g-msg","Thanks, your subscription is active. It can take a few seconds to show here.",true);
+ if(/checkout=success/.test(location.search)&&window.tyTrack)tyTrack("checkout_done","",true);if(/checkout=success/.test(location.search))msg("g-msg","Thanks, your subscription is active. It can take a few seconds to show here.",true);
 },
 team:async function(){
  var r=await sb.from("profiles").select("id,email,full_name").eq("team_owner",S.user.id),i=await sb.from("team_invites").select("email");
@@ -412,7 +412,7 @@ team:async function(){
 }};
 function uniqWeeks(){var s={};(S.briefs||[]).forEach(function(b){s[b.week]=1});return Object.keys(s)}
 
-async function go(fn,body,btn){if(btn)btn.disabled=true;msg("g-msg");
+async function go(fn,body,btn){if(btn)btn.disabled=true;msg("g-msg");if(fn==="create-checkout"&&window.tyTrack)tyTrack("checkout_start",body.plan+" · "+body.interval);
  var r=await sb.functions.invoke(fn,{body:body});if(btn)btn.disabled=false;
  if(r.error||!r.data||!r.data.url){var t=r.error&&r.error.context&&r.error.context.json?await r.error.context.json().catch(function(){return{}}):{};msg("g-msg",(r.data&&r.data.error)||t.error||"Something went wrong. Please try again.");scrollTo(0,0);return}
  location.href=r.data.url}
@@ -465,6 +465,7 @@ async function boot(){var s=await sb.auth.getSession();if(!s.data.session){show(
 boot();
 })();
 </script>
+<script src="assets/track.js"></script>
 <!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "ed3ce7710a55414f8f881c84da8964aa"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>

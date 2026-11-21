@@ -84,6 +84,9 @@ td b{color:#fff;font-weight:500}
 
 <div class="card sec"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><h2 style="margin:0">Founding-access requests <span class="note" id="reqn"></span></h2><button class="btn" id="req-csv">Export CSV</button></div><div class="tw" id="reqs" style="margin-top:12px"></div></div>
 
+<div class="card sec"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><h2 style="margin:0">Growth funnel <span class="note">(last 7 and 30 days)</span></h2><button class="btn" id="bs-csv">Export sign-ups CSV</button></div>
+<p class="note" style="margin:6px 0 14px">Anonymous counts of what visitors do. Page views and visitors are in Cloudflare Web Analytics.</p><div id="growth"><p class="note">Loading…</p></div></div>
+
 <div class="card sec"><h2>Users</h2>
 <div class="tools"><input id="q" placeholder="Search name, email, company" style="flex:1;min-width:200px"><select id="pf"><option value="">All plans</option><option value="free">Free</option><option value="investor">Investor</option><option value="pro">Pro</option><option value="enterprise">Team</option><option value="sharing">Possible sharing</option></select><button class="btn" id="u-csv">Export CSV</button></div>
 <div class="tw" id="users"></div>
@@ -165,13 +168,26 @@ $("q").oninput=users;$("pf").onchange=users;
 $("u-csv").onclick=function(){dl("terrayne-users.csv",[["email","name","company","job_title","plan","status","interval","renews_or_ends","cancelling","watchlist","joined","last_sign_in","brief_email","devices_7d","networks_7d"]].concat(D.people.map(function(p){return [p.email,p.full_name,p.company,p.job_title,p.effective_plan,p.status,p.billing_interval,p.current_period_end,p.cancel_at_period_end,p.watchlist,p.created_at,p.last_sign_in_at,p.brief_email,p.devices_7d,p.ips_7d]})))};
 $("req-csv").onclick=function(){dl("terrayne-access-requests.csv",[["received","name","email","company","interest"]].concat(D.requests.map(function(r){return [r.created_at,r.name,r.email,r.company,r.interest]})))};
 $("refresh").onclick=load;
+var G=null,STEPS=[["pc_check","Postcode checks"],["cmp_add","Areas added to compare"],["brief_signup","Sample brief sign-ups"],["signup_click","Clicked “Start free”"],["account_created","Accounts created"],["plan_click","Clicked “Get Pro” or “Get Team”"],["checkout_start","Started checkout"],["checkout_done","Subscribed"],["report_click","Clicked “Get a report”"],["report_checkout","Started £12 report checkout"],["report_bought","Reports bought"],["demo_click","Walkthrough requests (Class MA page)"]];
+async function growth(){
+ var r=await sb.rpc("admin_growth",{days:30});
+ if(r.error){$("growth").innerHTML='<p class="note">Not switched on yet: run <b>supabase/2026-11-growth.sql</b> in the Supabase SQL Editor (see SETUP.md).</p>';return}
+ G=r.data;var by={};(G.events||[]).forEach(function(e){by[e.name]=e});
+ var steps=STEPS.map(function(s){var e=by[s[0]]||{n:0,n7:0};return [s[1],n(e.n7)+" · "+n(e.n)]});
+ var refs=(G.refs||[]).slice(0,8).map(function(x){return [esc(x.ref),n(x.n)]}),pages=(G.pages||[]).slice(0,8).map(function(x){return [esc(x.page||"/"),n(x.n)]});
+ var su=(G.signups||[]);
+ $("growth").innerHTML='<div class="grid g3"><div><p class="note" style="margin:0 0 6px">Step · 7 days · 30 days</p>'+kv(steps)+'</div><div><p class="note" style="margin:0 0 6px">Where visitors who acted came from</p>'+(refs.length?kv(refs):'<p class="note">No outside referrers yet.</p>')+'</div><div><p class="note" style="margin:0 0 6px">Pages where people clicked to sign up or buy</p>'+(pages.length?kv(pages):'<p class="note">Nothing yet.</p>')+'</div></div>'+
+  '<h2 style="margin:22px 0 8px">Sample brief sign-ups <span class="note">('+n(su.length)+', '+n(su.filter(function(s){return s.updates&&!s.unsubscribed}).length)+' happy to get updates)</span></h2>'+
+  (su.length?'<div class="tw"><table><thead><tr><th>Signed up</th><th>Email</th><th>Neighbourhood</th><th>Updates?</th><th>From page</th></tr></thead><tbody>'+su.slice(0,100).map(function(s){return '<tr><td>'+day(s.created_at)+'</td><td><a href="mailto:'+esc(s.email)+'">'+esc(s.email)+'</a></td><td>'+esc(s.area)+'</td><td>'+(s.unsubscribed?'<span class="pill">Unsubscribed</span>':s.updates?'<span class="pill good">Yes</span>':'No')+'</td><td>'+esc(s.source||"")+'</td></tr>'}).join("")+'</tbody></table></div>':'<p class="note">No sign-ups yet.</p>');
+}
+$("bs-csv").onclick=function(){if(!G)return;dl("terrayne-brief-signups.csv",[["signed_up","email","neighbourhood","updates_ok","unsubscribed","page"]].concat((G.signups||[]).map(function(s){return [s.created_at,s.email,s.area,s.updates,s.unsubscribed,s.source]})))};
 
 async function load(){
  var s=await sb.auth.getSession();if(!s.data.session){$("asof").textContent="";say('Please <a href="account.html">sign in</a> with an admin account.',"info");return}
  $("who").textContent=s.data.session.user.email;
  var r=await sb.functions.invoke("admin-stats",{body:{}});
  if(r.error||!r.data||r.data.error){$("asof").textContent="";$("app").classList.add("hide");say(r.data&&r.data.error?esc(r.data.error):"This page is for Terrayne admins. If that’s you, mark your profile as admin (see SETUP.md).");return}
- D=r.data;say();$("app").classList.remove("hide");render();
+ D=r.data;say();$("app").classList.remove("hide");render();growth();
 }
 load();
 })();

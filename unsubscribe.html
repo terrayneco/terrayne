@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://cloudflareinsights.com https://*.supabase.co; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name="robots" content="noindex">
+<title>Stop emails · Terrayne</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:#060d1a;color:#fff;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;display:flex;align-items:center;justify-content:center;padding:24px}
+.c{max-width:520px;width:100%;background:rgba(13,24,48,.72);border:1px solid #1c2b4d;border-radius:24px;padding:clamp(24px,5vw,40px)}
+img{width:150px;display:block;margin:0 0 28px}h1{font-size:clamp(24px,4vw,32px);letter-spacing:-.02em;margin:0 0 12px}p{color:#9aa7bd;line-height:1.6;margin:0 0 20px}
+button,a.b{display:inline-block;background:#fff;color:#060d1a;border:0;border-radius:999px;padding:12px 24px;font:inherit;font-weight:600;cursor:pointer;text-decoration:none}button:disabled{opacity:.6}
+.m{margin-top:16px;font-size:15px}.ok{color:#7ee0b5}.err{color:#ff9a9a}
+</style>
+</head>
+<body>
+<div class="c">
+<a href="./"><img src="assets/logo-white.svg" alt="Terrayne"></a>
+<h1>Stop emails from Terrayne</h1>
+<p>We’ll stop sending sample briefs and updates to this address. If you have a Terrayne account, you can change your Monday brief in your account settings.</p>
+<button id="go">Stop emails</button>
+<div class="m" id="m" role="status" aria-live="polite"></div>
+</div>
+<script src="assets/config.js"></script>
+<script>
+(function(){
+var C=window.TERRAYNE||{},t=new URLSearchParams(location.search).get("t")||"",b=document.getElementById("go"),m=document.getElementById("m");
+function say(x,ok){m.className="m "+(ok?"ok":"err");m.textContent=x}
+if(!/^[0-9a-f-]{36}$/i.test(t)){b.disabled=true;say("This link isn’t complete. Please use the link from the email, or email hello@terrayne.co and we’ll remove you.");return}
+b.onclick=async function(){b.disabled=true;b.textContent="One moment…";
+ try{var r=await fetch(C.supabaseUrl+"/functions/v1/sample-brief",{method:"POST",headers:{apikey:C.supabaseAnonKey,"Content-Type":"application/json"},body:JSON.stringify({unsubscribe:t})});
+  var d=await r.json().catch(function(){return{}});if(!r.ok||!d.ok)throw new Error(d.error||"Something went wrong.");
+  b.style.display="none";say("Done. You won’t get any more of these emails.",true)}
+ catch(e){b.disabled=false;b.textContent="Stop emails";say((e.message||"Something went wrong.")+" You can also email hello@terrayne.co.")}};
+})();
+</script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "ed3ce7710a55414f8f881c84da8964aa"}'></script>
+</body>
+</html>

@@ -118,6 +118,11 @@ def main():
     print(f"public index written: {len(pub['areas'])} of {pub['tracked']} areas")
     import explore
     print("postcode check + Class MA tracker:", explore.write_all(full, week))
+    try:  # neighbourhood pages, Class MA page and sitemap, from the public data just written
+        import pages
+        print("SEO pages:", pages.write_all())
+    except Exception as e:  # noqa: BLE001
+        print(f"SEO pages skipped: {type(e).__name__}: {e}")
     # Other cities (no Supabase/briefs yet). A failure here never blocks London.
     import city, signals
     for c in city.CITY_AREAS:
@@ -156,6 +161,10 @@ def main():
                      "data": {"score": a["s"], "refs": [i["ref"] for i in items], "items": items}})
     sb("POST", "/rest/v1/briefs?on_conflict=week,area", rows, up)
     print(f"stored snapshot and {len(rows)} briefs for {week}")
+    try:  # anonymous funnel counts are kept for two years (privacy policy)
+        sb("DELETE", f"/rest/v1/events?created_at=lt.{(week - dt.timedelta(days=730)).isoformat()}", headers={"Prefer": "return=minimal"})
+    except Exception as e:  # noqa: BLE001  (table not created yet)
+        print(f"event clean-up skipped: {e}")
 
     # Alerts: new significant filings near each saved place (London places; Manchester has no open feed).
     places = sb("GET", "/rest/v1/saved_places?select=id,lat,lon,radius_m,postcode") or []

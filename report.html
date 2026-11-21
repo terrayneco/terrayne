@@ -82,13 +82,13 @@ async function access(pc){
    var p=await sb.from("profiles").select("full_name,company,brand_name,brand_logo").eq("id",s.data.session.user.id).single();profile=p.data||null;
    if(plan!=="free")return {full:true,why:"plan"}}
   var sess=Q.get("session");
-  if(sess){var v=await sb.functions.invoke("verify-report",{body:{session:sess,postcode:pc}});if(v.data&&v.data.ok)return {full:true,why:"bought"}}
+  if(sess){var v=await sb.functions.invoke("verify-report",{body:{session:sess,postcode:pc}});if(v.data&&v.data.ok&&window.tyTrack)tyTrack("report_bought","",true);if(v.data&&v.data.ok)return {full:true,why:"bought"}}
  }catch(e){}
  return {full:false,why:"none"}}
 
 async function buy(pc,r){var b=$("buy");if(b)b.disabled=true;
  try{await lib();sb=sb||window.supabase.createClient(C.supabaseUrl,C.supabaseAnonKey);
-  var x=await sb.functions.invoke("create-report-checkout",{body:{postcode:pc,radius:r}});
+  if(window.tyTrack)tyTrack("report_checkout");var x=await sb.functions.invoke("create-report-checkout",{body:{postcode:pc,radius:r}});
   if(x.data&&x.data.url){location.href=x.data.url;return}
   $("msg").textContent=(x.data&&x.data.error)||"Reports aren’t on sale yet. Please try again soon."}catch(e){$("msg").textContent="Reports aren’t on sale yet. Please try again soon."}
  if(b)b.disabled=false}
@@ -171,6 +171,7 @@ $("f").onsubmit=function(e){e.preventDefault();var pc=TerrayneReport.normPC($("p
 run();
 })();
 </script>
+<script src="assets/track.js"></script>
 <!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "ed3ce7710a55414f8f881c84da8964aa"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>
