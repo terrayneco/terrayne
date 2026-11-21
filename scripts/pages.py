@@ -328,7 +328,7 @@ def area_page(meta, a, rank, pub, cm, feed):
 </div></section>"""
         qs = [(f"Is {full} changing?",
                f"{full} scores {s}/100 on Terrayne’s Momentum Index this week ({v.lower()}), ranked {rank} of {pub['tracked']} tracked London neighbourhoods, "
-               f"and {pts(a.get('c12'))} over the last 12 months. In the last 12 months there were {nf(raw.get('act'))} significant planning applications "
+               f"and {('unchanged' if not a.get('c12') else ('up ' if a['c12'] > 0 else 'down ') + str(abs(a['c12'])) + ' pts')} over the past year. In the last 12 months there were {nf(raw.get('act'))} significant planning applications "
                f"within about {radius} km of the centre" + (f", against {nf(pub['bench']['act'])} for a typical same-sized area of London." if pub.get('bench', {}).get('act') else ".")),
               (f"How many new homes are planned in {full}?",
                f"Significant planning applications in the last 12 months propose {homes(a)} net new homes within about {radius} km of {full}, "
@@ -431,7 +431,7 @@ def classma_page(cm):
           ("How up to date is it?",
            "Councils add applications to the GLA’s Planning London Datahub every day. Terrayne collects and processes them early every Monday, and everything is updated by 7am UK time."),
           ("What do I get free, and what’s in Pro?",
-           "The borough table and the latest filings are free, with no account. Pro (£29 a month) adds alerts for new filings near the sites you save, the Monday Brief, the full "
+           "The borough table and the latest filings are free, with no account. Pro (£29 a month) adds the Monday Brief, including new filings near the sites you save, the full "
            "planning signal feed with “why it matters”, unlimited postcode checks and PDF reports. Team (£99 a month) covers up to 5 people and adds same-day email alerts when a big scheme near your saved places is filed, approved or refused.")]
     body = f"""<section class="ap-h"><div class="wrap">
 <div class="crumb"><a href="/">Terrayne</a> › Class MA tracker</div>
