@@ -164,14 +164,14 @@ async function run(){var pc=TerrayneReport.normPC(Q.get("pc")),r=parseInt(Q.get(
  if(plan==="enterprise"&&type!=="memo")act+='<a class="btn ghost" href="?pc='+encodeURIComponent(d.pc)+'&r='+r+'&type=memo">IC memo</a>';
  if(type==="memo")act+='<a class="btn ghost" href="?pc='+encodeURIComponent(d.pc)+'&r='+r+'">Report</a>';
  act+='<a class="btn ghost" href="account.html">Account</a>';$("actions").innerHTML=act;
- if($("pdf"))$("pdf").onclick=function(){window.print()};
+ if($("pdf"))$("pdf").onclick=function(){var pg=$("out").querySelectorAll(".page"),el=pg[pg.length-1];window.tyPDF?tyPDF(el,(type==="memo"?"Terrayne IC memo ":"Terrayne Postcode Report ")+d.pc+".pdf",this):window.print()};
  if($("buy"))$("buy").onclick=function(){buy(d.pc,r)};
 }
 $("f").onsubmit=function(e){e.preventDefault();var pc=TerrayneReport.normPC($("pc").value);if(!pc)return;history.replaceState(null,"","?pc="+encodeURIComponent(pc)+"&r="+$("r").value+(Q.get("type")?"&type="+Q.get("type"):""));Q=new URLSearchParams(location.search);run()};
 run();
 })();
 </script>
-<script src="assets/track.js"></script>
+<script src="assets/pdf.js"></script><script src="assets/track.js"></script>
 <!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "ed3ce7710a55414f8f881c84da8964aa"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>

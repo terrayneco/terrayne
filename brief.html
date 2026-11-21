@@ -102,11 +102,11 @@ if(A.length){h+='<h2>New near your saved places</h2>';
    a.items.map(function(i){return '<tr><td><b>'+esc(i.site)+'</b></td><td class="n" data-l="Homes">'+(i.units>0?esc(i.units):"—")+'</td><td data-l="Type">'+esc(i.kind)+'</td><td data-l="Status">'+esc(i.status)+'</td><td data-l="Ref">'+esc(i.lpa)+' '+esc(i.ref)+'</td><td class="n" data-l="Distance">'+esc(i.dist)+' m</td></tr>'}).join("")+'</tbody></table>'})}
 h+='<div class="ft">Built from the GLA Planning London Datahub and official statistics (TfL, ONS, HM Land Registry). Statuses can change, so check the council record by reference. Scores describe activity, not future prices, and aren’t investment advice. For use within your organisation. © Terrayne '+new Date().getFullYear()+'.</div>';
 $("out").innerHTML=h;document.title="Terrayne Monday Brief "+week;
-var btn=$("pdf");btn.disabled=false;btn.onclick=function(){if(window.tyTrack)tyTrack("brief_pdf",week);window.print()};
+var btn=$("pdf");btn.disabled=false;btn.onclick=function(){if(window.tyTrack)tyTrack("brief_pdf",week);window.tyPDF?tyPDF($("out"),"Terrayne Monday Brief "+week+".pdf",btn):window.print()};
 if(auto){try{history.replaceState(null,"","?week="+week+(all?"&all=1":""))}catch(e){}setTimeout(function(){btn.click()},700)}
 })();
 </script>
-<script src="assets/track.js"></script>
+<script src="assets/pdf.js"></script><script src="assets/track.js"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "ed3ce7710a55414f8f881c84da8964aa"}'></script>
 </body>
 </html>
