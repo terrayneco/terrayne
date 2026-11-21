@@ -68,6 +68,8 @@ td{padding:12px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
 .brief{border:1px solid var(--line);border-radius:16px;margin-bottom:10px;overflow:hidden}
 .brief summary{cursor:pointer;list-style:none;padding:16px 18px;display:flex;justify-content:space-between;gap:12px}
 .brief summary::-webkit-details-marker{display:none}
+.brief summary .tg{white-space:nowrap;align-self:center;font-size:13px;color:#9fd0ff;border:1px solid var(--line);border-radius:99px;padding:5px 12px}
+.brief summary .tg:after{content:"Read ▾"}.brief[open] summary .tg:after{content:"Hide ▴"}.brief summary:hover .tg{border-color:#9fd0ff}
 .brief .bd{padding:0 18px 16px;color:#c8d4e8;font-size:14px}
 .brief .bd ul{padding-left:18px}.brief .bd li{margin-bottom:8px}
 .plan{border:1px solid var(--line);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:10px}
@@ -332,8 +334,9 @@ briefs:function(){
  var only=S.briefsMine!==false&&S.watch.length>0;
  var list=S.briefs.filter(function(b){return !only||S.watch.indexOf(b.area)>=0});
  var html='<div class="chips" style="margin-bottom:16px"><button class="chip'+(only?" on":"")+'" id="bm">My watchlist</button><button class="chip'+(!only?" on":"")+'" id="ba">All neighbourhoods</button></div>',wk="";
- list.forEach(function(b){if(b.week!==wk){wk=b.week;html+='<h3 style="margin:22px 0 10px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">'+fmtDate(b.week)+'<a class="btn ghost sm" href="brief.html?week='+b.week+(only?"":"&all=1")+'&pdf=1" target="_blank" rel="noopener">Download PDF</a></h3>'}
-  html+='<details class="brief"><summary><span><span class="note">'+esc(b.area)+'</span><br><b>'+esc(b.title)+'</b></span><span class="note">▾</span></summary><div class="bd">'+b.body+'</div></details>'});
+ var first=list.length?list[0].week:"";
+ list.forEach(function(b){if(b.week!==wk){wk=b.week;var q="brief.html?week="+b.week+(only?"":"&all=1");html+='<h3 style="margin:22px 0 10px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">'+fmtDate(b.week)+(b.week===first?' <span class="note" style="font-weight:400;font-size:13px">Latest</span>':"")+'<span style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn ghost sm" href="'+q+'" target="_blank" rel="noopener">Open full brief</a><a class="btn ghost sm" href="'+q+'&pdf=1" target="_blank" rel="noopener">Download PDF</a></span></h3>'}
+  html+='<details class="brief"'+(b.week===first?" open":"")+'><summary><span><span class="note">'+esc(b.area)+'</span><br><b>'+esc(b.title)+'</b></span><span class="tg"></span></summary><div class="bd">'+b.body+'</div></details>'});
  $("b-body").innerHTML=html||'<p class="note">No briefs for your watchlist yet.</p>';
  $("bm").onclick=function(){S.briefsMine=true;P.briefs()};$("ba").onclick=function(){S.briefsMine=false;P.briefs()};
 },
