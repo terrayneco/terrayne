@@ -143,7 +143,7 @@ svg.spark{display:block}
 <div id="p-overview" class="pane">
 <div class="eyebrow">Overview</div><h1 id="hello">Welcome</h1><p class="sub" id="o-sub"></p>
 <div class="grid g3" id="o-stats"></div>
-<div class="grid g2" style="margin-top:16px"><div class="card"><h3>Your watchlist</h3><div id="o-watch"></div></div><div class="card"><h3>Latest brief</h3><div id="o-brief"></div></div></div>
+<div class="grid g2" style="margin-top:16px"><div class="card"><h3>Your watchlist</h3><div id="o-watch"></div></div><div class="card"><h3>This week’s Monday Brief</h3><div id="o-brief"></div></div></div>
 </div>
 
 <div id="p-watchlist" class="pane hide">
@@ -280,7 +280,11 @@ async function loadIndex(){
  if(!S.pub){try{S.pub=await (await fetch("data/momentum.json",{cache:"no-cache"})).json()}catch(e){S.pub={areas:[]}}}
 }
 function latest(){return S.snaps&&S.snaps.length?S.snaps[0].data:S.pub}
-async function loadBriefs(){if(!briefsOK()||S.briefs)return;var r=await sb.from("briefs").select("week,area,title,body").order("week",{ascending:false}).limit(1000);S.briefs=r.data||[]}
+function briefHeadline(B){var ds=B.map(function(b){return b.data}).filter(function(d){return d&&Array.isArray(d.items)});if(!ds.length)return "";
+ var pl=function(n,w){return n.toLocaleString("en-GB")+" "+w+(n===1?"":"s")},n=0,homes=0,dec=[];ds.forEach(function(d){n+=d.items.length;d.items.forEach(function(i){homes+=Math.max(0,i.units||0)});dec=dec.concat(d.decided||[])});
+ var ok=dec.filter(function(i){return i.status==="Approved"}).length,mv=ds.filter(function(d){return typeof d.move==="number"}).sort(function(a,b){return Math.abs(b.move)-Math.abs(a.move)})[0];
+ return ((n||dec.length)?(n?pl(n,"new significant filing")+(homes?" ("+pl(homes,"home")+")":""):"No new significant filings")+(dec.length?" and "+pl(dec.length,"decision")+" ("+ok+" approved)":"")+".":"A quiet week: no new significant filings or decisions.")+(mv&&mv.move?" Biggest mover: "+mv.name+", "+(mv.move>0?"up ":"down ")+Math.abs(mv.move)+" pts.":"")}
+async function loadBriefs(){if(!briefsOK()||S.briefs)return;var r=await sb.from("briefs").select("week,area,title,body,data").order("week",{ascending:false}).limit(1000);S.briefs=r.data||[]}
 function paid(){return S.plan!=="free"}
 function briefsOK(){return S.plan==="pro"||S.plan==="enterprise"}
 function lock(what){return '<div class="card lock"><span class="pill">Pro</span><h2 style="margin-top:12px">'+what+'</h2><p>Pro (£29 a month) unlocks all tracked neighbourhoods with history and trends, unlimited postcode checks, comparisons, the Monday brief and every past brief, and 10 saved places with alerts.</p><a class="btn" href="#billing">See plans</a></div>'}
@@ -297,8 +301,14 @@ overview:function(){
  var A=(d&&d.areas)||[];
  $("o-watch").innerHTML=!paid()?'<p class="note">The watchlist is part of Pro. <a href="#billing">Upgrade</a></p>':S.watch.length?S.watch.map(function(n){var a=A.find(function(x){return x.n===n});return '<div class="row"><span>'+esc(a?a.f:n)+'</span><span>'+(a?'<b>'+a.s+'</b>/100 '+chg(a.c):'')+'</span></div>'}).join(""):'<p class="note">You’re not following any neighbourhoods yet. <a href="#watchlist">Add some</a>.</p>';
  if(!paid()){$("o-brief").innerHTML='<p class="note">See a sample on the <a href="./#brief">home page</a>, or <a href="#billing">upgrade</a> to receive yours every Monday.</p>';return}
- var b=S.briefs&&S.briefs.find(function(x){return S.watch.indexOf(x.area)>=0})||(S.briefs&&S.briefs[0]);
- $("o-brief").innerHTML=b?'<p class="note">'+fmtDate(b.week)+'</p><p><b>'+esc(b.title)+'</b></p><a href="#briefs">Read all briefs</a> · <a href="brief.html?week='+b.week+'&pdf=1" target="_blank" rel="noopener">Download PDF</a>':'<p class="note">Your first brief arrives on Monday at 7am.</p>';
+ var wk=S.briefs&&S.briefs.length?S.briefs[0].week:null;
+ if(!wk){$("o-brief").innerHTML='<p class="note">Your first brief arrives on Monday at 7am.</p>';return}
+ var mineB=S.briefs.filter(function(x){return x.week===wk&&S.watch.indexOf(x.area)>=0}),all=!mineB.length,WB=all?S.briefs.filter(function(x){return x.week===wk}):mineB;
+ var q="brief.html?week="+wk+(all?"&all=1":""),hl=briefHeadline(WB);
+ $("o-brief").innerHTML='<p class="note" style="margin-top:0">Week of '+fmtDate(wk)+' · '+WB.length+' neighbourhood'+(WB.length===1?"":"s")+(all?" (all tracked)":"")+'</p>'+
+  (hl?'<p style="margin:0 0 12px"><b>'+esc(hl)+'</b></p>':'')+
+  WB.slice(0,6).map(function(x){var i=x.title.indexOf(": ");return '<div class="row"><span>'+esc(x.area)+'</span><span class="note">'+esc(i>0?x.title.slice(i+2):x.title)+'</span></div>'}).join("")+(WB.length>6?'<p class="note">+ '+(WB.length-6)+' more</p>':'')+
+  '<p style="margin:14px 0 0;display:flex;gap:8px;flex-wrap:wrap"><a class="btn sm" href="'+q+'" target="_blank" rel="noopener">Read this brief</a><a class="btn ghost sm" href="'+q+'&pdf=1" target="_blank" rel="noopener">Download PDF</a><a class="btn ghost sm" href="#briefs">Past briefs</a></p>';
 },
 watchlist:function(){
  if(!paid()){$("w-body").innerHTML=lock("Build your watchlist");$("w-limit").textContent="";return}
@@ -335,7 +345,7 @@ briefs:function(){
  var list=S.briefs.filter(function(b){return !only||S.watch.indexOf(b.area)>=0});
  var html='<div class="chips" style="margin-bottom:16px"><button class="chip'+(only?" on":"")+'" id="bm">My watchlist</button><button class="chip'+(!only?" on":"")+'" id="ba">All neighbourhoods</button></div>',wk="";
  var first=list.length?list[0].week:"";
- list.forEach(function(b){if(b.week!==wk){wk=b.week;var q="brief.html?week="+b.week+(only?"":"&all=1");html+='<h3 style="margin:22px 0 10px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">'+fmtDate(b.week)+(b.week===first?' <span class="note" style="font-weight:400;font-size:13px">Latest</span>':"")+'<span style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn ghost sm" href="'+q+'" target="_blank" rel="noopener">Open full brief</a><a class="btn ghost sm" href="'+q+'&pdf=1" target="_blank" rel="noopener">Download PDF</a></span></h3>'}
+ list.forEach(function(b){if(b.week!==wk){wk=b.week;var q="brief.html?week="+b.week+(only?"":"&all=1");html+='<h3 style="margin:22px 0 10px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">Monday Brief · '+fmtDate(b.week)+(b.week===first?' <span class="note" style="font-weight:400;font-size:13px">Latest</span>':"")+'<span style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn ghost sm" href="'+q+'" target="_blank" rel="noopener">Open full brief</a><a class="btn ghost sm" href="'+q+'&pdf=1" target="_blank" rel="noopener">Download PDF</a></span></h3>'}
   html+='<details class="brief"'+(b.week===first?" open":"")+'><summary><span><span class="note">'+esc(b.area)+'</span><br><b>'+esc(b.title)+'</b></span><span class="tg"></span></summary><div class="bd">'+b.body+'</div></details>'});
  $("b-body").innerHTML=html||'<p class="note">No briefs for your watchlist yet.</p>';
  $("bm").onclick=function(){S.briefsMine=true;P.briefs()};$("ba").onclick=function(){S.briefsMine=false;P.briefs()};
