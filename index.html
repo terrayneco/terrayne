@@ -447,7 +447,7 @@ footer .fl{align-items:center}footer .fl a.tmark{color:#fff}.tmark{display:inlin
 .mapp.full #map{max-height:calc(100vh - 170px);width:auto;max-width:100%;height:100%}
 .mapp.full #mapx{display:none}
 html.mapopen{overflow:hidden}
-.leg .lg-grad{display:inline-flex;align-items:center;gap:6px}.leg .lg-grad b{display:inline-block;width:70px;height:8px;border-radius:99px;background:linear-gradient(90deg,rgb(16,28,56),rgb(30,62,120) 38%,rgb(44,102,186) 58%,rgb(66,150,230) 72%,rgb(95,214,184) 85%,rgb(200,250,232))}.leg .lg-grad em{font-style:normal}.leg{flex-wrap:wrap;row-gap:6px}
+.leg .lg-grad{display:inline-flex;align-items:center;gap:6px}.leg .lg-grad b{display:inline-block;width:70px;height:8px;border-radius:99px;background:linear-gradient(90deg,rgb(20,34,66),rgb(37,78,140),rgb(63,140,214),rgb(95,214,184))}.leg .lg-grad em{font-style:normal}.leg{flex-wrap:wrap;row-gap:6px}
 
 /* FAQ */
 .fqs{border-top:1px solid var(--line)}
@@ -688,7 +688,7 @@ function loadTiles(){var c=CITY;if(TL[c])return;TL[c]="…";fetch(CITYCFG[c].dat
  var x0=Math.min.apply(0,xs),x1=Math.max.apply(0,xs)+1,y0=Math.min.apply(0,ys),y1=Math.max.apply(0,ys)+1,sc=Math.min(620/(x1-x0),420/(y1-y0));
  CITYCFG[c].M={x0:x0,y0:y0,s:sc,ox:(640-(x1-x0)*sc)/2,oy:(440-(y1-y0)*sc)/2};TL[c]=t.tiles;if(c===CITY)render()}).catch(function(){TL[c]=null})}
 function band(s){return s>=80?["High","#4f9be8"]:s>=70?["Active","#5fd6b8"]:["Building","#8c9ab3"]}
-function hcol(v){var st=[[20,[16,28,56]],[45,[30,62,120]],[58,[44,102,186]],[67,[66,150,230]],[75,[95,214,184]],[85,[200,250,232]]],a=st[0],b=st[st.length-1];
+function hcol(v){var st=[[25,[20,34,66]],[50,[37,78,140]],[65,[63,140,214]],[80,[95,214,184]]],a=st[0],b=st[st.length-1];
  for(var i=0;i<st.length-1;i++)if(v>=st[i][0]&&v<=st[i+1][0]){a=st[i];b=st[i+1];break}if(v<st[0][0])b=a;if(v>b[0])a=b;
  var t=a===b?0:(v-a[0])/(b[0]-a[0]);return "rgb("+a[1].map(function(c,j){return Math.round(c+(b[1][j]-c)*t)}).join(",")+")"}
 function heat(){var t=TL[CITY],c=PJ();if(!t||!c.M||typeof t!=="object")return"";var h='<g class="heat">';
