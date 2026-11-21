@@ -74,7 +74,7 @@ td b{color:#fff;font-weight:500}
 <div class="grid g3 sec">
 <div class="card"><h2>Users by plan</h2><div id="plans"></div></div>
 <div class="card"><h2>Subscription health</h2><div id="health"></div></div>
-<div class="card"><h2>Data &amp; briefs</h2><div id="datah"></div></div>
+<div class="card"><h2>Data &amp; briefs</h2><div id="datah"></div><div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--line)"><button class="btn" id="hist">Download full history</button><p class="note" id="histn" style="margin:8px 0 0">Every weekly snapshot and brief in one file. Save it to iCloud once a month as a backup.</p></div></div>
 </div>
 
 <div class="grid g2 sec">
@@ -168,6 +168,22 @@ $("q").oninput=users;$("pf").onchange=users;
 $("u-csv").onclick=function(){dl("terrayne-users.csv",[["email","name","company","job_title","plan","status","interval","renews_or_ends","cancelling","watchlist","joined","last_sign_in","brief_email","devices_7d","networks_7d"]].concat(D.people.map(function(p){return [p.email,p.full_name,p.company,p.job_title,p.effective_plan,p.status,p.billing_interval,p.current_period_end,p.cancel_at_period_end,p.watchlist,p.created_at,p.last_sign_in_at,p.brief_email,p.devices_7d,p.ips_7d]})))};
 $("req-csv").onclick=function(){dl("terrayne-access-requests.csv",[["received","name","email","company","interest"]].concat(D.requests.map(function(r){return [r.created_at,r.name,r.email,r.company,r.interest]})))};
 $("refresh").onclick=load;
+function histNote(){var l=null;try{l=localStorage.getItem("terrayne-history-dl")}catch(e){}
+ var d=l?Math.floor((Date.now()-new Date(l))/864e5):null;
+ $("histn").innerHTML="Every weekly snapshot and brief in one file. Save it to iCloud once a month as a backup. "+(l?(d>35?'<span class="pill warn">⚠ Last downloaded '+d+' days ago</span>':'Last downloaded '+day(l)+' on this browser.'):'<span class="pill warn">Not downloaded yet on this browser</span>')}
+histNote();
+$("hist").onclick=async function(){var b=$("hist");b.disabled=true;b.textContent="Preparing…";
+ try{var out={exported_at:new Date().toISOString(),note:"Terrayne full history: weekly Momentum Index snapshots (all neighbourhoods and tiles) and every Monday brief. Private: don't publish.",snapshots:[],briefs:[]};
+  for(var i=0;;i+=4){var r=await sb.from("snapshots").select("generated,data").order("generated").range(i,i+3);if(r.error)throw r.error;out.snapshots=out.snapshots.concat(r.data||[]);b.textContent="Preparing… "+out.snapshots.length+" weeks";if(!r.data||r.data.length<4)break}
+  for(var j=0;;j+=500){var r2=await sb.from("briefs").select("week,area,title,body,data").order("week").order("area").range(j,j+499);if(r2.error)throw r2.error;out.briefs=out.briefs.concat(r2.data||[]);if(!r2.data||r2.data.length<500)break}
+  if(!out.snapshots.length)throw new Error("No history visible yet. Run supabase/2026-11-history.sql in the Supabase SQL Editor (see SETUP.md).");
+  var blob=new Blob([JSON.stringify(out)],{type:"application/json"}),a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);a.download="terrayne-history-"+new Date().toISOString().slice(0,10)+".json";document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1000);
+  try{localStorage.setItem("terrayne-history-dl",new Date().toISOString())}catch(e){}
+  say("Downloaded "+n(out.snapshots.length)+" weeks of snapshots and "+n(out.briefs.length)+" briefs. Save the file somewhere safe, such as iCloud Drive.","info");histNote()}
+ catch(e){say(esc(e.message||"Couldn’t download the history."))}
+ b.disabled=false;b.textContent="Download full history"};
 var G=null,STEPS=[["pc_check","Postcode checks"],["cmp_add","Areas added to compare"],["brief_signup","Sample brief sign-ups"],["signup_click","Clicked “Start free”"],["account_created","Accounts created"],["plan_click","Clicked “Get Pro” or “Get Team”"],["checkout_start","Started checkout"],["checkout_done","Subscribed"],["report_click","Clicked “Get a report”"],["report_checkout","Started £12 report checkout"],["report_bought","Reports bought"],["demo_click","Walkthrough requests (Class MA page)"]];
 async function growth(){
  var r=await sb.rpc("admin_growth",{days:30});
