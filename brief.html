@@ -22,7 +22,7 @@ a{color:var(--blue)}
 select,input{font:inherit;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;color:var(--ink)}
 .page{max-width:820px;margin:28px auto;background:#fff;box-shadow:0 10px 40px -20px rgba(11,31,58,.35);border-radius:6px;padding:48px 56px}
 .hd{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;border-bottom:2px solid var(--ink);padding-bottom:18px;margin-bottom:22px}
-.brand{display:flex;align-items:center;gap:12px}.brand img{max-height:38px;max-width:180px}.brand b{font-size:18px;letter-spacing:.02em}
+.brand{display:flex;align-items:center;gap:12px}.brand img.tlogo{height:34px;width:auto;max-width:none;display:block}.brand img{max-height:38px;max-width:180px}.brand b{font-size:18px;letter-spacing:.02em}
 .meta{text-align:right;font-size:12px;color:var(--mute)}
 h1{font-size:28px;letter-spacing:-.02em;margin:0 0 4px;line-height:1.15}
 h2{font-size:15px;text-transform:uppercase;letter-spacing:.12em;color:var(--ink2);margin:26px 0 10px}
@@ -92,7 +92,7 @@ var P=(await sb.from("saved_places").select("id,label,postcode,radius_m")).data|
 if(P.length)A=((await sb.from("alerts").select("place_id,items").eq("week",week).in("place_id",P.map(function(p){return p.id}))).data||[]).filter(function(a){return (a.items||[]).length});
 var team=plan==="enterprise",brand=team&&(prof.brand_name||prof.company),logo=team&&/^https:\/\//.test(prof.brand_logo||"")?'<img src="'+esc(prof.brand_logo)+'" alt="">':"";
 var who=[prof.full_name,prof.company].filter(Boolean).map(esc).join(" · ");
-var h='<div class="hd"><div class="brand">'+(logo||'<b>'+(brand?esc(brand):"TERRAYNE")+'</b>')+'</div><div class="meta">Monday Brief<br>'+fmt(week)+(who?'<br>Prepared for '+who:"")+'</div></div>'+
+var h='<div class="hd"><div class="brand">'+(logo||(brand?'<b>'+esc(brand)+'</b>':'<img class="tlogo" src="assets/logo-black.svg" alt="Terrayne">'))+'</div><div class="meta">Monday Brief<br>'+fmt(week)+(who?'<br>Prepared for '+who:"")+'</div></div>'+
  '<h1>Your Monday Brief</h1><p class="sub">'+(B.length?'New planning filings and Momentum Index changes for '+(mine?B.length+' neighbourhood'+(B.length===1?"":"s")+' on your watchlist':'all '+B.length+' tracked neighbourhoods'):'No neighbourhood briefs for this week.')+(A.length?', plus new filings near your saved places':"")+'.</p>'+
  (wl.length?'<p class="tog noprint"><a href="?week='+week+(mine?"&all=1":"")+'">'+(mine?"Show every neighbourhood":"Show only my watchlist")+'</a></p>':'<p class="tog noprint note">Your watchlist is empty, so this shows every neighbourhood. <a href="account.html#watchlist">Choose your neighbourhoods</a>.</p>');
 B.forEach(function(b){h+='<div class="bh"><h2>'+esc(b.area)+'</h2><p class="t">'+esc(b.title)+'</p><div class="bd">'+b.body+'</div></div>'});
