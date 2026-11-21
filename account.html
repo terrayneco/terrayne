@@ -473,8 +473,17 @@ async function firstBrief(){
  var k="ty-first-"+S.user.id;try{if(localStorage.getItem(k))return}catch(e){}
  var r=await sb.functions.invoke("send-briefs",{body:{first:true}}),d=r.data||{};
  if(d.sent||d.reason==="already"){try{localStorage.setItem(k,"1")}catch(e){}}
- if(d.sent){msg("g-msg","We’ve just emailed you this week’s brief for your neighbourhoods. The next one arrives on Monday by 7am UK time.",true);if(window.tyTrack)tyTrack("first_brief")}
+ if(d.sent){var pre=($("g-msg").textContent||"").trim();msg("g-msg",(pre?pre+" ":"")+"We’ve just emailed you this week’s brief for your neighbourhoods. The next one arrives on Monday by 7am UK time.",true);if(window.tyTrack)tyTrack("first_brief")}
 }
+// "+ Add to watchlist" on the homepage: add it once they're on Pro or Team (kept for a day so it survives sign-up and checkout).
+async function watchIntent(){var w;try{w=JSON.parse(localStorage.getItem("terrayne-watch")||"null")}catch(e){}
+ if(!w||!w.n||Date.now()-w.t>864e5){try{localStorage.removeItem("terrayne-watch")}catch(e){}return}
+ if(!briefsOK()){if(!location.hash||location.hash==="#overview")history.replaceState(null,"",location.pathname+location.search+"#billing");msg("g-msg","Watchlists are part of Pro and Team. Choose a plan and we’ll add "+w.f+" to your watchlist straight away.",true);return}
+ try{localStorage.removeItem("terrayne-watch")}catch(e){}
+ if(S.watch.indexOf(w.n)>=0)return;
+ var r=await sb.from("watchlist").insert({user_id:S.user.id,area:w.n});
+ if(r.error){msg("g-msg",/up to 10/.test(r.error.message||"")?"Pro watchlists hold up to 10 neighbourhoods. Remove one to add "+w.f+".":r.error.message);return}
+ S.watch=S.watch.concat(w.n);history.replaceState(null,"",location.pathname+location.search+"#watchlist");msg("g-msg","Added "+w.f+" to your watchlist.",true)}
 async function boot(){var s=await sb.auth.getSession();if(!s.data.session){show("v-auth");return}
  try{var nx=new URLSearchParams(location.search).get("next");if(nx&&/^brief\.html(\?[\w=&.%-]*)?$/.test(nx)){location.replace(nx);return}}catch(e){}
  S.user=s.data.session.user;await loadProfile();await loadIndex();show("v-app");
@@ -484,7 +493,7 @@ async function boot(){var s=await sb.auth.getSession();if(!s.data.session){show(
  var wi=new URLSearchParams(location.search).get("interval")==="year"?"year":"month",auto=false;
  try{var st=JSON.parse(localStorage.getItem("terrayne-want")||"null");if(!want&&st&&Date.now()-st.t<864e5){want=st.plan;wi=st.interval}localStorage.removeItem("terrayne-want")}catch(e){}
  if(want&&!paid()&&!S.profile.team_owner&&(want==="pro"||want==="enterprise")){history.replaceState(null,"",location.pathname+"#billing");S.interval=wi;auto=true}
- showInvites();route();firstBrief();
+ showInvites();await watchIntent();route();firstBrief();
  if(auto){var bs=$("bl-sub");if(bs)bs.textContent="Taking you to checkout for "+(want==="pro"?"Pro":"Team")+"…";go("create-checkout",{plan:want,interval:wi})}}
 boot();
 })();

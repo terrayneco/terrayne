@@ -105,6 +105,7 @@ nav .wrap>a:first-child{display:flex;align-items:center}
 .big b{font-size:44px;font-weight:600;line-height:1}.big em{font-style:normal;color:var(--mute);font-family:ui-monospace,Menlo,monospace;font-size:13px}
 .big div{font-size:10px;color:var(--accent);background:rgba(79,155,232,.15);border-radius:8px;padding:4px 8px;margin-top:8px}
 .units{font-size:11px;color:var(--mute);margin-left:8px}
+.wlb{margin-top:12px;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line,#1c2b4d);background:transparent;color:#9fd0ff;border-radius:99px;padding:7px 14px;font:inherit;font-size:13px;font-weight:600;cursor:pointer}.wlb:hover{border-color:#9fd0ff}.wlb.on{color:#5fd6b8;border-color:rgba(95,214,184,.5)}.wln{display:block;font-size:12px;color:var(--mute);margin-top:6px}
 .sig{margin-bottom:18px}.sig .l{display:flex;justify-content:space-between;font-size:15px;margin-bottom:8px}.sig .l span:last-child{font-family:ui-monospace,Menlo,monospace}
 .sig .t{height:7px;border-radius:9px;background:var(--line);overflow:hidden}.sig .t i{display:block;height:100%;border-radius:9px;transition:width .5s}
 .take{border:1px solid var(--line);border-radius:18px;padding:20px;margin-top:6px}
@@ -714,7 +715,7 @@ function render(){if(!D.length)return;
  var P=pts(d),cols=["#4f9be8","#6aa9ec","#86b9f0","#a3c9f4","#5fd6b8","#80e0c8","#a2e9d8"];
  document.getElementById("mapx").innerHTML='<div class="mapx-h">WHAT DRIVES '+d.n.toUpperCase()+'’S '+d.s+'</div><div class="contrib" role="img" aria-label="Points contributed by each signal">'+P.map(function(v,i){return v>0?'<i title="'+L[i]+': '+v.toFixed(1)+' pts" style="width:'+v+'%;background:'+cols[i]+'"></i>':''}).join("")+'</div>'+
   '<div class="clist">'+P.map(function(v,i){return '<div><span><em style="background:'+cols[i]+'"></em>'+L[i]+'</span><b>'+v.toFixed(1)+'</b></div>'}).join("")+'</div>';
- document.getElementById("detail").innerHTML='<div class="dh"><div><small class="mono" style="font-size:11px;color:var(--mute)">'+d.b+'</small><h3>'+d.f+'</h3><span class="chg"'+cs(d.c)+'>'+(d.c==null?'new':sg(d.c)+' pts (30d)')+'</span>'+(d.c12!=null?' <span class="chg"'+cs(d.c12)+'>'+sg(d.c12)+' pts (12m)</span>':'')+'<span class="units mono">'+d.u+' '+((MI&&MI.unit_label)||'net new homes proposed (12m)')+'</span></div><div class="big"><b>'+d.s+'</b><em>/100</em><div class="mono">'+(d.s>=80?"High activity":d.s>=70?"Active":"Building")+'</div>'+(d.cf?'<div style="margin-top:10px">'+cfb(d.cf)+'</div>':'')+'</div></div>'+(d.cf&&d.cf[1].length?'<div class="cfr" style="margin:-4px 0 14px">'+d.cf[1].map(cfq).join(". ")+'.</div>':'')+
+ document.getElementById("detail").innerHTML='<div class="dh"><div><small class="mono" style="font-size:11px;color:var(--mute)">'+d.b+'</small><h3>'+d.f+'</h3><span class="chg"'+cs(d.c)+'>'+(d.c==null?'new':sg(d.c)+' pts (30d)')+'</span>'+(d.c12!=null?' <span class="chg"'+cs(d.c12)+'>'+sg(d.c12)+' pts (12m)</span>':'')+'<span class="units mono">'+d.u+' '+((MI&&MI.unit_label)||'net new homes proposed (12m)')+'</span>'+(CITY==="london"?'<div><button class="wlb" id="wlb" type="button" data-n="'+esc2(d.n)+'" data-f="'+esc2(d.f)+'">+ Add to watchlist</button><span class="wln" id="wln"></span></div>':'')+'</div><div class="big"><b>'+d.s+'</b><em>/100</em><div class="mono">'+(d.s>=80?"High activity":d.s>=70?"Active":"Building")+'</div>'+(d.cf?'<div style="margin-top:10px">'+cfb(d.cf)+'</div>':'')+'</div></div>'+(d.cf&&d.cf[1].length?'<div class="cfr" style="margin:-4px 0 14px">'+d.cf[1].map(cfq).join(". ")+'.</div>':'')+
  d.x.map(function(v,i){return grp(i)+'<div class="sig"><button class="sigb" aria-expanded="'+(!!OPEN[i])+'" onclick="tog('+i+')"><div class="l"><span>'+L[i]+(d.tr?trw(d.tr[i]):'')+'</span><span>'+(v==null?'n/a':v+'/100')+'</span></div><div class="t"><i style="width:'+(v||0)+'%;background:'+(i<g2()?'#4f9be8':'#5fd6b8')+'"></i></div></button>'+(OPEN[i]?bd(d,i):'')+'</div>'}).join("")+
  (d.hd!=null?'<div class="sig" style="margin-top:14px"><div class="l"><span>Price headroom <small style="color:var(--mute)">(not in score: cheaper than '+d.hd+'% of London'+(d.off&&d.off.median_price?', median £'+Math.round(d.off.median_price).toLocaleString("en-GB"):'')+')</small></span><span>'+d.hd+'/100</span></div><div class="t"><i style="width:'+d.hd+'%;background:#9aa3b5"></i></div></div>':'')+
  '<div class="take"><div class="top mono"><span>● Plain-English commercial takeaway</span><span>From official data</span></div><p>'+d.t+'</p></div>';
@@ -866,8 +867,23 @@ async function J(u){var r=await fetch(u,{cache:"no-cache"});if(!r.ok)throw new E
 async function pts(x,y){var k=CC+":"+x+"_"+y;if(!(k in CACHE)){try{CACHE[k]=await J(CK_CITIES[CC].dir+"pts/"+x+"_"+y+".json")}catch(e){CACHE[k]=[]}}return CACHE[k]}
 async function paid(){if(PAID!==null)return PAID;var C=window.TERRAYNE||{};if(!C.supabaseUrl||!C.supabaseAnonKey)return false;PAID=false;
  try{if(!window.supabase)await new Promise(function(ok,no){var s=document.createElement("script");s.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js";s.integrity="sha384-GFr3yTh5lJznCbZfpTtXnwboFsxqtTQoeTZCRHhE0579KrRmlCzen5AA8ohaB5ug";s.crossOrigin="anonymous";s.onload=ok;s.onerror=no;document.head.appendChild(s)});
-  var sb=window.supabase.createClient(C.supabaseUrl,C.supabaseAnonKey),s=await sb.auth.getSession();if(!s.data.session)return false;
+  var sb=window.supabase.createClient(C.supabaseUrl,C.supabaseAnonKey),s=await sb.auth.getSession();window.__tySB=sb;if(!s.data.session)return false;window.__tyUID=s.data.session.user.id;
   var r=await sb.rpc("effective_plan",{uid:s.data.session.user.id});PAID=!!(r.data&&r.data!=="free")}catch(e){}return PAID}window.tPaid=paid;
+/* "+ Add to watchlist" on the selected neighbourhood: paid users toggle it here; everyone else goes to their account, which adds it once they're on Pro or Team */
+var WLS=null;
+async function wlLoad(){if(WLS)return WLS;var ok=await paid();if(!ok||!window.__tySB)return null;var r=await window.__tySB.from("watchlist").select("area").eq("user_id",window.__tyUID);WLS=(r.data||[]).map(function(x){return x.area});return WLS}
+function wlSess(){try{for(var i=0;i<localStorage.length;i++)if(/^sb-.*-auth-token$/.test(localStorage.key(i)))return true}catch(e){}return false}
+async function wlSync(){var b=document.getElementById("wlb");if(!b||b.__w)return;b.__w=1;var n=b.getAttribute("data-n"),w=wlSess()?await wlLoad():null;
+ if(w&&w.indexOf(n)>=0){b.textContent="✓ On your watchlist";b.classList.add("on")}
+ b.onclick=async function(){var note=document.getElementById("wln"),f=b.getAttribute("data-f");
+  if(window.tyTrack)tyTrack("watch_click",n);
+  var w=await wlLoad();
+  if(!w){try{localStorage.setItem("terrayne-watch",JSON.stringify({n:n,f:f,t:Date.now()}))}catch(e){}location.href="account.html"+(window.__tyUID?"#billing":"");return}
+  b.disabled=true;var on=w.indexOf(n)>=0,sb=window.__tySB,r=on?await sb.from("watchlist").delete().eq("user_id",window.__tyUID).eq("area",n):await sb.from("watchlist").insert({user_id:window.__tyUID,area:n});b.disabled=false;
+  if(r.error){note.textContent=/up to 10/.test(r.error.message||"")?"Pro watchlists hold up to 10 neighbourhoods. Remove one in your account, or move to Team.":"Couldn’t update your watchlist. Please try again.";return}
+  WLS=on?w.filter(function(x){return x!==n}):w.concat(n);b.textContent=on?"+ Add to watchlist":"✓ On your watchlist";b.classList.toggle("on",!on);
+  note.innerHTML=on?"":'Added. It’ll be in your Monday Brief. <a href="account.html#watchlist" style="color:#9fd0ff">Your watchlist</a>'}}
+document.addEventListener("DOMContentLoaded",function(){var dt=document.getElementById("detail");if(dt){new MutationObserver(function(){wlSync()}).observe(dt,{childList:true});wlSync()}});
 function verdict(s){return s>=80?["Changing fast","#4f9be8"]:s>=65?["Changing","#5fd6b8"]:s>=50?["Steady","#9aa3b5"]:["Quiet","#8c9ab3"]}
 var KIND={ma:"Office/shop to homes (Class MA)",major:"Major scheme",res:"New homes",com:"Commercial space",bf:"Brownfield register site"};
 async function geo(pc){var r=await fetch("https://api.postcodes.io/postcodes/"+encodeURIComponent(pc));
