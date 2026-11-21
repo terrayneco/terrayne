@@ -182,6 +182,11 @@ EXTRA_CSS = """<style>
 .btb{display:grid;grid-template-columns:110px minmax(0,1fr) 62px;gap:10px;align-items:center;font-size:14px;padding:6px 0}.btb span{color:#c8d4e8}.btb i{height:8px;background:#16264a;border-radius:9px;overflow:hidden}.btb u{display:block;height:100%;background:linear-gradient(90deg,#3c7fd6,#5fd6b8);border-radius:9px}.btb b{text-align:right;font-variant-numeric:tabular-nums}
 .ix-plans{display:flex;justify-content:space-between;align-items:center;gap:22px;flex-wrap:wrap;background:linear-gradient(135deg,rgba(30,64,120,.45),rgba(13,24,48,.8))}
 .ixmap{padding:8px;position:relative;overflow:hidden}
+.wk{margin:16px 0 4px;border-color:#2f4677;background:linear-gradient(135deg,rgba(30,64,120,.35),rgba(13,24,48,.75))}.wk p{margin:8px 0 0;font-size:clamp(15.5px,1.8vw,17.5px);line-height:1.65;color:#e3ebf7}
+.lb td.tr{padding-right:0}.spk{display:block}
+.ldrs{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}.ldr{display:block;transition:border-color .2s}.ldr:hover{border-color:#3a5a92}
+.ldr .eyebrow{display:block;font-size:11px;margin-bottom:8px}.ldr b{display:block;font-size:18px}.ldr span{display:block;color:#c8d4e8;font-size:14px;margin-top:4px}.ldr em{display:block;font-style:normal;color:var(--mute);font-size:12.5px;margin-top:8px}
+.cite{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}.cite code{display:block;margin-top:10px;font-size:13px;color:#9fd0ff;background:#081227;border:1px solid var(--line);border-radius:10px;padding:9px 12px;white-space:normal}
 .hm .hc{transition:opacity .15s,stroke .15s;stroke:transparent;stroke-width:2}.hm .hcells:hover .hc{opacity:.55}.hm .hcells .hc:hover{opacity:1;stroke:#fff}
 .hm .mk{cursor:pointer}.hm .mk:hover text{text-decoration:underline}
 .htip{position:absolute;pointer-events:none;opacity:0;transition:opacity .12s;background:#0d1830;border:1px solid #2f4677;color:#fff;font-size:12.5px;padding:7px 10px;border-radius:10px;max-width:230px;box-shadow:0 8px 24px rgba(0,0,0,.4)}
@@ -193,7 +198,7 @@ EXTRA_CSS = """<style>
  .ap-t.stack tr{padding:12px 0;border-bottom:1px solid var(--line)}.ap-t.stack td{border:0;padding:2px 0;text-align:left}
  .ap-t.stack td[data-l]{display:inline-block!important;width:auto!important;font-family:inherit;letter-spacing:0;text-transform:none;margin:4px 14px 0 0;font-size:13px}.ap-t.stack td[data-l]:before{content:attr(data-l)": ";color:var(--mute)}
  .sg{grid-template-columns:minmax(0,1fr) 44px 70px;font-size:14px}
- .hm .lk text{display:none}.hm text{font-size:22px}
+ .hm .lk text{display:none}.hm text{font-size:30px}.hm .mk circle{r:11px}
  .lb td.rk{display:none!important}.lb .rkm{display:inline}.lb td[data-l="Score"]{display:block!important;margin:6px 0 2px!important}.lb td[data-l="Score"]:before{content:none!important}.scb{max-width:260px}}
 </style>"""
 
@@ -577,7 +582,138 @@ def backtest_html():
             'Full back-test results and method</a>.</p></div></section>')
 
 
-def london_page(pub):
+SIG_NAME = {"act": "planning activity", "pipe": "housing pipeline", "ma": "office-to-home conversions", "com": "commercial floorspace",
+            "transport": "station use", "population": "population", "prices": "house prices"}
+
+
+def _list(xs):
+    xs = list(xs)
+    return xs[0] if len(xs) == 1 else ", ".join(xs[:-1]) + " and " + xs[-1] if xs else ""
+
+
+def _ptsw(v):
+    v = abs(v or 0)
+    return f"{v} point" + ("" if v == 1 else "s")
+
+
+def week_summary(pub):
+    """A short plain-English summary of the week, built only from this week's public top 10."""
+    top = sorted(pub["areas"], key=lambda a: -a["s"])
+    if not top:
+        return ""
+    keys = pub.get("keys", [])
+    def drivers(a, k):
+        return [SIG_NAME[s] for s, t in zip(keys, a.get("tr") or []) if t == k and s in SIG_NAME]
+    lead = top[0]
+    c = lead.get("c") or 0
+    s1 = f"{lead['f']} leads the Index at {lead['s']}/100" + (f", {'up' if c > 0 else 'down'} {_ptsw(c)} this month" if c else ", unchanged this month")
+    up = drivers(lead, "u")
+    s1 += (f"; over the past year its {_list(up[:3])} {'have' if len(up) > 1 else 'has'} been rising." if up else ".")
+    movers = [a for a in top if a is not lead and a.get("c12")]
+    out = [s1]
+    if movers:
+        r = max(movers, key=lambda a: a["c12"])
+        f = min(movers, key=lambda a: a["c12"])
+        if r["c12"] > 0:
+            ru = drivers(r, "u")
+            out.append(f"{r['f']} has gained the most over 12 months, up {_ptsw(r['c12'])} to {r['s']}" + (f", with rising {_list(ru[:2])}." if ru else "."))
+        if f["c12"] < 0 and f is not r:
+            fd = drivers(f, "d")
+            out.append(f"{f['f']} has lost the most, down {_ptsw(f['c12'])} to {f['s']}" + (f", as {_list(fd[:2])} {'have' if len(fd[:2]) > 1 else 'has'} fallen." if fd else "."))
+    n_fast = sum(1 for a in top if a["s"] >= 80)
+    n_ch = sum(1 for a in top if 65 <= a["s"] < 80)
+    out.append(f"Of this week’s top 10, {n_fast} {'is' if n_fast == 1 else 'are'} changing fast and {n_ch} changing.")
+    return " ".join(out)
+
+
+def _leader_value(k, a):
+    raw, off = a.get("raw") or {}, a.get("off") or {}
+    if k == "act":
+        return f"{nf(raw.get('act'))} significant applications"
+    if k == "pipe":
+        return f"{homes(a)} net new homes proposed"
+    if k == "ma":
+        n = max(0, round((raw.get("ma") or 0) - 0.5 * (raw.get("ma_n") or 0)))
+        return f"{nf(n)} homes via office-to-home" if n else "office-to-home conversions"
+    if k == "com":
+        return f"{nf(raw.get('com'))} m² of commercial space"
+    if k == "transport" and off.get("transport") is not None:
+        return f"station use {pct(off['transport'])} ({e(off.get('transport_span', ''))})"
+    if k == "population" and off.get("population") is not None:
+        return f"population {pct(off['population'])} ({e(off.get('population_span', ''))})"
+    if k == "prices" and off.get("prices") is not None:
+        return f"resale prices {pct(off['prices'])} on a year earlier"
+    return ""
+
+
+def signal_leaders(pub):
+    top = pub["areas"]
+    keys, labels = pub.get("keys", []), pub.get("labels", [])
+    cards = []
+    for i, k in enumerate(keys):
+        have = [a for a in top if len(a.get("x") or []) > i and a["x"][i] is not None]
+        if not have:
+            continue
+        a = max(have, key=lambda a: a["x"][i])
+        cards.append(f'<a class="apc ldr" href="/london/{SLUG.get(a["n"], "")}/"><span class="eyebrow">{e(SIGNAL_INFO.get(k, (labels[i] if i < len(labels) else k,))[0])}</span>'
+                     f'<b>{e(a["f"])}</b><span>{_leader_value(k, a)}</span><em>{a["x"][i]}/100 on this signal</em></a>')
+    return ('<section class="ap-s"><div class="wrap"><div class="eyebrow">Signal leaders</div><h2>What’s driving the top 10.</h2>'
+            '<p class="ap-sub">For each of the seven signals, the top-10 neighbourhood that scores highest on it this week. A score on a signal is a ranking: 95 means more than about 95% of London.</p>'
+            f'<div class="ldrs">{"".join(cards)}</div></div></section>') if cards else ""
+
+
+def update_history(pub):
+    """Keep a weekly record of the public top 10 (data/history.json), for the trend lines.
+    The first run also records each area's score 30 days and 12 months earlier, which the Index already works out."""
+    f = ROOT / "data" / "history.json"
+    try:
+        h = json.loads(f.read_text())
+    except (OSError, ValueError):
+        h = {"note": "Weekly Momentum scores for each week's public top 10. Points marked derived come from the Index's own 30-day and 12-month changes.", "weeks": []}
+    weeks = h.setdefault("weeks", [])
+    g = dt.date.fromisoformat(pub["generated"])
+    if not weeks:
+        for days, key in ((365, "c12"), (30, "c")):
+            pts_ = {a["n"]: a["s"] - a[key] for a in pub["areas"] if a.get(key) is not None}
+            if pts_:
+                weeks.append({"d": (g - dt.timedelta(days=days)).isoformat(), "a": pts_, "derived": True})
+    now = {a["n"]: a["s"] for a in pub["areas"]}
+    weeks[:] = [w for w in weeks if w["d"] != pub["generated"]] + [{"d": pub["generated"], "a": now}]
+    weeks.sort(key=lambda w: w["d"])
+    del weeks[:-110]
+    f.write_text(json.dumps(h, ensure_ascii=False, indent=1))
+    return h
+
+
+def sparkline(h, n, w=120, ht=30):
+    pts_ = [(dt.date.fromisoformat(x["d"]), x["a"][n]) for x in h.get("weeks", []) if n in x.get("a", {})]
+    if len(pts_) < 2:
+        return ""
+    d0, d1 = pts_[0][0], pts_[-1][0]
+    span = max(1, (d1 - d0).days)
+    lo, hi = min(v for _, v in pts_), max(v for _, v in pts_)
+    lo, hi = lo - 2, hi + 2
+    P = [(3 + (d - d0).days / span * (w - 6), ht - 3 - (v - lo) / (hi - lo) * (ht - 6)) for d, v in pts_]
+    col = "#7ee0b5" if pts_[-1][1] > pts_[0][1] else "#ffb38a" if pts_[-1][1] < pts_[0][1] else "#9aa3b5"
+    first = pts_[0]
+    return (f'<svg class="spk" viewBox="0 0 {w} {ht}" width="{w}" height="{ht}" aria-label="Score from {first[1]} on {e(day(first[0].isoformat()))} to {pts_[-1][1]}">'
+            f'<title>{e(day(first[0].isoformat()))}: {first[1]} → now: {pts_[-1][1]}</title>'
+            f'<polyline fill="none" stroke="{col}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="{" ".join(f"{x:.1f},{y:.1f}" for x, y in P)}"/>'
+            f'<circle cx="{P[-1][0]:.1f}" cy="{P[-1][1]:.1f}" r="2.6" fill="{col}"/></svg>')
+
+
+def cite_box(pub):
+    wk = day(pub["generated"])
+    txt = f"Source: Terrayne London Momentum Index, {wk} (terrayne.co/london)"
+    return (f'<div class="apc cite"><div><div class="eyebrow">Quoting the Index?</div><p style="margin:6px 0 0;color:#c8d4e8">You’re welcome to quote individual scores and findings, '
+            f'with credit and a link. Use this line:</p><code id="citetxt">{e(txt)}</code></div>'
+            f'<button class="btn ghost sm" type="button" id="citebtn">Copy</button></div>'
+            '<script>(function(){var b=document.getElementById("citebtn");if(!b)return;b.onclick=function(){var t=document.getElementById("citetxt").textContent;'
+            '(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){b.textContent="Copied"},function(){var r=document.createRange();'
+            'r.selectNodeContents(document.getElementById("citetxt"));var s=getSelection();s.removeAllRanges();s.addRange(r)});setTimeout(function(){b.textContent="Copy"},2000)}})();</script>')
+
+
+def london_page(pub, hist=None):
     by = {a["n"]: a for a in pub["areas"]}
     top = sorted(pub["areas"], key=lambda a: -a["s"])
     upd = day(pub["generated"])
@@ -599,9 +735,9 @@ def london_page(pub):
                     f'<td data-l="Verdict"><span style="color:{c}">{e(v)}</span></td>'
                     f'<td class="n {cls(a.get("c"))}" data-l="30 days">{sgn(a.get("c"))}</td><td class="n {cls(a.get("c12"))}" data-l="12 months">{sgn(a.get("c12"))}</td>'
                     f'<td class="n" data-l="Homes proposed">{e(a.get("u", "—"))}</td><td class="n" data-l="Price headroom">{a.get("hd", "—")}</td>'
-                    f'<td data-l="Confidence">{CONF.get(cf, "Medium")}</td></tr>')
+                    f'<td data-l="Confidence">{CONF.get(cf, "Medium")}</td><td class="tr" data-l="Trend">{sparkline(hist or {}, a["n"])}</td></tr>')
     board = ('<div class="apw"><table class="ap-t stack lb"><thead><tr><th class="n">#</th><th>Neighbourhood</th><th>Score</th><th>Verdict</th>'
-             '<th class="n">30 days</th><th class="n">12 months</th><th class="n">Homes proposed</th><th class="n">Price headroom</th><th>Confidence</th></tr></thead><tbody>'
+             '<th class="n">30 days</th><th class="n">12 months</th><th class="n">Homes proposed</th><th class="n">Price headroom</th><th>Confidence</th><th>Trend</th></tr></thead><tbody>'
              + "".join(rows) + "</tbody></table></div>")
 
     up = max(top, key=lambda a: a.get("c") if a.get("c") is not None else -999)
@@ -676,14 +812,17 @@ def london_page(pub):
 <h1>Where London is changing, scored every week.</h1>
 <p class="ap-lead">The Momentum Index gives London neighbourhoods a score from 0 to 100 for how fast they are changing, from seven signals across five official sources: what’s being planned, and what’s already happening on the ground. Here’s this week’s top 10, free.</p>
 <div class="kn k4"><div class="apc"><b>{tracked}</b><span>regeneration neighbourhoods tracked in detail</span></div><div class="apc"><b>{nf(tiles) if tiles else "All"}</b><span>map squares scored across London</span></div><div class="apc"><b>7</b><span>signals from 5 official sources</span></div><div class="apc"><b>Mon 7am</b><span>new scores every week</span></div></div>
+<div class="apc wk"><div class="eyebrow">This week in brief · {e(upd)}</div><p>{e(week_summary(pub))}</p></div>
 <div class="ap-cta"><a class="btn" href="/#check">Score any London postcode</a><a class="btn ghost" href="/#index">Open the interactive map</a></div>
 </div></section>
 
 <section class="ap-s" style="padding-top:18px"><div class="wrap">
-<h2>This week’s top 10</h2><p class="ap-sub">Click a neighbourhood for its signals, numbers and largest schemes. Changes are in points. Homes proposed are net, from the last 12 months. Price headroom 80 means cheaper than 80% of London.</p>
+<h2>This week’s top 10</h2><p class="ap-sub">Click a neighbourhood for its signals, numbers and largest schemes. Changes are in points. Homes proposed are net, from the last 12 months. Price headroom 80 means cheaper than 80% of London. Trend lines run from a year ago to now, and fill in week by week.</p>
 {board}
 <div class="kn k4 mvs" style="margin-top:18px">{mv}</div>
 </div></section>
+
+{signal_leaders(pub)}
 
 <section class="ap-s"><div class="wrap">
 <div class="eyebrow">The heat map</div><h2>All of London, square by square.</h2><p class="ap-sub">Every part of London scored on the same seven signals, in squares about 3 km across. Brighter means changing faster. White dots are this week’s top 10; dashed dots are also tracked, with scores in Pro. Hover a square for its score, or tap a neighbourhood for its page.</p>
@@ -740,6 +879,7 @@ def london_page(pub):
 
 <section class="ap-s"><div class="wrap">
 <h2>Questions about the Index</h2>{faq_html(qs)}
+<div style="margin-top:28px">{cite_box(pub)}</div>
 <h2 style="margin-top:44px">Every tracked neighbourhood</h2>
 {other_links("")}
 <p class="small muted" style="margin-top:26px">Sources: GLA Planning London Datahub, TfL, Office of Rail and Road, ONS and HM Land Registry. Contains public sector information licensed under the Open Government Licence v3.0. Powered by TfL Open Data. Contains OS, Royal Mail, National Statistics and HM Land Registry data © copyright and database right 2026 (<a href="/methodology.html#sources" style="color:inherit;text-decoration:underline">full data credits</a>). Scores describe activity, not future prices, and aren’t investment advice.</p>
@@ -841,7 +981,8 @@ def write_all():
         d.mkdir(parents=True, exist_ok=True)
         a = by.get(m[0])
         (d / "index.html").write_text(area_page(m, a, ranked.index(m[0]) + 1 if a else None, pub, cm, feed))
-    (ROOT / "london" / "index.html").write_text(london_page(pub))
+    hist = update_history(pub)
+    (ROOT / "london" / "index.html").write_text(london_page(pub, hist))
     (ROOT / "class-ma").mkdir(exist_ok=True)
     (ROOT / "class-ma" / "index.html").write_text(classma_page(cm))
     lastmod = pub["generated"]

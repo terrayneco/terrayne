@@ -1,0 +1,52 @@
+{
+ "note": "Weekly Momentum scores for each week's public top 10. Points marked derived come from the Index's own 30-day and 12-month changes.",
+ "weeks": [
+  {
+   "d": "2025-11-20",
+   "a": {
+    "Ilford": 86,
+    "Old Kent Road": 67,
+    "Elephant": 75,
+    "Nine Elms": 73,
+    "Wembley": 73,
+    "Hammersmith": 68,
+    "Croydon": 71,
+    "Whitechapel": 65,
+    "Stratford": 69,
+    "King’s Cross": 74
+   },
+   "derived": true
+  },
+  {
+   "d": "2026-10-21",
+   "a": {
+    "Ilford": 87,
+    "Old Kent Road": 73,
+    "Elephant": 72,
+    "Nine Elms": 72,
+    "Wembley": 73,
+    "Hammersmith": 70,
+    "Croydon": 70,
+    "Whitechapel": 67,
+    "Stratford": 66,
+    "King’s Cross": 65
+   },
+   "derived": true
+  },
+  {
+   "d": "2026-11-20",
+   "a": {
+    "Ilford": 80,
+    "Old Kent Road": 73,
+    "Elephant": 73,
+    "Nine Elms": 71,
+    "Wembley": 71,
+    "Hammersmith": 70,
+    "Croydon": 69,
+    "Whitechapel": 66,
+    "Stratford": 65,
+    "King’s Cross": 65
+   }
+  }
+ ]
+}
