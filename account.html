@@ -390,13 +390,14 @@ billing:function(){
   ["enterprise","Team","£"+pr.enterprise[I].toLocaleString()+"<small> / "+I+"</small>",["Everything in Pro, for up to 5 people","Shared team watchlist and alerts","Unlimited saved places","Custom catchments, branded reports, Slack brief"]]];
  if(S.plan==="investor")plans.splice(1,0,["investor","Investor","Your current plan",["You’re on an older plan, which keeps working.","Switch to Pro any time for the full product."]]);
  $("bl-plans").innerHTML=plans.map(function(x){var isCur=x[0]===S.plan,btn="";
-  if(team)btn="";else if(isCur)btn='<button class="btn ghost" disabled>Current plan</button>';
-  else if(x[0]==="free")btn=live?'<button class="btn ghost" data-portal="1">Cancel subscription</button>':"";
+  if(team)btn="";else if(isCur){btn='<button class="btn ghost" disabled>Current plan</button>';
+   if(live&&x[0]!=="free")btn+=p.cancel_at_period_end?'<p class="note" style="margin:12px 0 0">Cancels on '+fmtDate(p.current_period_end)+'. <a href="#" data-portal="1" style="color:inherit;text-decoration:underline">Keep it</a></p>':'<p class="note" style="margin:12px 0 0"><a href="#" data-portal="1" style="color:inherit;text-decoration:underline">Cancel subscription</a></p>'}
+  else if(x[0]==="free")btn=live?'<button class="btn ghost" data-portal="1">Switch to Free</button>':"";
   else btn='<button class="btn" data-plan="'+x[0]+'">'+(live?"Switch to ":"Upgrade to ")+x[1]+'</button>';
   return '<div class="plan'+(isCur?" cur":"")+'"><div class="note">'+x[1]+'</div><div class="p">'+x[2]+'</div><ul>'+x[3].map(function(f){return "<li>"+f+"</li>"}).join("")+'</ul><div style="margin-top:auto">'+btn+'</div></div>'}).join("");
  [].forEach.call($("bl-int").children,function(b){b.classList.toggle("on",b.dataset.i===I);b.onclick=function(){S.interval=b.dataset.i;P.billing()}});
  $("bl-plans").querySelectorAll("[data-plan]").forEach(function(b){b.onclick=function(){go("create-checkout",{plan:b.dataset.plan,interval:S.interval},b)}});
- $("bl-plans").querySelectorAll("[data-portal]").forEach(function(b){b.onclick=function(){go("customer-portal",{},b)}});
+ $("bl-plans").querySelectorAll("[data-portal]").forEach(function(b){b.onclick=function(e){if(e)e.preventDefault();go("customer-portal",{},b)}});
  if($("portal"))$("portal").onclick=function(){go("customer-portal",{},this)};
  if(/checkout=success/.test(location.search)&&window.tyTrack)tyTrack("checkout_done","",true);if(/checkout=success/.test(location.search))msg("g-msg","Thanks, your subscription is active. It can take a few seconds to show here.",true);
 },
