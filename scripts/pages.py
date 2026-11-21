@@ -182,6 +182,16 @@ EXTRA_CSS = """<style>
 .btb{display:grid;grid-template-columns:110px minmax(0,1fr) 62px;gap:10px;align-items:center;font-size:14px;padding:6px 0}.btb span{color:#c8d4e8}.btb i{height:8px;background:#16264a;border-radius:9px;overflow:hidden}.btb u{display:block;height:100%;background:linear-gradient(90deg,#3c7fd6,#5fd6b8);border-radius:9px}.btb b{text-align:right;font-variant-numeric:tabular-nums}
 .ix-plans{display:flex;justify-content:space-between;align-items:center;gap:22px;flex-wrap:wrap;background:linear-gradient(135deg,rgba(30,64,120,.45),rgba(13,24,48,.8))}
 .ixmap{padding:8px;position:relative;overflow:hidden}
+.stp{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}.stp .apc em{display:block;font-style:normal;font-family:ui-monospace,Menlo,monospace;color:#9fd0ff;font-size:12px;margin-bottom:8px}
+.stp .apc b{display:block;font-size:16.5px;margin-bottom:6px}.stp .apc p{margin:0;color:var(--mute);font-size:14px;line-height:1.55}.stp .apc a{color:var(--accent)}
+.bpg .stp{grid-template-columns:1fr 1fr}.rpg .stp{grid-template-columns:1fr}.dpg{align-items:start}
+.tk{list-style:none;padding:0;margin:10px 0 0}.tk li{position:relative;padding:7px 0 7px 26px;color:#c8d4e8;font-size:14.5px;line-height:1.5;border-bottom:1px solid rgba(28,43,77,.6)}.tk li:last-child{border-bottom:0}
+.tk li:before{content:"";position:absolute;left:2px;top:13px;width:12px;height:7px;border-left:2px solid #5fd6b8;border-bottom:2px solid #5fd6b8;transform:rotate(-45deg)}
+.mail{background:#0a1529;border:1px solid #1c2b4d;border-radius:20px;padding:18px;font-size:14px;color:#c8d4e8}.mail .mh{display:flex;justify-content:space-between;font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--mute);border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:12px}
+.mail .me{letter-spacing:.18em;text-transform:uppercase;font-size:11px;color:#9fd0ff;margin:0}.mail h3{margin:6px 0 8px;font-size:20px;color:#fff}.mail .hl2{margin:0 0 12px;line-height:1.55}
+.mail .mc{background:#0d1830;border:1px solid #1c2b4d;border-radius:14px;padding:14px 16px;margin:0 0 10px}.mail .ma{font-size:12px;color:var(--mute)}.mail h4{margin:4px 0 6px;font-size:15.5px;color:#fff}
+.mail p{margin:6px 0;line-height:1.55}.mail .dim{color:var(--mute);font-size:13px}.mail ul{margin:6px 0 0;padding-left:18px}.mail li{margin:0 0 10px;line-height:1.5}.mail li span{color:var(--mute)}.mail a{color:#4c9bff}
+.mail .mt{font-weight:700;color:#fff;margin:14px 0 8px}.mail .foot{font-size:11.5px;color:#52617f;margin:10px 0 0}
 .wk{margin:16px 0 4px;border-color:#2f4677;background:linear-gradient(135deg,rgba(30,64,120,.35),rgba(13,24,48,.75))}.wk p{margin:8px 0 0;font-size:clamp(15.5px,1.8vw,17.5px);line-height:1.65;color:#e3ebf7}
 .lb td.tr{padding-right:0}.spk{display:block}
 .ldrs{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}.ldr{display:block;transition:border-color .2s}.ldr:hover{border-color:#3a5a92}
@@ -193,7 +203,7 @@ EXTRA_CSS = """<style>
 .hsum{margin-top:16px}.hleg{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--mute)}.hleg i{flex:0 1 260px;height:8px;border-radius:9px;background:linear-gradient(90deg,rgb(16,28,56),rgb(30,62,120) 38%,rgb(44,102,186) 58%,rgb(66,150,230) 72%,rgb(95,214,184) 85%,rgb(200,250,232))}
 .hbar{display:flex;height:12px;border-radius:9px;overflow:hidden;margin:14px 0 10px;gap:2px}.hbar i{display:block;height:100%}
 .hkeys{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13.5px;color:#c8d4e8}.hkeys u{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
-@media(max-width:820px){.apg,.apg2{grid-template-columns:1fr}.kn,.kn.k4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:820px){.apg,.apg2,.bpg .stp{grid-template-columns:1fr}.kn,.kn.k4{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){.ap-t.stack thead{display:none}.ap-t.stack,.ap-t.stack tbody,.ap-t.stack tr,.ap-t.stack td{display:block;width:100%}
  .ap-t.stack tr{padding:12px 0;border-bottom:1px solid var(--line)}.ap-t.stack td{border:0;padding:2px 0;text-align:left}
  .ap-t.stack td[data-l]{display:inline-block!important;width:auto!important;font-family:inherit;letter-spacing:0;text-transform:none;margin:4px 14px 0 0;font-size:13px}.ap-t.stack td[data-l]:before{content:attr(data-l)": ";color:var(--mute)}
@@ -208,7 +218,8 @@ document.addEventListener("click",function(){dd.classList.remove("open");b.setAt
 
 
 def footer():
-    links = [("/about.html", "About"), ("/london/", "Momentum Index"), ("/class-ma/", "Class MA"), ("/planning.html", "Planning tracker"),
+    links = [("/about.html", "About"), ("/london/", "Momentum Index"), ("/monday-brief/", "Monday Brief"), ("/postcode-report/", "Postcode Report"),
+             ("/developers/", "For firms"), ("/class-ma/", "Class MA"), ("/planning.html", "Planning tracker"),
              ("/methodology.html", "Methodology"), ("/terms.html", "Terms"), ("/privacy.html", "Privacy")]
     return ('<footer><div class="wrap"><span>© 2026 Terrayne. Property intelligence.</span><span class="fl">'
             + "".join(f'<a href="{h}">{t}</a>' for h, t in links)
@@ -865,7 +876,7 @@ def london_page(pub, hist=None):
 <h2>Who uses it</h2>
 <div class="apg3">
 <div class="apc"><div class="eyebrow">Developers</div><p class="small muted" style="margin:8px 0 0">Shortlist areas where planning, transport and population are all moving, then check the schemes and decisions behind the score before you spend time on a site.</p></div>
-<div class="apc"><div class="eyebrow">Planning consultants</div><p class="small muted" style="margin:8px 0 0">Evidence for clients on how an area is changing, with council references for every scheme, plus <a href="/class-ma/" style="color:var(--accent)">office-to-home approval rates</a> by borough.</p></div>
+<div class="apc"><div class="eyebrow">Planning consultants</div><p class="small muted" style="margin:8px 0 0">Evidence on how an area is changing for the advice you give, with council references for every scheme, plus <a href="/class-ma/" style="color:var(--accent)">office-to-home approval rates</a> by borough.</p></div>
 <div class="apc"><div class="eyebrow">Agents and investors</div><p class="small muted" style="margin:8px 0 0">Context for valuations and listings: what’s planned within walking distance, how the area compares with London, and how much price headroom is left.</p></div>
 </div>
 </div></section>
@@ -970,6 +981,225 @@ def classma_page(cm):
 
 # ---------------------------------------------------------------- write everything
 
+# ---------------------------------------------------------------- product and audience pages
+
+WALKTHROUGH = ("mailto:hello@terrayne.co?subject=Terrayne%20walkthrough&amp;body=Hi%2C%20I%27d%20like%20a%2015-minute%20walkthrough%20of%20Terrayne."
+               "%20Our%20firm%3A%20")
+SAMPLE_REPORT = "/report.html?pc=CR0%201LF&amp;r=800&amp;sample=1"
+
+
+def steps_html(items):
+    return '<div class="stp">' + "".join(f'<div class="apc"><em>{i:02d}</em><b>{e(t)}</b><p>{d}</p></div>' for i, (t, d) in enumerate(items, 1)) + "</div>"
+
+
+def ticks(items):
+    return '<ul class="tk">' + "".join(f"<li>{x}</li>" for x in items) + "</ul>"
+
+
+def big_rows(feed, n=3):
+    rows = [r for r in feed.get("rows", []) if (r.get("homes") or 0) >= 10 or (r.get("commercial_m2") or 0) >= 1000 or r.get("kind") == "ma"]
+    rows.sort(key=lambda r: r.get("valid", ""), reverse=True)
+    return rows[:n]
+
+
+def developers_page(pub, cm, feed):
+    L = cm.get("london") or {}
+    rate = f"{round(L['approval_rate'] * 100)}%" if L.get("approval_rate") is not None else "—"
+    bs = sorted([b for b in cm.get("boroughs", []) if b.get("decided_24m", 0) >= 5 and b.get("approval_rate") is not None],
+                key=lambda b: -b.get("filed_12m", 0))[:6]
+    brow = "".join(f'<tr><td><b>{e(b["borough"])}</b></td><td class="n" data-l="Filed (12m)">{nf(b["filed_12m"])}</td><td class="n" data-l="Homes proposed">{nf(b["homes_12m"])}</td>'
+                   f'<td class="n" data-l="Approved">{round(b["approval_rate"] * 100)}%</td><td class="n" data-l="Median decision">{nf(b["median_days"])} days</td></tr>' for b in bs)
+    qs = [("Where does the data come from?",
+           "Planning applications from the GLA Planning London Datahub, which every London council feeds; station use from TfL and the Office of Rail and Road; population "
+           "from the ONS; and sale prices from HM Land Registry. Every scheme comes with its council reference, so you can check the official record. "
+           "<a href=\"/methodology.html#sources\">Full sources and licences</a>."),
+          ("How up to date is it?",
+           "Planning data is collected and processed every Monday by 7am UK time. On Team, same-day alerts check for new filings and decisions near your saved places "
+           "every afternoon from Tuesday to Friday."),
+          ("Can the whole team use it?",
+           "Team (£99 a month) covers up to 5 people, each with their own login, sharing one watchlist and one set of saved places. Briefs, reports and PDFs can be shared "
+           "within your firm. For larger teams, or to get Terrayne’s data into your own systems, email hello@terrayne.co."),
+          ("Does it show who the applicant is?",
+           "No. The GLA removes personal information, including applicant and agent names, from the Datahub. Each scheme links to a search for the council’s record, "
+           "where the applicant and documents are published."),
+          ("Is this planning or investment advice?",
+           "No. Terrayne shows what has been filed, decided and measured, from official sources, so your own research and advice are faster. It doesn’t replace "
+           "professional judgement or local authority searches.")]
+    feat = big_rows(feed)
+    body = f"""<section class="ap-h"><div class="wrap">
+<div class="crumb"><a href="/">Terrayne</a> › For developers and planning consultants</div>
+<div class="eyebrow">For developers and planning consultants</div>
+<h1>The planning picture around every London site.</h1>
+<p class="ap-lead">Find the areas that are moving, see everything planned and decided around a site, know how each borough treats office-to-home conversions, and hear the same day when something big lands near the sites you’re watching. All from official data, with council references for every scheme.</p>
+<div class="ap-cta"><a class="btn" href="{WALKTHROUGH}" data-ev="demo_click" data-evd="developers">Book a 15-minute walkthrough</a><a class="btn ghost" href="/account.html?signup">Start free</a></div>
+<div class="kn k4" style="margin-top:30px"><div class="apc"><b>{nf(L.get('filed_12m'))}</b><span>office-to-home (Class MA) applications in London in 12 months</span></div><div class="apc"><b>{rate}</b><span>of decided Class MA applications approved</span></div><div class="apc"><b>{nf(L.get('median_days'))} days</b><span>median Class MA decision time</span></div><div class="apc"><b>{nf(L.get('homes_12m'))}</b><span>homes proposed through Class MA in 12 months</span></div></div>
+</div></section>
+
+<section class="ap-s"><div class="wrap">
+<div class="eyebrow">How firms use it</div><h2>From shortlist to site, in four steps.</h2>
+{steps_html([("Find", 'The <a href="/london/">Momentum Index</a> and its heat map show where planning, transport and population are all moving, across every part of London.'),
+             ("Check", 'The postcode check and <a href="/postcode-report/">Postcode Report</a> list every significant scheme within a 5, 10 or 20-minute walk of a site, with status and council reference.'),
+             ("Judge the odds", 'The <a href="/class-ma/">Class MA tracker</a> shows how often each borough approves office-to-home conversions, and how long it takes against the 56-day limit.'),
+             ("Watch", 'Save your sites and patches. The <a href="/monday-brief/">Monday Brief</a> covers them every week, and Team gets an email the same day a big scheme nearby is filed, approved or refused.')])}
+</div></section>
+
+<section class="ap-s"><div class="wrap apg">
+<div class="apc"><div class="eyebrow">Office-to-home approval odds</div><h3 style="margin:8px 0 4px">The busiest boroughs for Class MA</h3>
+<p class="small muted" style="margin:0 0 10px">Applications in the last 12 months; approval rate and median decision time over 24 months.</p>
+<div class="apw"><table class="ap-t stack"><thead><tr><th>Borough</th><th class="n">Filed</th><th class="n">Homes</th><th class="n">Approved</th><th class="n">Median</th></tr></thead><tbody>{brow}</tbody></table></div>
+<p class="small muted" style="margin:12px 0 0"><a href="/class-ma/" style="color:var(--accent)">Every borough in the Class MA tracker →</a></p></div>
+<div class="apc"><div class="eyebrow">Filed recently</div><h3 style="margin:8px 0 4px">The kind of scheme Terrayne flags</h3>{feed_list(feat)}
+<p class="small muted" style="margin:10px 0 0"><a href="/planning.html" style="color:var(--accent)">The full planning signal feed →</a></p></div>
+</div></section>
+
+<section class="ap-s"><div class="wrap apg dpg">
+<div class="apc ix-plans" style="display:block"><div class="eyebrow">Team · £99 a month</div><h2 style="margin:6px 0 10px">Built for a small firm working on sites together.</h2>
+{ticks(["Up to 5 people, each with their own login", "A shared watchlist and unlimited saved places", "Same-day email alerts when a big scheme near a saved place is filed, approved or refused",
+        "The Monday Brief for every neighbourhood you follow, by email, PDF or Slack", "Unlimited postcode checks and Postcode Reports, with custom catchment sizes",
+        "Reports and investment-committee memos with your firm’s name and logo", "Every tracked neighbourhood, with history and 12-month trends"])}
+<div class="ap-cta"><a class="btn" href="/account.html?signup&amp;plan=enterprise">Start with Team</a><a class="btn ghost" href="/#pricing">Compare plans</a></div></div>
+<div class="apc"><div class="eyebrow">Founding partners</div><h2 style="margin:6px 0 10px">Help shape what we build.</h2>
+<p class="muted" style="margin:0 0 12px">We’re working closely with a small number of London developers and planning consultancies as founding partners: a guided setup, a direct line to us, and a say in what we build next.</p>
+<p class="muted" style="margin:0">Ask us too about teams of more than 5, and access to Terrayne’s data for your own systems.</p>
+<div class="ap-cta"><a class="btn" href="{WALKTHROUGH}" data-ev="demo_click" data-evd="developers-fp">Book a 15-minute walkthrough</a></div></div>
+</div></section>
+
+<section class="ap-s"><div class="wrap">{brief_box("", "See a real Monday Brief first.", "Pick a neighbourhood you work in and we’ll email you this week’s brief. No account or card needed.")}</div></section>
+
+<section class="ap-s"><div class="wrap">
+<h2>Questions from firms</h2>{faq_html(qs)}
+<p class="small muted" style="margin-top:26px">Sources: GLA Planning London Datahub, TfL, Office of Rail and Road, ONS and HM Land Registry. Contains public sector information licensed under the Open Government Licence v3.0 (<a href="/methodology.html#sources" style="color:inherit;text-decoration:underline">full data credits</a>). Statuses can change, so check the council record by reference.</p>
+</div></section>"""
+    return page("For developers and planning consultants: London planning intelligence | Terrayne",
+                "Find London areas that are moving, see everything planned and decided around a site, Class MA approval odds by borough, and same-day alerts near your sites.",
+                "/developers/", body, faq_ld(qs))
+
+
+def brief_page(pub, feed):
+    top = sorted(pub["areas"], key=lambda a: -a["s"])
+    keys = pub.get("keys", [])
+    rows = feed.get("rows", [])
+    def close(a):
+        return [r for r in rows if r.get("lat") and km(a["lat"], a["lon"], r["lat"], r["lon"]) <= 2.5]
+    lead = max(top, key=lambda a: (len(close(a)), a["s"])) if top else None
+    near = sorted(close(lead), key=lambda r: r.get("valid", ""), reverse=True)[:2] if lead else []
+    big = [r for r in big_rows(feed, 6) if r not in near][:3]
+    sample = ""
+    if lead:
+        up = [SIG_NAME[s] for s, t in zip(keys, lead.get("tr") or []) if t == "u" and s in SIG_NAME]
+        c = lead.get("c") or 0
+        move = f"{'up' if c > 0 else 'down'} {_ptsw(c)}" if c else "unchanged"
+        def item(r):
+            scale = " · ".join(x for x in [f"{nf(r['homes'])} homes" if (r.get("homes") or 0) > 0 else "", f"{nf(r['commercial_m2'])} m² commercial" if (r.get("commercial_m2") or 0) >= 200 else ""] if x)
+            return (f'<li><b>{e(tidy(r["site"]))}</b>: {e(scale)} · {e(KIND_NAME.get(r.get("kind"), "Major scheme"))} · {e(r["status"])}<br><span>{e(r.get("why") or "")}</span><br>'
+                    f'<a href="{ref_link(r["ref"], r["borough"])}" target="_blank" rel="noopener">{e(r["borough"])} ref {e(r["ref"])} →</a></li>')
+        sample = f"""<div class="mail"><div class="mh"><span>briefings@terrayne.co</span><span>Mon 7am</span></div>
+<p class="me">Monday Brief · sample issue</p><h3>Good morning.</h3>
+<p class="hl2">{e(lead['f'])} is at {lead['s']}/100 on the Momentum Index, {move} this month. Below: what’s new nearby, and the biggest new schemes across London.</p>
+<div class="mc"><span class="ma">{e(lead['n'])}</span><h4>{e(lead['f'])}: {lead['s']}/100, {move} over 30 days</h4>
+<p>Momentum Index <b>{lead['s']}/100</b>. {('Rising over 12 months: ' + e(', '.join(up)) + '.') if up else ''}</p>
+<p><b>Decided this week</b></p><p class="dim">Approvals and refusals of significant schemes nearby appear here, in green and red, each with its council reference.</p>
+<p><b>New significant filings</b></p><ul>{''.join(item(r) for r in near) or '<li>No new significant filings nearby.</li>'}</ul></div>
+<p class="mt">Biggest new schemes in London</p><div class="mc"><ul>{''.join(item(r) for r in big)}</ul></div>
+<p class="foot">Built from real filings in the GLA Planning London Datahub. Your brief covers the neighbourhoods on your watchlist and the places you save.</p></div>"""
+    qs = [("When does it arrive?", "Every Monday by 7am UK time. When you first subscribe and pick your neighbourhoods, we email you that week’s brief straight away, so you don’t wait until Monday."),
+          ("Which areas does it cover?", "The neighbourhoods on your watchlist (up to 10 on Pro), new filings near the places you save, and the biggest new schemes across London. On Team the watchlist and saved places are shared by up to 5 people."),
+          ("What counts as a significant filing?", "New homes, office-to-home (Class MA) conversions, or 200 m² or more of commercial space. Paperwork on old permissions, signs, windows, cladding and similar small applications are left out, so the brief stays short."),
+          ("Can I share it?", "Yes, within your organisation. Every brief downloads as an A4 PDF, and Team can also get it in a Slack channel."),
+          ("Can I stop it?", "Any time: turn it off on your profile page, or cancel your plan in a couple of clicks. You keep every past brief while your plan is active."),
+          ("Can I see one first?", "Yes. Ask for a free sample on this page: pick a neighbourhood and we’ll email you this week’s brief, with no account or card needed.")]
+    body = f"""<section class="ap-h"><div class="wrap">
+<div class="crumb"><a href="/">Terrayne</a> › Monday Brief</div>
+<div class="eyebrow">The Monday Brief</div>
+<h1>What changed in your London, by 7am.</h1>
+<p class="ap-lead">Nobody wants another dashboard to check. Every Monday, Terrayne emails you a short brief on the neighbourhoods and places you follow: what was filed, what was decided, which areas moved, and why each one matters. With a link to the council record for every scheme.</p>
+<div class="ap-cta"><a class="btn" href="/account.html?signup&amp;plan=pro">Get the Monday Brief with Pro</a><a class="btn ghost" href="#sample">Get a free sample</a></div>
+</div></section>
+
+<section class="ap-s" style="padding-top:20px"><div class="wrap apg bpg">
+<div><div class="eyebrow">What’s in it</div><h2>Six parts, in about two minutes.</h2>
+{steps_html([("Your week in one line", "How many schemes were filed and decided across your neighbourhoods, and which one moved most."),
+             ("Score and direction", "Each neighbourhood’s Momentum score, how it moved, and which signals are rising or falling."),
+             ("Decided this week", "Significant schemes nearby that were approved or refused, in green and red."),
+             ("New filings, explained", "Every new scheme for homes, office-to-home or sizeable commercial space, with why it matters and a council link."),
+             ("Near your saved places", "New filings within the walking distance you chose around each site you save."),
+             ("The biggest in London", "The three largest new schemes anywhere in London, so even a quiet week tells you something.")])}
+</div>
+<div><div class="eyebrow">A real sample</div><h2>Built from this week’s filings.</h2>{sample}</div>
+</div></section>
+
+<section class="ap-s"><div class="wrap">
+<div class="apg3">
+<div class="apc"><div class="eyebrow">Download and share</div><p class="small muted" style="margin:8px 0 0">Every brief downloads as a clean A4 PDF with the Terrayne logo, from the email or your account, to forward around your organisation. Every past brief stays in your account.</p></div>
+<div class="apc"><div class="eyebrow">First brief straight away</div><p class="small muted" style="margin:8px 0 0">Subscribe, pick your neighbourhoods, and this week’s brief lands in your inbox within a minute. From then on, every Monday by 7am UK time.</p></div>
+<div class="apc"><div class="eyebrow">Same-day alerts (Team)</div><p class="small muted" style="margin:8px 0 0">Team doesn’t wait for Monday: when a big scheme near a saved place is filed, approved or refused, everyone on the team gets an email that afternoon.</p></div>
+</div>
+</div></section>
+
+<section class="ap-s"><div class="wrap apg">
+<div class="apc"><div class="eyebrow">Pro · £29 a month</div><h3 style="margin:8px 0 8px">For one person</h3>{ticks(["The Monday Brief for up to 10 neighbourhoods", "New filings near 10 saved places", "Every past brief, as PDFs", "All tracked neighbourhoods, unlimited postcode checks and reports"])}
+<div class="ap-cta"><a class="btn" href="/account.html?signup&amp;plan=pro">Get Pro</a></div></div>
+<div class="apc"><div class="eyebrow">Team · £99 a month</div><h3 style="margin:8px 0 8px">For up to 5 people</h3>{ticks(["Everything in Pro, shared across your team", "Unlimited saved places", "Same-day alerts near your saved places", "The brief in Slack, and branded reports"])}
+<div class="ap-cta"><a class="btn ghost" href="/account.html?signup&amp;plan=enterprise">Get Team</a></div></div>
+</div></section>
+
+<section class="ap-s" id="sample"><div class="wrap">{brief_box("", "Get a free sample Monday Brief.", "Pick a neighbourhood and we’ll email you this week’s brief: what was filed, what moved and why it matters. No account or card needed.")}</div></section>
+
+<section class="ap-s"><div class="wrap"><h2>Questions about the brief</h2>{faq_html(qs)}</div></section>"""
+    return page("The Monday Brief: London planning and property changes, every Monday by 7am | Terrayne",
+                "A short email every Monday on the London neighbourhoods and sites you follow: new filings, approvals and refusals, score moves and why each one matters.",
+                "/monday-brief/", body, faq_ld(qs))
+
+
+def report_page(pub, feed):
+    qs = [("What area does it cover?", "The postcode you choose and a walking distance around it: 400 m (about 5 minutes), 800 m (about 10) or 1.6 km (about 20)."),
+          ("How current is it?", "It uses the latest weekly data at the moment you buy it, and shows the date of each source. It’s a snapshot: it doesn’t update afterwards."),
+          ("Is it a substitute for local authority searches or a survey?", "No. It summarises what has been filed and measured around a postcode, from official open data, to help your research. It isn’t a legal search, a survey or advice."),
+          ("How do I pay?", "By card through Stripe, £12 per report, with no subscription. Terrayne never sees your card details."),
+          ("What if something goes wrong?", "If a report fails to load or is wrong because of a fault on our side, email hello@terrayne.co and we’ll fix it or refund you."),
+          ("I need lots of reports.", "Pro (£29 a month) includes unlimited postcode checks and reports. Team adds reports and investment-committee memos with your firm’s name and logo.")]
+    body = f"""<section class="ap-h"><div class="wrap">
+<div class="crumb"><a href="/">Terrayne</a> › Postcode Report</div>
+<div class="eyebrow">The Postcode Report · £12</div>
+<h1>Everything planned around one London postcode.</h1>
+<p class="ap-lead">Every significant planning application within a 5, 10 or 20-minute walk, with its status and council reference. How many homes and new residents that adds up to, how fast the area is changing, how local prices compare with the rest of London, and a short summary of demand and risks. As a PDF, in about a minute.</p>
+<div class="ap-cta"><a class="btn" href="/report.html" data-ev="report_start" data-evd="report-page">Get a report · £12</a><a class="btn ghost" href="{SAMPLE_REPORT}">See a sample report</a></div>
+</div></section>
+
+<section class="ap-s" style="padding-top:20px"><div class="wrap apg rpg">
+<div class="apc"><div class="eyebrow">What’s inside</div>{ticks(["<b>Every significant scheme nearby</b>: new homes, office-to-home conversions and commercial space, each with its status, size and council reference",
+        "<b>What it adds up to</b>: homes proposed and the number of new residents that could mean",
+        "<b>The area’s Momentum score</b>, with all seven signals and whether each is rising or falling",
+        "<b>Price headroom</b>: how local prices compare with the rest of London",
+        "<b>Demand, opportunities and risks</b>, in plain English",
+        "<b>Sources and dates</b> for every figure, and a clean A4 PDF to save"])}</div>
+<div><div class="eyebrow">How it works</div><h2>Three steps, one minute.</h2>
+{steps_html([("Enter a postcode", "Any London postcode, and pick a walking distance: 400 m, 800 m or 1.6 km."),
+             ("See the preview free", "The summary and the three largest schemes nearby, before you pay anything."),
+             ("Unlock for £12", "Pay by card and get the full report straight away: every scheme, the signals, opportunities, risks and the PDF.")])}</div>
+</div></section>
+
+<section class="ap-s"><div class="wrap">
+<h2>Who it’s for</h2>
+<div class="apg3">
+<div class="apc"><div class="eyebrow">Buying or renting</div><p class="small muted" style="margin:8px 0 0">See what’s planned around a home before you commit: new blocks, conversions next door, shops and offices on the way.</p></div>
+<div class="apc"><div class="eyebrow">Agents</div><p class="small muted" style="margin:8px 0 0">Back up a valuation or a listing with what’s planned within walking distance, and how the area compares with London.</p></div>
+<div class="apc"><div class="eyebrow">Developers and investors</div><p class="small muted" style="margin:8px 0 0">A fast first look at a site’s surroundings and pipeline before you spend on a full appraisal. Need several? Pro includes unlimited reports.</p></div>
+</div>
+<div class="ap-cta"><a class="btn" href="/report.html" data-ev="report_start" data-evd="report-page-2">Get a report · £12</a><a class="btn ghost" href="/#check">Try a free postcode check first</a></div>
+</div></section>
+
+<section class="ap-s"><div class="wrap"><h2>Questions about the report</h2>{faq_html(qs)}
+<p class="small muted" style="margin-top:26px">Built from the GLA Planning London Datahub, TfL, Office of Rail and Road, ONS and HM Land Registry data (<a href="/methodology.html#sources" style="color:inherit;text-decoration:underline">full data credits</a>). Scores describe activity, not future prices, and aren’t investment advice.</p>
+</div></section>"""
+    return page("The £12 Postcode Report: everything planned around a London postcode | Terrayne",
+                "Every significant planning application within a 5, 10 or 20-minute walk of any London postcode, with council references, the Momentum score and price headroom. £12, no subscription.",
+                "/postcode-report/", body, faq_ld(qs))
+
+
+KIND_NAME = {"ma": "Office-to-home (Class MA)", "major": "Major scheme", "res": "New homes", "com": "Commercial space"}
+
+
 def write_all():
     pub = json.loads((ROOT / "data" / "momentum.json").read_text())
     cm = json.loads((ROOT / "data" / "classma.json").read_text())
@@ -983,10 +1213,13 @@ def write_all():
         (d / "index.html").write_text(area_page(m, a, ranked.index(m[0]) + 1 if a else None, pub, cm, feed))
     hist = update_history(pub)
     (ROOT / "london" / "index.html").write_text(london_page(pub, hist))
+    for slug, html_ in (("developers", developers_page(pub, cm, feed)), ("monday-brief", brief_page(pub, feed)), ("postcode-report", report_page(pub, feed))):
+        (ROOT / slug).mkdir(exist_ok=True)
+        (ROOT / slug / "index.html").write_text(html_)
     (ROOT / "class-ma").mkdir(exist_ok=True)
     (ROOT / "class-ma" / "index.html").write_text(classma_page(cm))
     lastmod = pub["generated"]
-    urls = ["/", "/class-ma/", "/london/", "/planning.html", "/methodology.html", "/about.html", "/report.html"] + [f"/london/{m[5]}/" for m in AREAS]
+    urls = ["/", "/london/", "/developers/", "/monday-brief/", "/postcode-report/", "/class-ma/", "/planning.html", "/methodology.html", "/about.html", "/report.html"] + [f"/london/{m[5]}/" for m in AREAS]
     (ROOT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
                                       + "".join(f"  <url><loc>{SITE}{u}</loc><lastmod>{lastmod}</lastmod></url>\n" for u in urls) + "</urlset>\n")
     (ROOT / "robots.txt").write_text("User-agent: *\nDisallow: /admin.html\nDisallow: /account.html\nDisallow: /unsubscribe.html\n\n"
