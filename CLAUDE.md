@@ -30,7 +30,7 @@ sync will overwrite your change. If you do edit here, copy `index.html` back to 
 
 ## Growth pages and tracking
 - SEO pages: `scripts/pages.py` builds `london/index.html`, `london/<slug>/index.html` (18 neighbourhoods; full detail only for the public top 10, the rest show planning context and a Pro prompt, so no paid data leaks), `class-ma/index.html`, `sitemap.xml` and `robots.txt` from the public data files. publish.py runs it every Monday; the workflow commits the output. Edit the generator, never the generated HTML. It copies the head/nav styles from methodology.html, so re-run `python3 scripts/pages.py` after changing those.
-- Sample brief: `assets/brief.js` renders any `<div data-brief-signup data-area="...">` box; it posts to the `sample-brief` Edge Function (email + area, no account). Stop-emails page: `unsubscribe.html`. Sign-ups are in Supabase `brief_signups` and on admin.html.
+- Sample brief: `assets/brief.js` renders any `<div data-brief-signup data-area="...">` box; it posts to the `sample-brief` Edge Function (email + area, no account; one sample per email address, ever). Stop-emails page: `unsubscribe.html`. Sign-ups are in Supabase `brief_signups` and on admin.html.
 - Funnel counts: `assets/track.js` (`tyTrack(name, detail)`, plus automatic clicks on signup/plan/report links and any element with `data-ev`). Anonymous rows in Supabase `events`; no cookies, storage or personal data (keep it that way, and keep privacy.html in step). Shown on admin.html via `admin_growth()`. publish.py deletes events older than 2 years. Page views come from Cloudflare Web Analytics.
 - New public pages should load `assets/track.js` (after config.js) and the Cloudflare beacon.
 

@@ -2,7 +2,7 @@
 //   POST { email, area, updates, source, website }  -> stores the sign-up and emails this week's brief for that area
 //   POST { unsubscribe: "<token>" }                  -> stops all emails to that address
 // Anyone can call it, so in the Supabase dashboard turn OFF "Verify JWT" for this function.
-// Spam is limited by the database (2 per email per day, 300 per day in total) and a hidden form field.
+// One sample per email address, ever. Spam is also limited by the database (300 per day in total) and a hidden form field.
 // Self-contained (no shared files), so it can be pasted straight into the Supabase dashboard editor.
 import { createClient } from "npm:@supabase/supabase-js@2.45.4";
 
@@ -63,6 +63,10 @@ Deno.serve(async (req) => {
 
   const { data: prior } = await admin.from("brief_signups").select("id").eq("email", addr).eq("unsubscribed", true).limit(1);
   if (prior?.length) return json({ error: "This address asked us to stop emailing it. Email hello@terrayne.co to start again." }, 400);
+
+  // One sample per email address, ever: the sample shows what Pro is like; Pro sends one for every area each week.
+  const { data: had } = await admin.from("brief_signups").select("id").eq("email", addr).limit(1);
+  if (had?.length) return json({ error: "We’ve already sent a sample brief to this address. Pro sends one for every area on your watchlist, every Monday: terrayne.co/#pricing" }, 409);
 
   const ins = await admin.from("brief_signups").insert({
     email: addr, area, updates: b.updates === true, source: String(b.source ?? "").slice(0, 120),
