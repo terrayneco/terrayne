@@ -36,52 +36,90 @@ def public(data):
     d["tracked"] = len(data["areas"])
     return d
 
+# What counts as a filing worth telling a developer about: new homes, office-to-home (Class MA),
+# or at least 200 m2 of commercial space. Paperwork on old permissions, signs, windows and the like are left out.
+BRIEF_WANT = {"bool": {"should": [{"range": {M.PROP: {"gte": 1}}}, {"range": {M.GAIN: {"gte": 200}}},
+                                  {"term": {"application_type_full.raw": M.CLASS_MA}}, {"match_phrase": {"description": "class ma"}}],
+                       "minimum_should_match": 1}}
+NOISE = re.compile(r"pursuant to|details of condition|discharge|\bs106\b|section 106|section 73|variation of condition|deed of"
+                   r"|certificate of lawful|lawful development|advertisement|illuminated|signage|fascia|shopfront|window"
+                   r"|cladding|external wall|solar panel|\btrees?\b|telecom|street hub|pre-application", re.I)
+BRIEF_SRC = ["lpa_app_no", "lpa_name", "site_name", "street_name", "description", "status", "decision", "valid_date",
+             "application_type_full", "centroid", M.PROP, M.EXIST, M.GAIN, M.LOST]
+
+
+def brief_item(s, since, today):
+    """A filing as a brief line, or None if it isn't worth a developer's attention."""
+    import explore as X
+    u, com = X.units_of(s)
+    ma = bool(X.is_ma(s))
+    v = X.dmy(s.get("valid_date"))
+    if not v or v < since - dt.timedelta(days=1) or v > today + dt.timedelta(days=7):   # bad or far-off dates
+        return None
+    if not (u >= 1 or com >= 200 or ma) or (NOISE.search(s.get("description") or "") and u < 1 and not ma):
+        return None
+    kind = ("Office-to-home (Class MA)" if ma else "Major scheme" if (u >= 10 or com >= 1000)
+            else "New homes" if u > 0 else "Commercial space")
+    return {"ref": s.get("lpa_app_no"), "lpa": s.get("lpa_name"), "site": M.label(s.get("site_name"), s.get("street_name")),
+            "units": max(u, 0), "com": max(com, 0), "status": X.short_status(s) or s.get("status") or "",
+            "valid": s.get("valid_date"), "kind": kind, "desc": M.clip(s.get("description"), 220)}
+
+
+def hits(body):
+    """Run a brief query; if the stricter filter is ever rejected, fall back to the broad one (brief_item still filters)."""
+    try:
+        return M.q(body)["hits"]["hits"]
+    except Exception as e:  # noqa: BLE001
+        print(f"brief query fell back to the broad filter: {type(e).__name__}: {e}")
+        f = [x for x in body["query"]["bool"]["filter"] if x is not BRIEF_WANT]
+        body = {**body, "size": 150, "query": {"bool": {**body["query"]["bool"], "filter": f}}}
+        return M.q(body)["hits"]["hits"]
+
 
 def new_filings(area, since, seen):
     n, full, boro, lat, lon = area
     geo = {"geo_distance": {"distance": f"{M.RADIUS_KM}km", "centroid": {"lat": lat, "lon": lon}}}
     rng = {"range": {"valid_date": {"gte": since.strftime("%d/%m/%Y"), "format": "dd/MM/yyyy"}}}
-    body = {"size": 40, "query": {"bool": {"filter": [rng, geo, M.QUALIFYING], "must_not": [M.terms("status", M.DEAD)]}},
-            "sort": [{M.PROP: {"order": "desc", "missing": "_last"}}],
-            "_source": ["lpa_app_no", "lpa_name", "site_name", "street_name", "description", "status", "valid_date",
-                        "application_type_full", "centroid", M.PROP, M.EXIST]}
-    out = []
-    for h in M.q(body)["hits"]["hits"]:
+    import explore as X
+    body = {"size": 80, "query": {"bool": {"filter": [rng, geo, M.QUALIFYING, BRIEF_WANT],
+                                           "must_not": [M.terms("status", M.DEAD)] + X.NOT_DUP}},
+            "sort": [{M.PROP: {"order": "desc", "missing": "_last"}}], "_source": BRIEF_SRC}
+    out, today = [], dt.date.today()
+    for h in hits(body):
         s = h["_source"]; c = s.get("centroid") or {}
         if s.get("lpa_app_no") in seen or (c and M.nearest(c["lat"], c["lon"]) != n):
             continue
-        rd = (s.get("application_details") or {}).get("residential_details") or {}
-        units = (rd.get("total_no_proposed_residential_units") or 0) - (rd.get("total_no_existing_residential_units") or 0)
-        kind = "Class MA conversion" if "Use Class E) to Dwellinghouses" in (s.get("application_type_full") or "") or re.search(r"class ma", s.get("description") or "", re.I) else (s.get("application_type_full") or "Application")
-        out.append({"ref": s["lpa_app_no"], "lpa": s.get("lpa_name"), "site": M.label(s.get("site_name"), s.get("street_name")),
-                    "units": units, "status": s.get("status") or "", "valid": s.get("valid_date"), "kind": kind,
-                    "desc": M.clip(s.get("description"), 220)})
-    out.sort(key=lambda x: -(x["units"] or 0))
+        it = brief_item(s, since, today)
+        if it:
+            out.append(it)
+    out.sort(key=lambda x: (-(x["units"] or 0), -(x["com"] or 0)))
     return out[:6]
 
 
 def near_filings(lat, lon, radius_m, since, seen):
     geo = {"geo_distance": {"distance": f"{radius_m}m", "centroid": {"lat": lat, "lon": lon}}}
     rng = {"range": {"valid_date": {"gte": since.strftime("%d/%m/%Y"), "format": "dd/MM/yyyy"}}}
-    body = {"size": 30, "query": {"bool": {"filter": [rng, geo, M.QUALIFYING], "must_not": [M.terms("status", M.DEAD)]}},
-            "sort": [{M.PROP: {"order": "desc", "missing": "_last"}}],
-            "_source": ["lpa_app_no", "lpa_name", "site_name", "street_name", "status", "application_type_full", "description", "centroid", M.PROP, M.EXIST]}
-    out = []
+    import explore as X
+    body = {"size": 60, "query": {"bool": {"filter": [rng, geo, M.QUALIFYING, BRIEF_WANT],
+                                           "must_not": [M.terms("status", M.DEAD)] + X.NOT_DUP}},
+            "sort": [{M.PROP: {"order": "desc", "missing": "_last"}}], "_source": BRIEF_SRC}
+    out, today = [], dt.date.today()
     import math
-    for h in M.q(body)["hits"]["hits"]:
+    for h in hits(body):
         s = h["_source"]
         if s.get("lpa_app_no") in seen:
             continue
-        rd = (s.get("application_details") or {}).get("residential_details") or {}
-        u = (rd.get("total_no_proposed_residential_units") or 0) - (rd.get("total_no_existing_residential_units") or 0)
+        it = brief_item(s, since, today)
+        if not it:
+            continue
         c = s.get("centroid") or {}
         try:
             d = int(math.hypot((float(c["lon"]) - lon) * 69.4, (float(c["lat"]) - lat) * 111.2) * 1000)
         except (KeyError, TypeError, ValueError):
             d = 0
-        kind = "Class MA conversion" if "Use Class E) to Dwellinghouses" in (s.get("application_type_full") or "") else (s.get("application_type_full") or "Application")
-        out.append({"ref": s.get("lpa_app_no"), "lpa": s.get("lpa_name"), "site": M.label(s.get("site_name"), s.get("street_name")),
-                    "units": int(u), "kind": kind, "status": s.get("status") or "", "dist": d})
+        out.append({"ref": it["ref"], "lpa": it["lpa"], "site": it["site"], "units": it["units"], "com": it["com"],
+                    "kind": it["kind"], "status": it["status"], "dist": d})
+    out.sort(key=lambda x: (-(x["units"] or 0), -(x["com"] or 0), x["dist"]))
     return out[:8]
 
 
@@ -91,18 +129,22 @@ def brief_for(a, prev, items):
     move = f"up {d} pts" if d > 0 else f"down {-d} pts" if d < 0 else "unchanged"
     title = f"{a['f']}: {a['s']}/100, {move} {when}"
     units = sum(max(0, i["units"] or 0) for i in items)
+    com = sum(max(0, i.get("com") or 0) for i in items)
     p = [f"<p>Momentum Index <b>{a['s']}/100</b> ({move} {when}). {H.escape(a['t'])}</p>"]
     if items:
+        prop = " and ".join(x for x in [f"{units:,} net new home{'s' if units != 1 else ''}" if units else "",
+                                         f"{com:,} m² of commercial space" if com else ""] if x)
         p.append(f"<p><b>{len(items)} new significant filing{'s' if len(items) != 1 else ''}</b>"
-                 + (f" proposing {units:,} net new homes" if units else "") + ":</p><ul>")
+                 + (f" proposing {prop}" if prop else "") + ":</p><ul>")
         for i in items:
-            u = f"{i['units']} homes · " if (i["units"] or 0) > 0 else ""
+            u = (f"{i['units']} home{'s' if i['units'] != 1 else ''} · " if (i["units"] or 0) > 0 else "") + \
+                (f"{i['com']:,} m² commercial · " if (i.get("com") or 0) >= 200 else "")
             p.append(f"<li><b>{H.escape(i['site'])}</b>: {u}{H.escape(i['kind'])} · {H.escape(i['status'])} "
                      f"<span style='color:#8c9ab3'>(ref {H.escape(i['ref'])}, {H.escape(i['lpa'] or '')})</span><br>"
                      f"<span style='color:#8c9ab3'>{H.escape(i['desc'])}</span></li>")
         p.append("</ul>")
     else:
-        p.append("<p>No new significant filings this week.</p>")
+        p.append("<p>No new homes, office-to-home conversions or sizeable commercial schemes were filed nearby this week.</p>")
     return title, "".join(p)
 
 

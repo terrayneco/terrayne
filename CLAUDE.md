@@ -34,6 +34,7 @@ sync will overwrite your change. If you do edit here, copy `index.html` back to 
 - Funnel counts: `assets/track.js` (`tyTrack(name, detail)`, plus automatic clicks on signup/plan/report links and any element with `data-ev`). Anonymous rows in Supabase `events`; no cookies, storage or personal data (keep it that way, and keep privacy.html in step). Shown on admin.html via `admin_growth()`. publish.py deletes events older than 2 years. Page views come from Cloudflare Web Analytics.
 - History: the `snapshots` and `briefs` tables are the long-term data asset; never delete from them. admin.html has "Download full history" (needs `supabase/2026-11-history.sql`) for a monthly backup.
 - Monday brief PDF: `brief.html?week=YYYY-MM-DD[&all=1][&pdf=1]` shows the signed-in Pro/Team user's brief (watchlist areas + saved-place alerts) as an A4 page; "Download PDF" = browser Save as PDF. Linked from the brief email (send-briefs) and account.html → Monday briefs. account.html?next=brief.html… returns there after sign-in (only brief.html is allowed).
+- Monday brief filings (publish.py `brief_item`/`BRIEF_WANT`/`NOISE`): only new homes, Class MA, or 200+ m² commercial; condition paperwork, signs, windows, cladding etc. and impossible dates are dropped; sorted by homes then floorspace. Same rule for saved-place alerts.
 - New public pages should load `assets/track.js` (after config.js) and the Cloudflare beacon.
 
 ## Cities
