@@ -10,6 +10,6 @@ Deno.serve(async (req) => {
   const hook = me.profile.slack_webhook || "";
   if (!/^https:\/\/hooks\.slack\.com\/services\//.test(hook)) return json({ error: "Add a Slack incoming-webhook URL first." }, 400);
   const r = await fetch(hook, { method: "POST", headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ text: "✅ Terrayne is connected. Your Monday brief will arrive here at 7am." }) });
+    body: JSON.stringify({ text: "✅ Terrayne is connected. Your Monday Brief will arrive here at 7am." }) });
   return r.ok ? json({ ok: true }) : json({ error: "Slack rejected the message. Check the webhook URL." }, 400);
 });

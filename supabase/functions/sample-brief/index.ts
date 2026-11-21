@@ -1,4 +1,4 @@
-// Free sample Monday brief for one neighbourhood, by email only (no account needed).
+// Free sample Monday Brief for one neighbourhood, by email only (no account needed).
 //   POST { email, area, updates, source, website }  -> stores the sign-up and emails this week's brief for that area
 //   POST { unsubscribe: "<token>" }                  -> stops all emails to that address
 // Anyone can call it, so in the Supabase dashboard turn OFF "Verify JWT" for this function.

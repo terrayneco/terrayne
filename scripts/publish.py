@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Weekly publish: Momentum Index + Monday briefs.
+"""Weekly publish: Momentum Index + Monday Briefs.
 
   python3 scripts/publish.py [--html PATH] [--send]
 

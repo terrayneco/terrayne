@@ -23,7 +23,7 @@
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
   function mount(el, i) {
     var pre = el.getAttribute("data-area") || "", root = el.getAttribute("data-root") || "";
-    var title = el.getAttribute("data-title") || (pre ? "Get this week’s brief for " + ((AREAS.filter(function (a) { return a[0] === pre; })[0] || [0, pre])[1]) + ", free." : "Get a free sample Monday brief.");
+    var title = el.getAttribute("data-title") || (pre ? "Get this week’s brief for " + ((AREAS.filter(function (a) { return a[0] === pre; })[0] || [0, pre])[1]) + ", free." : "Get a free sample Monday Brief.");
     var sub = el.getAttribute("data-sub") || "Pick a neighbourhood and we’ll email you this week’s brief: what was filed, what moved and why it matters. No account or card needed.";
     var id = "bs" + i;
     el.innerHTML = '<div class="bs"><h3>' + esc(title) + '</h3><p class="bs-sub">' + esc(sub) + '</p>' +

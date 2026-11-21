@@ -109,7 +109,7 @@ svg.spark{display:block}
 <section id="v-auth" class="auth hide">
 <div class="eyebrow">Terrayne account</div>
 <h1 id="a-title">Sign in</h1>
-<p class="sub" id="a-sub">Your watchlist, Monday briefs and subscription in one place.</p>
+<p class="sub" id="a-sub">Your watchlist, Monday Briefs and subscription in one place.</p>
 <div class="card">
 <div class="seg" id="a-seg"><button data-m="in" class="on">Sign in</button><button data-m="up">Create account</button></div>
 <div class="msg" id="a-msg"></div>
@@ -134,7 +134,7 @@ svg.spark{display:block}
 <section id="v-app" class="hide">
 <div class="layout">
 <nav class="side" id="side">
-<a href="#overview">Overview</a><a href="#watchlist">Watchlist</a><a href="#places">Saved places</a><a href="#briefs">Monday briefs</a><a href="#index">Index &amp; history</a><a href="#profile">Profile</a><a href="#billing">Subscription</a><a href="#team" id="nav-team" class="hide">Team</a>
+<a href="#overview">Overview</a><a href="#watchlist">Watchlist</a><a href="#places">Saved places</a><a href="#briefs">Monday Briefs</a><a href="#index">Index &amp; history</a><a href="#profile">Profile</a><a href="#billing">Subscription</a><a href="#team" id="nav-team" class="hide">Team</a>
 </nav>
 <div>
 <div class="msg" id="g-msg"></div>
@@ -147,7 +147,7 @@ svg.spark{display:block}
 </div>
 
 <div id="p-watchlist" class="pane hide">
-<div class="eyebrow">Watchlist</div><h1>Neighbourhoods you follow</h1><p class="sub">Your 7am Monday brief covers these neighbourhoods. <span id="w-limit"></span></p>
+<div class="eyebrow">Watchlist</div><h1>Neighbourhoods you follow</h1><p class="sub">Your 7am Monday Brief covers these neighbourhoods. <span id="w-limit"></span></p>
 <div id="w-body"></div>
 </div>
 
@@ -157,7 +157,7 @@ svg.spark{display:block}
 </div>
 
 <div id="p-briefs" class="pane hide">
-<div class="eyebrow">Monday briefs</div><h1>Every brief so far</h1><p class="sub">Each Monday’s brief, built from new planning filings and the latest Momentum Index.</p>
+<div class="eyebrow">Monday Briefs</div><h1>Every brief so far</h1><p class="sub">Each Monday’s brief, built from new planning filings and the latest Momentum Index.</p>
 <div id="b-body"></div>
 </div>
 
@@ -173,7 +173,7 @@ svg.spark{display:block}
 <div class="field"><label for="pf-name">Full name</label><input id="pf-name" autocomplete="name"></div>
 <div class="field"><label for="pf-company">Company</label><input id="pf-company" autocomplete="organization"></div>
 <div class="field"><label for="pf-title">Job title</label><input id="pf-title" autocomplete="organization-title"></div>
-<label class="toggle" style="margin:6px 0 16px"><input type="checkbox" id="pf-brief"> Email me the Monday brief</label>
+<label class="toggle" style="margin:6px 0 16px"><input type="checkbox" id="pf-brief"> Email me the Monday Brief</label>
 <button class="btn">Save</button></form>
 <div class="grid" style="align-content:start">
 <form class="card" id="em-form"><h3>Email address</h3><div class="msg" id="em-msg"></div><div class="field"><label for="em-email">Email</label><input id="em-email" type="email" required></div><button class="btn ghost">Change email</button><p class="note" style="margin:10px 0 0">We’ll send a confirmation link to the new address.</p></form>
@@ -183,7 +183,7 @@ svg.spark{display:block}
 <div class="field"><label for="ent-logo">Logo URL (https, PNG or SVG)</label><input id="ent-logo" type="url" maxlength="300" placeholder="https://…"></div>
 <div class="field"><label for="ent-slack">Slack incoming-webhook URL</label><input id="ent-slack" type="url" maxlength="300" placeholder="https://hooks.slack.com/services/…"></div>
 <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn">Save</button><button class="btn ghost" type="button" id="ent-test">Send Slack test</button></div>
-<p class="note" style="margin:10px 0 0">In Slack: Apps → Incoming Webhooks → Add to a channel, then paste the URL here. The Monday brief and alerts are posted there at 7am.</p></form>
+<p class="note" style="margin:10px 0 0">In Slack: Apps → Incoming Webhooks → Add to a channel, then paste the URL here. The Monday Brief and alerts are posted there at 7am.</p></form>
 <div class="card"><h3>Account</h3><p class="note" style="margin:0 0 14px">Deleting your account cancels any subscription immediately and removes your watchlist and profile. This can’t be undone.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn ghost" id="signout2">Sign out</button><button class="btn danger" id="del">Delete account</button></div></div>
 </div></div>
 </div>
@@ -287,7 +287,7 @@ function briefHeadline(B){var ds=B.map(function(b){return b.data}).filter(functi
 async function loadBriefs(){if(!briefsOK()||S.briefs)return;var r=await sb.from("briefs").select("week,area,title,body,data").order("week",{ascending:false}).limit(1000);S.briefs=r.data||[]}
 function paid(){return S.plan!=="free"}
 function briefsOK(){return S.plan==="pro"||S.plan==="enterprise"}
-function lock(what){return '<div class="card lock"><span class="pill">Pro</span><h2 style="margin-top:12px">'+what+'</h2><p>Pro (£29 a month) unlocks all tracked neighbourhoods with history and trends, unlimited postcode checks, comparisons, the Monday brief and every past brief, and 10 saved places with alerts.</p><a class="btn" href="#billing">See plans</a></div>'}
+function lock(what){return '<div class="card lock"><span class="pill">Pro</span><h2 style="margin-top:12px">'+what+'</h2><p>Pro (£29 a month) unlocks all tracked neighbourhoods with history and trends, unlimited postcode checks, comparisons, the Monday Brief and every past brief, and 10 saved places with alerts.</p><a class="btn" href="#billing">See plans</a></div>'}
 
 /* ---------- panes ---------- */
 function P_places(){P.places()}
@@ -339,7 +339,7 @@ watchlist:function(){
   if(r.error)msg("g-msg",r.error.message);else{msg("g-msg");S.watch=on?S.watch.filter(function(x){return x!==n}):S.watch.concat(n)}P.watchlist()}});
 },
 briefs:function(){
- if(!briefsOK()){$("b-body").innerHTML=lock("The Monday brief is part of Pro");return}
+ if(!briefsOK()){$("b-body").innerHTML=lock("The Monday Brief is part of Pro");return}
  if(!S.briefs.length){$("b-body").innerHTML='<div class="card"><p class="note" style="margin:0">Your first brief arrives on Monday at 7am. Past briefs will appear here.</p></div>';return}
  var only=S.briefsMine!==false&&S.watch.length>0;
  var list=S.briefs.filter(function(b){return !only||S.watch.indexOf(b.area)>=0});
@@ -398,7 +398,7 @@ billing:function(){
  var line=team?"Your Team access is provided by your team owner.":!live?"You’re on the free plan.":p.cancel_at_period_end?"Cancels on "+fmtDate(p.current_period_end)+". You keep access until then.":"Renews on "+fmtDate(p.current_period_end)+" ("+(p.billing_interval==="year"?"yearly":"monthly")+").";
  $("bl-sub").textContent=live||team?"":"Monthly or yearly, cancel any time. Prices in GBP; no VAT is added.";
  $("bl-cur").innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap"><div><div class="note">Current plan</div><div class="score">'+cur+' '+(st==="past_due"?'<span class="pill warn">Payment due</span>':p.cancel_at_period_end?'<span class="pill warn">Cancelling</span>':'')+'</div><div class="note">'+esc(line)+'</div></div>'+(live&&!team?'<button class="btn ghost" id="portal">Manage subscription</button>':'')+'</div>';
- var I=S.interval,plans=[["free","Free","£0",["3 postcode checks a month","Top 10 neighbourhoods, and compare them","Preview of the signal feed and Class MA tracker","Sample Monday brief"]],
+ var I=S.interval,plans=[["free","Free","£0",["3 postcode checks a month","Top 10 neighbourhoods, and compare them","Preview of the signal feed and Class MA tracker","Sample Monday Brief"]],
   ["pro","Pro","£"+pr.pro[I].toLocaleString()+"<small> / "+I+"</small>",["All tracked neighbourhoods, with history and 12-month trends","Unlimited postcode checks and comparisons","Monday 7am brief and full signal feed","Live Class MA leads","10 saved places with alerts","PDF reports and CSV export"]],
   ["enterprise","Team","£"+pr.enterprise[I].toLocaleString()+"<small> / "+I+"</small>",["Everything in Pro, for up to 5 people","Shared team watchlist and alerts","Unlimited saved places","Custom catchments, branded reports, Slack brief"]]];
  if(S.plan==="investor")plans.splice(1,0,["investor","Investor","Your current plan",["You’re on an older plan, which keeps working.","Switch to Pro any time for the full product."]]);

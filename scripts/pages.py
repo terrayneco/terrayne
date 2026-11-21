@@ -417,7 +417,7 @@ def classma_page(cm):
         for r in cm.get("latest", [])[:8])
     uses = [("Advise on the odds", "Approval rates for office-to-home conversions in every London borough, so you can tell a client how a council has treated similar applications before you take the job on."),
             ("Set expectations on timing", "Median decision times against the 56-day limit, borough by borough, so your programme and your client’s finance line up with reality."),
-            ("Hear about new filings first", "Save the sites and patches you work on. Every new Class MA application within a 5, 10 or 20-minute walk lands in your Monday brief by 7am."),
+            ("Hear about new filings first", "Save the sites and patches you work on. Every new Class MA application within a 5, 10 or 20-minute walk lands in your Monday Brief by 7am."),
             ("Find the council record fast", "Every filing comes with its council reference and a direct search link, so you can pull up comparable decisions in seconds.")]
     qs = [("What is Class MA?",
            "Class MA is a permitted development right in England that lets buildings in commercial, business and service use (Class E), such as offices and shops, become homes "
@@ -431,7 +431,7 @@ def classma_page(cm):
           ("How up to date is it?",
            "Councils add applications to the GLA’s Planning London Datahub every day. Terrayne collects and processes them early every Monday, and everything is updated by 7am UK time."),
           ("What do I get free, and what’s in Pro?",
-           "The borough table and the latest filings are free, with no account. Pro (£29 a month) adds alerts for new filings near the sites you save, the Monday brief, the full "
+           "The borough table and the latest filings are free, with no account. Pro (£29 a month) adds alerts for new filings near the sites you save, the Monday Brief, the full "
            "planning signal feed with “why it matters”, unlimited postcode checks and PDF reports. Team (£99 a month) covers up to 5 people.")]
     body = f"""<section class="ap-h"><div class="wrap">
 <div class="crumb"><a href="/">Terrayne</a> › Class MA tracker</div>
@@ -458,7 +458,7 @@ def classma_page(cm):
 <section class="ap-s"><div class="wrap">
 <div class="apc" style="margin-bottom:18px"><div class="eyebrow" style="margin-bottom:4px">Latest Class MA filings</div><ul class="lst">{latest}</ul>
 <p class="small muted" style="margin:12px 0 0"><a href="/planning.html" style="color:var(--accent)">See the full planning tracker →</a></p></div>
-{brief_box(title="See a real Monday brief first.", sub="Pick a neighbourhood and we’ll email you this week’s brief, including new office-to-home filings nearby. No account or card needed.")}
+{brief_box(title="See a real Monday Brief first.", sub="Pick a neighbourhood and we’ll email you this week’s brief, including new office-to-home filings nearby. No account or card needed.")}
 </div></section>
 <section class="ap-s"><div class="wrap">
 <div class="apc" style="text-align:center;padding:clamp(26px,4vw,44px)">

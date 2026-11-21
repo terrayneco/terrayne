@@ -38,7 +38,7 @@ BBOX = {"top_left": {"lat": 51.70, "lon": -0.52}, "bottom_right": {"lat": 51.28,
 PLAN_W = {"act": 0.15, "pipe": 0.20, "ma": 0.10, "com": 0.10}
 OFFICIAL_W = {"transport": 0.15, "population": 0.15, "prices": 0.15}
 WEIGHTS = {**PLAN_W, **OFFICIAL_W}
-LABELS = {"act": "Planning Activity", "pipe": "Development Pipeline", "ma": "Class MA (Office-to-Resi)", "com": "Commercial Floorspace",
+LABELS = {"act": "Planning Activity", "pipe": "Development Pipeline", "ma": "Class MA (office-to-home)", "com": "Commercial Floorspace",
           "transport": "Transport Demand", "population": "Population Growth", "prices": "Price Momentum"}
 SOURCES = {"act": "GLA Planning London Datahub", "pipe": "GLA Planning London Datahub", "ma": "GLA Planning London Datahub",
            "com": "GLA Planning London Datahub", "transport": "TfL Annual Station Counts; ORR Estimates of Station Usage; DfT NaPTAN",
@@ -266,7 +266,7 @@ def takeaway(full, sig, parts, schemes, off=None):
     bits = []
     have = {k: v for k, v in parts.items() if v is not None}
     lead = max(have, key=have.get)
-    names = {"act": "planning activity", "pipe": "its housing pipeline", "ma": "office-to-residential (Class MA) conversions",
+    names = {"act": "planning activity", "pipe": "its housing pipeline", "ma": "office-to-home (Class MA) conversions",
              "com": "new commercial floorspace", "transport": "growth in station use", "population": "population growth",
              "prices": "house-price momentum"}
     bits.append(f"{full} scores highest on {names[lead]} (top {max(1, 100 - parts[lead])}% of London).")

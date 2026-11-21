@@ -15,7 +15,7 @@
  "labels": [
   "Planning Activity",
   "Development Pipeline",
-  "Class MA (Office-to-Resi)",
+  "Class MA (office-to-home)",
   "Commercial Floorspace",
   "Transport Demand",
   "Population Growth",
@@ -1303,7 +1303,7 @@
      "sales": 796
     }
    },
-   "t": "Hammersmith & White City scores highest on office-to-residential (Class MA) conversions (top 1% of London). In the last 12 months: 587 significant applications, 985 net new homes proposed, 555 homes via Class MA and 44,174 m² of net commercial floorspace. Official statistics: station use +5.4% (TfL 2023→2025); population +2.2% (2021→2024); median sale price −5.7% on a year earlier, at £654,375. Largest live schemes: Sussex Place (292 homes, application received, ref P/2026/00633/FUL); Griffin House Hammersmith Road (140 homes, approved, ref P/2026/01329/PACU1).",
+   "t": "Hammersmith & White City scores highest on office-to-home (Class MA) conversions (top 1% of London). In the last 12 months: 587 significant applications, 985 net new homes proposed, 555 homes via Class MA and 44,174 m² of net commercial floorspace. Official statistics: station use +5.4% (TfL 2023→2025); population +2.2% (2021→2024); median sale price −5.7% on a year earlier, at £654,375. Largest live schemes: Sussex Place (292 homes, application received, ref P/2026/00633/FUL); Griffin House Hammersmith Road (140 homes, approved, ref P/2026/01329/PACU1).",
    "cf": [
     "H",
     []
@@ -1516,7 +1516,7 @@
      "sales": 556
     }
    },
-   "t": "Croydon town centre scores highest on office-to-residential (Class MA) conversions (top 1% of London). In the last 12 months: 164 significant applications, 1,167 net new homes proposed, 689 homes via Class MA. Official statistics: station use +11.3% (TfL 2023→2025); population +9.4% (2021→2024); median sale price −4.1% on a year earlier, at £322,000. Largest live schemes: Southern House (281 homes, application under consideration, ref 26/02309/GPDO); Addiscombe Road (250 homes, application under consideration, ref 26/01474/GPDO).",
+   "t": "Croydon town centre scores highest on office-to-home (Class MA) conversions (top 1% of London). In the last 12 months: 164 significant applications, 1,167 net new homes proposed, 689 homes via Class MA. Official statistics: station use +11.3% (TfL 2023→2025); population +9.4% (2021→2024); median sale price −4.1% on a year earlier, at £322,000. Largest live schemes: Southern House (281 homes, application under consideration, ref 26/02309/GPDO); Addiscombe Road (250 homes, application under consideration, ref 26/01474/GPDO).",
    "cf": [
     "H",
     []

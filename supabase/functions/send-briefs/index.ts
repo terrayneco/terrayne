@@ -1,4 +1,4 @@
-// Emails this week's Monday brief to every paying user with a watchlist.
+// Emails this week's Monday Brief to every paying user with a watchlist.
 // Called by the weekly GitHub Action: POST with header "x-cron-secret: <CRON_SECRET>", body { week: "YYYY-MM-DD" }.
 // Deploy with --no-verify-jwt (protected by CRON_SECRET instead).
 import { admin, SITE } from "../_shared/common.ts";
@@ -107,7 +107,7 @@ Deno.serve(async (req) => {
     if (plan === "free" || !plan) continue;
     const alerts = await alertsFor(u.id, week);              // Any paid plan: alerts near saved places
     let items: Brief[] = [];
-    if (plan === "pro" || plan === "enterprise") {           // Monday brief is Pro and Team
+    if (plan === "pro" || plan === "enterprise") {           // Monday Brief is Pro and Team
       const { data: wl } = await admin.from("watchlist").select("area").eq("user_id", u.id);
       items = (wl ?? []).map((w) => byArea.get(w.area)).filter(Boolean) as typeof items;
     }

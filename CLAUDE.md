@@ -54,3 +54,4 @@ sync will overwrite your change. If you do edit here, copy `index.html` back to 
 
 ## Style
 Dark navy (#060d1a), large white type, muted grey text, rounded corners. Branding says "property intelligence".
+Wording: "Monday Brief" (capitalised product name), "Postcode Report", "Momentum Index" (the index) / "Momentum score" (an area's number), "office-to-home (Class MA)" (never "office-to-resi"), "saved places" (not saved postcodes/properties), "watchlist", plans Free / Pro £29 / Team £99 / £12 report, "by 7am UK time every Monday".
