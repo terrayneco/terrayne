@@ -169,11 +169,25 @@ EXTRA_CSS = """<style>
 .faq summary::-webkit-details-marker{display:none}.faq summary:after{content:"+";color:var(--mute)}.faq details[open] summary:after{content:"−"}
 .faq details p{color:var(--mute);margin:10px 0 0;line-height:1.65;max-width:760px}
 .lock{border:1px dashed #2f4677;background:rgba(13,24,48,.5)}
-@media(max-width:820px){.apg{grid-template-columns:1fr}.kn,.kn.k4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.apg2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.lb td{vertical-align:middle}.lb .rk{color:var(--mute);width:28px}.lb a.nm b{font-size:15.5px}.lb a.nm:hover b{text-decoration:underline}.lb td span.small{display:block}
+.lb td.up{color:#7ee0b5}.lb td.down{color:#ffb38a}
+.scb{display:flex;align-items:center;gap:10px;min-width:130px}.scb b{font-size:20px;font-variant-numeric:tabular-nums;width:30px}.scb i{flex:1;height:6px;background:#16264a;border-radius:9px;overflow:hidden;min-width:60px}.scb u{display:block;height:100%;border-radius:9px}
+.mvr{display:block;transition:border-color .2s}.mvr:hover{border-color:#3a5a92}.mvr .eyebrow{display:block;font-size:11px;margin-bottom:8px}.kn .mvr b{font-size:clamp(18px,2.2vw,22px)}
+.alist.one{grid-template-columns:1fr}
+.lb .rkm{display:none}
+.sgx{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid rgba(28,43,77,.7)}.sgx:last-of-type{border-bottom:0}.sgx b{display:block;font-size:15px}.sgx span{display:block;color:var(--mute);font-size:13.5px;line-height:1.5;margin-top:3px}.sgx em{font-style:normal;font-weight:700;font-size:18px;color:#9fd0ff;font-variant-numeric:tabular-nums}
+.vlist{list-style:none;padding:0;margin:10px 0 0}.vlist li{display:flex;align-items:center;gap:10px;padding:5px 0;font-size:14px;color:#c8d4e8}.vlist i{width:10px;height:10px;border-radius:50%;flex:none}.vlist b{width:74px;color:#fff;font-variant-numeric:tabular-nums}
+.bth{font-size:clamp(18px,2.2vw,22px);margin:8px 0 6px;line-height:1.3}
+.btb{display:grid;grid-template-columns:110px minmax(0,1fr) 62px;gap:10px;align-items:center;font-size:14px;padding:6px 0}.btb span{color:#c8d4e8}.btb i{height:8px;background:#16264a;border-radius:9px;overflow:hidden}.btb u{display:block;height:100%;background:linear-gradient(90deg,#3c7fd6,#5fd6b8);border-radius:9px}.btb b{text-align:right;font-variant-numeric:tabular-nums}
+.ix-plans{display:flex;justify-content:space-between;align-items:center;gap:22px;flex-wrap:wrap;background:linear-gradient(135deg,rgba(30,64,120,.45),rgba(13,24,48,.8))}
+.ixmap{padding:10px;overflow-x:auto}.ixmap svg{min-width:640px}
+@media(max-width:820px){.apg,.apg2{grid-template-columns:1fr}.kn,.kn.k4{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){.ap-t.stack thead{display:none}.ap-t.stack,.ap-t.stack tbody,.ap-t.stack tr,.ap-t.stack td{display:block;width:100%}
  .ap-t.stack tr{padding:12px 0;border-bottom:1px solid var(--line)}.ap-t.stack td{border:0;padding:2px 0;text-align:left}
  .ap-t.stack td[data-l]{display:inline-block!important;width:auto!important;font-family:inherit;letter-spacing:0;text-transform:none;margin:4px 14px 0 0;font-size:13px}.ap-t.stack td[data-l]:before{content:attr(data-l)": ";color:var(--mute)}
- .sg{grid-template-columns:minmax(0,1fr) 44px 70px;font-size:14px}}
+ .sg{grid-template-columns:minmax(0,1fr) 44px 70px;font-size:14px}
+ .lb td.rk{display:none!important}.lb .rkm{display:inline}.lb td[data-l="Score"]{display:block!important;margin:6px 0 2px!important}.lb td[data-l="Score"]:before{content:none!important}.scb{max-width:260px}}
 </style>"""
 
 DD_JS = """<script>(function(){var dd=document.getElementById("dd");if(!dd)return;var b=dd.querySelector("button");
@@ -182,7 +196,7 @@ document.addEventListener("click",function(){dd.classList.remove("open");b.setAt
 
 
 def footer():
-    links = [("/about.html", "About"), ("/london/", "Neighbourhoods"), ("/class-ma/", "Class MA"), ("/planning.html", "Planning tracker"),
+    links = [("/about.html", "About"), ("/london/", "Momentum Index"), ("/class-ma/", "Class MA"), ("/planning.html", "Planning tracker"),
              ("/methodology.html", "Methodology"), ("/terms.html", "Terms"), ("/privacy.html", "Privacy")]
     return ('<footer><div class="wrap"><span>© 2026 Terrayne. Property intelligence.</span><span class="fl">'
             + "".join(f'<a href="{h}">{t}</a>' for h, t in links)
@@ -268,7 +282,7 @@ def area_page(meta, a, rank, pub, cm, feed):
     upd = day(pub["generated"])
     near = near_rows(feed, lat, lon, names)
     radius = f"{pub.get('radius_km', 1.72):.1f}"
-    crumb = f'<div class="crumb"><a href="/">Terrayne</a> › <a href="/london/">London neighbourhoods</a> › {e(full)}</div>'
+    crumb = f'<div class="crumb"><a href="/">Terrayne</a> › <a href="/london/">Momentum Index</a> › {e(full)}</div>'
     cta = (f'<div class="ap-cta"><a class="btn" href="/?q={e(short.replace("’", "").replace(".", ""))}#check">Check a postcode in {e(full)}</a>'
            f'<a class="btn ghost" href="/#compare">Compare with other areas</a></div>')
     if a:
@@ -375,29 +389,288 @@ def area_page(meta, a, rank, pub, cm, feed):
     return page(title, desc, f"/london/{slug}/", body, faq_ld(qs))
 
 
+VCOL = {"Changing fast": "#4f9be8", "Changing": "#5fd6b8", "Steady": "#9aa3b5", "Quiet": "#8c9ab3"}
+SIGNAL_INFO = {
+    "act": ("Significant planning applications", "How many sizeable applications (new homes, conversions, commercial space) were filed nearby in 12 months."),
+    "pipe": ("Net new homes proposed", "Homes proposed minus homes lost, in applications that are still live."),
+    "ma": ("Office-to-home conversions", "Homes proposed through Class MA prior approvals: offices and shops becoming flats."),
+    "com": ("Net new commercial floorspace", "Square metres of shops, offices and other commercial space gained, minus space lost."),
+    "transport": ("Station use", "Change in entries and exits at nearby stations, from TfL and the Office of Rail and Road."),
+    "population": ("Population growth", "Change in residents across the small census areas (LSOAs) nearby, from the ONS."),
+    "prices": ("Price momentum", "Year-on-year change in resale prices, like-for-like by property type, from HM Land Registry."),
+}
+
+
+def thames():
+    """The river line used on the homepage map, so both maps match."""
+    try:
+        m = re.search(r"var TH=(\[\[.*?\]\]);", (ROOT / "index.html").read_text())
+        return json.loads(m.group(1)) if m else []
+    except (OSError, ValueError):
+        return []
+
+
+# Label positions for the crowded centre of the map (dx, dy, anchor), so names don't overlap.
+NUDGE = {"Elephant": (-14, -10, "end"), "Nine Elms": (-14, 16, "end"), "Old Kent Road": (14, 18, "start"), "Canada Water": (12, -10, "start"),
+         "Whitechapel": (14, -8, "start"), "King’s Cross": (-14, -8, "end"), "Isle of Dogs": (12, 18, "start"), "Greenwich Pen.": (12, -2, "start"),
+         "Woolwich": (12, 14, "start"), "Lewisham": (12, 16, "start")}
+
+
+def london_map(pub):
+    W, H = 1100, 560
+    x0, x1, y0, y1 = -0.34, 0.11, 51.355, 51.60
+    X = lambda lon: 30 + (lon - x0) / (x1 - x0) * (W - 60)
+    Y = lambda lat: 20 + (y1 - lat) / (y1 - y0) * (H - 40)
+    by = {a["n"]: a for a in pub["areas"]}
+    river = thames()
+    out = [f'<svg viewBox="0 0 {W} {H}" role="img" aria-label="Map of the {pub["tracked"]} tracked London neighbourhoods" style="width:100%;height:auto;display:block">',
+           f'<rect x="0" y="0" width="{W}" height="{H}" rx="18" fill="#08142a"/>']
+    if river:
+        out.append('<polyline fill="none" stroke="#1d3f74" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" points="'
+                   + " ".join(f"{X(lo):.1f},{Y(la):.1f}" for lo, la in river) + '"/>')
+    locked = [m for m in AREAS if m[0] not in by]
+    scored = [m for m in AREAS if m[0] in by]
+    for m in locked:
+        out.append(f'<a href="/london/{m[5]}/"><title>{e(m[1])}: score included with Pro</title>'
+                   f'<circle cx="{X(m[4]):.1f}" cy="{Y(m[3]):.1f}" r="6" fill="#0a1426" stroke="#52617f" stroke-width="2" stroke-dasharray="3 2"/>'
+                   f'<text x="{X(m[4]) + NUDGE.get(m[0], (11, 4, "start"))[0]:.1f}" y="{Y(m[3]) + NUDGE.get(m[0], (11, 4, "start"))[1]:.1f}" text-anchor="{NUDGE.get(m[0], (11, 4, "start"))[2]}" font-size="12.5" fill="#6f7f9e">{e(m[0])}</text></a>')
+    for m in scored:
+        a = by[m[0]]
+        c = VCOL[verdict(a["s"])]
+        r = max(7, 8 + (a["s"] - 50) / 12)
+        dx, dy, anc = NUDGE.get(m[0], (r + 6, 5, "start"))
+        out.append(f'<a href="/london/{m[5]}/"><title>{e(m[1])}: {a["s"]}/100</title>'
+                   f'<circle cx="{X(m[4]):.1f}" cy="{Y(m[3]):.1f}" r="{r:.1f}" fill="{c}" fill-opacity=".22" stroke="{c}" stroke-width="2.2"/>'
+                   f'<text x="{X(m[4]) + dx:.1f}" y="{Y(m[3]) + dy:.1f}" text-anchor="{anc}" font-size="14" font-weight="700" fill="#fff">{e(m[0])} <tspan fill="{c}">{a["s"]}</tspan></text></a>')
+    out.append("</svg>")
+    return "".join(out)
+
+
+def monthyear(iso):
+    try:
+        return dt.date.fromisoformat(iso).strftime("%B %Y")
+    except ValueError:
+        return iso
+
+
+def _num(s):
+    try:
+        return int(str(s).replace(",", ""))
+    except ValueError:
+        return 0
+
+
+def _bars(items, key, lab):
+    mx = max([abs(x.get(key) or 0) for x in items] + [0.0001])
+    return "".join(f'<div class="btb"><span>{e(lab(x))}</span><i><u style="width:{max(3, abs(x.get(key) or 0) / mx * 100):.0f}%"></u></i>'
+                   f'<b>{pct(x.get(key))}</b></div>' for x in items)
+
+
+def backtest_html():
+    try:
+        bt = json.loads((ROOT / "data" / "backtest.json").read_text())
+    except (OSError, ValueError):
+        return ""
+    pop = bt.get("population_test") or {}
+    hdt = (bt.get("headroom_tests") or [{}])[0]
+    cards = ""
+    if pop.get("bands"):
+        hi = next((b for b in pop["bands"] if b["band"].startswith("80")), None)
+        lo = next((b for b in pop["bands"] if b["band"].startswith("0")), None)
+        beat = (f'<p class="small muted" style="margin-top:12px">{round(hi["beat_london"] * 100)}% of areas scoring 80+ grew faster than London as a whole '
+                f'({pct(pop.get("london_growth"))}), against {round(lo["beat_london"] * 100)}% of areas scoring under 40.</p>') if hi and lo else ""
+        cards += ('<div class="apc"><div class="eyebrow">Test 1 · Population</div><h3 class="bth">High scores were followed by more residents.</h3>'
+                  f'<p class="small muted">We rebuilt the planning part of the Index as it stood in {e(monthyear(pop.get("start", "")))} for {pop.get("areas")} areas of London, '
+                  f'then measured each area’s population change ({e(pop.get("years", ""))}, ONS). Median growth per area:</p>'
+                  + _bars(pop["bands"], "median_growth", lambda x: "Score " + x["band"].replace("0–39", "under 40")) + beat + "</div>")
+    if hdt.get("thirds"):
+        cards += ('<div class="apc"><div class="eyebrow">Test 2 · Prices</div><h3 class="bth">On its own, momentum didn’t predict prices. Cheaper areas did better.</h3>'
+                  f'<p class="small muted">Resale prices, like-for-like by property type, from the year to {e(monthyear(hdt.get("start", "")))} to the year to {e(monthyear(hdt.get("end", "")))} '
+                  f'(HM Land Registry, {hdt.get("areas")} areas):</p>'
+                  + _bars(hdt["thirds"], "median_growth", lambda x: x["group"].capitalize() + " third")
+                  + '<p class="small muted" style="margin-top:12px">High planning activity was not followed by faster price growth: lots of new homes can hold resale '
+                    'prices back. That’s why every area also shows <b style="color:#fff">price headroom</b>. Use the score to find where demand is growing, and headroom '
+                    'to judge value.</p></div>')
+    if not cards:
+        return ""
+    return ('<section class="ap-s"><div class="wrap"><div class="eyebrow">Does it work?</div><h2>We tested it on the past.</h2>'
+            '<p class="ap-sub">We rebuilt the planning half of the Index as it stood years ago and checked what happened next. Only the planning signals can be '
+            'rebuilt historically, and past patterns don’t guarantee future ones.</p>'
+            f'<div class="apg2">{cards}</div><p class="small muted" style="margin-top:14px"><a href="/methodology.html" style="color:var(--accent)">'
+            'Full back-test results and method</a>.</p></div></section>')
+
+
 def london_page(pub):
     by = {a["n"]: a for a in pub["areas"]}
     top = sorted(pub["areas"], key=lambda a: -a["s"])
-    cards = "".join(f'<a href="/london/{SLUG.get(a["n"], "")}/"><em>{a["s"]}</em><b>{e(a["f"])}</b><span>{e(a["b"])} · {e(verdict(a["s"]))} · {e(pts(a.get("c12")))} in 12 months</span></a>'
-                    for a in top if a["n"] in SLUG)
-    rest = "".join(f'<a href="/london/{m[5]}/"><b>{e(m[1])}</b><span>{e(m[2])} · score in Pro</span></a>' for m in sorted(AREAS, key=lambda m: m[1]) if m[0] not in by)
+    upd = day(pub["generated"])
+    W, keys = pub.get("weights", {}), pub.get("keys", [])
+    B = pub.get("bench") or {}
+    tracked = pub["tracked"]
+    tiles = pub.get("tiles") or 0
+    radius = f"{pub.get('radius_km', 1.72):.1f}"
+    sgn = lambda v: "0" if not v else (f"+{v}" if v > 0 else f"−{abs(v)}")
+    cls = lambda v: "up" if (v or 0) > 0 else "down" if (v or 0) < 0 else ""
+
+    rows = []
+    for i, a in enumerate(top, 1):
+        v = verdict(a["s"])
+        c = VCOL[v]
+        cf = (a.get("cf") or ["M"])[0]
+        rows.append(f'<tr><td class="n rk">{i}</td><td><a class="nm" href="/london/{SLUG.get(a["n"], "")}/"><b><span class="rkm">{i}. </span>{e(a["f"])}</b></a><span class="muted small">{e(a["b"])}</span></td>'
+                    f'<td data-l="Score"><span class="scb"><b>{a["s"]}</b><i><u style="width:{a["s"]}%;background:{c}"></u></i></span></td>'
+                    f'<td data-l="Verdict"><span style="color:{c}">{e(v)}</span></td>'
+                    f'<td class="n {cls(a.get("c"))}" data-l="30 days">{sgn(a.get("c"))}</td><td class="n {cls(a.get("c12"))}" data-l="12 months">{sgn(a.get("c12"))}</td>'
+                    f'<td class="n" data-l="Homes proposed">{e(a.get("u", "—"))}</td><td class="n" data-l="Price headroom">{a.get("hd", "—")}</td>'
+                    f'<td data-l="Confidence">{CONF.get(cf, "Medium")}</td></tr>')
+    board = ('<div class="apw"><table class="ap-t stack lb"><thead><tr><th class="n">#</th><th>Neighbourhood</th><th>Score</th><th>Verdict</th>'
+             '<th class="n">30 days</th><th class="n">12 months</th><th class="n">Homes proposed</th><th class="n">Price headroom</th><th>Confidence</th></tr></thead><tbody>'
+             + "".join(rows) + "</tbody></table></div>")
+
+    up = max(top, key=lambda a: a.get("c") if a.get("c") is not None else -999)
+    dn = min(top, key=lambda a: a.get("c") if a.get("c") is not None else 999)
+    most = max(top, key=lambda a: _num(a.get("u")))
+    head = max(top, key=lambda a: a.get("hd") or 0)
+    ptw = lambda v: f"{sgn(v)} pt" + ("" if abs(v or 0) == 1 else "s")
+    movers = [("Biggest rise this month", up, f"{ptw(up.get('c'))}, now {up['s']}/100"),
+              ("Biggest fall this month", dn, f"{ptw(dn.get('c'))}, now {dn['s']}/100"),
+              ("Most new homes proposed", most, f"{e(most.get('u'))} net new homes in 12 months"),
+              ("Most price headroom", head, "cheaper than almost all of London" if (head.get("hd") or 0) >= 99 else f"cheaper than {head.get('hd')}% of London")]
+    mv = "".join(f'<a class="apc mvr" href="/london/{SLUG.get(a["n"], "")}/"><span class="eyebrow">{e(t)}</span><b>{e(a["f"])}</b><span>{x}</span></a>'
+                 for t, a, x in movers)
+
+    locked = "".join(f'<a href="/london/{m[5]}/"><b>{e(m[1])}</b><span>{e(m[2])} · score, signals and trend in Pro</span></a>'
+                     for m in sorted(AREAS, key=lambda m: m[1]) if m[0] not in by)
+
+    def sig_rows(ks):
+        return "".join(f'<div class="sgx"><div><b>{e(SIGNAL_INFO[k][0])}</b><span>{e(SIGNAL_INFO[k][1])}</span></div><em>{round(W.get(k, 0) * 100)}%</em></div>'
+                       for k in ks if k in SIGNAL_INFO)
+    plan_k = [k for k in keys if k in ("act", "pipe", "ma", "com")]
+    off_k = [k for k in keys if k in ("transport", "population", "prices")]
+    pw = round(sum(W.get(k, 0) for k in plan_k) * 100)
+    ow = round(sum(W.get(k, 0) for k in off_k) * 100)
+
+    bench = []
+    if "act" in B:
+        bench.append((nf(B["act"]), "significant planning applications in 12 months"))
+    if "pipe" in B:
+        bench.append((nf(B["pipe"]), "net new homes proposed"))
+    if "com" in B:
+        bench.append((f"{nf(B['com'])} m²", "net new commercial floorspace proposed"))
+    if "transport" in B:
+        bench.append((pct(B["transport"]), "change in station use"))
+    if "population" in B:
+        bench.append((pct(B["population"]), "population change"))
+    if "price_level" in B:
+        bench.append((f"£{nf(B['price_level'])}", "median sale price" + (f", {pct(B['prices'])} on a year earlier" if "prices" in B else "")))
+    bn = "".join(f'<div class="apc"><b>{v}</b><span>{l}</span></div>' for v, l in bench)
+
+    qs = [("What is the London Momentum Index?",
+           f"A score from 0 to 100 for how fast a London neighbourhood is changing, compared with the rest of London. It combines seven signals from five official sources: "
+           f"planning applications, new homes and commercial space proposed, office-to-home conversions, station use, population and resale prices. Terrayne tracks "
+           f"{tracked} neighbourhoods in detail and scores every part of London on a grid of map squares about 3 km across."),
+          ("How is the score calculated?",
+           f"For each signal, an area is ranked against every same-sized area of London, so a 90 means more activity than about 90% of London. The seven rankings are "
+           f"combined with fixed weights: planning signals {pw}%, official statistics {ow}%. Where a signal has no data, the others are re-weighted, and the data "
+           f"confidence rating says so. The full method is on the <a href=\"/methodology.html\">methodology page</a>."),
+          ("Does a high score mean prices will rise?",
+           "No. The score measures activity, not future prices. Our back-test found high scores were followed by faster population growth, but not by faster price "
+           "growth: cheaper areas did better. Use the score to see where change and demand are building, and price headroom to judge value. It isn’t investment advice."),
+          ("How often is it updated?",
+           "Every Monday by 7am UK time, from new planning filings in the GLA Planning London Datahub. Station use, population and sale prices update when the "
+           "government publishes them, from monthly to yearly."),
+          (f"Why these {tracked} neighbourhoods?",
+           f"They are London’s main regeneration and growth areas, from Stratford and Old Kent Road to Wembley Park and Croydon. Each is measured within about "
+           f"{radius} km of its centre. Any other London postcode can still be checked: the postcode check scores the area it sits in."),
+          ("Can I see the score for my own postcode?",
+           "Yes. The postcode check on the homepage shows the score for the area around any London postcode, with every significant scheme within walking distance. "
+           "It’s free 3 times a month, and unlimited with Pro."),
+          ("What does data confidence mean?",
+           "How complete the evidence behind a score is. An area with no stations has no station-use signal, and one with few sales has thin price data. High means "
+           "no gaps, Medium one or two, Low three or more. It isn’t a forecast."),
+          ("What’s free and what’s in Pro?",
+           f"This week’s top 10 is free, with every neighbourhood page and 3 postcode checks a month. Pro (£29 a month) adds all {tracked} neighbourhoods with history "
+           f"and 12-month trends, unlimited postcode checks and comparisons, a watchlist and the Monday Brief. Team (£99 a month) is for up to 5 people and adds "
+           f"same-day alerts near your saved places.")]
+
     body = f"""<section class="ap-h"><div class="wrap">
-<div class="crumb"><a href="/">Terrayne</a> › London neighbourhoods</div>
-<div class="eyebrow">Updated {e(day(pub['generated']))}</div>
-<h1>London neighbourhoods: where change is coming.</h1>
-<p class="ap-lead">Terrayne tracks {pub['tracked']} of London’s fastest-changing neighbourhoods, scoring each from 0 to 100 on how fast it is changing, from planning filings, station use, population and sale prices. Here are this week’s top 10, free.</p>
-<div class="ap-cta"><a class="btn" href="/#check">Check any London postcode</a><a class="btn ghost" href="/#compare">Compare areas side by side</a></div>
+<div class="crumb"><a href="/">Terrayne</a> › Momentum Index</div>
+<div class="eyebrow">The Development Momentum Index · London · Updated {e(upd)}</div>
+<h1>Where London is changing, scored every week.</h1>
+<p class="ap-lead">The Momentum Index gives London neighbourhoods a score from 0 to 100 for how fast they are changing, from seven signals across five official sources: what’s being planned, and what’s already happening on the ground. Here’s this week’s top 10, free.</p>
+<div class="kn k4"><div class="apc"><b>{tracked}</b><span>regeneration neighbourhoods tracked in detail</span></div><div class="apc"><b>{nf(tiles) if tiles else "All"}</b><span>map squares scored across London</span></div><div class="apc"><b>7</b><span>signals from 5 official sources</span></div><div class="apc"><b>Mon 7am</b><span>new scores every week</span></div></div>
+<div class="ap-cta"><a class="btn" href="/#check">Score any London postcode</a><a class="btn ghost" href="/#index">Open the interactive map</a></div>
 </div></section>
-<section class="ap-s" style="padding-top:20px"><div class="wrap">
-<h2>This week’s top 10</h2><p class="ap-sub">Scores out of 100. A high score means more is changing, not that prices will rise. <a href="/methodology.html" style="color:var(--accent)">How the score works</a>.</p>
-<div class="alist">{cards}</div>
-<h2 style="margin-top:44px">Also tracked</h2><p class="ap-sub">Their scores, signals and trends are included with Pro. Each page shows new planning filings nearby.</p>
-<div class="alist">{rest}</div>
+
+<section class="ap-s" style="padding-top:18px"><div class="wrap">
+<h2>This week’s top 10</h2><p class="ap-sub">Click a neighbourhood for its signals, numbers and largest schemes. Changes are in points. Homes proposed are net, from the last 12 months. Price headroom 80 means cheaper than 80% of London.</p>
+{board}
+<div class="kn k4 mvs" style="margin-top:18px">{mv}</div>
 </div></section>
-<section class="ap-s"><div class="wrap">{brief_box()}</div></section>"""
-    return page("London neighbourhoods: regeneration and planning, area by area | Terrayne",
-                f"Which London neighbourhoods are changing fastest? Terrayne scores {pub['tracked']} areas every week from planning filings, station use, population and sale prices.",
-                "/london/", body)
+
+<section class="ap-s"><div class="wrap">
+<h2>The map</h2><p class="ap-sub">Filled circles are this week’s top 10, sized and coloured by score. Dashed circles are also tracked, with scores in Pro. Tap any neighbourhood for its page, or <a href="/#index" style="color:var(--accent)">open the interactive heat map</a> to see every part of London.</p>
+<div class="apc ixmap">{london_map(pub)}</div>
+<h2 style="margin-top:44px">Also tracked</h2><p class="ap-sub">These neighbourhoods are outside this week’s top 10. Their scores, the signals behind them and their trends are included with Pro, and each page shows new planning filings nearby.</p>
+<div class="alist">{locked}</div>
+<div class="ap-cta"><a class="btn" href="/account.html?signup&amp;plan=pro">See every score with Pro</a></div>
+</div></section>
+
+<section class="ap-s"><div class="wrap">
+<div class="eyebrow">How it works</div><h2>Seven signals. One score.</h2>
+<p class="ap-sub">Each signal ranks an area against every same-sized area of London, so a 90 means more activity than about 90% of the city. Planning filings show what’s coming; official statistics show what’s already changing. <a href="/methodology.html" style="color:var(--accent)">Read the full method</a>.</p>
+<div class="apg2">
+<div class="apc"><div class="sgh">What’s coming <span>planning filings, last 12 months · {pw}% of the score</span></div>{sig_rows(plan_k)}<p class="small muted" style="margin:12px 0 0">Source: GLA Planning London Datahub. Applications aren’t approvals, so the signals count live schemes only.</p></div>
+<div class="apc"><div class="sgh">What’s already changing <span>official statistics · {ow}% of the score</span></div>{sig_rows(off_k)}<p class="small muted" style="margin:12px 0 0">Sources: TfL and the Office of Rail and Road, ONS, HM Land Registry.</p></div>
+</div>
+</div></section>
+
+<section class="ap-s"><div class="wrap">
+<h2>Reading a score</h2><p class="ap-sub">Every area gets a score, a verdict, a direction of travel and a data confidence rating.</p>
+<div class="apg3">
+<div class="apc"><div class="eyebrow">Verdict</div><ul class="vlist"><li><i style="background:#4f9be8"></i><b>80–100</b> Changing fast</li><li><i style="background:#5fd6b8"></i><b>65–79</b> Changing</li><li><i style="background:#9aa3b5"></i><b>50–64</b> Steady</li><li><i style="background:#52617f"></i><b>Under 50</b> Quiet</li></ul></div>
+<div class="apc"><div class="eyebrow">Direction of travel</div><p class="small muted" style="margin:8px 0 0">Each signal is marked <span style="color:#7ee0b5">↑ rising</span>, → stable or <span style="color:#ffb38a">↓ falling</span> over 12 months, and every score shows its change over 30 days and 12 months, so you can tell an area that’s speeding up from one that has peaked.</p></div>
+<div class="apc"><div class="eyebrow">Data confidence</div><p class="small muted" style="margin:8px 0 0">High, Medium or Low, depending on gaps in the evidence: no nearby stations, or too few applications, sales or census areas. A Low score rests on less evidence, so check it more carefully. <a href="/methodology.html#confidence" style="color:var(--accent)">How it’s rated</a>.</p></div>
+<div class="apc"><div class="eyebrow">Price headroom</div><p class="small muted" style="margin:8px 0 0">Not part of the score: how local prices compare with the rest of London. 80 means cheaper than 80% of London. Pair it with momentum to find areas that are changing but where prices are still comparatively low.</p></div>
+</div>
+</div></section>
+
+<section class="ap-s"><div class="wrap">
+<h2>A typical London area, for comparison</h2><p class="ap-sub">The median for every same-sized area of London over the same 12 months. Every neighbourhood page shows its own figures against these.</p>
+<div class="kn">{bn}</div>
+</div></section>
+
+{backtest_html()}
+
+<section class="ap-s"><div class="wrap">
+<h2>Who uses it</h2>
+<div class="apg3">
+<div class="apc"><div class="eyebrow">Developers</div><p class="small muted" style="margin:8px 0 0">Shortlist areas where planning, transport and population are all moving, then check the schemes and decisions behind the score before you spend time on a site.</p></div>
+<div class="apc"><div class="eyebrow">Planning consultants</div><p class="small muted" style="margin:8px 0 0">Evidence for clients on how an area is changing, with council references for every scheme, plus <a href="/class-ma/" style="color:var(--accent)">office-to-home approval rates</a> by borough.</p></div>
+<div class="apc"><div class="eyebrow">Agents and investors</div><p class="small muted" style="margin:8px 0 0">Context for valuations and listings: what’s planned within walking distance, how the area compares with London, and how much price headroom is left.</p></div>
+</div>
+</div></section>
+
+<section class="ap-s"><div class="wrap">
+<div class="apc ix-plans"><div><div class="eyebrow">Follow the Index</div><h2 style="margin:6px 0 8px">Every score, every week, in your inbox.</h2>
+<p class="muted" style="margin:0;max-width:620px">Pro (£29 a month) unlocks all {tracked} neighbourhoods with history and trends, unlimited postcode checks and comparisons, and a watchlist with the Monday Brief: what moved, what was filed and what was decided, by 7am UK time. Team (£99 a month) adds same-day alerts for up to 5 people.</p></div>
+<div class="ap-cta" style="margin-top:0"><a class="btn" href="/account.html?signup&amp;plan=pro">Get Pro</a><a class="btn ghost" href="/#pricing">Compare plans</a></div></div>
+<div style="margin-top:22px">{brief_box("", "See a real Monday Brief first.", "Pick a neighbourhood and we’ll email you this week’s brief. No account or card needed.")}</div>
+</div></section>
+
+<section class="ap-s"><div class="wrap">
+<h2>Questions about the Index</h2>{faq_html(qs)}
+<h2 style="margin-top:44px">Every tracked neighbourhood</h2>
+{other_links("")}
+<p class="small muted" style="margin-top:26px">Sources: GLA Planning London Datahub, TfL, Office of Rail and Road, ONS and HM Land Registry. Contains public sector information licensed under the Open Government Licence v3.0. Powered by TfL Open Data. Contains OS, Royal Mail, National Statistics and HM Land Registry data © copyright and database right 2026 (<a href="/methodology.html#sources" style="color:inherit;text-decoration:underline">full data credits</a>). Scores describe activity, not future prices, and aren’t investment advice.</p>
+</div></section>"""
+    ld = [faq_ld(qs), {"@context": "https://schema.org", "@type": "Dataset", "name": "London Development Momentum Index",
+                       "description": f"Weekly 0–100 scores for how fast London neighbourhoods are changing, from planning filings, station use, population and resale prices. Top {len(top)} published free.",
+                       "url": SITE + "/london/", "creator": {"@type": "Organization", "name": "Terrayne", "url": SITE},
+                       "dateModified": pub["generated"], "spatialCoverage": "Greater London", "isAccessibleForFree": True}]
+    return page("London Momentum Index: which neighbourhoods are changing fastest | Terrayne",
+                f"This week’s London Momentum Index: {tracked} regeneration neighbourhoods scored 0–100 from planning filings, station use, population and sale prices. Top 10 free, updated every Monday.",
+                "/london/", body, ld)
 
 
 # ---------------------------------------------------------------- Class MA landing page

@@ -449,22 +449,36 @@ footer .fl{align-items:center}footer .fl a.tmark{color:#fff}.tmark{display:inlin
 .faq summary::-webkit-details-marker{display:none}.faq summary:after{content:"+";color:var(--mute)}.faq details[open] summary:after{content:"−"}
 .faq details p{color:var(--mute);margin:10px 0 0;line-height:1.65;max-width:760px}
 .lock{border:1px dashed #2f4677;background:rgba(13,24,48,.5)}
-@media(max-width:820px){.apg{grid-template-columns:1fr}.kn,.kn.k4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.apg2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.lb td{vertical-align:middle}.lb .rk{color:var(--mute);width:28px}.lb a.nm b{font-size:15.5px}.lb a.nm:hover b{text-decoration:underline}.lb td span.small{display:block}
+.lb td.up{color:#7ee0b5}.lb td.down{color:#ffb38a}
+.scb{display:flex;align-items:center;gap:10px;min-width:130px}.scb b{font-size:20px;font-variant-numeric:tabular-nums;width:30px}.scb i{flex:1;height:6px;background:#16264a;border-radius:9px;overflow:hidden;min-width:60px}.scb u{display:block;height:100%;border-radius:9px}
+.mvr{display:block;transition:border-color .2s}.mvr:hover{border-color:#3a5a92}.mvr .eyebrow{display:block;font-size:11px;margin-bottom:8px}.kn .mvr b{font-size:clamp(18px,2.2vw,22px)}
+.alist.one{grid-template-columns:1fr}
+.lb .rkm{display:none}
+.sgx{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid rgba(28,43,77,.7)}.sgx:last-of-type{border-bottom:0}.sgx b{display:block;font-size:15px}.sgx span{display:block;color:var(--mute);font-size:13.5px;line-height:1.5;margin-top:3px}.sgx em{font-style:normal;font-weight:700;font-size:18px;color:#9fd0ff;font-variant-numeric:tabular-nums}
+.vlist{list-style:none;padding:0;margin:10px 0 0}.vlist li{display:flex;align-items:center;gap:10px;padding:5px 0;font-size:14px;color:#c8d4e8}.vlist i{width:10px;height:10px;border-radius:50%;flex:none}.vlist b{width:74px;color:#fff;font-variant-numeric:tabular-nums}
+.bth{font-size:clamp(18px,2.2vw,22px);margin:8px 0 6px;line-height:1.3}
+.btb{display:grid;grid-template-columns:110px minmax(0,1fr) 62px;gap:10px;align-items:center;font-size:14px;padding:6px 0}.btb span{color:#c8d4e8}.btb i{height:8px;background:#16264a;border-radius:9px;overflow:hidden}.btb u{display:block;height:100%;background:linear-gradient(90deg,#3c7fd6,#5fd6b8);border-radius:9px}.btb b{text-align:right;font-variant-numeric:tabular-nums}
+.ix-plans{display:flex;justify-content:space-between;align-items:center;gap:22px;flex-wrap:wrap;background:linear-gradient(135deg,rgba(30,64,120,.45),rgba(13,24,48,.8))}
+.ixmap{padding:10px;overflow-x:auto}.ixmap svg{min-width:640px}
+@media(max-width:820px){.apg,.apg2{grid-template-columns:1fr}.kn,.kn.k4{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){.ap-t.stack thead{display:none}.ap-t.stack,.ap-t.stack tbody,.ap-t.stack tr,.ap-t.stack td{display:block;width:100%}
  .ap-t.stack tr{padding:12px 0;border-bottom:1px solid var(--line)}.ap-t.stack td{border:0;padding:2px 0;text-align:left}
  .ap-t.stack td[data-l]{display:inline-block!important;width:auto!important;font-family:inherit;letter-spacing:0;text-transform:none;margin:4px 14px 0 0;font-size:13px}.ap-t.stack td[data-l]:before{content:attr(data-l)": ";color:var(--mute)}
- .sg{grid-template-columns:minmax(0,1fr) 44px 70px;font-size:14px}}
+ .sg{grid-template-columns:minmax(0,1fr) 44px 70px;font-size:14px}
+ .lb td.rk{display:none!important}.lb .rkm{display:inline}.lb td[data-l="Score"]{display:block!important;margin:6px 0 2px!important}.lb td[data-l="Score"]:before{content:none!important}.scb{max-width:260px}}
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is Canary Wharf & Isle of Dogs changing?", "acceptedAnswer": {"@type": "Answer", "text": "Canary Wharf & Isle of Dogs is one of 18 London neighbourhoods Terrayne tracks. This week it’s outside the free top 10; its full score and trend are in Pro. You can check any postcode in the area free, up to 3 times a month."}}, {"@type": "Question", "name": "Where does this data come from?", "acceptedAnswer": {"@type": "Answer", "text": "Planning applications from the GLA Planning London Datahub, station use from TfL and the Office of Rail and Road, population from the ONS and sale prices from HM Land Registry. It’s updated every Monday by 7am UK time."}}]}</script>
 </head>
 <body>
 <nav><div class="wrap">
 <a href="/#top" class="brand"><img class="logo" alt="Terrayne" src="/assets/logo-white.svg"></a>
-<ul id="menu"><li class="dd" id="dd"><button type="button" aria-expanded="false" aria-controls="ddm">Who it’s for</button><ul class="ddm" id="ddm"><li><a href="/#for-developers">Developers &amp; Class MA<small>Where conversions get approved, and how fast</small></a></li><li><a href="/#for-agents">Estate &amp; letting agents<small>Know your patch, win more listings</small></a></li><li><a href="/#for-investors">Buyers &amp; investors<small>Is this street about to change?</small></a></li><li><a href="/#for-retail">Retail, leisure &amp; services<small>Where to open next, from new residents arriving</small></a></li></ul></li><li><a href="/#check">Postcode check</a></li><li><a href="/#index">Index</a></li><li><a href="/#compare">Compare</a></li><li><a href="/planning.html">Planning</a></li><li><a href="/#pricing">Pricing</a></li><li><a href="/about.html">About</a></li><li class="mcta"><a href="/account.html">Sign in</a></li><li class="mcta"><a href="/account.html?signup">Start free</a></li></ul>
+<ul id="menu"><li class="dd" id="dd"><button type="button" aria-expanded="false" aria-controls="ddm">Who it’s for</button><ul class="ddm" id="ddm"><li><a href="/#for-developers">Developers &amp; Class MA<small>Where conversions get approved, and how fast</small></a></li><li><a href="/#for-agents">Estate &amp; letting agents<small>Know your patch, win more listings</small></a></li><li><a href="/#for-investors">Buyers &amp; investors<small>Is this street about to change?</small></a></li><li><a href="/#for-retail">Retail, leisure &amp; services<small>Where to open next, from new residents arriving</small></a></li></ul></li><li><a href="/#check">Postcode check</a></li><li><a href="/london/">Index</a></li><li><a href="/#compare">Compare</a></li><li><a href="/planning.html">Planning</a></li><li><a href="/#pricing">Pricing</a></li><li><a href="/about.html">About</a></li><li class="mcta"><a href="/account.html">Sign in</a></li><li class="mcta"><a href="/account.html?signup">Start free</a></li></ul>
 <div class="nr"><a class="nsign" href="/account.html">Sign in</a><a class="btn ncta" href="/account.html?signup">Start free</a><button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><i></i><i></i><i></i></button></div>
 </div></nav>
 <main>
-<section class="ap-h"><div class="wrap"><div class="crumb"><a href="/">Terrayne</a> › <a href="/london/">London neighbourhoods</a> › Canary Wharf &amp; Isle of Dogs</div>
+<section class="ap-h"><div class="wrap"><div class="crumb"><a href="/">Terrayne</a> › <a href="/london/">Momentum Index</a> › Canary Wharf &amp; Isle of Dogs</div>
 <div class="eyebrow">LB Tower Hamlets · Updated 20 November 2026</div>
 <h1>Canary Wharf &amp; Isle of Dogs: what’s changing</h1>
 <p class="ap-lead">Planning, new homes and property signals for Canary Wharf &amp; Isle of Dogs, in plain English. Built from official data and updated every Monday.</p>
@@ -488,7 +502,7 @@ footer .fl{align-items:center}footer .fl a.tmark{color:#fff}.tmark{display:inlin
 <p class="small muted" style="margin-top:26px">Sources: GLA Planning London Datahub, TfL, Office of Rail and Road, ONS and HM Land Registry. Contains public sector information licensed under the Open Government Licence v3.0. Powered by TfL Open Data. Contains OS, Royal Mail, National Statistics and HM Land Registry data © copyright and database right 2026 (<a href="/methodology.html#sources" style="color:inherit;text-decoration:underline">full data credits</a>). Statuses can change, so check the council record by reference. Scores describe activity, not future prices, and aren’t investment advice.</p>
 </div></section>
 </main>
-<footer><div class="wrap"><span>© 2026 Terrayne. Property intelligence.</span><span class="fl"><a href="/about.html">About</a><a href="/london/">Neighbourhoods</a><a href="/class-ma/">Class MA</a><a href="/planning.html">Planning tracker</a><a href="/methodology.html">Methodology</a><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a><a class="tmark" href="#" aria-label="Back to top"><svg viewBox="0 0 270 143" aria-hidden="true"><path d="M0 40L270 0V46H0Z" fill="currentColor"/><rect x="96" y="45" width="20" height="98" fill="currentColor"/></svg></a></span></div></footer>
+<footer><div class="wrap"><span>© 2026 Terrayne. Property intelligence.</span><span class="fl"><a href="/about.html">About</a><a href="/london/">Momentum Index</a><a href="/class-ma/">Class MA</a><a href="/planning.html">Planning tracker</a><a href="/methodology.html">Methodology</a><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a><a class="tmark" href="#" aria-label="Back to top"><svg viewBox="0 0 270 143" aria-hidden="true"><path d="M0 40L270 0V46H0Z" fill="currentColor"/><rect x="96" y="45" width="20" height="98" fill="currentColor"/></svg></a></span></div></footer>
 <script>
 (function(){var n=document.querySelector("nav"),b=document.getElementById("burger"),L=document.querySelectorAll("#menu a");
 b.onclick=function(){var o=n.classList.toggle("open");b.setAttribute("aria-expanded",o)};
