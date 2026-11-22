@@ -197,11 +197,16 @@ EXTRA_CSS = """<style>
 .ldrs{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}.ldr{display:block;transition:border-color .2s}.ldr:hover{border-color:#3a5a92}
 .ldr .eyebrow{display:block;font-size:11px;margin-bottom:8px}.ldr b{display:block;font-size:18px}.ldr span{display:block;color:#c8d4e8;font-size:14px;margin-top:4px}.ldr em{display:block;font-style:normal;color:var(--mute);font-size:12.5px;margin-top:8px}
 .cite{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}.cite code{display:block;margin-top:10px;font-size:13px;color:#9fd0ff;background:#081227;border:1px solid var(--line);border-radius:10px;padding:9px 12px;white-space:normal}
-.hm .hc{transition:opacity .15s,stroke .15s;stroke:transparent;stroke-width:2}.hm .hcells:hover .hc{opacity:.55}.hm .hcells .hc:hover{opacity:1;stroke:#fff}
-.hm .mk{cursor:pointer}.hm .mk:hover text{text-decoration:underline}
-.htip{position:absolute;pointer-events:none;opacity:0;transition:opacity .12s;background:#0d1830;border:1px solid #2f4677;color:#fff;font-size:12.5px;padding:7px 10px;border-radius:10px;max-width:230px;box-shadow:0 8px 24px rgba(0,0,0,.4)}
-.hsum{margin-top:16px}.hleg{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--mute)}.hleg i{flex:0 1 260px;height:8px;border-radius:9px;background:linear-gradient(90deg,rgb(16,28,56),rgb(30,62,120) 38%,rgb(44,102,186) 58%,rgb(66,150,230) 72%,rgb(95,214,184) 85%,rgb(200,250,232))}
-.hbar{display:flex;height:12px;border-radius:9px;overflow:hidden;margin:14px 0 10px;gap:2px}.hbar i{display:block;height:100%}
+.ixh{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;padding:10px 12px 14px}.ixh small{color:var(--mute);letter-spacing:.14em;text-transform:uppercase;font-size:11px}.ixh h3{margin:4px 0 0;font-size:18px}
+.leg{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:12px;color:var(--mute);align-items:center}.leg i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}
+.lg-grad{display:inline-flex;align-items:center;gap:8px}.lg-grad b{display:inline-block;width:110px;height:8px;border-radius:9px;background:linear-gradient(90deg,rgb(16,28,56),rgb(30,62,120) 38%,rgb(44,102,186) 58%,rgb(66,150,230) 72%,rgb(95,214,184) 85%,rgb(200,250,232))}.lg-grad em{font-style:normal}
+.ixwrap{position:relative;border-radius:14px;overflow:hidden}.maphint{font-size:13px;color:var(--mute);margin:12px 12px 4px}
+.hm rect.ht{cursor:pointer;transition:stroke .15s}.hm rect.ht:hover,.hm rect.ht.on{stroke:#fff;stroke-width:2.5}.hm .mk{cursor:pointer}.hm .mk:hover text{text-decoration:underline}
+#ixtip{position:absolute;z-index:5;min-width:190px;max-width:240px;background:rgba(10,20,38,.97);border:1px solid rgba(159,208,255,.25);border-radius:14px;padding:12px 14px;box-shadow:0 18px 40px -14px rgba(0,0,0,.8);font-size:13px}
+#ixtip .tt-h{font-weight:600;color:#fff;display:flex;align-items:center;gap:8px}#ixtip .tt-h i{width:9px;height:9px;border-radius:50%}
+#ixtip .tt-p{color:var(--mute);margin:3px 0 8px}#ixtip .tt-s{color:#c8d4e8;margin-bottom:10px}#ixtip .tt-s a{color:#9fd0ff;text-decoration:underline}
+#ixtip .tt-b{width:100%;background:#fff;color:#0a1223;border:0;border-radius:99px;padding:8px 10px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer}
+.hsum{margin-top:16px}.hbar{display:flex;height:12px;border-radius:9px;overflow:hidden;margin:0 0 10px;gap:2px}.hbar i{display:block;height:100%}
 .hkeys{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13.5px;color:#c8d4e8}.hkeys u{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
 @media(max-width:820px){.apg,.apg2,.bpg .stp{grid-template-columns:1fr}.kn,.kn.k4{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){.ap-t.stack thead{display:none}.ap-t.stack,.ap-t.stack tbody,.ap-t.stack tr,.ap-t.stack td{display:block;width:100%}
@@ -418,7 +423,7 @@ def area_page(meta, a, rank, pub, cm, feed):
     return page(title, desc, f"/london/{slug}/", body, faq_ld(qs))
 
 
-VCOL = {"Changing fast": "#4f9be8", "Changing": "#5fd6b8", "Steady": "#9aa3b5", "Quiet": "#8c9ab3"}
+VCOL = {"Changing fast": "#4f9be8", "Changing": "#5fd6b8", "Steady": "#9aa3b5", "Quiet": "#6f7f9e"}
 SIGNAL_INFO = {
     "act": ("Significant planning applications", "How many sizeable applications (new homes, conversions, commercial space) were filed nearby in 12 months."),
     "pipe": ("Net new homes proposed", "Homes proposed minus homes lost, in applications that are still live."),
@@ -439,8 +444,9 @@ def thames():
         return []
 
 
-# Spread over 20-85, where London's squares actually sit, so differences show (same blues and teal as the homepage).
 HSTOPS = [(20, (16, 28, 56)), (45, (30, 62, 120)), (58, (44, 102, 186)), (67, (66, 150, 230)), (75, (95, 214, 184)), (85, (200, 250, 232))]
+BANDS = [(80, "Changing fast", "#4f9be8"), (65, "Changing", "#5fd6b8"), (50, "Steady", "#9aa3b5"), (0, "Quiet", "#6f7f9e")]   # same as the homepage band()
+REGIONS = [(-0.33, 51.6, "NORTH WEST"), (0.0, 51.6, "NORTH EAST"), (-0.35, 51.43, "RIVER THAMES"), (0.02, 51.39, "SOUTH EAST")]   # same as the homepage map
 
 
 def hcol(v):
@@ -458,6 +464,10 @@ def hcol(v):
     return "rgb(" + ",".join(str(round(c + (d - c) * t)) for c, d in zip(a[1], b[1])) + ")"
 
 
+def band_of(s):
+    return next(b for b in BANDS if s >= b[0])
+
+
 def _merc(lat, lon, z=13):
     n = 2 ** z
     x = (lon + 180) / 360 * n
@@ -466,9 +476,9 @@ def _merc(lat, lon, z=13):
 
 
 # Label positions for the crowded centre of the map (dx, dy, anchor), so names don't overlap.
-NUDGE = {"Elephant": (0, -15, "middle"), "Hammersmith": (-13, 5, "end"), "Nine Elms": (-14, 18, "end"), "Old Kent Road": (14, 20, "start"), "Canada Water": (12, -12, "start"),
-         "Whitechapel": (14, -10, "start"), "King’s Cross": (-14, -10, "end"), "Isle of Dogs": (12, 20, "start"), "Greenwich Pen.": (12, -4, "start"),
-         "Woolwich": (12, 16, "start"), "Lewisham": (12, 18, "start")}
+NUDGE = {"Elephant": (0, -15, "middle"), "Hammersmith": (-13, 5, "end"), "Nine Elms": (-14, 18, "end"), "Old Kent Road": (14, 20, "start"),
+         "Canada Water": (12, -12, "start"), "Whitechapel": (14, -10, "start"), "King’s Cross": (-14, -10, "end"), "Isle of Dogs": (12, 20, "start"),
+         "Greenwich Pen.": (12, -4, "start"), "Woolwich": (12, 16, "start"), "Lewisham": (12, 18, "start")}
 
 
 def tile_data():
@@ -479,70 +489,94 @@ def tile_data():
 
 
 def london_map(pub):
-    """A heat map of every scored map square in London (the public data/tiles.json the homepage map uses), with the tracked neighbourhoods on top."""
+    """The homepage heat map, drawn large: every scored square in London (public data/tiles.json), the river, region labels and the
+    tracked neighbourhoods. Squares show their band, not their exact score (exact scores are a Pro feature, as on the homepage)."""
     tiles = tile_data()
     by = {a["n"]: a for a in pub["areas"]}
     if not tiles:
         return ""
-    ks = [(int(k.split("/")[1]), int(k.split("/")[2]), v) for k, v in tiles.items()]
+    ks = [(int(k.split("/")[1]), int(k.split("/")[2]), k, v) for k, v in tiles.items()]
     x0, x1 = min(k[0] for k in ks) - 0.6, max(k[0] for k in ks) + 1.6
     y0, y1 = min(k[1] for k in ks) - 0.6, max(k[1] for k in ks) + 1.6
     S = 1100 / (x1 - x0)
     W, H = 1100, (y1 - y0) * S
     P = lambda x, y: ((x - x0) * S, (y - y0) * S)
-    out = [f'<svg class="hm" viewBox="0 0 {W:.0f} {H:.0f}" role="img" aria-label="Heat map of the Momentum Index across London" style="width:100%;height:auto;display:block">',
-           '<defs><filter id="hglow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="22"/></filter>'
-           '</defs>',
-           f'<rect x="0" y="0" width="{W:.0f}" height="{H:.0f}" rx="18" fill="#060f22"/>']
-    glow = []
-    cells = []
-    for x, y, v in ks:
+    out = [f'<svg class="hm" id="ixmapsvg" viewBox="0 0 {W:.0f} {H:.0f}" role="img" aria-label="Heat map of the Momentum Index across London" style="width:100%;height:auto;display:block">',
+           '<defs><pattern id="gr" width="38" height="38" patternUnits="userSpaceOnUse"><path d="M38 0H0V38" fill="none" stroke="#16233f" stroke-width="1"/></pattern>'
+           '<filter id="hglow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="20"/></filter></defs>',
+           f'<rect x="0" y="0" width="{W:.0f}" height="{H:.0f}" fill="#060f22"/><rect x="0" y="0" width="{W:.0f}" height="{H:.0f}" fill="url(#gr)" opacity=".7"/>']
+    glow, cells = [], []
+    for x, y, k, v in ks:
         s = v.get("s", 0)
         px, py = P(x, y)
         glow.append(f'<rect x="{px - S * .15:.1f}" y="{py - S * .15:.1f}" width="{S * 1.3:.1f}" height="{S * 1.3:.1f}" fill="{hcol(s)}"/>')
-        cf = CONF.get((v.get("cf") or ["M"])[0], "Medium")
-        tr = v.get("c12")
-        tip = f"{s}/100 · {verdict(s)}" + (f" · {'+' if tr > 0 else '−' if tr < 0 else '±'}{abs(tr)} pts in 12 months" if tr is not None else "") + f" · {cf} confidence"
-        cells.append(f'<rect class="hc" data-t="{e(tip)}" x="{px + 1.2:.1f}" y="{py + 1.2:.1f}" width="{S - 2.4:.1f}" height="{S - 2.4:.1f}" rx="{S * .12:.1f}" '
-                     f'fill="{hcol(s)}"><title>{e(tip)}</title></rect>')
-    out.append(f'<g filter="url(#hglow)" opacity=".55">{"".join(glow)}</g><g class="hcells" opacity=".92">{"".join(cells)}</g>')
+        b = BANDS.index(band_of(s))
+        cells.append(f'<rect class="ht" data-k="{k}" data-b="{b}" x="{px:.1f}" y="{py:.1f}" width="{S - 2.5:.1f}" height="{S - 2.5:.1f}" rx="5" fill="{hcol(s)}" fill-opacity=".85"/>')
+    out.append(f'<g filter="url(#hglow)" opacity=".5">{"".join(glow)}</g><g class="heat">{"".join(cells)}</g>')
     river = thames()
     if river:
-        pts_ = " ".join("{:.1f},{:.1f}".format(*P(*_merc(la, lo))) for lo, la in river)
-        out.append(f'<polyline fill="none" stroke="#9fd0ff" stroke-opacity=".45" stroke-width="3" stroke-dasharray="1 7" stroke-linecap="round" stroke-linejoin="round" points="{pts_}"/>')
+        out.append('<path d="M' + "L".join("{:.1f} {:.1f}".format(*P(*_merc(la, lo))) for lo, la in river)
+                   + f'" fill="none" stroke="#1d3358" stroke-width="{S * .3:.1f}" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>')
+    out.append('<g fill="#52617f" font-size="14" letter-spacing="4" font-family="ui-monospace,Menlo,monospace" pointer-events="none">'
+               + "".join('<text x="{:.0f}" y="{:.0f}">{}</text>'.format(*P(*_merc(la, lo)), nm) for lo, la, nm in REGIONS) + "</g>")
     for m in AREAS:
         cx, cy = P(*_merc(m[3], m[4]))
         dx, dy, anc = NUDGE.get(m[0], (13, 5, "start"))
         if m[0] in by:
             a = by[m[0]]
-            out.append(f'<a href="/london/{m[5]}/" class="mk"><title>{e(m[1])}: {a["s"]}/100</title><circle cx="{cx:.1f}" cy="{cy:.1f}" r="7" fill="#fff" stroke="#060f22" stroke-width="3"/>'
+            c = band_of(a["s"])[2]
+            out.append(f'<a href="/london/{m[5]}/" class="mk"><title>{e(m[1])}: {a["s"]}/100</title><circle cx="{cx:.1f}" cy="{cy:.1f}" r="9" fill="#0a1426" stroke="{c}" stroke-width="3"/>'
                        f'<text x="{cx + dx:.1f}" y="{cy + dy:.1f}" text-anchor="{anc}" font-size="15" font-weight="700" fill="#fff" paint-order="stroke" stroke="#060f22" stroke-width="4" stroke-linejoin="round">'
-                       f'{e(m[0])} <tspan fill="#9fe8d2">{a["s"]}</tspan></text></a>')
+                       f'{e(m[0])} <tspan fill="{c}">{a["s"]}</tspan></text></a>')
         else:
-            out.append(f'<a href="/london/{m[5]}/" class="mk lk"><title>{e(m[1])}: score included with Pro</title><circle cx="{cx:.1f}" cy="{cy:.1f}" r="5.5" fill="#060f22" stroke="#c8d4e8" stroke-width="2" stroke-dasharray="3 2"/>'
+            out.append(f'<a href="/london/{m[5]}/" class="mk lk"><title>{e(m[1])}: score included with Pro</title><circle cx="{cx:.1f}" cy="{cy:.1f}" r="6.5" fill="#0a1426" stroke="#8c9ab3" stroke-width="2" stroke-dasharray="3 2"/>'
                        f'<text x="{cx + dx:.1f}" y="{cy + dy:.1f}" text-anchor="{anc}" font-size="13" fill="#c8d4e8" paint-order="stroke" stroke="#060f22" stroke-width="4" stroke-linejoin="round">{e(m[0])}</text></a>')
     out.append("</svg>")
     return "".join(out)
+
+
+def map_legend():
+    """The homepage map legend, word for word."""
+    return ('<div class="leg"><span class="lg-grad"><em>Quieter</em><b></b><em>Changing fastest</em></span>'
+            + "".join(f'<span><i style="background:{c}"></i>{r} {n}</span>' for (lo, n, c), r in zip(BANDS, ["80+", "65–79", "50–64", "Under 50"])) + "</div>")
 
 
 def heat_summary():
     tiles = tile_data()
     if not tiles:
         return ""
-    bands = [("Changing fast", 80, 101, hcol(84)), ("Changing", 65, 80, hcol(71)), ("Steady", 50, 65, hcol(58)), ("Quiet", 0, 50, hcol(38))]
     n = len(tiles)
-    counts = [(b, sum(1 for v in tiles.values() if b[1] <= v.get("s", 0) < b[2])) for b in bands]
-    bar = "".join(f'<i style="width:{c / n * 100:.1f}%;background:{b[3]}" title="{e(b[0])}: {c}"></i>' for b, c in counts if c)
-    keys = "".join(f'<span><u style="background:{b[3]}"></u><b>{c}</b> {e(b[0].lower())} ({round(c / n * 100)}%)</span>' for b, c in counts if c)
-    return (f'<div class="hsum"><div class="hleg"><span>Quiet</span><i></i><span>Changing fast</span></div>'
-            f'<div class="hbar">{bar}</div><div class="hkeys">{keys}</div>'
-            f'<p class="small muted" style="margin:10px 0 0">Of the {n} map squares scored across London this week. Each square is about 3 km across and scored on the same seven signals.</p></div>')
+    counts = [(b, sum(1 for v in tiles.values() if band_of(v.get("s", 0)) is b)) for b in BANDS]
+    bar = "".join(f'<i style="width:{c / n * 100:.1f}%;background:{b[2]}" title="{e(b[1])}: {c}"></i>' for b, c in counts if c)
+    keys = "".join(f'<span><u style="background:{b[2]}"></u><b>{c}</b> {e(b[1].lower())} ({round(c / n * 100)}%)</span>' for b, c in counts if c)
+    return (f'<div class="hsum"><div class="hbar">{bar}</div><div class="hkeys">{keys}</div>'
+            f'<p class="small muted" style="margin:10px 0 0">Of the {n} map squares scored across London this week.</p></div>')
 
 
-HEAT_JS = """<script>(function(){var m=document.querySelector(".ixmap");if(!m)return;var tip=document.createElement("div");tip.className="htip";m.appendChild(tip);
-m.addEventListener("mousemove",function(ev){var t=ev.target.closest&&ev.target.closest(".hc");if(!t){tip.style.opacity=0;return}
-var r=m.getBoundingClientRect();tip.textContent=t.getAttribute("data-t");tip.style.left=Math.min(r.width-230,ev.clientX-r.left+14)+"px";tip.style.top=(ev.clientY-r.top+14)+"px";tip.style.opacity=1});
-m.addEventListener("mouseleave",function(){tip.style.opacity=0})})();</script>"""
+def heat_js():
+    near = json.dumps([[m[1], m[3], m[4]] for m in AREAS], ensure_ascii=False)
+    return ("""<script>/* Same popup as the homepage map: band, place, exact score with Pro, and a postcode check */
+(function(){var svg=document.getElementById("ixmapsvg"),tip=document.getElementById("ixtip");if(!svg||!tip)return;
+var A=""" + near + """,B=[["Changing fast","#4f9be8"],["Changing","#5fd6b8"],["Steady","#9aa3b5"],["Quiet","#6f7f9e"]],sel=null,hv=null;
+function near(lat,lon){var b=null,bd=1e9;A.forEach(function(a){var d=Math.hypot((a[1]-lat)*111,(a[2]-lon)*69);if(d<bd){bd=d;b=a}});return b&&bd<3.2?b[0]:null}
+function centre(k){var a=k.split("/"),x=+a[1]+.5,y=+a[2]+.5,n=8192;return{lon:x/n*360-180,lat:Math.atan(Math.sinh(Math.PI*(1-2*y/n)))*180/Math.PI}}
+function pc(c){return fetch("https://api.postcodes.io/postcodes?lon="+c.lon+"&lat="+c.lat+"&radius=2000&limit=1").then(function(x){return x.json()}).then(function(j){return j.result&&j.result[0]})}
+function show(r){var k=r.getAttribute("data-k"),b=B[+r.getAttribute("data-b")]||B[3],c=centre(k),nm=near(c.lat,c.lon);
+ if(sel)sel.classList.remove("on");sel=r;r.classList.add("on");
+ tip.innerHTML='<div class="tt-h"><i style="background:'+b[1]+'"></i>'+b[0]+'</div><div class="tt-p">'+(nm?'Around '+nm:'This area')+'</div><div class="tt-s">Exact score with <a href="/#pricing">Pro</a></div><button type="button" class="tt-b">Check a postcode here →</button>';
+ tip.querySelector(".tt-b").onclick=function(){var bt=this;bt.textContent="Finding a postcode…";pc(c).then(function(q){if(!q){bt.textContent="No postcode found here";return}location.href="/?pc="+encodeURIComponent(q.postcode)+"#check"}).catch(function(){bt.textContent="Couldn’t find a postcode"})};
+ if(!nm)pc(c).then(function(q){if(q&&sel===r){var e=tip.querySelector(".tt-p");if(e)e.textContent="Around "+[q.admin_ward,q.admin_district].filter(Boolean).join(", ")}}).catch(function(){});
+ var w=tip.parentNode.getBoundingClientRect(),rr=r.getBoundingClientRect(),x=rr.left-w.left+rr.width/2,y=rr.top-w.top;tip.hidden=false;
+ var tw=tip.offsetWidth,th=tip.offsetHeight;tip.style.left=Math.max(6,Math.min(w.width-tw-6,x-tw/2))+"px";tip.style.top=(y-th-8<6?rr.bottom-w.top+8:y-th-8)+"px"}
+function hide(){tip.hidden=true;if(sel)sel.classList.remove("on");sel=null}
+function hoverOK(){return matchMedia("(hover:hover)").matches}
+svg.addEventListener("mouseover",function(e){var r=e.target.closest&&e.target.closest("rect.ht");if(!r||!hoverOK()||r===sel)return;clearTimeout(hv);if(tip.hidden){show(r);return}hv=setTimeout(function(){if(!tip.matches(":hover"))show(r)},350)});
+svg.addEventListener("mouseout",function(e){if(e.target.closest&&e.target.closest("rect.ht"))clearTimeout(hv)});
+tip.addEventListener("mouseenter",function(){clearTimeout(hv)});
+svg.addEventListener("click",function(e){var r=e.target.closest&&e.target.closest("rect.ht");if(r){e.stopPropagation();show(r)}else if(!(e.target.closest&&e.target.closest(".mk")))hide()});
+svg.addEventListener("mouseleave",function(e){if(hoverOK()&&!(e.relatedTarget&&tip.contains(e.relatedTarget)))setTimeout(function(){if(!tip.matches(":hover"))hide()},250)});
+document.addEventListener("click",function(e){if(!tip.hidden&&!tip.contains(e.target)&&!svg.contains(e.target))hide()});
+})();</script>""")
 
 
 def monthyear(iso):
@@ -842,11 +876,13 @@ def london_page(pub, hist=None):
 {signal_leaders(pub)}
 
 <section class="ap-s"><div class="wrap">
-<div class="eyebrow">The heat map</div><h2>All of London, square by square.</h2><p class="ap-sub">Every part of London scored on the same seven signals, in squares about 3 km across. Brighter means changing faster. White dots are this week’s top 10; dashed dots are also tracked, with scores in Pro. Hover a square for its score, or tap a neighbourhood for its page.</p>
-<div class="apc ixmap">{london_map(pub)}</div>
+<div class="eyebrow">The heat map</div><h2>All of London, square by square.</h2><p class="ap-sub">The same map as on the homepage, drawn large: every part of London scored on the same seven signals. White-ringed dots are this week’s top 10; dashed dots are also tracked, with scores in Pro. Tap a neighbourhood for its page.</p>
+<div class="apc ixmap"><div class="ixh"><div><small class="mono">Spatial intelligence layer</small><h3>Greater London: tracked neighbourhoods</h3></div>{map_legend()}</div>
+<div class="ixwrap">{london_map(pub)}<div id="ixtip" hidden></div></div>
+<p class="maphint">Every square is about 3 km across, coloured by its Momentum score: brighter means changing faster. Hover or tap one to explore.</p></div>
 {heat_summary()}
-<p class="small muted" style="margin:12px 0 0">Want the score for a specific street? <a href="/#check" style="color:var(--accent)">Check any London postcode</a> for its square’s score and every significant scheme within walking distance.</p>
-{HEAT_JS}
+<p class="small muted" style="margin:12px 0 0">Want the score for a specific street? <a href="/#check" style="color:var(--accent)">Check any London postcode</a> for its square’s score and every significant scheme within walking distance, or <a href="/#index" style="color:var(--accent)">open the interactive map</a> to zoom in.</p>
+{heat_js()}
 <h2 style="margin-top:44px">Also tracked</h2><p class="ap-sub">These neighbourhoods are outside this week’s top 10. Their scores, the signals behind them and their trends are included with Pro, and each page shows new planning filings nearby.</p>
 <div class="alist">{locked}</div>
 <div class="ap-cta"><a class="btn" href="/account.html?signup&amp;plan=pro">See every score with Pro</a></div>
@@ -864,7 +900,7 @@ def london_page(pub, hist=None):
 <section class="ap-s"><div class="wrap">
 <h2>Reading a score</h2><p class="ap-sub">Every area gets a score, a verdict, a direction of travel and a data confidence rating.</p>
 <div class="apg3">
-<div class="apc"><div class="eyebrow">Verdict</div><ul class="vlist"><li><i style="background:#4f9be8"></i><b>80–100</b> Changing fast</li><li><i style="background:#5fd6b8"></i><b>65–79</b> Changing</li><li><i style="background:#9aa3b5"></i><b>50–64</b> Steady</li><li><i style="background:#52617f"></i><b>Under 50</b> Quiet</li></ul></div>
+<div class="apc"><div class="eyebrow">Verdict</div><ul class="vlist"><li><i style="background:#4f9be8"></i><b>80–100</b> Changing fast</li><li><i style="background:#5fd6b8"></i><b>65–79</b> Changing</li><li><i style="background:#9aa3b5"></i><b>50–64</b> Steady</li><li><i style="background:#6f7f9e"></i><b>Under 50</b> Quiet</li></ul></div>
 <div class="apc"><div class="eyebrow">Direction of travel</div><p class="small muted" style="margin:8px 0 0">Each signal is marked <span style="color:#7ee0b5">↑ rising</span>, → stable or <span style="color:#ffb38a">↓ falling</span> over 12 months, and every score shows its change over 30 days and 12 months, so you can tell an area that’s speeding up from one that has peaked.</p></div>
 <div class="apc"><div class="eyebrow">Data confidence</div><p class="small muted" style="margin:8px 0 0">High, Medium or Low, depending on gaps in the evidence: no nearby stations, or too few applications, sales or census areas. A Low score rests on less evidence, so check it more carefully. <a href="/methodology.html#confidence" style="color:var(--accent)">How it’s rated</a>.</p></div>
 <div class="apc"><div class="eyebrow">Price headroom</div><p class="small muted" style="margin:8px 0 0">Not part of the score: how local prices compare with the rest of London. 80 means cheaper than 80% of London. Pair it with momentum to find areas that are changing but where prices are still comparatively low.</p></div>
