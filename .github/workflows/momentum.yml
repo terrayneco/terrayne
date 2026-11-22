@@ -46,15 +46,15 @@ jobs:
             python3 scripts/publish.py
           fi
 
-      - name: Publish the free top-6 data to the website
+      - name: Publish the free top-10 data and the generated pages to the website
         run: |
           git config user.name "terrayne-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add data/ london/ class-ma/ sitemap.xml robots.txt
+          git add data/ london/ class-ma/ developers/ monday-brief/ postcode-report/ sitemap.xml robots.txt
           if git diff --cached --quiet; then
             echo "No data changes."
           else
             git commit -m "Weekly Momentum Index update"
-            git pull --rebase origin main
+            git pull --rebase --autostash origin main
             git push origin main
           fi
