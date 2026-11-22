@@ -187,7 +187,8 @@ EXTRA_CSS = """<style>
 .bpg .stp{grid-template-columns:1fr 1fr}.bpg .stp .apc:last-child:nth-child(odd){grid-column:1/-1}
 .wx{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.wx .apc:nth-child(3){grid-column:1/-1}.wx em{display:block;font-style:normal;font-family:ui-monospace,Menlo,monospace;color:#9fd0ff;font-size:12px;margin-bottom:8px}
 .wx p{margin:0 0 10px;color:#c8d4e8;line-height:1.6;font-size:14.5px}.wx ul{margin:0 0 10px;padding-left:18px;color:#c8d4e8;font-size:14px;line-height:1.55}.wx ul a{color:var(--accent)}.wx .apc>a{color:var(--accent);font-size:13.5px}
-.wxt tr.me td{background:rgba(79,155,232,.08)}.wxt tr.me td:first-child b{color:#9fd0ff}.rpg .stp{grid-template-columns:1fr}.dpg{align-items:start}
+.wxt tr.me td{background:rgba(79,155,232,.08)}
+.wxend{display:flex;justify-content:space-between;align-items:center;gap:22px;flex-wrap:wrap;margin-top:14px;background:linear-gradient(135deg,rgba(30,64,120,.45),rgba(13,24,48,.8));border-color:#2f4677}.wxend p{margin:6px 0 0;color:#e3ebf7;line-height:1.6;max-width:680px}.wxt tr.me td:first-child b{color:#9fd0ff}.rpg .stp{grid-template-columns:1fr}.dpg{align-items:start}
 .tk{list-style:none;padding:0;margin:10px 0 0}.tk li{position:relative;padding:7px 0 7px 26px;color:#c8d4e8;font-size:14.5px;line-height:1.5;border-bottom:1px solid rgba(28,43,77,.6)}.tk li:last-child{border-bottom:0}
 .tk li:before{content:"";position:absolute;left:2px;top:13px;width:12px;height:7px;border-left:2px solid #5fd6b8;border-bottom:2px solid #5fd6b8;transform:rotate(-45deg)}
 .mail{background:#0a1529;border:1px solid #1c2b4d;border-radius:20px;padding:18px;font-size:14px;color:#c8d4e8}.mail .mh{display:flex;justify-content:space-between;font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--mute);border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:12px}
@@ -1034,8 +1035,25 @@ def classma_page(cm):
 <div class="apg3">{''.join(f'<div class="apc"><b style="display:block;font-size:17px;margin-bottom:6px">{e(t)}</b><span class="muted" style="font-size:14.5px;line-height:1.6">{e(d)}</span></div>' for t, d in uses)}</div>
 </div></section>
 <section class="ap-s" id="boroughs"><div class="wrap">
-<h2>Every London borough</h2><p class="ap-sub">Sorted by applications filed in the last 12 months. Approval rate and decision time cover the last 24 months, shown where at least 5 were decided.</p>
+<h2>Every London borough</h2><p class="ap-sub">Sorted by applications filed in the last 12 months. Approval rate and decision time cover the last 24 months, shown where at least 5 were decided. <a href="#method" style="color:var(--accent)">How these are counted</a>.</p>
 <div class="apc apw"><table class="ap-t stack"><thead><tr><th>Borough</th><th class="n">Filed (12m)</th><th class="n">Homes</th><th class="n">Approved</th><th class="n">Median decision</th><th class="n">Pending</th></tr></thead><tbody>{rows}</tbody></table></div>
+</div></section>
+<section class="ap-s" id="method"><div class="wrap">
+<div class="eyebrow">Method</div><h2>How the figures are counted</h2>
+<p class="ap-sub">So you can quote them with confidence, or check them against the council’s own records.</p>
+<div class="apg2">
+<div class="apc"><ul class="tk">
+<li><b>What counts:</b> applications recorded in the GLA Planning London Datahub as prior approval for a change of use from Class E (commercial, business and service) to homes (Class C3), plus older records whose description names Class MA.</li>
+<li><b>Filed:</b> applications with a valid date in the last 12 months. <b>Homes</b> is the number of homes they propose.</li>
+<li><b>Approval rate:</b> approved (including prior approval not required, started or completed) divided by approved plus refused, for applications from the last 24 months. Withdrawn and undecided applications are left out. Shown only where a borough decided at least 5.</li>
+</ul></div>
+<div class="apc"><ul class="tk">
+<li><b>Median decision time:</b> days from the valid date to the decision, for decided applications from the last 24 months, shown where there are at least 5. The legal limit is 56 days: if the council hasn’t decided by then, the development can generally go ahead by default.</li>
+<li><b>Pending:</b> applications with no decision recorded yet.</li>
+<li><b>Limits:</b> figures are as recorded by each council in the Datahub, which can lag by days or weeks, and a few councils record some applications late or incompletely. Every filing links to the council’s own record. Updated every Monday.</li>
+</ul></div>
+</div>
+<p class="small muted" style="margin-top:12px">Source: GLA Planning London Datahub. Contains public sector information licensed under the Open Government Licence v3.0. <a href="/methodology.html" style="color:var(--accent)">How the Momentum Index works</a>.</p>
 </div></section>
 <section class="ap-s"><div class="wrap">
 <div class="apc" style="margin-bottom:18px"><div class="eyebrow" style="margin-bottom:4px">Latest Class MA filings</div><ul class="lst">{latest}</ul>
@@ -1118,6 +1136,9 @@ def worked_example(pub, cm, feed):
 <div class="apc"><em>04 · The planning odds</em><p>{ma_line}</p><a href="/class-ma/">Every borough →</a></div>
 <div class="apc"><em>05 · Keep watching</em><p>The developer saves the site and adds {e(A["n"])} to the team watchlist. From then on, the Monday Brief covers every new filing and decision around it, and on Team an email arrives the same day a big scheme nearby is filed, approved or refused.</p><a href="/monday-brief/">What’s in the Monday Brief →</a></div>
 </div>
+<div class="apc wxend"><div><div class="eyebrow">What they came away with</div>
+<p>In about ten minutes, without opening a single council portal: how fast the area around the site is changing, what’s planned next to it, how it compares with two alternatives, the borough’s record on office-to-home conversions, and a watch on the site from now on. Enough to decide whether it’s worth a full appraisal, a call to the agent, or a pass.</p></div>
+<div class="ap-cta" style="margin-top:0"><a class="btn" href="{WALKTHROUGH}" data-ev="demo_click" data-evd="worked-example">Walk through your own site</a><a class="btn ghost" href="/account.html?signup&amp;plan=enterprise">Start with Team</a></div></div>
 <p class="small muted" style="margin-top:12px">An illustration of how the tools fit together, not a recommendation about this area. Scores describe activity, not future prices.</p>
 </div></section>"""
 
