@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-20",
+ "generated": "2026-11-22",
  "window_days": 365,
  "radius_km": 1.72,
  "tiles": 181,
@@ -61,10 +61,10 @@
  },
  "errors": {},
  "bench": {
-  "act": 84,
-  "pipe": 36.0,
+  "act": 87,
+  "pipe": 35.0,
   "ma": 0.0,
-  "com": 2313.2300119400024,
+  "com": 2289.4899911880493,
   "transport": 0.06401123597069258,
   "population": 0.02217997465145749,
   "prices": -0.010184316126214354,
@@ -90,22 +90,22 @@
     "u",
     "f"
    ],
-   "u": "149",
+   "u": "138",
    "x": [
-    78,
+    77,
     81,
     95,
-    74,
+    73,
     96,
     88,
     51
    ],
    "hd": 82,
    "raw": {
-    "act": 180,
-    "pipe": 149,
+    "act": 173,
+    "pipe": 138,
     "ma": 50,
-    "com": 7386,
+    "com": 7173,
     "ma_n": 3
    },
    "off": {
@@ -126,14 +126,6 @@
      "units": 45,
      "status": "Approved",
      "valid": "07/07/2026"
-    },
-    {
-     "ref": "2668/25",
-     "lpa": "Redbridge",
-     "site": "Development At 10 The Drive",
-     "units": 12,
-     "status": "Commenced",
-     "valid": "21/11/2025"
     },
     {
      "ref": "0363/26",
@@ -214,6 +206,14 @@
      "units": 4,
      "status": "Application Received",
      "valid": "13/05/2026"
+    },
+    {
+     "ref": "1484/26",
+     "lpa": "Redbridge",
+     "site": "Development At Waylands Court",
+     "units": 4,
+     "status": "Appeal Received",
+     "valid": "03/06/2026"
     }
    ],
    "det": {
@@ -264,7 +264,7 @@
      "sales": 226
     }
    },
-   "t": "Ilford town centre scores highest on growth in station use (top 4% of London). In the last 12 months: 180 significant applications, 149 net new homes proposed, 48 homes via Class MA and 7,386 m² of net commercial floorspace. Official statistics: station use +27.2% (TfL 2023→2025); population +6.7% (2021→2024); median sale price −1.0% on a year earlier, at £432,500. Largest live schemes: Development At Rigby Mews And 99 To 127 Cranbrook Road (45 homes, approved, ref 1801/26); Development At 10 The Drive (12 homes, commenced, ref 2668/25).",
+   "t": "Ilford town centre scores highest on growth in station use (top 4% of London). In the last 12 months: 173 significant applications, 138 net new homes proposed, 48 homes via Class MA and 7,173 m² of net commercial floorspace. Official statistics: station use +27.2% (TfL 2023→2025); population +6.7% (2021→2024); median sale price −1.0% on a year earlier, at £432,500. Largest live schemes: Development At Rigby Mews And 99 To 127 Cranbrook Road (45 homes, approved, ref 1801/26).",
    "cf": [
     "H",
     []
@@ -288,7 +288,7 @@
     "u",
     "f"
    ],
-   "u": "182",
+   "u": "181",
    "x": [
     76,
     85,
@@ -300,8 +300,8 @@
    ],
    "hd": 75,
    "raw": {
-    "act": 171,
-    "pipe": 182,
+    "act": 167,
+    "pipe": 181,
     "ma": 2,
     "com": 4340,
     "ma_n": 1
@@ -424,7 +424,7 @@
      "sales": 712
     }
    },
-   "t": "Old Kent Road scores highest on growth in station use (top 3% of London). In the last 12 months: 171 significant applications, 182 net new homes proposed, 1 home via Class MA and 4,340 m² of net commercial floorspace. Official statistics: station use +34.7% (TfL 2023→2025); population +3.1% (2021→2024); median sale price −0.4% on a year earlier, at £450,000. Largest live schemes: Abbey Street (152 homes, application under consideration, ref 26/AP/0096).",
+   "t": "Old Kent Road scores highest on growth in station use (top 3% of London). In the last 12 months: 167 significant applications, 181 net new homes proposed, 1 home via Class MA and 4,340 m² of net commercial floorspace. Official statistics: station use +34.7% (TfL 2023→2025); population +3.1% (2021→2024); median sale price −0.4% on a year earlier, at £450,000. Largest live schemes: Abbey Street (152 homes, application under consideration, ref 26/AP/0096).",
    "cf": [
     "H",
     []
@@ -448,7 +448,7 @@
     "u",
     "f"
    ],
-   "u": "525",
+   "u": "524",
    "x": [
     90,
     93,
@@ -460,8 +460,8 @@
    ],
    "hd": 50,
    "raw": {
-    "act": 305,
-    "pipe": 525,
+    "act": 301,
+    "pipe": 524,
     "ma": 4,
     "com": 31502,
     "ma_n": 2
@@ -639,7 +639,7 @@
      "sales": 706
     }
    },
-   "t": "Elephant & Castle scores highest on its housing pipeline (top 7% of London). In the last 12 months: 305 significant applications, 525 net new homes proposed, 3 homes via Class MA and 31,502 m² of net commercial floorspace. Official statistics: station use +2.9% (TfL 2023→2025); population +5.5% (2021→2024); median sale price −1.4% on a year earlier, at £512,500.",
+   "t": "Elephant & Castle scores highest on its housing pipeline (top 7% of London). In the last 12 months: 301 significant applications, 524 net new homes proposed, 3 homes via Class MA and 31,502 m² of net commercial floorspace. Official statistics: station use +2.9% (TfL 2023→2025); population +5.5% (2021→2024); median sale price −1.4% on a year earlier, at £512,500.",
    "cf": [
     "H",
     []
@@ -675,10 +675,10 @@
    ],
    "hd": 28,
    "raw": {
-    "act": 423,
+    "act": 421,
     "pipe": 625,
     "ma": 60,
-    "com": 38895,
+    "com": 38874,
     "ma_n": 7
    },
    "off": {
@@ -862,7 +862,7 @@
      "sales": 1003
     }
    },
-   "t": "Nine Elms & Vauxhall scores highest on its housing pipeline (top 4% of London). In the last 12 months: 423 significant applications, 625 net new homes proposed, 57 homes via Class MA and 38,895 m² of net commercial floorspace. Official statistics: station use +3.1% (TfL 2023→2025); population +4.0% (2021→2024); median sale price −3.6% on a year earlier, at £585,000. Largest live schemes: Units 1-6 Citadel Place (522 homes, application under consideration, ref 26/00601/FUL); Vincent Square (26 homes, approved, ref 26/00795/P3JPA).",
+   "t": "Nine Elms & Vauxhall scores highest on its housing pipeline (top 4% of London). In the last 12 months: 421 significant applications, 625 net new homes proposed, 57 homes via Class MA and 38,874 m² of net commercial floorspace. Official statistics: station use +3.1% (TfL 2023→2025); population +4.0% (2021→2024); median sale price −3.6% on a year earlier, at £585,000. Largest live schemes: Units 1-6 Citadel Place (522 homes, application under consideration, ref 26/00601/FUL); Vincent Square (26 homes, approved, ref 26/00795/P3JPA).",
    "cf": [
     "H",
     []
@@ -888,7 +888,7 @@
    ],
    "u": "817",
    "x": [
-    73,
+    72,
     96,
     28,
     94,
@@ -972,14 +972,6 @@
      "valid": "13/07/2026"
     },
     {
-     "ref": "26/0397",
-     "lpa": "Brent",
-     "site": "7 Chalfont Avenue, Wembley",
-     "units": 1,
-     "status": "Dismissed",
-     "valid": "26/02/2026"
-    },
-    {
      "ref": "26/2506",
      "lpa": "Brent",
      "site": "First Floor Flat, 517A High Road, Wembley",
@@ -988,12 +980,12 @@
      "valid": "12/10/2026"
     },
     {
-     "ref": "26/1723",
+     "ref": "26/0397",
      "lpa": "Brent",
-     "site": "128 Church Lane",
+     "site": "7 Chalfont Avenue, Wembley",
      "units": 1,
-     "status": "Approved",
-     "valid": "15/07/2026"
+     "status": "Dismissed",
+     "valid": "26/02/2026"
     },
     {
      "ref": "26/2408",
@@ -1004,12 +996,20 @@
      "valid": "22/09/2026"
     },
     {
-     "ref": "26/0407",
+     "ref": "26/1723",
      "lpa": "Brent",
-     "site": "146 Wembley Hill Road, Wembley",
+     "site": "128 Church Lane",
+     "units": 1,
+     "status": "Approved",
+     "valid": "15/07/2026"
+    },
+    {
+     "ref": "26/1906",
+     "lpa": "Brent",
+     "site": "55 Chalkhill Road, Wembley",
      "units": 0,
-     "status": "Appeal Received",
-     "valid": "16/03/2026"
+     "status": "Approved",
+     "valid": "31/07/2026"
     }
    ],
    "det": {
@@ -1087,6 +1087,209 @@
    ]
   },
   {
+   "n": "Colindale",
+   "f": "Colindale",
+   "b": "LB Barnet",
+   "lat": 51.596,
+   "lon": -0.25,
+   "s": 71,
+   "c": -2,
+   "c12": 5,
+   "tr": [
+    "f",
+    "d",
+    "u",
+    "d",
+    "d",
+    "u",
+    "f"
+   ],
+   "u": "661",
+   "x": [
+    51,
+    96,
+    98,
+    90,
+    3,
+    90,
+    76
+   ],
+   "hd": 89,
+   "raw": {
+    "act": 90,
+    "pipe": 661,
+    "ma": 206,
+    "com": 26071,
+    "ma_n": 1
+   },
+   "off": {
+    "transport": -0.0962,
+    "stations": 2,
+    "population": 0.0775,
+    "prices": 0.0066,
+    "median_price": 413500.0,
+    "sales": 374,
+    "transport_span": "TfL 2023→2025",
+    "population_span": "2021→2024"
+   },
+   "schemes": [
+    {
+     "ref": "25/4757/OUT",
+     "lpa": "Barnet",
+     "site": "Silk House Annesley Avenue",
+     "units": 291,
+     "status": "Application Under Consideration",
+     "valid": "03/12/2025"
+    },
+    {
+     "ref": "26/2696/PNE",
+     "lpa": "Barnet",
+     "site": "Merit House The Hyde",
+     "units": 205,
+     "status": "Application Under Consideration",
+     "valid": "20/07/2026"
+    },
+    {
+     "ref": "26/2973/191",
+     "lpa": "Barnet",
+     "site": "Volvo Cars The Hyde",
+     "units": 139,
+     "status": "Completed",
+     "valid": "11/08/2026"
+    },
+    {
+     "ref": "25/4712/191",
+     "lpa": "Barnet",
+     "site": "Hendale Avenue",
+     "units": 7,
+     "status": "Completed",
+     "valid": "25/11/2025"
+    },
+    {
+     "ref": "26/2779/191",
+     "lpa": "Barnet",
+     "site": "Great North Way",
+     "units": 4,
+     "status": "Completed",
+     "valid": "30/07/2026"
+    },
+    {
+     "ref": "26/0573/191",
+     "lpa": "Barnet",
+     "site": "North Road",
+     "units": 3,
+     "status": "Completed",
+     "valid": "27/02/2026"
+    },
+    {
+     "ref": "26/2757/FUL",
+     "lpa": "Barnet",
+     "site": "Watford Way",
+     "units": 1,
+     "status": "Application Under Consideration",
+     "valid": "24/07/2026"
+    },
+    {
+     "ref": "26/3162/FUL",
+     "lpa": "Barnet",
+     "site": "Woodcroft Avenue",
+     "units": 2,
+     "status": "Approved",
+     "valid": "27/08/2026"
+    },
+    {
+     "ref": "26/1818/191",
+     "lpa": "Barnet",
+     "site": "Annesley Avenue",
+     "units": 2,
+     "status": "Completed",
+     "valid": "14/05/2026"
+    },
+    {
+     "ref": "26/3826/FUL",
+     "lpa": "Barnet",
+     "site": "Store Rear Watling Avenue",
+     "units": 2,
+     "status": "Application Under Consideration",
+     "valid": "09/11/2026"
+    },
+    {
+     "ref": "26/1882/191",
+     "lpa": "Barnet",
+     "site": "Hemswell Drive",
+     "units": 1,
+     "status": "Completed",
+     "valid": "19/05/2026"
+    },
+    {
+     "ref": "PL/0603/26",
+     "lpa": "Harrow",
+     "site": "Kenmore Gardens",
+     "units": 1,
+     "status": "Completed",
+     "valid": "08/04/2026"
+    }
+   ],
+   "det": {
+    "transport": {
+     "now": 8476269,
+     "before": 9378234,
+     "top": [
+      [
+       "Colindale",
+       5409247,
+       6314434
+      ],
+      [
+       "Burnt Oak",
+       3067022,
+       3063800
+      ]
+     ]
+    },
+    "population": {
+     "now": 86648,
+     "before": 80416,
+     "lsoas": 45
+    },
+    "prices": {
+     "types": [
+      [
+       "Flats",
+       201,
+       340000,
+       347500
+      ],
+      [
+       "Terraced",
+       83,
+       500000,
+       470000
+      ],
+      [
+       "Semi-detached",
+       68,
+       602000,
+       600000
+      ],
+      [
+       "Detached",
+       13,
+       900000,
+       823000
+      ]
+     ],
+     "new_build": 9,
+     "sales": 374
+    }
+   },
+   "t": "Colindale scores highest on office-to-home (Class MA) conversions (top 2% of London). In the last 12 months: 90 significant applications, 661 net new homes proposed, 205 homes via Class MA and 26,071 m² of net commercial floorspace. Official statistics: station use −9.6% (TfL 2023→2025); population +7.7% (2021→2024); median sale price +0.7% on a year earlier, at £413,500. Largest live schemes: Silk House Annesley Avenue (291 homes, application under consideration, ref 25/4757/OUT); Merit House The Hyde (205 homes, application under consideration, ref 26/2696/PNE).",
+   "cf": [
+    "H",
+    []
+   ]
+  },
+  {
    "n": "Hammersmith",
    "f": "Hammersmith & White City",
    "b": "LB Hammersmith & Fulham",
@@ -1104,7 +1307,7 @@
     "u",
     "d"
    ],
-   "u": "985",
+   "u": "984",
    "x": [
     97,
     97,
@@ -1116,10 +1319,10 @@
    ],
    "hd": 15,
    "raw": {
-    "act": 587,
-    "pipe": 985,
+    "act": 584,
+    "pipe": 984,
     "ma": 561,
-    "com": 44174,
+    "com": 44086,
     "ma_n": 12
    },
    "off": {
@@ -1303,7 +1506,7 @@
      "sales": 796
     }
    },
-   "t": "Hammersmith & White City scores highest on office-to-home (Class MA) conversions (top 1% of London). In the last 12 months: 587 significant applications, 985 net new homes proposed, 555 homes via Class MA and 44,174 m² of net commercial floorspace. Official statistics: station use +5.4% (TfL 2023→2025); population +2.2% (2021→2024); median sale price −5.7% on a year earlier, at £654,375. Largest live schemes: Sussex Place (292 homes, application received, ref P/2026/00633/FUL); Griffin House Hammersmith Road (140 homes, approved, ref P/2026/01329/PACU1).",
+   "t": "Hammersmith & White City scores highest on office-to-home (Class MA) conversions (top 1% of London). In the last 12 months: 584 significant applications, 984 net new homes proposed, 555 homes via Class MA and 44,086 m² of net commercial floorspace. Official statistics: station use +5.4% (TfL 2023→2025); population +2.2% (2021→2024); median sale price −5.7% on a year earlier, at £654,375. Largest live schemes: Sussex Place (292 homes, application received, ref P/2026/00633/FUL); Griffin House Hammersmith Road (140 homes, approved, ref P/2026/01329/PACU1).",
    "cf": [
     "H",
     []
@@ -1329,7 +1532,7 @@
    ],
    "u": "1,167",
    "x": [
-    75,
+    76,
     99,
     100,
     7,
@@ -1339,7 +1542,7 @@
    ],
    "hd": 100,
    "raw": {
-    "act": 164,
+    "act": 163,
     "pipe": 1167,
     "ma": 694,
     "com": 0,
@@ -1516,7 +1719,7 @@
      "sales": 556
     }
    },
-   "t": "Croydon town centre scores highest on office-to-home (Class MA) conversions (top 1% of London). In the last 12 months: 164 significant applications, 1,167 net new homes proposed, 689 homes via Class MA. Official statistics: station use +11.3% (TfL 2023→2025); population +9.4% (2021→2024); median sale price −4.1% on a year earlier, at £322,000. Largest live schemes: Southern House (281 homes, application under consideration, ref 26/02309/GPDO); Addiscombe Road (250 homes, application under consideration, ref 26/01474/GPDO).",
+   "t": "Croydon town centre scores highest on office-to-home (Class MA) conversions (top 1% of London). In the last 12 months: 163 significant applications, 1,167 net new homes proposed, 689 homes via Class MA. Official statistics: station use +11.3% (TfL 2023→2025); population +9.4% (2021→2024); median sale price −4.1% on a year earlier, at £322,000. Largest live schemes: Southern House (281 homes, application under consideration, ref 26/02309/GPDO); Addiscombe Road (250 homes, application under consideration, ref 26/01474/GPDO).",
    "cf": [
     "H",
     []
@@ -1552,7 +1755,7 @@
    ],
    "hd": 61,
    "raw": {
-    "act": 394,
+    "act": 393,
     "pipe": 1277,
     "ma": 0,
     "com": 74238,
@@ -1739,7 +1942,7 @@
      "sales": 755
     }
    },
-   "t": "Whitechapel & Aldgate scores highest on its housing pipeline (top 1% of London). In the last 12 months: 394 significant applications, 1,277 net new homes proposed and 74,238 m² of net commercial floorspace. Official statistics: station use +2.4% (TfL 2023→2025); population +6.4% (2021→2024); median sale price −4.9% on a year earlier, at £480,000. Largest live schemes: Calcutta House (794 homes, application under consideration, ref PA/26/00391/A1); 13-15 Blount Street (106 homes, approved, ref PA/26/00122/S).",
+   "t": "Whitechapel & Aldgate scores highest on its housing pipeline (top 1% of London). In the last 12 months: 393 significant applications, 1,277 net new homes proposed and 74,238 m² of net commercial floorspace. Official statistics: station use +2.4% (TfL 2023→2025); population +6.4% (2021→2024); median sale price −4.9% on a year earlier, at £480,000. Largest live schemes: Calcutta House (794 homes, application under consideration, ref PA/26/00391/A1); 13-15 Blount Street (106 homes, approved, ref PA/26/00122/S).",
    "cf": [
     "H",
     []
@@ -1755,7 +1958,7 @@
    "c": -1,
    "c12": -4,
    "tr": [
-    "u",
+    "f",
     "f",
     "d",
     "u",
@@ -1775,10 +1978,10 @@
    ],
    "hd": 71,
    "raw": {
-    "act": 206,
+    "act": 207,
     "pipe": 548,
     "ma": 0,
-    "com": 188920,
+    "com": 189395,
     "ma_n": 0
    },
    "off": {
@@ -1815,6 +2018,14 @@
      "units": 9,
      "status": "Approved",
      "valid": "26/01/2026"
+    },
+    {
+     "ref": "26/02341/FUL",
+     "lpa": "Newham",
+     "site": "Chandos Road",
+     "units": 0,
+     "status": "Application Under Consideration",
+     "valid": "19/11/2026"
     },
     {
      "ref": "26/02043/FUL",
@@ -1879,14 +2090,6 @@
      "units": 2,
      "status": "Application Under Consideration",
      "valid": "11/06/2026"
-    },
-    {
-     "ref": "PA/26/00108/A1",
-     "lpa": "Tower Hamlets",
-     "site": "Flat 1, Iron Works, 58 Dace Road",
-     "units": 1,
-     "status": "Approved",
-     "valid": "09/02/2026"
     }
    ],
    "det": {
@@ -1962,235 +2165,12 @@
      "sales": 520
     }
    },
-   "t": "Stratford & Olympic Park scores highest on new commercial floorspace (top 1% of London). In the last 12 months: 206 significant applications, 548 net new homes proposed and 188,920 m² of net commercial floorspace. Official statistics: station use −1.5% (TfL 2023→2025); population +9.3% (2021→2024); median sale price −2.8% on a year earlier, at £459,000. Largest live schemes: Land at Wansbeck Road, Fish Island (324 homes, application under consideration, ref PA/26/00765/A1); Land At 2 Bridge Terrace (179 homes, application under consideration, ref 26/02121/FUL).",
-   "cf": [
-    "H",
-    []
-   ]
-  },
-  {
-   "n": "King’s Cross",
-   "f": "King’s Cross & St Pancras",
-   "b": "LB Camden / Islington",
-   "lat": 51.5347,
-   "lon": -0.1246,
-   "s": 65,
-   "c": 0,
-   "c12": -9,
-   "tr": [
-    "f",
-    "d",
-    "f",
-    "d",
-    "u",
-    "u",
-    "d"
-   ],
-   "u": "548",
-   "x": [
-    97,
-    93,
-    97,
-    7,
-    49,
-    82,
-    9
-   ],
-   "hd": 13,
-   "raw": {
-    "act": 677,
-    "pipe": 548,
-    "ma": 102,
-    "com": 0,
-    "ma_n": 11
-   },
-   "off": {
-    "transport": 0.0576,
-    "stations": 14,
-    "population": 0.0569,
-    "prices": -0.059,
-    "median_price": 674250.0,
-    "sales": 616,
-    "transport_span": "TfL 2023→2025",
-    "population_span": "2021→2024"
-   },
-   "schemes": [
-    {
-     "ref": "2025/5802/P",
-     "lpa": "Camden",
-     "site": "Bonham Carter House",
-     "units": 128,
-     "status": "Application Received",
-     "valid": "22/12/2025"
-    },
-    {
-     "ref": "2026/2226/P",
-     "lpa": "Camden",
-     "site": "Bangor Wharf Georgiana Street",
-     "units": 153,
-     "status": "Application Received",
-     "valid": "01/06/2026"
-    },
-    {
-     "ref": "2026/1229/P",
-     "lpa": "Camden",
-     "site": "Car Parking Site At 13 Britannia Street",
-     "units": 124,
-     "status": "Application Received",
-     "valid": "27/03/2026"
-    },
-    {
-     "ref": "P2025/3531/PRA",
-     "lpa": "Islington",
-     "site": "City Road",
-     "units": 35,
-     "status": "Approved",
-     "valid": "12/12/2025"
-    },
-    {
-     "ref": "P2026/0278/PRA",
-     "lpa": "Islington",
-     "site": "City Road",
-     "units": 20,
-     "status": "Approved",
-     "valid": "03/02/2026"
-    },
-    {
-     "ref": "P2026/1470/PRA",
-     "lpa": "Islington",
-     "site": "391-395 City Road",
-     "units": 20,
-     "status": "Approved",
-     "valid": "08/06/2026"
-    },
-    {
-     "ref": "P2026/2346/PRA",
-     "lpa": "Islington",
-     "site": "Northampton Square",
-     "units": 10,
-     "status": "Approved",
-     "valid": "07/09/2026"
-    },
-    {
-     "ref": "2026/3433/P",
-     "lpa": "Camden",
-     "site": "Fitzroy Street",
-     "units": 8,
-     "status": "Application Received",
-     "valid": "11/08/2026"
-    },
-    {
-     "ref": "2026/4736/P",
-     "lpa": "Camden",
-     "site": "5-6 Underhill Street",
-     "units": 6,
-     "status": "Application Received",
-     "valid": "26/10/2026"
-    },
-    {
-     "ref": "P2026/0584/PRA",
-     "lpa": "Islington",
-     "site": "Green Man Tower",
-     "units": 5,
-     "status": "Approved",
-     "valid": "03/03/2026"
-    },
-    {
-     "ref": "2026/1904/P",
-     "lpa": "Camden",
-     "site": "Woburn Square",
-     "units": 4,
-     "status": "Application Received",
-     "valid": "13/05/2026"
-    },
-    {
-     "ref": "2026/0689/P",
-     "lpa": "Camden",
-     "site": "Hargrave Place",
-     "units": 4,
-     "status": "Application Received",
-     "valid": "31/07/2026"
-    }
-   ],
-   "det": {
-    "transport": {
-     "now": 262708557,
-     "before": 248403068,
-     "top": [
-      [
-       "King's Cross St. Pancras",
-       73571468,
-       72124262
-      ],
-      [
-       "London St Pancras International",
-       41528712,
-       35959980
-      ],
-      [
-       "Euston",
-       37686944,
-       32861441
-      ],
-      [
-       "London Kings Cross",
-       28846602,
-       24483826
-      ],
-      [
-       "Camden Town",
-       17155755,
-       18805872
-      ],
-      [
-       "Warren Street",
-       13853666,
-       14076462
-      ]
-     ]
-    },
-    "population": {
-     "now": 121175,
-     "before": 114656,
-     "lsoas": 67
-    },
-    "prices": {
-     "types": [
-      [
-       "Flats",
-       484,
-       580000,
-       613000
-      ],
-      [
-       "Terraced",
-       76,
-       1555000,
-       1712500
-      ],
-      [
-       "Semi-detached",
-       9,
-       2225000,
-       2250000
-      ],
-      [
-       "Detached",
-       1,
-       1625000,
-       null
-      ]
-     ],
-     "new_build": 46,
-     "sales": 616
-    }
-   },
-   "t": "King’s Cross & St Pancras scores highest on planning activity (top 3% of London). In the last 12 months: 677 significant applications, 548 net new homes proposed, 96 homes via Class MA. Official statistics: station use +5.8% (TfL 2023→2025); population +5.7% (2021→2024); median sale price −5.9% on a year earlier, at £674,250. Largest live schemes: Bonham Carter House (128 homes, application received, ref 2025/5802/P); Bangor Wharf Georgiana Street (153 homes, application received, ref 2026/2226/P).",
+   "t": "Stratford & Olympic Park scores highest on new commercial floorspace (top 1% of London). In the last 12 months: 207 significant applications, 548 net new homes proposed and 189,395 m² of net commercial floorspace. Official statistics: station use −1.5% (TfL 2023→2025); population +9.3% (2021→2024); median sale price −2.8% on a year earlier, at £459,000. Largest live schemes: Land at Wansbeck Road, Fish Island (324 homes, application under consideration, ref PA/26/00765/A1); Land At 2 Bridge Terrace (179 homes, application under consideration, ref 26/02121/FUL).",
    "cf": [
     "H",
     []
    ]
   }
  ],
- "tracked": 18
+ "tracked": 26
 }
