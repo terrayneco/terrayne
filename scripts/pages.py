@@ -43,6 +43,14 @@ AREAS = [
     ("Hammersmith", "Hammersmith & White City", "LB Hammersmith & Fulham", 51.5000, -0.2250, "hammersmith-white-city"),
     ("Ealing", "Ealing Broadway", "LB Ealing", 51.5130, -0.3010, "ealing"),
     ("Isle of Dogs", "Canary Wharf & Isle of Dogs", "LB Tower Hamlets", 51.5000, -0.0180, "canary-wharf-isle-of-dogs"),
+    ("Royal Docks", "Royal Docks & Canning Town", "LB Newham", 51.5080, 0.0300, "royal-docks"),
+    ("Barking Riverside", "Barking Riverside", "LB Barking & Dagenham", 51.5180, 0.1150, "barking-riverside"),
+    ("Old Oak", "Old Oak & Park Royal", "LB Hammersmith & Fulham / Brent / Ealing", 51.5270, -0.2500, "old-oak-park-royal"),
+    ("Earls Court", "Earls Court", "RB Kensington & Chelsea / LB Hammersmith & Fulham", 51.4900, -0.1960, "earls-court"),
+    ("Walthamstow", "Walthamstow", "LB Waltham Forest", 51.5830, -0.0200, "walthamstow"),
+    ("Colindale", "Colindale", "LB Barnet", 51.5960, -0.2500, "colindale"),
+    ("Thamesmead", "Thamesmead & Abbey Wood", "RB Greenwich / LB Bexley", 51.4980, 0.1150, "thamesmead-abbey-wood"),
+    ("Romford", "Romford town centre", "LB Havering", 51.5750, 0.1830, "romford"),
 ]
 SLUG = {a[0]: a[5] for a in AREAS}
 TREND = {"u": ("Rising", "↑", "up"), "f": ("Stable", "→", "flat"), "d": ("Falling", "↓", "down")}
@@ -489,8 +497,9 @@ def _merc(lat, lon, z=13):
 
 # Label positions for the crowded centre of the map (dx, dy, anchor), so names don't overlap.
 NUDGE = {"Elephant": (0, -15, "middle"), "Hammersmith": (-13, 5, "end"), "Nine Elms": (-14, 18, "end"), "Old Kent Road": (14, 20, "start"),
-         "Canada Water": (12, -12, "start"), "Whitechapel": (14, -10, "start"), "King’s Cross": (-14, -10, "end"), "Isle of Dogs": (12, 20, "start"),
-         "Greenwich Pen.": (12, -4, "start"), "Woolwich": (12, 16, "start"), "Lewisham": (12, 18, "start")}
+         "Canada Water": (-8, -22, "end"), "Whitechapel": (14, -10, "start"), "King’s Cross": (-14, -10, "end"), "Isle of Dogs": (12, 20, "start"),
+         "Greenwich Pen.": (12, -4, "start"), "Woolwich": (12, 16, "start"), "Lewisham": (12, 18, "start"),
+         "Royal Docks": (8, -14, "start"), "Earls Court": (12, 8, "start")}
 
 
 def tile_data():
@@ -1351,6 +1360,7 @@ KIND_NAME = {"ma": "Office-to-home (Class MA)", "major": "Major scheme", "res": 
 
 def write_all():
     pub = json.loads((ROOT / "data" / "momentum.json").read_text())
+    pub["tracked"] = max(pub.get("tracked", 0), len(AREAS))  # the full list, even before the data refresh picks up new areas
     cm = json.loads((ROOT / "data" / "classma.json").read_text())
     feed = json.loads((ROOT / "data" / "feed.json").read_text())
     by = {a["n"]: a for a in pub["areas"]}

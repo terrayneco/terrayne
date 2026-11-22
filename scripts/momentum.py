@@ -64,6 +64,14 @@ AREAS = [
     ("Hammersmith", "Hammersmith & White City", "LB Hammersmith & Fulham", 51.5000, -0.2250),
     ("Ealing", "Ealing Broadway", "LB Ealing", 51.5130, -0.3010),
     ("Isle of Dogs", "Canary Wharf & Isle of Dogs", "LB Tower Hamlets", 51.5000, -0.0180),
+    ("Royal Docks", "Royal Docks & Canning Town", "LB Newham", 51.5080, 0.0300),
+    ("Barking Riverside", "Barking Riverside", "LB Barking & Dagenham", 51.5180, 0.1150),
+    ("Old Oak", "Old Oak & Park Royal", "LB Hammersmith & Fulham / Brent / Ealing", 51.5270, -0.2500),
+    ("Earls Court", "Earls Court", "RB Kensington & Chelsea / LB Hammersmith & Fulham", 51.4900, -0.1960),
+    ("Walthamstow", "Walthamstow", "LB Waltham Forest", 51.5830, -0.0200),
+    ("Colindale", "Colindale", "LB Barnet", 51.5960, -0.2500),
+    ("Thamesmead", "Thamesmead & Abbey Wood", "RB Greenwich / LB Bexley", 51.4980, 0.1150),
+    ("Romford", "Romford town centre", "LB Havering", 51.5750, 0.1830),
 ]
 
 RES = "application_details.residential_details."
