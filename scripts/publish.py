@@ -227,6 +227,46 @@ def li(i, decided=False):
             f"<a href='{H.escape(i['url'])}' style='color:#4c9bff'>{H.escape(i['lpa'] or 'Council')} ref {H.escape(i['ref'] or '')} →</a></li>")
 
 
+SIG_WORDS = {"act": "planning activity", "pipe": "the housing pipeline", "ma": "office-to-home conversions", "com": "commercial floorspace",
+             "transport": "station use", "population": "population", "prices": "house prices"}
+
+
+def _plist(xs):
+    xs = list(xs)
+    return xs[0] if len(xs) == 1 else ", ".join(xs[:-1]) + " and " + xs[-1] if xs else ""
+
+
+def location_to_watch(full, prev, recent=()):
+    """One neighbourhood each week that's worth a closer look (the biggest riser this week, not featured in the last 4 weeks),
+    plus up to three areas with real momentum but prices still below most of London. Built from the full weekly snapshot."""
+    keys = full.get("keys", [])
+    areas = full.get("areas", [])
+    def move(a):
+        p = prev.get(a["n"])
+        return (a["s"] - p["s"]) if p else (a.get("c") or 0)
+    pool = [a for a in areas if a["n"] not in recent] or areas
+    if not pool:
+        return None, []
+    w = max(pool, key=lambda a: (move(a), a.get("c12") or 0, a["s"]))
+    up = [SIG_WORDS[k] for k, v in zip(keys, w.get("tr") or []) if v == "u" and k in SIG_WORDS]
+    d = move(w)
+    when = "since last week" if prev.get(w["n"]) else "over 30 days"
+    bits = [f"{w['f']} scores {w['s']}/100, " + (f"{'up' if d > 0 else 'down'} {abs(d)} point{'s' if abs(d) != 1 else ''} {when}" if d else f"unchanged {when}")
+            + (f" and {'up' if w['c12'] > 0 else 'down'} {abs(w['c12'])} over 12 months" if w.get("c12") else "") + "."]
+    if up:
+        bits.append(f"Rising over the past year: {_plist(up[:3])}.")
+    u = w.get("u")
+    if u not in (None, "", "0"):
+        bits.append(f"{u} net new homes proposed nearby in 12 months.")
+    if w.get("hd") is not None:
+        bits.append("Prices are among the lowest in London." if w["hd"] >= 99 else f"Prices are lower than in {w['hd']}% of London.")
+    watch = {"n": w["n"], "f": w["f"], "s": w["s"], "move": d, "why": " ".join(bits)}
+    cand = [a for a in areas if a["n"] != w["n"] and a["s"] >= 60 and (a.get("hd") or 0) >= 50]
+    cand.sort(key=lambda a: -(a["s"] + (a.get("hd") or 0)))
+    scout = [{"n": a["n"], "f": a["f"], "s": a["s"], "hd": a.get("hd")} for a in cand[:3]]
+    return watch, scout
+
+
 def brief_for(a, prev, items, decided=(), keys=None):
     d = (a["s"] - prev["s"]) if prev else a["c"]
     when = "since last week" if prev else "over 30 days"
@@ -299,7 +339,7 @@ def main():
     sb("POST", "/rest/v1/snapshots?on_conflict=generated", {"generated": full["generated"], "data": full}, up)
     prev_rows = sb("GET", f"/rest/v1/snapshots?select=generated,data&generated=lt.{full['generated']}&order=generated.desc&limit=1") or []
     prev = {a["n"]: a for a in prev_rows[0]["data"]["areas"]} if prev_rows else {}
-    seen_rows = sb("GET", f"/rest/v1/briefs?select=data&week=gte.{(week - dt.timedelta(days=120)).isoformat()}&week=lt.{week.isoformat()}") or []
+    seen_rows = sb("GET", f"/rest/v1/briefs?select=data,week&week=gte.{(week - dt.timedelta(days=120)).isoformat()}&week=lt.{week.isoformat()}") or []
     seen = {r for row in seen_rows for r in (row["data"] or {}).get("refs", [])}
     dseen = {r for row in seen_rows for r in (row["data"] or {}).get("drefs", [])}
     lseen = {r for row in seen_rows for r in (row["data"] or {}).get("lrefs", [])}
@@ -310,6 +350,8 @@ def main():
         pass
     since = week - dt.timedelta(days=21)
     top = london_top(since, lseen)
+    recent = {(row["data"] or {}).get("watch", {}).get("n") for row in seen_rows if row.get("week", "") >= (week - dt.timedelta(days=28)).isoformat()}
+    watch, scout = location_to_watch(full, prev, recent)
     rows = []
     for area in M.AREAS:
         a = next(x for x in full["areas"] if x["n"] == area[0])
@@ -321,7 +363,7 @@ def main():
                      "data": {"score": a["s"], "move": (a["s"] - pa["s"]) if pa else a["c"], "name": a["f"],
                               "refs": [i["ref"] for i in items], "items": items,
                               "drefs": [i["ref"] for i in dec], "decided": dec,
-                              "lrefs": [i["ref"] for i in top], "london": top}})
+                              "lrefs": [i["ref"] for i in top], "london": top, "watch": watch, "scout": scout}})
     sb("POST", "/rest/v1/briefs?on_conflict=week,area", rows, up)
     print(f"stored snapshot and {len(rows)} briefs for {week}")
     try:  # anonymous funnel counts are kept for two years (privacy policy)

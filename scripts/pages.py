@@ -184,7 +184,10 @@ EXTRA_CSS = """<style>
 .ixmap{padding:8px;position:relative;overflow:hidden}
 .stp{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}.stp .apc em{display:block;font-style:normal;font-family:ui-monospace,Menlo,monospace;color:#9fd0ff;font-size:12px;margin-bottom:8px}
 .stp .apc b{display:block;font-size:16.5px;margin-bottom:6px}.stp .apc p{margin:0;color:var(--mute);font-size:14px;line-height:1.55}.stp .apc a{color:var(--accent)}
-.bpg .stp{grid-template-columns:1fr 1fr}.rpg .stp{grid-template-columns:1fr}.dpg{align-items:start}
+.bpg .stp{grid-template-columns:1fr 1fr}.bpg .stp .apc:last-child:nth-child(odd){grid-column:1/-1}
+.wx{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.wx .apc:nth-child(3){grid-column:1/-1}.wx em{display:block;font-style:normal;font-family:ui-monospace,Menlo,monospace;color:#9fd0ff;font-size:12px;margin-bottom:8px}
+.wx p{margin:0 0 10px;color:#c8d4e8;line-height:1.6;font-size:14.5px}.wx ul{margin:0 0 10px;padding-left:18px;color:#c8d4e8;font-size:14px;line-height:1.55}.wx ul a{color:var(--accent)}.wx .apc>a{color:var(--accent);font-size:13.5px}
+.wxt tr.me td{background:rgba(79,155,232,.08)}.wxt tr.me td:first-child b{color:#9fd0ff}.rpg .stp{grid-template-columns:1fr}.dpg{align-items:start}
 .tk{list-style:none;padding:0;margin:10px 0 0}.tk li{position:relative;padding:7px 0 7px 26px;color:#c8d4e8;font-size:14.5px;line-height:1.5;border-bottom:1px solid rgba(28,43,77,.6)}.tk li:last-child{border-bottom:0}
 .tk li:before{content:"";position:absolute;left:2px;top:13px;width:12px;height:7px;border-left:2px solid #5fd6b8;border-bottom:2px solid #5fd6b8;transform:rotate(-45deg)}
 .mail{background:#0a1529;border:1px solid #1c2b4d;border-radius:20px;padding:18px;font-size:14px;color:#c8d4e8}.mail .mh{display:flex;justify-content:space-between;font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--mute);border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:12px}
@@ -208,7 +211,7 @@ EXTRA_CSS = """<style>
 #ixtip .tt-b{width:100%;background:#fff;color:#0a1223;border:0;border-radius:99px;padding:8px 10px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer}
 .hsum{margin-top:16px}.hbar{display:flex;height:12px;border-radius:9px;overflow:hidden;margin:0 0 10px;gap:2px}.hbar i{display:block;height:100%}
 .hkeys{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13.5px;color:#c8d4e8}.hkeys u{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
-@media(max-width:820px){.apg,.apg2,.bpg .stp{grid-template-columns:1fr}.kn,.kn.k4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:820px){.apg,.apg2,.bpg .stp,.wx{grid-template-columns:1fr}.kn,.kn.k4{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){.ap-t.stack thead{display:none}.ap-t.stack,.ap-t.stack tbody,.ap-t.stack tr,.ap-t.stack td{display:block;width:100%}
  .ap-t.stack tr{padding:12px 0;border-bottom:1px solid var(--line)}.ap-t.stack td{border:0;padding:2px 0;text-align:left}
  .ap-t.stack td[data-l]{display:inline-block!important;width:auto!important;font-family:inherit;letter-spacing:0;text-transform:none;margin:4px 14px 0 0;font-size:13px}.ap-t.stack td[data-l]:before{content:attr(data-l)": ";color:var(--mute)}
@@ -1048,6 +1051,48 @@ def big_rows(feed, n=3):
     return rows[:n]
 
 
+def worked_example(pub, cm, feed):
+    """A walkthrough of checking a site, built from this week's public data: a top-10 neighbourhood with recent filings nearby,
+    two alternatives with similar scores, the borough's Class MA record, then the watchlist."""
+    top = sorted(pub["areas"], key=lambda a: -a["s"])
+    rows = feed.get("rows", [])
+    if len(top) < 3:
+        return ""
+    def close(a):
+        return [r for r in rows if r.get("lat") and km(a["lat"], a["lon"], r["lat"], r["lon"]) <= 2.0]
+    A = max(top, key=lambda a: (len(close(a)), a["s"]))
+    alts = sorted([a for a in top if a is not A], key=lambda a: abs(a["s"] - A["s"]))[:2]
+    near = sorted(close(A), key=lambda r: ((r.get("homes") or 0), r.get("valid", "")), reverse=True)[:3]
+    raw = A.get("raw") or {}
+    names = [x.strip() for x in (A.get("b") or "").replace("LB ", "").replace("RB ", "").split("/")]
+    bmap = {b.get("borough"): b for b in cm.get("boroughs", [])}
+    boro = next((bmap[n] for n in names if n in bmap and bmap[n].get("approval_rate") is not None), None)
+    def sch(r):
+        scale = " · ".join(x for x in [f"{nf(r['homes'])} homes" if (r.get("homes") or 0) > 0 else "", f"{nf(r['commercial_m2'])} m² commercial" if (r.get("commercial_m2") or 0) >= 200 else ""] if x)
+        return (f'<li><b>{e(tidy(r["site"]))}</b>: {e(scale or KIND_NAME.get(r.get("kind"), "Major scheme"))} · {e(r["status"])} · '
+                f'<a href="{ref_link(r["ref"], r["borough"])}" target="_blank" rel="noopener">ref {e(r["ref"])}</a></li>')
+    cmp_rows = "".join(f'<tr{" class=\"me\"" if a is A else ""}><td><b>{e(a["f"])}</b></td><td class="n" data-l="Score">{a["s"]}</td>'
+                       f'<td class="n" data-l="12 months">{("+" if (a.get("c12") or 0) > 0 else "−" if (a.get("c12") or 0) < 0 else "")}{abs(a.get("c12") or 0)}</td>'
+                       f'<td class="n" data-l="Homes proposed">{e(a.get("u", "—"))}</td><td class="n" data-l="Price headroom">{a.get("hd", "—")}</td>'
+                       f'<td data-l="Confidence">{CONF.get((a.get("cf") or ["M"])[0], "Medium")}</td></tr>' for a in [A] + alts)
+    ma_line = (f'In {e(boro["borough"])}, {round(boro["approval_rate"] * 100)}% of decided office-to-home (Class MA) applications were approved over 24 months, '
+               f'with a median decision time of {nf(boro["median_days"])} days, against {round((cm.get("london") or {}).get("approval_rate", 0) * 100)}% across London. '
+               f'{nf(boro.get("filed_12m"))} were filed there in the last 12 months.') if boro and boro.get("approval_rate") is not None else \
+              f'The <a href="/class-ma/">Class MA tracker</a> shows how {e(A["b"])} treats office-to-home conversions compared with every other borough.'
+    return f"""<section class="ap-s"><div class="wrap">
+<div class="eyebrow">A worked example · this week’s real data</div><h2>Checking a site near {e(A["f"])}.</h2>
+<p class="ap-sub">How a developer might use Terrayne to decide whether a site is worth pursuing. The figures update every Monday.</p>
+<div class="wx">
+<div class="apc"><em>01 · The area</em><p><b>{e(A["f"])}</b> scores <b>{A["s"]}/100</b> on the Momentum Index ({e(verdict(A["s"]).lower())}). In the last 12 months there were {nf(raw.get("act"))} significant planning applications within {pub.get("radius_km", 1.72):.1f} km, proposing {e(A.get("u", "—"))} net new homes. Prices are lower than in {A.get("hd", "—")}% of London.</p><a href="/london/{SLUG.get(A["n"], "")}/">The neighbourhood page →</a></div>
+<div class="apc"><em>02 · What’s planned nearby</em><p>The largest recent filings around it, each with its council reference:</p><ul>{"".join(sch(r) for r in near) or "<li>No major filings in the last 60 days.</li>"}</ul><a href="/postcode-report/">A full list for any site: the Postcode Report →</a></div>
+<div class="apc"><em>03 · The alternatives</em><p>Compared with the two top-10 neighbourhoods closest in score:</p><div class="apw"><table class="ap-t stack wxt"><thead><tr><th>Neighbourhood</th><th class="n">Score</th><th class="n">12 months</th><th class="n">Homes</th><th class="n">Headroom</th><th>Confidence</th></tr></thead><tbody>{cmp_rows}</tbody></table></div><a href="/#compare">Compare any three areas →</a></div>
+<div class="apc"><em>04 · The planning odds</em><p>{ma_line}</p><a href="/class-ma/">Every borough →</a></div>
+<div class="apc"><em>05 · Keep watching</em><p>The developer saves the site and adds {e(A["n"])} to the team watchlist. From then on, the Monday Brief covers every new filing and decision around it, and on Team an email arrives the same day a big scheme nearby is filed, approved or refused.</p><a href="/monday-brief/">What’s in the Monday Brief →</a></div>
+</div>
+<p class="small muted" style="margin-top:12px">An illustration of how the tools fit together, not a recommendation about this area. Scores describe activity, not future prices.</p>
+</div></section>"""
+
+
 def developers_page(pub, cm, feed):
     L = cm.get("london") or {}
     rate = f"{round(L['approval_rate'] * 100)}%" if L.get("approval_rate") is not None else "—"
@@ -1092,6 +1137,8 @@ def developers_page(pub, cm, feed):
              ("Judge the odds", 'The <a href="/class-ma/">Class MA tracker</a> shows how often each borough approves office-to-home conversions, and how long it takes against the 56-day limit.'),
              ("Watch", 'Save your sites and patches. The <a href="/monday-brief/">Monday Brief</a> covers them every week, and Team gets an email the same day a big scheme nearby is filed, approved or refused.')])}
 </div></section>
+
+{worked_example(pub, cm, feed)}
 
 <section class="ap-s"><div class="wrap apg">
 <div class="apc"><div class="eyebrow">Office-to-home approval odds</div><h3 style="margin:8px 0 4px">The busiest boroughs for Class MA</h3>
@@ -1167,12 +1214,13 @@ def brief_page(pub, feed):
 </div></section>
 
 <section class="ap-s" style="padding-top:20px"><div class="wrap apg bpg">
-<div><div class="eyebrow">What’s in it</div><h2>Six parts, in about two minutes.</h2>
+<div><div class="eyebrow">What’s in it</div><h2>Seven parts, in about two minutes.</h2>
 {steps_html([("Your week in one line", "How many schemes were filed and decided across your neighbourhoods, and which one moved most."),
              ("Score and direction", "Each neighbourhood’s Momentum score, how it moved, and which signals are rising or falling."),
              ("Decided this week", "Significant schemes nearby that were approved or refused, in green and red."),
              ("New filings, explained", "Every new scheme for homes, office-to-home or sizeable commercial space, with why it matters and a council link."),
              ("Near your saved places", "New filings within the walking distance you chose around each site you save."),
+             ("Location to watch", "One neighbourhood each week worth a closer look, and three where momentum meets price headroom."),
              ("The biggest in London", "The three largest new schemes anywhere in London, so even a quiet week tells you something.")])}
 </div>
 <div><div class="eyebrow">A real sample</div><h2>Built from this week’s filings.</h2>{sample}</div>

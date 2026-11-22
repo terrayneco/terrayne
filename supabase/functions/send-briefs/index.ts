@@ -9,7 +9,9 @@ const FROM = Deno.env.get("BRIEF_FROM") ?? "Terrayne <briefings@terrayne.co>";
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]!));
 
 type Item = { site: string; lpa: string; ref: string; units: number; com: number; kind: string; status: string; why?: string; url?: string; desc?: string };
-type BriefData = { name?: string; move?: number; items?: Item[]; decided?: Item[]; london?: Item[] };
+type Watch = { n: string; f: string; s: number; move: number; why: string };
+type Scout = { n: string; f: string; s: number; hd?: number };
+type BriefData = { name?: string; move?: number; items?: Item[]; decided?: Item[]; london?: Item[]; watch?: Watch | null; scout?: Scout[] };
 type Brief = { area: string; title: string; body: string; data?: BriefData | null };
 const plural = (n: number, w: string) => `${n.toLocaleString("en-GB")} ${w}${n === 1 ? "" : "s"}`;
 
@@ -29,6 +31,18 @@ function headline(items: Brief[]) {
     : `A quiet week across ${where}: no new significant filings or decisions.`;
   const big = mv && mv.move ? ` Biggest mover: ${mv.name}, ${mv.move > 0 ? "up" : "down"} ${Math.abs(mv.move)} pts.` : "";
   return what + big;
+}
+
+function watchHtml(items: Brief[]) {
+  const d = items.map((b) => b.data).find((x) => x && x.watch);
+  if (!d || !d.watch) return "";
+  const w = d.watch, sc = d.scout ?? [];
+  const head = (hd?: number) => hd == null ? "" : hd >= 99 ? "prices among the lowest in London" : `cheaper than ${hd}% of London`;
+  return `<h2 style="font-size:17px;margin:22px 0 10px">Location to watch</h2><div style="background:linear-gradient(135deg,#13284d,#0d1830);border:1px solid #2f4677;border-radius:16px;padding:16px 18px;margin:0 0 12px">` +
+    `<p style="margin:0 0 6px;font-size:16px;color:#fff"><b>${esc(w.f)}</b> · ${w.s}/100</p><p style="margin:0;font-size:14px;line-height:1.55;color:#c8d4e8">${esc(w.why)}</p>` +
+    (sc.length ? `<p style="margin:14px 0 6px;font-size:13px;color:#9fd0ff;letter-spacing:.06em">ALSO WORTH INVESTIGATING · MOMENTUM WITH PRICE HEADROOM</p><ul style="margin:0;padding-left:18px;font-size:14px;line-height:1.55;color:#c8d4e8">` +
+      sc.map((x) => `<li><b style="color:#fff">${esc(x.f)}</b>: ${x.s}/100, ${head(x.hd)}</li>`).join("") + `</ul>` : "") +
+    `<p style="margin:12px 0 0;font-size:12px;color:#8c9ab3">A starting point for your own research, not a recommendation. <a href="${SITE}/account.html#index" style="color:#9fd0ff">Every score in your account</a></p></div>`;
 }
 
 function londonHtml(items: Brief[]) {
@@ -52,6 +66,7 @@ ${hl ? `<p style="font-size:15px;line-height:1.55;color:#c8d4e8;margin:0 0 20px"
 <p style="font-size:12px;color:#8c9ab3;margin:0 0 4px">${esc(b.area)}</p><h2 style="font-size:17px;margin:0 0 8px">${esc(b.title)}</h2>
 <div style="font-size:14px;line-height:1.55;color:#c8d4e8">${b.body}</div></div>`).join("")}
 ${alertsHtml(alerts)}
+${watchHtml(items)}
 ${londonHtml(items)}
 <p style="margin:22px 0 0"><a href="${SITE}/brief.html?week=${week}&pdf=1" style="display:inline-block;padding:10px 18px;border-radius:999px;background:#ffffff;color:#060d1a;font-weight:600;font-size:14px;text-decoration:none">Download this brief as a PDF</a></p>
 <p style="font-size:13px;color:#8c9ab3;margin:24px 0 0"><a href="${SITE}/account.html#briefs" style="color:#9fd0ff">Open all briefs</a> · <a href="${SITE}/account.html#profile" style="color:#9fd0ff">Email settings</a></p>
