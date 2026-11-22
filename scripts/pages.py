@@ -1066,7 +1066,7 @@ def classma_page(cm):
 <p class="ap-sub" style="margin:0 auto 6px">Pro is £29 a month, or £290 a year. Cancel any time. Team is £99 a month for up to 5 people.</p>
 <p class="ap-sub" style="margin:0 auto 6px">Work at a planning consultancy or developer? We’re taking on a small number of London firms as founding partners, with a guided setup and a say in what we build next.</p>
 <div class="ap-cta" style="justify-content:center"><a class="btn" href="/account.html?signup&amp;plan=pro">Get Pro</a><a class="btn ghost" href="/account.html?signup">Start free</a>
-<a class="btn ghost" href="mailto:hello@terrayne.co?subject=Terrayne%20walkthrough" data-ev="demo_click">Book a 15-minute walkthrough</a></div></div>
+<a class="btn ghost" href="mailto:charlie@terrayne.co?subject=Terrayne%20walkthrough" data-ev="demo_click">Book a 15-minute walkthrough</a></div></div>
 </div></section>
 <section class="ap-s"><div class="wrap"><h2>Questions</h2>{faq_html(qs)}
 <p class="small muted" style="margin-top:22px">Source: GLA Planning London Datahub. Contains public sector information licensed under the Open Government Licence v3.0. Statuses can change, so check the council record by reference. Not legal or planning advice.</p></div></section>"""
@@ -1079,7 +1079,7 @@ def classma_page(cm):
 
 # ---------------------------------------------------------------- product and audience pages
 
-WALKTHROUGH = ("mailto:hello@terrayne.co?subject=Terrayne%20walkthrough&amp;body=Hi%2C%20I%27d%20like%20a%2015-minute%20walkthrough%20of%20Terrayne."
+WALKTHROUGH = ("mailto:charlie@terrayne.co?subject=Terrayne%20walkthrough&amp;body=Hi%2C%20I%27d%20like%20a%2015-minute%20walkthrough%20of%20Terrayne."
                "%20Our%20firm%3A%20")
 SAMPLE_REPORT = "/report.html?pc=CR0%201LF&amp;r=800&amp;sample=1"
 
