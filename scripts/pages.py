@@ -197,6 +197,10 @@ EXTRA_CSS = """<style>
 .mail .mt{font-weight:700;color:#fff;margin:14px 0 8px}.mail .foot{font-size:11.5px;color:#52617f;margin:10px 0 0}
 .wk{margin:16px 0 4px;border-color:#2f4677;background:linear-gradient(135deg,rgba(30,64,120,.35),rgba(13,24,48,.75))}.wk p{margin:8px 0 0;font-size:clamp(15.5px,1.8vw,17.5px);line-height:1.65;color:#e3ebf7}
 .lb td.tr{padding-right:0}.spk{display:block}
+.cns{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.cn p{margin:6px 0 10px;color:var(--mute);font-size:13px;line-height:1.45}
+.cn ol{list-style:none;margin:0;padding:0}.cn li{display:grid;grid-template-columns:20px minmax(0,1fr) auto;gap:8px;align-items:baseline;padding:8px 0;border-top:1px solid rgba(28,43,77,.7);font-size:14px}
+.cn li em{font-style:normal;color:var(--mute);font-family:ui-monospace,Menlo,monospace;font-size:12px}.cn li a{color:#fff}.cn li a:hover{text-decoration:underline}.cn li b{color:#9fe8d2;font-variant-numeric:tabular-nums;font-size:13px;text-align:right;white-space:nowrap}.cn li.none{display:block;color:var(--mute)}
+@media(max-width:1000px){.cns{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:560px){.cns{grid-template-columns:1fr}}
 .ldrs{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}.ldr{display:block;transition:border-color .2s}.ldr:hover{border-color:#3a5a92}
 .ldr .eyebrow{display:block;font-size:11px;margin-bottom:8px}.ldr b{display:block;font-size:18px}.ldr span{display:block;color:#c8d4e8;font-size:14px;margin-top:4px}.ldr em{display:block;font-style:normal;color:var(--mute);font-size:12.5px;margin-top:8px}
 .cite{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}.cite code{display:block;margin-top:10px;font-size:13px;color:#9fd0ff;background:#081227;border:1px solid var(--line);border-radius:10px;padding:9px 12px;white-space:normal}
@@ -771,6 +775,30 @@ def cite_box(pub):
             'r.selectNodeContents(document.getElementById("citetxt"));var s=getSelection();s.removeAllRanges();s.addRange(r)});setTimeout(function(){b.textContent="Copy"},2000)}})();</script>')
 
 
+def changing_next(pub):
+    """'Where is London changing next?': four ranked lists from this week's public top 10."""
+    top = pub["areas"]
+    link = lambda a: f'<a href="/london/{SLUG.get(a["n"], "")}/">{e(a["f"])}</a>'
+    pw = lambda v: f"{abs(v)} pt" + ("" if abs(v) == 1 else "s")
+    def col(title, sub, items, fmt, empty):
+        lis = "".join(f'<li><em>{i}</em><span>{link(a)}</span><b>{fmt(a)}</b></li>' for i, a in enumerate(items, 1)) or f'<li class="none">{e(empty)}</li>'
+        return f'<div class="apc cn"><div class="eyebrow">{e(title)}</div><p>{e(sub)}</p><ol>{lis}</ol></div>'
+    fast = sorted([a for a in top if (a.get("c") or 0) > 0], key=lambda a: -a["c"])[:3]
+    year = sorted([a for a in top if (a.get("c12") or 0) > 0], key=lambda a: -a["c12"])[:3]
+    pipe = sorted(top, key=lambda a: -_num(a.get("u")))[:3]
+    head = sorted([a for a in top if a["s"] >= 60 and (a.get("hd") or 0) >= 50], key=lambda a: -(a["s"] + (a.get("hd") or 0)))[:3]
+    cols = (col("Speeding up", "Biggest score gains over 30 days", fast, lambda a: f"+{pw(a['c'])}", "No top-10 area rose this month.")
+            + col("Rising over the year", "Biggest gains over 12 months", year, lambda a: f"+{pw(a['c12'])}", "No top-10 area is up on a year ago.")
+            + col("Biggest pipelines", "Net new homes proposed in 12 months", pipe, lambda a: f"{e(a.get('u'))} homes", "—")
+            + col("Momentum with headroom", "Score 60+ and prices below most of London (score · headroom)", head, lambda a: f"{a['s']} · {a['hd']}", "None this week."))
+    return (f'<section class="ap-s"><div class="wrap"><div class="eyebrow">Emerging locations</div><h2>Where is London changing next?</h2>'
+            f'<p class="ap-sub">Four ways to read this week’s top 10: where change is speeding up, where it has built over the year, where the most homes are planned, '
+            f'and where momentum meets prices that are still below most of London. A starting point for research, not a recommendation.</p>'
+            f'<div class="cns">{cols}</div>'
+            f'<p class="small muted" style="margin-top:14px">Pro ranks all {pub["tracked"]} neighbourhoods this way, and every Monday Brief picks a location to watch. '
+            f'<a href="/monday-brief/" style="color:var(--accent)">What’s in the brief →</a></p></div></section>')
+
+
 def london_page(pub, hist=None):
     by = {a["n"]: a for a in pub["areas"]}
     top = sorted(pub["areas"], key=lambda a: -a["s"])
@@ -877,8 +905,9 @@ def london_page(pub, hist=None):
 <section class="ap-s" style="padding-top:18px"><div class="wrap">
 <h2>This week’s top 10</h2><p class="ap-sub">Click a neighbourhood for its signals, numbers and largest schemes. Changes are in points. Homes proposed are net, from the last 12 months. Price headroom 80 means cheaper than 80% of London. Trend lines run from a year ago to now, and fill in week by week.</p>
 {board}
-<div class="kn k4 mvs" style="margin-top:18px">{mv}</div>
 </div></section>
+
+{changing_next(pub)}
 
 {signal_leaders(pub)}
 
