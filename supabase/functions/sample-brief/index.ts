@@ -18,7 +18,8 @@ const json = (body: unknown, status = 200) =>
 
 const FROM = Deno.env.get("BRIEF_FROM") ?? "Terrayne <briefings@terrayne.co>";
 const AREAS = ["Nine Elms", "Stratford", "Canada Water", "Whitechapel", "King’s Cross", "Croydon", "Old Kent Road", "Elephant",
-  "Wembley", "Brent Cross", "Tottenham Hale", "Ilford", "Greenwich Pen.", "Woolwich", "Lewisham", "Hammersmith", "Ealing", "Isle of Dogs"];
+  "Wembley", "Brent Cross", "Tottenham Hale", "Ilford", "Greenwich Pen.", "Woolwich", "Lewisham", "Hammersmith", "Ealing", "Isle of Dogs",
+  "Royal Docks", "Barking Riverside", "Old Oak", "Earls Court", "Walthamstow", "Colindale", "Thamesmead", "Romford"];
 const esc = (s: string) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]!));
 
 function email(area: string, week: string, title: string, body: string, token: string) {
@@ -68,6 +69,9 @@ Deno.serve(async (req) => {
   const { data: had } = await admin.from("brief_signups").select("id").eq("email", addr).limit(1);
   if (had?.length) return json({ error: "We’ve already sent a sample brief to this address. Pro sends one for every area on your watchlist, every Monday: terrayne.co/#pricing" }, 409);
 
+  const { data: brief } = await admin.from("briefs").select("week,title,body").eq("area", area).order("week", { ascending: false }).limit(1).maybeSingle();
+  if (!brief) return json({ error: "The first brief for this neighbourhood arrives on Monday. Please choose another neighbourhood for now, or come back after Monday." }, 409);
+
   const ins = await admin.from("brief_signups").insert({
     email: addr, area, updates: b.updates === true, source: String(b.source ?? "").slice(0, 120),
   }).select("token").single();
@@ -75,9 +79,6 @@ Deno.serve(async (req) => {
     const tooMany = /too many/i.test(ins.error.message);
     return json({ error: tooMany ? "We’ve already sent a sample to this address today. Check your inbox (and spam folder)." : "Something went wrong. Please try again." }, tooMany ? 429 : 500);
   }
-
-  const { data: brief } = await admin.from("briefs").select("week,title,body").eq("area", area).order("week", { ascending: false }).limit(1).maybeSingle();
-  if (!brief) return json({ ok: true, queued: true });                    // no brief stored yet: signed up, nothing to send
 
   const r = await fetch("https://api.resend.com/emails", {
     method: "POST",

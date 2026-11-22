@@ -889,7 +889,7 @@ def london_page(pub, hist=None):
            "Every Monday by 7am UK time, from new planning filings in the GLA Planning London Datahub. Station use, population and sale prices update when the "
            "government publishes them, from monthly to yearly."),
           (f"Why these {tracked} neighbourhoods?",
-           f"They are London’s main regeneration and growth areas, from Stratford and Old Kent Road to Wembley Park and Croydon. Each is measured within about "
+           f"They are London’s main regeneration and growth areas, from Stratford and Old Kent Road to Wembley Park, Croydon and the Royal Docks. Each is measured within about "
            f"{radius} km of its centre. Any other London postcode can still be checked: the postcode check scores the area it sits in."),
           ("Can I see the score for my own postcode?",
            "Yes. The postcode check on the homepage shows the score for the area around any London postcode, with every significant scheme within walking distance. "

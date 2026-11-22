@@ -3,11 +3,15 @@
    Sends to the sample-brief Edge Function, which emails this week's brief for the chosen neighbourhood. */
 (function () {
   var C = window.TERRAYNE || {};
-  var AREAS = [["Brent Cross", "Brent Cross & Cricklewood"], ["Canada Water", "Canada Water & Surrey Quays"], ["Isle of Dogs", "Canary Wharf & Isle of Dogs"],
-    ["Croydon", "Croydon town centre"], ["Ealing", "Ealing Broadway"], ["Elephant", "Elephant & Castle"], ["Greenwich Pen.", "Greenwich Peninsula"],
-    ["Hammersmith", "Hammersmith & White City"], ["Ilford", "Ilford town centre"], ["King’s Cross", "King’s Cross & St Pancras"], ["Lewisham", "Lewisham town centre"],
-    ["Nine Elms", "Nine Elms & Vauxhall"], ["Old Kent Road", "Old Kent Road"], ["Stratford", "Stratford & Olympic Park"], ["Tottenham Hale", "Tottenham Hale"],
-    ["Wembley", "Wembley Park"], ["Whitechapel", "Whitechapel & Aldgate"], ["Woolwich", "Woolwich"]];
+  var AREAS = [["Barking Riverside", "Barking Riverside"], ["Brent Cross", "Brent Cross & Cricklewood"], ["Canada Water", "Canada Water & Surrey Quays"],
+    ["Isle of Dogs", "Canary Wharf & Isle of Dogs"], ["Colindale", "Colindale"], ["Croydon", "Croydon town centre"],
+    ["Ealing", "Ealing Broadway"], ["Earls Court", "Earls Court"], ["Elephant", "Elephant & Castle"],
+    ["Greenwich Pen.", "Greenwich Peninsula"], ["Hammersmith", "Hammersmith & White City"], ["Ilford", "Ilford town centre"],
+    ["King’s Cross", "King’s Cross & St Pancras"], ["Lewisham", "Lewisham town centre"], ["Nine Elms", "Nine Elms & Vauxhall"],
+    ["Old Kent Road", "Old Kent Road"], ["Old Oak", "Old Oak & Park Royal"], ["Romford", "Romford town centre"],
+    ["Royal Docks", "Royal Docks & Canning Town"], ["Stratford", "Stratford & Olympic Park"], ["Thamesmead", "Thamesmead & Abbey Wood"],
+    ["Tottenham Hale", "Tottenham Hale"], ["Walthamstow", "Walthamstow"], ["Wembley", "Wembley Park"],
+    ["Whitechapel", "Whitechapel & Aldgate"], ["Woolwich", "Woolwich"]];
   var css = ".bs{background:rgba(13,24,48,.72);border:1px solid #1c2b4d;border-radius:20px;padding:clamp(18px,3vw,26px);color:#fff;text-align:left}" +
     ".bs h3{font-size:clamp(18px,2.2vw,22px);margin:0 0 6px;letter-spacing:-.01em;line-height:1.25}.bs p.bs-sub{color:#9aa7bd;font-size:14px;line-height:1.55;margin:0 0 16px}" +
     ".bs form{display:grid;grid-template-columns:1.4fr 1fr auto;gap:10px;align-items:stretch}" +
