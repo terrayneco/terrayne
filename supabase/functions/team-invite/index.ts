@@ -37,7 +37,7 @@ Deno.serve(async (req) => {
   const html = `<div style="font-family:-apple-system,Helvetica,Arial,sans-serif;max-width:520px;margin:0 auto;color:#0a1223">
 <div style="background:#060d1a;border-radius:14px;padding:18px 0;text-align:center;margin:0 0 20px"><img src="https://terrayne.co/assets/email-logo.png" width="210" height="70" alt="Terrayne" style="display:inline-block;border:0;color:#ffffff;font-size:18px"></div>
 <h2 style="margin:8px 0 12px">${who}${org} has invited you to their Terrayne team</h2>
-<p style="line-height:1.6">Terrayne is property intelligence for London: what’s being planned around any site, how fast each neighbourhood is changing, and a brief every Monday. As part of the team you get full Team access at no cost to you.</p>
+<p style="line-height:1.6">Terrayne is property intelligence for London: what’s being planned around any site, how fast each neighbourhood is changing, and a Monday Brief by 7am UK time every Monday. As part of the team you get full Team access at no cost to you.</p>
 <p style="line-height:1.6">${action}</p>
 <p><a href="${link}" style="display:inline-block;background:#0a1223;color:#fff;padding:12px 22px;border-radius:99px;text-decoration:none">${existing ? "Accept the invitation" : "Join the team"}</a></p>
 <p style="font-size:12px;color:#6b7891;line-height:1.5">If you weren’t expecting this, you can ignore it: nothing happens unless you sign in or create an account.</p></div>`;
