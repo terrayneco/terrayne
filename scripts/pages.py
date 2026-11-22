@@ -240,6 +240,10 @@ def footer():
 
 def page(title, desc, path, body, jsonld=None):
     head, nav, nav_js = shell()
+    # light up the menu item for the section this page belongs to
+    sec = "/" + path.strip("/").split("/")[0] + "/" if path.strip("/") else None
+    if sec and f'<a href="{sec}">' in nav:
+        nav = nav.replace(f'<a href="{sec}">', f'<a href="{sec}" class="act" aria-current="page">', 1)
     url = SITE + path
     meta = (f"<title>{e(title)}</title>\n<meta name=\"description\" content=\"{e(desc)}\">\n<link rel=\"canonical\" href=\"{url}\">\n"
             f'<meta property="og:type" content="website"><meta property="og:site_name" content="Terrayne"><meta property="og:title" content="{e(title)}">'
