@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-22",
+ "generated": "2026-11-23",
  "boroughs": [
   {
    "borough": "Barnet",
@@ -14,9 +14,9 @@
    "borough": "Croydon",
    "filed_12m": 30,
    "homes_12m": 824,
-   "decided_24m": 74,
-   "approval_rate": 0.73,
-   "median_days": 88,
+   "decided_24m": 73,
+   "approval_rate": 0.74,
+   "median_days": 92,
    "pending": 7
   },
   {
@@ -32,9 +32,9 @@
    "borough": "Hammersmith & Fulham",
    "filed_12m": 23,
    "homes_12m": 616,
-   "decided_24m": 63,
-   "approval_rate": 0.524,
-   "median_days": 72,
+   "decided_24m": 62,
+   "approval_rate": 0.532,
+   "median_days": 74,
    "pending": 26
   },
   {
@@ -85,7 +85,7 @@
   {
    "borough": "Ealing",
    "filed_12m": 15,
-   "homes_12m": 395,
+   "homes_12m": 399,
    "decided_24m": 39,
    "approval_rate": 0.846,
    "median_days": 56,
@@ -274,8 +274,8 @@
  ],
  "london": {
   "filed_12m": 323,
-  "homes_12m": 3309,
-  "approval_rate": 0.696,
+  "homes_12m": 3313,
+  "approval_rate": 0.697,
   "median_days": 56
  },
  "latest": [
@@ -302,6 +302,14 @@
    "status": "Pending",
    "valid": "2026-11-10",
    "ref": "26/03185/GPDO"
+  },
+  {
+   "borough": "Ealing",
+   "site": "New Broadway",
+   "homes": 3,
+   "status": "Pending",
+   "valid": "2026-11-09",
+   "ref": "264077PACBSD"
   },
   {
    "borough": "Islington",
@@ -366,14 +374,6 @@
    "status": "Pending",
    "valid": "2026-10-07",
    "ref": "P/2026/02574/PACU1"
-  },
-  {
-   "borough": "Haringey",
-   "site": "307 West Green Road, Tottenham",
-   "homes": 2,
-   "status": "Pending",
-   "valid": "2026-10-01",
-   "ref": "HGY/2026/2729"
   }
  ]
 }
