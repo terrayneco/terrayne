@@ -476,7 +476,7 @@ html.mapopen{overflow:hidden}
 <body>
 <nav><div class="wrap">
 <a href="#top" class="brand"><img class="logo" alt="Terrayne" src="assets/logo-white.svg"></a>
-<ul id="menu"><li><a href="#top">Home</a></li><li class="dd" id="dd"><button type="button" aria-expanded="false" aria-controls="ddm">Who it’s for</button><ul class="ddm" id="ddm"><li><a href="developers/">Developers &amp; planning consultants<small>Sites, pipelines and Class MA odds</small></a></li><li><a href="#for-agents">Estate &amp; letting agents<small>Know your patch, win more listings</small></a></li><li><a href="#for-investors">Buyers &amp; investors<small>Is this street about to change?</small></a></li><li><a href="#for-retail">Retail, leisure &amp; services<small>Where to open next, from new residents arriving</small></a></li></ul></li><li class="dd" id="dd2"><button type="button" aria-expanded="false" aria-controls="ddm2">Tools</button><ul class="ddm" id="ddm2"><li><a href="#check">Postcode check<small>Score any London postcode, free</small></a></li><li><a href="#compare">Compare<small>Up to 3 areas side by side</small></a></li><li><a href="planning.html">Planning tracker<small>The latest significant filings, explained</small></a></li><li><a href="class-ma/">Class MA tracker<small>Office-to-home approval rates by borough</small></a></li></ul></li><li><a href="london/">Index</a></li><li><a href="monday-brief/">Monday Brief</a></li><li><a href="postcode-report/">Postcode Report</a></li><li><a href="#pricing">Pricing</a></li><li><a href="about.html">About</a></li><li class="mcta"><a href="account.html">Sign in</a></li><li class="mcta"><a href="account.html?signup">Start free</a></li></ul>
+<ul id="menu"><li><a href="#top">Home</a></li><li class="dd" id="dd"><button type="button" aria-expanded="false" aria-controls="ddm">Who it’s for</button><ul class="ddm" id="ddm"><li><a href="developers/">Developers &amp; planning consultants<small>Sites, pipelines and Class MA odds</small></a></li><li><a href="#for-agents">Estate &amp; letting agents<small>Know your patch, win more listings</small></a></li><li><a href="#for-investors">Buyers &amp; investors<small>What’s planned near a purchase</small></a></li><li><a href="#for-retail">Retail, leisure &amp; services<small>Where to open next, from new residents arriving</small></a></li></ul></li><li class="dd" id="dd2"><button type="button" aria-expanded="false" aria-controls="ddm2">Tools</button><ul class="ddm" id="ddm2"><li><a href="#check">Postcode check<small>Score any London postcode, free</small></a></li><li><a href="#compare">Compare<small>Up to 3 areas side by side</small></a></li><li><a href="planning.html">Planning tracker<small>The latest significant filings, explained</small></a></li><li><a href="class-ma/">Class MA tracker<small>Office-to-home approval rates by borough</small></a></li></ul></li><li><a href="london/">Index</a></li><li><a href="monday-brief/">Monday Brief</a></li><li><a href="postcode-report/">Postcode Report</a></li><li><a href="#pricing">Pricing</a></li><li><a href="about.html">About</a></li><li class="mcta"><a href="account.html">Sign in</a></li><li class="mcta"><a href="account.html?signup">Start free</a></li></ul>
 <div class="nr"><a class="nsign" href="account.html">Sign in</a><a class="btn ncta" href="account.html?signup">Start free</a><button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><i></i><i></i><i></i></button></div>
 </div></nav>
 
@@ -525,11 +525,26 @@ html.mapopen{overflow:hidden}
 <div class="card"><div class="num">03</div><h3>Priced for small teams</h3><p>Pro is £29 a month; Team is £99 for five people. Monthly or yearly, cancel any time, and three postcode checks a month are free.</p></div>
 </div></div></section>
 
+<section id="brief" style="padding-top:0"><div class="wrap bgrid">
+<div>
+<div class="eyebrow mono teal">Comes to your inbox, so you don’t have to log in</div>
+<h2>The Monday Brief.</h2>
+<p class="sub" style="margin-bottom:0">Nobody wants another dashboard to remember to check. Every Monday by 7am, Terrayne emails you a short summary of what’s new in the neighbourhoods on your watchlist and around any places you’ve saved: the schemes filed, the decisions made, the areas that moved, and why each one matters, whether you’re buying, selling, building or opening.</p>
+<div class="wl mono">Pick boroughs to preview a sample brief:</div>
+<div class="chips" id="chips"></div>
+<ul class="bl"><li>Shows which neighbourhoods’ scores moved this week, and why</li><li>Flags new office-to-home conversions (Class MA) near you</li><li>Lists the big schemes approved or refused this week, with links to the council record</li><li>Picks a location to watch each week, plus areas where momentum meets price headroom</li><li>Comes as a PDF you can forward to your team or clients</li><li>Included with Pro and Team, by email, with every past brief archived. Your first one arrives as soon as you join, and Teams can get it in Slack too.</li></ul><p style="margin:14px 0 0"><a href="monday-brief/" style="color:#9fd0ff;text-decoration:underline">See what’s in every part of the brief →</a></p>
+</div>
+<div class="mail"><div class="mb"><i></i><i></i><i></i><span>briefings@terrayne.co</span><em>MON 7AM</em></div>
+<div class="mh"><div class="t mono"><b>Terrayne</b><span>Sample issue • London edition</span></div><h3 id="mt">Your Monday Brief</h3><p>Built from real filings in <span id="bdupd">the last 30 days</span></p></div>
+<div class="mbody" id="mbody"></div></div>
+</div>
+<div class="wrap" style="margin-top:clamp(28px,4vw,44px)"><div data-brief-signup></div></div></section>
+
 <section id="questions" style="padding-top:0"><div class="wrap">
 <div class="eyebrow">What Terrayne answers</div>
 <h2>The questions behind every site decision.</h2>
 <p class="sub">Built for developers, site finders and planning consultants who need to know where to look next, and why.</p>
-<div class="grid g3"><div class="card qa"><h3>Where should we look for our next site?</h3><p>See how fast every part of London is changing, then shortlist and compare up to three areas side by side.</p><div class="qal"><a href="#index">Momentum Index →</a><a href="#compare">Compare areas →</a></div></div><div class="card qa"><h3>Where is regeneration actually happening?</h3><p>Follow the homes and commercial space being filed and approved, not the press releases.</p><div class="qal"><a href="planning.html#feed">Planning feed →</a></div></div><div class="card qa"><h3>Which areas are being overlooked?</h3><p>Spot areas with strong momentum where homes still cost less than in much of London (price headroom).</p><div class="qal"><a href="#index">Momentum Index →</a></div></div><div class="card qa"><h3>Is this area still moving, or has it peaked?</h3><p>See the 12-month change, and whether each signal is rising, stable or falling.</p><div class="qal"><a href="methodology.html#direction">Direction of travel →</a></div></div><div class="card qa"><h3>What’s planned around this site?</h3><p>Every significant scheme within a 5, 10 or 20-minute walk, with the council reference.</p><div class="qal"><a href="#check">Check a postcode →</a></div></div><div class="card qa"><h3>Where do office-to-home conversions get approved?</h3><p>Approval rates and decision times for Class MA conversions across London’s boroughs.</p><div class="qal"><a href="planning.html">Class MA tracker →</a></div></div></div>
+<div class="grid g3"><div class="card qa"><h3>Where should we look for our next site?</h3><p>See how fast every part of London is changing, then shortlist and compare up to three areas side by side.</p><div class="qal"><a href="#index">Momentum Index →</a><a href="#compare">Compare areas →</a></div></div><div class="card qa"><h3>Which areas are being overlooked?</h3><p>Spot areas with strong momentum where homes still cost less than in much of London (price headroom).</p><div class="qal"><a href="#index">Momentum Index →</a></div></div><div class="card qa"><h3>Where do office-to-home conversions get approved?</h3><p>Approval rates and decision times for Class MA conversions across London’s boroughs.</p><div class="qal"><a href="planning.html">Class MA tracker →</a></div></div></div>
 </div></section>
 
 
@@ -595,20 +610,7 @@ html.mapopen{overflow:hidden}
 
 </div></section>
 
-<section id="brief" style="padding-top:0"><div class="wrap bgrid">
-<div>
-<div class="eyebrow mono teal">Comes to your inbox, so you don’t have to log in</div>
-<h2>The Monday Brief.</h2>
-<p class="sub" style="margin-bottom:0">Nobody wants another dashboard to remember to check. Every Monday by 7am, Terrayne emails you a short summary of what’s new in the neighbourhoods on your watchlist and around any places you’ve saved: the schemes filed, the decisions made, the areas that moved, and why each one matters, whether you’re buying, selling, building or opening.</p>
-<div class="wl mono">Pick boroughs to preview a sample brief:</div>
-<div class="chips" id="chips"></div>
-<ul class="bl"><li>Shows which neighbourhoods’ scores moved this week, and why</li><li>Flags new office-to-home conversions (Class MA) near you</li><li>Lists the big schemes approved or refused this week, with links to the council record</li><li>Picks a location to watch each week, plus areas where momentum meets price headroom</li><li>Comes as a PDF you can forward to your team or clients</li><li>Included with Pro and Team, by email, with every past brief archived. Your first one arrives as soon as you join, and Teams can get it in Slack too.</li></ul><p style="margin:14px 0 0"><a href="monday-brief/" style="color:#9fd0ff;text-decoration:underline">See what’s in every part of the brief →</a></p>
-</div>
-<div class="mail"><div class="mb"><i></i><i></i><i></i><span>briefings@terrayne.co</span><em>MON 7AM</em></div>
-<div class="mh"><div class="t mono"><b>Terrayne</b><span>Sample issue • London edition</span></div><h3 id="mt">Your Monday Brief</h3><p>Built from real filings in <span id="bdupd">the last 30 days</span></p></div>
-<div class="mbody" id="mbody"></div></div>
-</div>
-<div class="wrap" style="margin-top:clamp(28px,4vw,44px)"><div data-brief-signup></div></div></section>
+
 
 <section id="pricing" class="plan" style="padding-top:0"><div class="wrap">
 <div class="eyebrow">Pricing</div>
