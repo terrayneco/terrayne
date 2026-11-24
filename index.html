@@ -36,6 +36,7 @@ h1{font-size:clamp(42px,8vw,92px);line-height:1.02;letter-spacing:-.03em;margin:
 h1 span{color:var(--mute)}.hero h1 span{display:block}.hero h1,.hero h1 span{text-wrap:balance}
 .lead{font-size:clamp(17px,2.2vw,21px);color:var(--mute);max-width:620px;margin:0 0 36px}
 .cta{display:flex;gap:14px;flex-wrap:wrap;position:relative;z-index:2}
+.cta .tlink{align-self:center;color:#c8d4e8;font-size:15px;text-decoration:underline;text-underline-offset:4px;text-decoration-color:rgba(200,212,232,.35);padding:10px 6px}.cta .tlink:hover{color:#fff}
 .sky{display:block;width:100%;height:auto;margin-top:-40px;position:relative}
 section{padding:110px 0}
 h2{font-size:clamp(32px,5vw,56px);line-height:1.08;letter-spacing:-.025em;margin:0 0 18px;font-weight:700}
@@ -216,6 +217,7 @@ img,svg{max-width:100%}
  .score b{font-size:64px}
  .mh{padding:24px 20px 20px}.mbody{padding:18px 16px 20px}.bc{padding:18px}
  .cta .btn{flex:1 1 auto;text-align:center;padding:13px 20px;font-size:14.5px}
+ .cta .tlink{flex:1 1 100%;text-align:center;padding:4px 0}
  /* Signal feed table becomes stacked cards */
  .tw{background:none;border:0;border-radius:0;overflow:visible}
  .tw table,.tw tbody,.tw tr,.tw td{display:block;width:100%;min-width:0}
@@ -484,7 +486,7 @@ html.mapopen{overflow:hidden}
 <div class="eyebrow"><span style="white-space:nowrap">Property intelligence</span> · <span style="white-space:nowrap">For London developers</span> <span style="white-space:nowrap">and planning consultants</span></div>
 <h1>See where London is changing. <span>And why, before everyone else.</span></h1>
 <p class="lead">Terrayne reads every significant London planning application, alongside station use, population and sale prices. See what’s planned around any site and which neighbourhoods are moving, then get the changes in a Monday Brief.</p>
-<div class="cta"><a class="btn" href="#check">Check a site’s postcode</a><a class="btn ghost" href="developers/">How developers use it</a></div>
+<div class="cta"><a class="btn" href="#check">Check a site’s postcode</a><a class="tlink" href="developers/">How developers use it →</a></div>
 <ul class="proof"><li><b>Any London postcode</b>, with 26 regeneration neighbourhoods tracked in detail every week</li><li><b>Back-tested:</b> areas scoring 80+ went on to grow their population 5.3%, against 1.6% for areas under 40 <a href="methodology.html">(method)</a></li><li><b>Official sources only</b>, with a council reference for every scheme</li></ul>
 </div>
 <svg class="sky" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
@@ -522,7 +524,7 @@ html.mapopen{overflow:hidden}
 <div class="grid g3">
 <div class="card"><div class="num">01</div><h3>It comes to you</h3><p>A Monday Brief by 7am UK time every Monday, for the areas and saved places you watch. No logging in to search, no portals to check.</p></div>
 <div class="card"><div class="num">02</div><h3>Only what matters</h3><p>New homes, office-to-home (Class MA) and larger commercial schemes. Condition paperwork, signs and minor works are filtered out, and each scheme gets a plain-English line on why it matters.</p></div>
-<div class="card"><div class="num">03</div><h3>Priced for small teams</h3><p>Pro is £29 a month; Team is £99 for five people. Monthly or yearly, cancel any time, and three postcode checks a month are free.</p></div>
+<div class="card"><div class="num">03</div><h3>Priced for small teams</h3><p>Most site-sourcing platforms start at £150 a month or more per user. Terrayne Pro is £29 a month and Team is £99 for five people, monthly or yearly, cancel any time.</p></div>
 </div></div></section>
 
 <section id="brief" style="padding-top:0"><div class="wrap bgrid">
