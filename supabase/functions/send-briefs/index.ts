@@ -4,6 +4,7 @@
 //  3. A signed-in Pro/Team user (account page), body { first: true } -> this week's brief straight away, once per account.
 // Deploy with --no-verify-jwt (cron calls use CRON_SECRET; user calls are checked with their sign-in token).
 import { admin, SITE, cors } from "../_shared/common.ts";
+import { active, filterBrief, wanted } from "../_shared/uses.ts";
 
 const FROM = Deno.env.get("BRIEF_FROM") ?? "Terrayne <briefings@terrayne.co>";
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]!));
@@ -99,16 +100,17 @@ async function slack(hook: string, week: string, items: { area: string; title: s
   await fetch(hook, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text }) }).catch(() => {});
 }
 
-async function alertsFor(uid: string, week: string): Promise<Alert[]> {
+async function alertsFor(uid: string, week: string, want: string[] | null = null): Promise<Alert[]> {
   const { data: me } = await admin.from("profiles").select("team_owner").eq("id", uid).single();
   const owners = [uid, ...(me?.team_owner ? [me.team_owner] : [])];
   const { data: places } = await admin.from("saved_places").select("id,label,postcode,radius_m").in("owner", owners);
   if (!places?.length) return [];
   const { data: rows } = await admin.from("alerts").select("place_id,items").eq("week", week).in("place_id", places.map((p) => p.id));
-  return (rows ?? []).filter((r) => (r.items as unknown[]).length).map((r) => {
+  return (rows ?? []).map((r) => {
     const p = places.find((x) => x.id === r.place_id)!;
-    return { label: p.label, postcode: p.postcode, radius_m: p.radius_m, items: r.items as Alert["items"] };
-  });
+    const items = (r.items as Alert["items"]).filter((i) => !want || wanted(i, want));
+    return { label: p.label, postcode: p.postcode, radius_m: p.radius_m, items };
+  }).filter((a) => a.items.length);
 }
 
 async function send(to: string, subject: string, body: string, at?: string) {
@@ -177,7 +179,8 @@ async function firstBrief(req: Request) {
   if (!uid) return { sent: false, reason: "signin" };
   const { data: plan } = await admin.rpc("effective_plan", { uid });
   if (plan !== "pro" && plan !== "enterprise") return { sent: false, reason: "plan" };
-  const { data: prof } = await admin.from("profiles").select("email,full_name,brief_email").eq("id", uid).single();
+  let { data: prof, error: pe } = await admin.from("profiles").select("email,full_name,brief_email,brief_uses").eq("id", uid).single();
+  if (pe) prof = (await admin.from("profiles").select("email,full_name,brief_email").eq("id", uid).single()).data as typeof prof;
   if (!prof?.email || prof.brief_email === false) return { sent: false, reason: "email_off" };
   const { data: wl } = await admin.from("watchlist").select("area").eq("user_id", uid);
   const areas = (wl ?? []).map((w) => w.area);
@@ -188,7 +191,7 @@ async function firstBrief(req: Request) {
   const { error: dup } = await admin.from("first_briefs").insert({ user_id: uid, week });
   if (dup) return { sent: false, reason: "already" };
   const { data: rows } = await admin.from("briefs").select("area,title,body,data").eq("week", week).in("area", areas);
-  const items = (rows ?? []) as Brief[];
+  const items = ((rows ?? []) as Brief[]).map((b) => filterBrief(b, active(prof.brief_uses)));
   const ok = items.length && await send(prof.email, `Your first Monday Brief: ${items.map((i) => i.area).join(", ")}`,
     html(prof.full_name, week, items, [], "Welcome to Terrayne. Here’s this week’s brief for your neighbourhoods so you don’t have to wait. The next one arrives on Monday by 7am UK time."));
   if (!ok) { await admin.from("first_briefs").delete().eq("user_id", uid); return { sent: false, reason: "send" }; }
@@ -210,17 +213,20 @@ Deno.serve(async (req) => {
   const { data: briefs } = await admin.from("briefs").select("area,title,body,data").eq("week", week);
   if (!briefs?.length) return new Response(JSON.stringify({ sent: 0, reason: "no briefs" }));
   const byArea = new Map(briefs.map((b) => [b.area, b]));
-  const { data: users } = await admin.from("profiles").select("id,email,full_name,brief_email,slack_webhook,team_owner").eq("brief_email", true);
+  // If the brief_uses column hasn't been added yet (supabase/2026-11-uses.sql), send everyone everything rather than nothing.
+  let { data: users, error: ue } = await admin.from("profiles").select("id,email,full_name,brief_email,brief_uses,slack_webhook,team_owner").eq("brief_email", true);
+  if (ue) users = (await admin.from("profiles").select("id,email,full_name,brief_email,slack_webhook,team_owner").eq("brief_email", true)).data as typeof users;
   let sent = 0;
   const failed: string[] = [];
   for (const u of users ?? []) {
     const { data: plan } = await admin.rpc("effective_plan", { uid: u.id });
     if (plan === "free" || !plan) continue;
-    const alerts = await alertsFor(u.id, week);              // Any paid plan: alerts near saved places
+    const want = active(u.brief_uses);                         // Land uses this reader follows (null = all)
+    const alerts = await alertsFor(u.id, week, want);        // Any paid plan: alerts near saved places
     let items: Brief[] = [];
     if (plan === "pro" || plan === "enterprise") {           // Monday Brief is Pro and Team
       const { data: wl } = await admin.from("watchlist").select("area").eq("user_id", u.id);
-      items = (wl ?? []).map((w) => byArea.get(w.area)).filter(Boolean) as typeof items;
+      items = ((wl ?? []).map((w) => byArea.get(w.area)).filter(Boolean) as typeof items).map((b) => filterBrief(b, want));
     }
     if (!items.length && !alerts.length) continue;
     if (plan === "enterprise") {

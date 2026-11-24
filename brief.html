@@ -64,6 +64,7 @@ td small{color:var(--mute)}
 <div class="bar"><a href="./"><img src="assets/logo-white.svg" alt="Terrayne"></a><div class="r"><select id="wk" class="hide" aria-label="Choose a week"></select><button class="btn" id="pdf" disabled>Download PDF</button><a class="btn ghost" href="account.html#briefs">All briefs</a></div></div>
 <div class="page" id="out"><p class="note">Loading your brief…</p></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" integrity="sha384-GFr3yTh5lJznCbZfpTtXnwboFsxqtTQoeTZCRHhE0579KrRmlCzen5AA8ohaB5ug" crossorigin="anonymous"></script>
+<script src="assets/uses.js"></script>
 <script>
 /* Printable Monday Brief for the signed-in Pro/Team user: brief.html?week=YYYY-MM-DD[&all=1][&pdf=1]
    "Download PDF" uses the browser's Save as PDF (A4). pdf=1 (the link in the email) opens that straight away. */
@@ -89,7 +90,8 @@ var s=(await sb.auth.getSession()).data.session;
 if(!s){lock("Sign in to see your brief","Your Monday Brief is kept in your Terrayne account.",'<a class="btn dark" href="account.html?next='+encodeURIComponent("brief.html"+location.search)+'">Sign in</a>');return}
 var plan=(await sb.rpc("effective_plan",{uid:s.user.id})).data;
 if(plan!=="pro"&&plan!=="enterprise"){lock("The Monday Brief is part of Pro","Every Monday by 7am: what was filed and what moved in the neighbourhoods you follow, and new filings near the places you save.",'<a class="btn dark" href="account.html#billing">See Pro</a>');return}
-var prof=(await sb.from("profiles").select("full_name,company,brand_name,brand_logo").eq("id",s.user.id).single()).data||{};
+var pq=await sb.from("profiles").select("full_name,company,brand_name,brand_logo,brief_uses").eq("id",s.user.id).single();if(pq.error)pq=await sb.from("profiles").select("full_name,company,brand_name,brand_logo").eq("id",s.user.id).single();var prof=pq.data||{};
+var U=window.tyUses,WANT=U?U.active(prof.brief_uses):null;
 var wl=((await sb.from("watchlist").select("area").eq("user_id",s.user.id)).data||[]).map(function(x){return x.area});
 var wr=(await sb.from("briefs").select("week").order("week",{ascending:false}).limit(1000)).data||[];
 var weeks=[];wr.forEach(function(x){if(weeks.indexOf(x.week)<0)weeks.push(x.week)});
@@ -98,9 +100,9 @@ if(weeks.indexOf(week)<0)week=weeks[0];
 var sel=$("wk");sel.innerHTML=weeks.map(function(w){return '<option value="'+w+'"'+(w===week?" selected":"")+'>'+fmt(w)+'</option>'}).join("");sel.classList.remove("hide");
 sel.onchange=function(){location.search="?week="+sel.value+(all?"&all=1":"")};
 var mine=!all&&wl.length>0;
-var B=((await sb.from("briefs").select("area,title,body,data").eq("week",week).order("area")).data||[]).filter(function(b){return !mine||wl.indexOf(b.area)>=0});
+var B=((await sb.from("briefs").select("area,title,body,data").eq("week",week).order("area")).data||[]).filter(function(b){return !mine||wl.indexOf(b.area)>=0}).map(function(b){return WANT?U.filterBrief(b,WANT):b});
 var P=(await sb.from("saved_places").select("id,label,postcode,radius_m")).data||[],A=[];
-if(P.length)A=((await sb.from("alerts").select("place_id,items").eq("week",week).in("place_id",P.map(function(p){return p.id}))).data||[]).filter(function(a){return (a.items||[]).length});
+if(P.length)A=((await sb.from("alerts").select("place_id,items").eq("week",week).in("place_id",P.map(function(p){return p.id}))).data||[]).map(function(a){return{place_id:a.place_id,items:(a.items||[]).filter(function(i){return !WANT||U.wanted(i,WANT)})}}).filter(function(a){return a.items.length});
 var team=plan==="enterprise",brand=team&&(prof.brand_name||prof.company),logo=team&&/^https:\/\//.test(prof.brand_logo||"")?'<img src="'+esc(prof.brand_logo)+'" alt="">':"";
 var who=[prof.full_name,prof.company].filter(Boolean).map(esc).join(" · ");
 var h='<div class="hd"><div class="brand">'+(logo||(brand?'<b>'+esc(brand)+'</b>':'<img class="tlogo" src="assets/logo-black.svg" alt="Terrayne">'))+'</div><div class="meta">Monday Brief<br>'+fmt(week)+(who?'<br>Prepared for '+who:"")+'</div></div>'+

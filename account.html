@@ -174,6 +174,11 @@ svg.spark{display:block}
 <div class="field"><label for="pf-company">Company</label><input id="pf-company" autocomplete="organization"></div>
 <div class="field"><label for="pf-title">Job title</label><input id="pf-title" autocomplete="organization-title"></div>
 <label class="toggle" style="margin:6px 0 16px"><input type="checkbox" id="pf-brief"> Email me the Monday Brief</label>
+<fieldset class="hide" id="pf-uses-w" style="border:0;margin:0 0 16px;padding:0"><legend style="font-size:13px;color:var(--mute);margin:0 0 8px">Schemes to include in your brief and alerts</legend>
+<label class="toggle" style="margin:0 0 6px"><input type="checkbox" name="pf-use" value="res"> New homes</label>
+<label class="toggle" style="margin:0 0 6px"><input type="checkbox" name="pf-use" value="ma"> Office-to-home (Class MA)</label>
+<label class="toggle" style="margin:0 0 6px"><input type="checkbox" name="pf-use" value="com"> Commercial</label>
+<label class="toggle" style="margin:0"><input type="checkbox" name="pf-use" value="ind"> Industrial &amp; logistics</label></fieldset>
 <label class="toggle hide" id="pf-instant-w" style="margin:-6px 0 16px"><input type="checkbox" id="pf-instant"> Email me same-day alerts when a big scheme is filed, approved or refused near my saved places (Team)</label>
 <button class="btn">Save</button></form>
 <div class="grid" style="align-content:start">
@@ -391,7 +396,7 @@ places:async function(){
   var x=await sb.from("saved_places").insert(row);if(x.error){msg("pl-msg",x.error.message);return}P_places()};
  $("pl-body").querySelectorAll("[data-del]").forEach(function(b){b.onclick=async function(){if(!confirm("Remove this place and its alerts?"))return;await sb.from("saved_places").delete().eq("id",b.dataset.del);P_places()}});
 },
-profile:function(){var p=S.profile;$("ent-form").classList.toggle("hide",!(S.plan==="enterprise"&&!p.team_owner));$("ent-brand").value=p.brand_name||"";$("ent-logo").value=p.brand_logo||"";$("ent-slack").value=p.slack_webhook||"";$("pf-name").value=p.full_name||"";$("pf-company").value=p.company||"";$("pf-title").value=p.job_title||"";$("pf-brief").checked=p.brief_email!==false;$("pf-instant-w").classList.toggle("hide",S.plan!=="enterprise");$("pf-instant").checked=p.instant_email!==false;$("em-email").value=S.user.email||""},
+profile:function(){var p=S.profile;$("ent-form").classList.toggle("hide",!(S.plan==="enterprise"&&!p.team_owner));$("ent-brand").value=p.brand_name||"";$("ent-logo").value=p.brand_logo||"";$("ent-slack").value=p.slack_webhook||"";$("pf-name").value=p.full_name||"";$("pf-company").value=p.company||"";$("pf-title").value=p.job_title||"";$("pf-brief").checked=p.brief_email!==false;$("pf-instant-w").classList.toggle("hide",S.plan!=="enterprise");$("pf-instant").checked=p.instant_email!==false;var hasU=("brief_uses" in p)&&(S.plan==="pro"||S.plan==="enterprise");$("pf-uses-w").classList.toggle("hide",!hasU);document.querySelectorAll("input[name=pf-use]").forEach(function(c){c.checked=!p.brief_uses||p.brief_uses.indexOf(c.value)>-1});$("em-email").value=S.user.email||""},
 billing:function(){
  var p=S.profile,pr=C.prices||{pro:{month:29,year:290},enterprise:{month:99,year:990}},team=!!p.team_owner;
  var st=p.status,live=["active","trialing","past_due"].indexOf(st)>=0;
@@ -434,6 +439,7 @@ async function go(fn,body,btn){if(btn)btn.disabled=true;msg("g-msg");if(fn==="cr
 
 /* ---------- forms ---------- */
 $("pf-form").onsubmit=async function(e){e.preventDefault();var u={full_name:$("pf-name").value.trim(),company:$("pf-company").value.trim(),job_title:$("pf-title").value.trim(),brief_email:$("pf-brief").checked};if(S.plan==="enterprise")u.instant_email=$("pf-instant").checked;
+ if(!$("pf-uses-w").classList.contains("hide")){var us=[].slice.call(document.querySelectorAll("input[name=pf-use]:checked")).map(function(c){return c.value});if(!us.length){msg("pf-msg","Choose at least one type of scheme for your brief.");return}u.brief_uses=us.length===4?null:us}
  var r=await sb.from("profiles").update(u).eq("id",S.user.id);if(r.error)msg("pf-msg",r.error.message);else{Object.assign(S.profile,u);msg("pf-msg","Saved.",true)}};
 $("em-form").onsubmit=async function(e){e.preventDefault();var r=await sb.auth.updateUser({email:$("em-email").value.trim()},{emailRedirectTo:location.origin+location.pathname});msg("em-msg",r.error?r.error.message:"Check both inboxes to confirm the change.",!r.error)};
 $("ent-form").onsubmit=async function(e){e.preventDefault();var logo=$("ent-logo").value.trim(),hook=$("ent-slack").value.trim();
