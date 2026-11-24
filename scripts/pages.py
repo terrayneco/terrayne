@@ -1009,7 +1009,7 @@ def classma_page(cm):
         for r in cm.get("latest", [])[:8])
     uses = [("Advise on the odds", "Approval rates for office-to-home conversions in every London borough, so you can tell a client how a council has treated similar applications before you take the job on."),
             ("Set expectations on timing", "Median decision times against the 56-day limit, borough by borough, so your programme and your client’s finance line up with reality."),
-            ("Hear about new filings first", "Save the sites and patches you work on. Every new Class MA application within a 5, 10 or 20-minute walk lands in your Monday Brief by 7am, and Team plans get an email the same day."),
+            ("Hear about new filings first", "Save the sites and patches you work on. Every new Class MA application within a 5, 10 or 20-minute walk lands in your Monday Brief by 7am UK time, and Team plans get an email the same day."),
             ("Find the council record fast", "Every filing comes with its council reference and a direct search link, so you can pull up comparable decisions in seconds.")]
     qs = [("What is Class MA?",
            "Class MA is a permitted development right in England that lets buildings in commercial, business and service use (Class E), such as offices and shops, become homes "
@@ -1267,8 +1267,8 @@ def brief_page(pub, feed):
     body = f"""<section class="ap-h"><div class="wrap">
 <div class="crumb"><a href="/">Terrayne</a> › Monday Brief</div>
 <div class="eyebrow">The Monday Brief</div>
-<h1>What changed in your London, by 7am.</h1>
-<p class="ap-lead">Nobody wants another dashboard to check. Every Monday, Terrayne emails you a short brief on the neighbourhoods and places you follow: what was filed, what was decided, which areas moved, and why each one matters. With a link to the council record for every scheme.</p>
+<h1>What changed in your London, by 7am UK time.</h1>
+<p class="ap-lead">Nobody wants another dashboard to check. Every Monday, Terrayne emails you a short brief on the neighbourhoods and places you follow, covering only the kinds of scheme you choose: what was filed, what was decided, which areas moved, and why each one matters. With a link to the council record for every scheme.</p>
 <div class="ap-cta"><a class="btn" href="/account.html?signup&amp;plan=pro">Get the Monday Brief with Pro</a><a class="btn ghost" href="#sample">Get a free sample</a></div>
 </div></section>
 
@@ -1303,7 +1303,7 @@ def brief_page(pub, feed):
 <section class="ap-s" id="sample"><div class="wrap">{brief_box("", "Get a free sample Monday Brief.", "Pick a neighbourhood and we’ll email you this week’s brief: what was filed, what moved and why it matters. No account or card needed.")}</div></section>
 
 <section class="ap-s"><div class="wrap"><h2>Questions about the brief</h2>{faq_html(qs)}</div></section>"""
-    return page("The Monday Brief: London planning and property changes, every Monday by 7am | Terrayne",
+    return page("The Monday Brief: London planning and property changes, every Monday by 7am UK time | Terrayne",
                 "A short email every Monday on the London neighbourhoods and sites you follow: new filings, approvals and refusals, score moves and why each one matters.",
                 "/monday-brief/", body, faq_ld(qs))
 
