@@ -483,7 +483,7 @@ html.mapopen{overflow:hidden}
 <header class="hero" id="top"><div class="wrap">
 <div class="eyebrow"><span style="white-space:nowrap">Property intelligence</span> · <span style="white-space:nowrap">For London developers</span> <span style="white-space:nowrap">and planning consultants</span></div>
 <h1>See where London is changing. <span>And why, before everyone else.</span></h1>
-<p class="lead">Every new home, office conversion and station upgrade is filed in public years before it’s built. Terrayne reads it all, from planning applications to station use, population and sale prices, so you can see which neighbourhoods are moving, what’s planned and decided around a site, and where to look next. Then it watches your sites and patches for you, every week.</p>
+<p class="lead">Terrayne reads every significant London planning application, alongside station use, population and sale prices. See what’s planned around any site and which neighbourhoods are moving, then get the changes in a Monday Brief.</p>
 <div class="cta"><a class="btn" href="#check">Check a site’s postcode</a><a class="btn ghost" href="developers/">How developers use it</a></div>
 <ul class="proof"><li><b>Any London postcode</b>, with 26 regeneration neighbourhoods tracked in detail every week</li><li><b>Back-tested:</b> areas scoring 80+ went on to grow their population 5.3%, against 1.6% for areas under 40 <a href="methodology.html">(method)</a></li><li><b>Official sources only</b>, with a council reference for every scheme</li></ul>
 </div>
@@ -507,30 +507,31 @@ html.mapopen{overflow:hidden}
 
 <section id="check"><div class="wrap">
 <div class="eyebrow">Postcode check · free</div>
-<h2>Is this street about to change?</h2>
-<p class="sub">Enter any London postcode or area name. See its Momentum score (0 to 100: how fast the area is changing) and every significant scheme planned nearby: new homes, office-to-home conversions and commercial space, with council references so you can check the details.</p>
+<h2>What’s planned around this site?</h2>
+<p class="sub">Enter any London postcode or area name. See every significant scheme filed or decided nearby (new homes, office-to-home conversions and commercial space, each with its council reference) and the area’s Momentum score (0 to 100: how fast it’s changing).</p>
 <form class="ckf" id="ckf"><input id="ckpc" placeholder="Postcode or area, e.g. SE1 7PB" autocomplete="off" aria-label="London postcode or area name" maxlength="40"><input type="hidden" id="ckr" value="0.8"><div class="ckrad" role="radiogroup" aria-label="Walking distance"><span class="ckind" aria-hidden="true"></span><button type="button" role="radio" data-r="0.4" aria-checked="false"><b>5 min</b><small>400 m</small></button><button type="button" role="radio" data-r="0.8" aria-checked="true"><b>10 min</b><small>800 m</small></button><button type="button" role="radio" data-r="1.6" aria-checked="false"><b>20 min</b><small>1.6 km</small></button></div><button class="btn" type="submit">Check</button></form>
 <div class="ckex">Try: <button type="button" data-pc="CR0 1LF">Croydon</button><button type="button" data-pc="IG1 1NY">Ilford</button><button type="button" data-pc="E15 1BX">Stratford</button></div>
 <p class="ckmsg" id="ckmsg" role="status"></p><p class="note" id="ckleft" style="margin:4px 0 0"></p>
 <div id="ckout"></div>
 </div></section>
 
+<section id="why"><div class="wrap">
+<div class="eyebrow">Why Terrayne</div>
+<h2>Other tools give you a map to search. Terrayne tells you what changed.</h2>
+<p class="sub">London has 33 planning authorities, each publishing differently, in dense jargon. Terrayne reads them all through the GLA’s <a href="https://www.london.gov.uk/programmes-strategies/planning/digital-planning/planning-london-datahub" target="_blank" rel="noopener" style="text-decoration:underline">Planning London Datahub</a>, keeps only what matters for site decisions, and explains it.</p>
+<div class="grid g3">
+<div class="card"><div class="num">01</div><h3>It comes to you</h3><p>A Monday Brief by 7am UK time every Monday, for the areas and saved places you watch. No logging in to search, no portals to check.</p></div>
+<div class="card"><div class="num">02</div><h3>Only what matters</h3><p>New homes, office-to-home (Class MA) and larger commercial schemes. Condition paperwork, signs and minor works are filtered out, and each scheme gets a plain-English line on why it matters.</p></div>
+<div class="card"><div class="num">03</div><h3>Priced for small teams</h3><p>Pro is £29 a month; Team is £99 for five people. Monthly or yearly, cancel any time, and three postcode checks a month are free.</p></div>
+</div></div></section>
+
 <section id="questions" style="padding-top:0"><div class="wrap">
 <div class="eyebrow">What Terrayne answers</div>
 <h2>The questions behind every site decision.</h2>
-<p class="sub">Built for developers, agents and investors who need to know where to look next, and why.</p>
+<p class="sub">Built for developers, site finders and planning consultants who need to know where to look next, and why.</p>
 <div class="grid g3"><div class="card qa"><h3>Where should we look for our next site?</h3><p>See how fast every part of London is changing, then shortlist and compare up to three areas side by side.</p><div class="qal"><a href="#index">Momentum Index →</a><a href="#compare">Compare areas →</a></div></div><div class="card qa"><h3>Where is regeneration actually happening?</h3><p>Follow the homes and commercial space being filed and approved, not the press releases.</p><div class="qal"><a href="planning.html#feed">Planning feed →</a></div></div><div class="card qa"><h3>Which areas are being overlooked?</h3><p>Spot areas with strong momentum where homes still cost less than in much of London (price headroom).</p><div class="qal"><a href="#index">Momentum Index →</a></div></div><div class="card qa"><h3>Is this area still moving, or has it peaked?</h3><p>See the 12-month change, and whether each signal is rising, stable or falling.</p><div class="qal"><a href="methodology.html#direction">Direction of travel →</a></div></div><div class="card qa"><h3>What’s planned around this site?</h3><p>Every significant scheme within a 5, 10 or 20-minute walk, with the council reference.</p><div class="qal"><a href="#check">Check a postcode →</a></div></div><div class="card qa"><h3>Where do office-to-home conversions get approved?</h3><p>Approval rates and decision times for Class MA conversions across London’s boroughs.</p><div class="qal"><a href="planning.html">Class MA tracker →</a></div></div></div>
 </div></section>
 
-<section id="problem"><div class="wrap">
-<div class="eyebrow">The problem in London</div>
-<h2>33 councils. 33 portals. Hours of reading.</h2>
-<p class="sub">Every borough publishes planning data differently, in dense jargon, and by the time it’s been read the opportunity has moved. Terrayne reads it all for you, using the GLA’s <a href="https://www.london.gov.uk/programmes-strategies/planning/digital-planning/planning-london-datahub" target="_blank" rel="noopener" style="text-decoration:underline">Planning London Datahub</a>.</p>
-<div class="grid g3">
-<div class="card"><div class="num">01</div><h3>Ingest</h3><p>Planning applications from across London are pulled in automatically, filtered for major developments (10+ units) and Class MA office-to-home conversions.</p></div>
-<div class="card"><div class="num">02</div><h3>Translate</h3><p>Each significant filing is summed up in plain English, and every neighbourhood gets a Momentum score from official data.</p></div>
-<div class="card"><div class="num">03</div><h3>Decide</h3><p>Get a Monday morning brief, a watchlist of the areas you care about, and a postcode check for any site.</p></div>
-</div></section>
 
 
 <section id="index" style="padding-top:0"><div class="wrap">
