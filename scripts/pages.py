@@ -1378,7 +1378,7 @@ def write_all():
     (ROOT / "class-ma").mkdir(exist_ok=True)
     (ROOT / "class-ma" / "index.html").write_text(classma_page(cm))
     lastmod = pub["generated"]
-    urls = ["/", "/london/", "/developers/", "/monday-brief/", "/postcode-report/", "/class-ma/", "/planning.html", "/methodology.html", "/about.html", "/report.html"] + [f"/london/{m[5]}/" for m in AREAS]
+    urls = ["/", "/london/", "/developers/", "/monday-brief/", "/postcode-report/", "/class-ma/", "/planning.html", "/methodology.html", "/about.html", "/terms.html", "/privacy.html"] + [f"/london/{m[5]}/" for m in AREAS]
     (ROOT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
                                       + "".join(f"  <url><loc>{SITE}{u}</loc><lastmod>{lastmod}</lastmod></url>\n" for u in urls) + "</urlset>\n")
     (ROOT / "robots.txt").write_text("User-agent: *\nDisallow: /admin.html\nDisallow: /account.html\nDisallow: /unsubscribe.html\n\n"
